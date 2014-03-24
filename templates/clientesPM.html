@@ -1,0 +1,100 @@
+
+	<!-- barra -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+	  
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav">
+	        
+	        <li>
+	        	<img src="/LVDI/img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px;margin-bottom:5px;" />
+	        </li>
+	        
+	        <li class="middle"><a href="#!/productos">Productos</a></li>
+	        <li class="middle"><a href="#!/pedidos">Pedidos</a></li>
+	        <li class="middle"><a href="#!/producciones">Producciones</a></li>
+	        <li class="middle"><a href="#!/ventas">Ventas</a></li>
+	        <li class="middle active"><a href="#">Clientes Por mayor</a></li>
+	        <li class="middle"><a href="#!/clientes">Clientes</a></li>
+	        <li class="middle"><a href="#!/reportes">Reportes</a></li>
+	      
+	      </ul>
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="#">Salir</a></li>
+	      </ul>
+	      
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+
+
+
+<div class="container-fluid" ng-controller="clientesPMCtrl" >
+
+	<div class="row-fluid">
+	
+		<div class="h2 titleh2"> Clientes por mayor </div>
+
+
+		<!-- SIDEBAR-->			
+		<div class=" col-xs-12 col-md-3 sidebar">
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					
+					
+					<input 	type="text" class="form-control small filterInput" 
+							ng-model="query" id='inputSearch' 
+							placeholder="Filtro de clientes" >
+					
+									
+					
+					<hr/>
+					
+					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo cliente </button>
+					
+					      
+				</div>
+			</form>
+		</div>
+
+	
+		<!-- BODY-->
+		<div class="col-xs-12 col-md-9 ">
+			<div class="tableContainer" >
+			
+				<table class="table table-hover table-condense">
+			  		<thead>
+			  			<tr>
+			  				<th>Cliente</th>
+			  				<th>Local</th>
+			  				<th>Tel</th>
+			  				<th>Tel2</th>
+			  				<th>email</th>
+			  			</tr>
+			  		</thead>	
+			  		<tbody>
+			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query | filter:filterCl)" 
+			  						class="clienteList link" ng-click="opencliente(cl.id)">
+			  				<td> {{cliente.nombre}}</td>
+			  				<td> {{cliente.local}}</td>
+			  				<td> {{cliente.tel}}</td>
+		 					<td> {{cliente.tel2}}%</td>						
+		 					<td> {{cliente.email}}</td>
+		  				</tr>
+		  				<tr ng-show="(filteredClientes.length < 1)" class="aviso"> <td colspan="5"> No hay clientes</td></tr>
+		   			</tbody>
+		  		</table>
+	
+			</div>
+			
+			
+		</div>
+		
+	       
+       			
+	</div>
+</div>

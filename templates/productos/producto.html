@@ -1,0 +1,32 @@
+<div ng-class="{1: 'enProduccion', 0: 'fueraDeProduccion'}[producto.enProduccion]" class="row thumbnail productoList">
+	
+	<div class="col-xs-6 col-md-2 center">
+
+		<img src="{{producto.img | noCache}}" 
+			 data-alt="{{producto.producto}}" 
+			 class="media-object img-thumbnail imgItemList" 
+			 style="max-width:105px;max-height:105px;width:auto;height:auto;" />
+			 
+	</div>
+	
+	<div class="col-xs-6 col-md-6 link" ng-click="openProducto(producto.id)">
+		<h4>{{producto.nombre}}</h4>
+		<p class="small"> Precio: {{producto.precio | currency}} </p>
+	</div>
+
+	<div class="col-xs-12 col-md-4 modelosCol">
+		<h6><ul class="list-inline"><li class="modeloItemListCol1">Colores</li><li>Stock</li></ul></h6>
+		<ul class="list-group modelosList">
+			<li ng-repeat="mod in producto.modelos" class="list-group-item modeloItemList">
+				<ul class="list-inline">
+					<li class="modeloItemListCol1 small">{{mod.nombre}} </li>
+					<li class="modeloItemListCol2 small">{{mod.stock}}</li>
+					<li class="linkElem">
+						<span id="mod{idmodelo}" class="glyphicon glyphicon-plus" ng-click="reponer(producto.id, $index)"></span>
+					</li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+					
+</div>

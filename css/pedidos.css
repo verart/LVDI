@@ -1,0 +1,38 @@
+.wndPedido .modal-dialog{
+	width: 900px;
+}
+
+.resumenPedido{
+	text-align: right;
+	padding-right: 15px;
+}
+
+.autocompleteFP >input{
+	margin-top:30px; 
+	margin-bottom: -12px;
+}
+
+.autocompleteFP > ul{
+	margin-right:30px; 
+}
+
+.editableCell .editable-controls > input{
+	width: 40px;
+	height: 21px;
+}
+
+.editableCell .editable-controls > select{
+	height: 21px;
+}
+
+.editableCell .editable-buttons > button{
+
+	width: 32px;
+	height: 21px;
+	padding: 0px;
+}
+
+.editableCell .editable-buttons{
+	margin-left:0px;
+}
+

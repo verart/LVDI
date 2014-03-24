@@ -1,0 +1,89 @@
+
+	<!-- barra -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+	  
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav">
+	        
+	        <li>
+	        	<img src="/LVDI/img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px;margin-bottom:5px;" />
+	        </li>
+	        
+	        <li class="active middle"><a href="#">Productos</a></li>
+	        <li class="middle"><a href="#!/pedidos">Pedidos</a></li>
+	        <li class="middle"><a href="#!/producciones">Producciones</a></li>
+	        <li class="middle"><a href="#!/ventas">Ventas</a></li>
+	        <li class="middle"><a href="#!/clientesPM">Clientes Por mayor</a></li>
+	        <li class="middle"><a href="#!/clientes">Clientes</a></li>
+	        <li class="middle"><a href="#!/reportes">Reportes</a></li>
+	      
+	      </ul>
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="#">Salir</a></li>
+	      </ul>
+	      
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+
+
+<div class="container-fluid" ng-controller="productosCtrl" >
+
+	<div class="row-fluid">
+	
+		<div class="h2 titleh2"> Productos </div>
+			
+		<!-- SIDEBAR-->			
+		<div class=" col-xs-12 col-md-3 sidebar">
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					
+					<input type="text" class="form-control small filterInput" ng-model="queryId.id" placeholder="Id de producto" >
+					
+					<hr/>
+					
+					<input type="text" class="form-control small filterInput" ng-model="query" id='inputSearch' placeholder="Filtro de productos" >
+					
+					
+					<div class="checkbox formElement">
+						<label class="small">
+							<input type="checkbox" ng-true-value="1" ng-false-value="" ng-model="filterProds.reponer"> 
+							Sólo los que necesitan reposición 
+						</label>
+					</div>
+					
+					<div class="checkbox formElement">
+						<label class="small">
+							<input type="checkbox" ng-true-value="" ng-false-value='1' ng-model="filterProds.enProduccion"> 
+							Incluir <i>fuera de producción </i>
+						</label>
+					</div>
+					
+					<hr/>
+					
+					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo Producto </button>
+					      
+				</div>
+			</form>
+		</div>
+       
+       	<!-- BODY-->
+		<div class="col-xs-12 col-md-9 productosList">
+	       
+	       	<div ng-repeat= "producto in filteredProducts = (data |  orderBy:order:true | filter:query | filter:filterProds | filter:queryId:exceptEmptyComparator)" >
+					<ng-producto producto="producto" > </ng-producto>
+			</div>
+			<p ng-show="(filteredProducts.length < 1)" class="aviso"> No hay productos</p>
+		</div>
+				
+	</div>
+	
+</div> 
+
+ 
+    

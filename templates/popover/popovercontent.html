@@ -1,0 +1,9 @@
+<div id="popover_content_wrapper{{id}}" ng-show=false>
+	<ul class="list-group modelosList">
+		<li ng-repeat="mod in modelos track by mod.id" class="list-group-item modeloItemList">
+			<ul class="list-inline"><li class="modeloItemListCol1 small"> {{mod.nombre}} </li>
+			<li class="modeloItemListCol2 small">Stock:{{mod.stock}}</li>
+			<li class="linkElem"> <span class="glyphicon glyphicon-plus" id="mod.id" ng-click="mod.stock = mod.stock + 1"></span></li></ul>
+		</li>
+	</ul>
+</div>

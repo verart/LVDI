@@ -1,0 +1,45 @@
+<div  class="container">
+<hr>
+	<div class="span5" ng-controller="loginCtrl"> 
+        
+    	<form class="form-signin" role="form">
+    	
+        	<input type="text" ng-model="usuario.usuario" class="form-control" placeholder="Usuario" required autofocus>
+            <input type="password" ng-model="usuario.clave" class="form-control" placeholder="Clave" required>
+            <br>
+            <input type="submit" value="Entrar" ng-click="doLogin()" class="btn btn-lg btn-primary btn-block">
+            <br>
+            <div> {{aviso}}</div>
+            
+        </form>
+        
+    </div>
+      
+    <!-- creamos una directiva  llamada Loged-->
+<!--
+    <loged ng-hide="true"></loged> -->
+</div>
+
+
+
+
+<!--
+<div  class="container">
+	
+	<iframe src="templates/sink.html" name="sink" style="display:none"></iframe>
+	
+	<div class="span5">
+	
+		<form name="loginForm" action="templates/sink.html" target="sink" method="post" ng-submit="login(credentials)" class="form-signin" role="form"  >
+	
+	
+			<input type="text" id="usuario" ng-model="credentials.usuario" class="form-control" placeholder="Usuario" required autofocus>
+			<input type="password" id="clave" ng-model="credentials.clave" class="form-control" placeholder="Clave" required>
+			<button type="submit" class="btn btn-lg btn-primary btn-block" >Entrar</button>
+		  
+		  <div> {{aviso}}</div>
+		   
+		</form>
+	</div>
+</div>
+-->

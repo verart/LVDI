@@ -1,0 +1,152 @@
+
+        <div id= "wndOpenProduccion" class="modal-body">
+		
+		
+			<div class="modal-header"  style="margin-bottom: 18px;">
+			   		<h3>Datos de la producción</h3>
+			</div>
+			       
+		
+		
+			<div class="modal-body form-group">
+						
+					<div class="row">
+					
+						<div class="colForm col-xs-6 col-sm-3">
+								<input type="date" class="form-control small" 
+										id="fechaProduccion" focus-me="{{true}}" 
+										ng-model="produccion.fecha" style="padding-right:0px;"/>
+						</div>
+							
+						<div class="col-sm-1"><label for="fechaDevProduccion" >hasta</label></div>
+								
+						<div class="form-group colForm col-xs-6 col-sm-3">
+								<input type="date" class="form-control small"
+										id="fechaDevProduccion"  
+										ng-model="produccion.fecha_devolucion" style="padding-right:0px;"/>
+						</div>
+
+						<div class="col-sm-2"></div>
+						
+						<div class="colForm col-xs-6 col-sm-3">
+								<input type="text" autocomplete="off" ng-model="produccion.estado"  class="form-control small" 
+										placeholder="Estado de la producción"
+										typeahead="estado for estado in estados | filter:$viewValue" />
+						</div>
+						
+					</div>	
+						
+					<div class="row">	
+					
+						<div class="colForm col-xs-6 col-sm-4">
+							<input type="text" autocomplete="off" ng-model="form.responsable"  class="form-control small" 
+										placeholder="Nombre de responsable"
+										typeahead="resp_option as resp_option.nombre for resp_option in p.resp_options | filter:$viewValue" />
+						</div>
+						
+						<div class="colForm col-xs-6 col-sm-8">	
+							<textarea class="form-control" rows="2" placeholder="Motivo sobre la producción" 
+									ng-model="produccion.motivo"></textarea>
+						</div>
+						
+					</div>
+					
+					
+		
+						
+		</div>
+        
+			
+		<br/>
+        
+			
+			
+			<div class="row">
+			
+				<div class="col-xs-12 col-sm-4">
+				
+					<div class="boxPeak">
+						
+						<div class="pull-right arrow-right"></div>
+										
+						<h5>Agregar producto</h5>
+						<input type="text" id="newMod" autocomplete="off" ng-model="form.modelo" class="form-control small" 
+									placeholder="Nombre de producto"
+									typeahead="mod_option as mod_option.nombre for mod_option in p.mod_options | filter:$viewValue" />
+				
+						<div class="row" style="margin-top:5px;">
+							<div class="colForm col-xs-6 col-md-6">
+								<button class="btn btn-default" ng-click="add()" > Agregar </button>
+							</div>
+						</div>
+					</div>
+					
+					<br/>
+					
+					<textarea class="form-control" rows="3" placeholder="Nota sobre la produccion" ng-model="produccion.nota"></textarea>
+					
+				</div>
+				
+				
+				
+				<!-- DETALLE  -->
+				<div class=" col-xs-12 col-sm-8">
+				
+					<div class="tableContainer">
+					<table class="table table-condensed table-hover small">
+						<thead>
+							<tr>
+								<th class="col-md-6">Productos</th>
+							  	<th class="col-md-1 text-center">Estado</th>
+							  	<th class="col-md-1 text-center"> </th>
+							  </tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="mod in produccion.modelos">
+								<td class="col-md-6">{{mod.nombre}}</span></td>
+								<td class="col-md-1 text-center editableCell"> 
+									<a href="#" editable-select="mod.estado" e-ng-options="s for s in estados">
+										{{ mod.estado }}
+									</a>
+					
+								<td class="col-md-1 text-center">				
+										
+									<!-- ELIMINAR  - Si es el unico modelo del producto no se permite eliminarlo -->
+									<span 	ng-class="{true: 'disabled'}[(produccion.estado == 'Devuelto')]"
+											class="glyphicon glyphicon-remove accionesLst link"  
+											title="Quitar producto de la producción"
+											ng-click="(produccion.estado == 'Devuelto') || remove($index)">
+									</span>
+				 
+								</td>
+							</tr>
+							<tr><td class="avisoSmall" colspan="6" style="text-align=center" ng-if="produccion.modelos.length == 0">
+								No hay productos en la producción</td>
+							</tr>
+						</tbody>
+					</table>										
+					</div>
+					
+					<br>
+					
+					<button ng-if="produccion.modelos.length > 0" class="btn btn-primary btn-sm pull-right" 
+							ng-click="todosDevueltos()">Marcar todos los productos devueltos</button>
+				
+			</div>	
+			
+
+
+
+		</div> <!-- / modal-body -->
+						
+						            
+        <div class="modal-footer">
+        	
+	        <button ng-if="produccion.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteProduccion()">Eliminar produccion</button>
+
+	        <button class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
+            <button class="btn btn-primary" ng-click="ok()">Guardar</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+            
+        </div>
+   

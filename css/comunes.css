@@ -1,0 +1,109 @@
+.centered{
+    margin: 0 auto;
+}
+
+.alertsList{
+	width:90%;
+}
+
+.aviso{
+	text-align: center;
+	font-size: 27px;
+	color: rgb(167, 164, 164);
+	margin-top: 27px;
+	font-style: italic;
+}
+
+.avisoSmall{
+	text-align: center;
+	font-size: 12px;
+	color: rgb(167, 164, 164);
+	margin-top: 27px;
+	font-style: italic;
+}
+
+
+.link:hover{
+	cursor: pointer;
+	
+}
+
+
+.disabled{
+    opacity: 0.25;
+}
+
+.middle{
+	margin-top: 29px;
+}
+
+.active > a{
+	border-radius: 4px;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+	background-color: rgba(235,235,235,0.96);
+}
+
+
+#alertGlobal {
+	position: fixed;
+	left: 50%;
+	top: 0px;
+	width: 500px;
+	margin-left: -250px;
+	margin-bottom: 0px;
+	z-index: 100;
+	text-align: center;
+}
+
+#alertGlobal .alert {
+	margin-bottom: 0px;
+}
+
+.tableContainer{
+	border: 1px solid #ddd;
+	padding: 12px 5px;
+	border-radius: 9px;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+	line-height: 2.428571;
+	background-color: #FFFFFF;
+}
+
+.tableContainer >table{
+	margin-bottom: 2px;
+}
+
+.accionesLst{
+	margin-right: 7px;	
+} 
+
+
+.boxPeak{
+    background-color: rgba(240,240,240,0.60);
+	padding: 10px;
+	border-radius: 9px;
+	-webkit-transition: all .2s ease-in-out;
+	transition: all .2s ease-in-out;
+	line-height: 2.428571;
+
+}
+
+.arrow-right {
+	width: 0; 
+	height: 0; 
+	border-top: 10px solid transparent;
+	border-bottom: 10px solid transparent;
+	
+	border-left: 10px solid rgba(240, 240, 240, 0.60);
+	margin-right: -20px;
+}
+
+
+.wndPdf .modal-dialog{
+	width: 900px;
+}
+
+.wndPdf .pdfOutput{
+	height: 500px;
+}
