@@ -203,7 +203,7 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, producto) {
 		  	var original = angular.copy(producto);
 		  	$scope.producto = producto;
 		  }else{
-		  	$scope.producto = {nombre:'',precio:'', img:'LVDI/img/productos/noimg.jpg', modelos:[], enProduccion:"1"}
+		  	$scope.producto = {nombre:'',precio:'', img:'img/productos/noimg.jpg', modelos:[], enProduccion:"1"}
 		  	var original = $scope.producto;
 		  }
 		  $scope.producto.mod2delete = [];

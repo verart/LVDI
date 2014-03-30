@@ -3,7 +3,7 @@ app.controller('produccionesCtrl', ['$scope','$modal', '$filter', 'produccionesS
 	function ($scope, $modal, $filter, produccionesService, productosService, responsablesService, AlertService) {
        
         
-	    $scope.optFilter = ['Retirado', 'Devuelto'];
+	    $scope.filterProds ={estado:''};
 	    $scope.order = '-fecha';
 	    
 	    /*****************************************************************************************************
@@ -27,7 +27,7 @@ app.controller('produccionesCtrl', ['$scope','$modal', '$filter', 'produccionesS
 	    
 	    
 	    //PRODUCTOS - Recupera todos los modelos de cada producto. Retorna como nombre NomProd-NomMod
-	    productosService.nombresProductos(1).then(
+	    productosService.nombresProductosDisponibles().then(
 			//success
 			function(promise){
 			     promise.data.DATA.forEach(function (prod) {
@@ -297,7 +297,7 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 		  ****************************************************/
 		  $scope.deleteProduccion = function () {
 			  $scope.back2original();	
-			  var res = {action:'delete'};	  		
+			  var res = {action:'delete', idProduccion:$scope.produccion.id};	  		
 			  $modalInstance.dismiss(res);
 		  };
 		  

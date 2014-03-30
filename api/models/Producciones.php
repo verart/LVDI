@@ -5,6 +5,7 @@ class Producciones extends AppModel {
 	public $primaryKey = 'id';	
 	
 	
+	public $hasMany = array('Modelos', 'MovimientosStock'); 
 	
 	
 	/**
@@ -50,7 +51,7 @@ class Producciones extends AppModel {
 				$resultsFormat[$iF]['modelos'][$m]['id'] = $results[$i]['modelos_id'];
 				$resultsFormat[$iF]['modelos'][$m]['idProdMod'] = $results[$i]['idProdMod'];
 				$resultsFormat[$iF]['modelos'][$m]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
-				$resultsFormat[$iF]['modelos'][$m]['estado'] = $results[$i++]['estadoProducto'];				
+				$resultsFormat[$iF]['modelos'][$m++]['estado'] = $results[$i++]['estadoProducto'];				
 			}
 			$iF++;
 		}
@@ -70,7 +71,9 @@ class Producciones extends AppModel {
 	function getProduccionPorId($idProduccion) {
 		
 				
-		$sql = "SELECT P.*, R.nombre as responsable, Pr.nombre as producto, M.nombre as modelo
+		$sql = "SELECT P.*, R.nombre as responsable, Pr.nombre as producto, 
+				M.id as modelos_id, M.nombre as modelo,PM.estado as estadoProducto, 
+				PM.id as idProdMod 
 				FROM producciones P
 				INNER JOIN responsables R ON R.id = P.responsables_id
 				INNER JOIN producciones_modelos PM ON P.id = PM.producciones_id
@@ -83,28 +86,49 @@ class Producciones extends AppModel {
 		$query = $query->execute(array($idProduccion));
 		$results = $query->fetchAll();
 		
-		for($i=0; $i < count($results); $i++){
-			$results[$i]['responsable'] = utf8_encode($results[$i]['responsable']);
-			$results[$i]['producto'] = utf8_encode($results[$i]['producto']);
-			$results[$i]['modelo'] = utf8_encode($results[$i]['modelo']);
+		$i = 0;
+		$resultsFormat = array();
+		//Proceso los pedidos 
+		while($i < count($results)){
+			$resultsFormat['id'] = $results[$i]['id'];
+			$resultsFormat['fecha'] = $results[$i]['fecha'];
+			$resultsFormat['fecha_devolucion'] = $results[$i]['fecha_devolucion'];
+			$resultsFormat['responsables_id'] = $results[$i]['responsables_id']; 
+			$resultsFormat['responsable'] = utf8_encode($results[$i]['responsable']);
+			$resultsFormat['estado'] = $results[$i]['estado']; 
+			$resultsFormat['nota'] = $results[$i]['nota']; 
+			$resultsFormat['motivo'] = $results[$i]['motivo'];
+			
+			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
+			$resultsFormat['modelos'] = array();
+			while($i < count($results)){
+				$resultsFormat['modelos'][$i]['id'] = $results[$i]['modelos_id'];
+				$resultsFormat['modelos'][$i]['idProdMod'] = $results[$i]['idProdMod'];
+				$resultsFormat['modelos'][$i]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
+				$resultsFormat['modelos'][$i]['estado'] = $results[$i]['estadoProducto'];	
+				$i++;			
+			}
 		}
 		
-		return $results;		
+		
+		return $resultsFormat;	
 	}
+	
+	
 	
 	
 	
 	
 	/**
 	* SETPRODUCCION
-	* $pedido = array( ['id'=>''], 'responsables_id'=>'', 'motivo'=>'', 'fecha'=>'', 'fecha_devolucion'=>'', 'nota'=>'', 'estado'=>'' )
-	* $modelos  = array( 	
-	* 					array(['id'=>'']) )
+	* @param $pedido (array)  ( ['id'], 'responsables_id', 'motivo', 'fecha', 'fecha_devolucion', 'nota', 'estado')
+	* @param $modelos (array) ( ['idProdMod'],'id') ) //Si no viene idProdMod es porq es un producto nuevo para la produccion
+	*
 	* 
 	* Los estado pueden ser: 'Retirado','Devuelto'
 	*/
 	function setProduccion($produccion, $modelos){
-		
+						
 		try{
 			$this->beginTransaction();
 		
@@ -114,8 +138,7 @@ class Producciones extends AppModel {
 					
 			if(!isset($produccion['id'])){ 
 				
-				//Creo la produccion
-							
+				/*********** NUEVA produccion *************************/						
 				if($this->create($produccion)) {
 					
 					//Agrego los modelos
@@ -125,50 +148,136 @@ class Producciones extends AppModel {
 					
 						$idModelo = $value['id'];
 						
-						$sql = "INSERT INTO producciones_modelos (producciones_id,modelos_id,estado) VALUES ($idProduccion, $idModelo,  'Retirado') ";
+					
+					
+						//Decremento el stock del modelo agregado a la produccion
+						$res = $this->Modelos->baja($idModelo, 1,'','BajaProduccion');
+						if(!$res['success'])
+							throw new BadRequestException($res['msg']);
+						
+					
+					
+					
+						$sql = "INSERT INTO producciones_modelos (producciones_id,modelos_id,estado) 
+								VALUES ($idProduccion, $idModelo,  'Retirado') ";
+					
+								
 						$query = $this->con->query($sql);
 						
 						if(@PEAR::isError($query))
 							throw new BadRequestException('Hubo un error al agregar los modelos a la produccion');
+							
+							
+							
 			
 					}
+					
 				}else
 					throw new BadRequestException('Hubo un error en al creación de la produccion');
 							
 			}else{
 				
+				/*********** UPDATE produccion *************************/
+				
+				$idProduccion =  $produccion['id'];
+
 				if($this->update($produccion, array('id'=>$produccion['id']))){
-				
-					$idProduccion =  $produccion['id'];
-				
+
+					//Recupero el estado de los productos de la produccio
+					$produccionBefore = $this->getProduccionPorId($idProduccion);
+
 					foreach($modelos as $field => $value) {
 					
 						$idModelo = $value['id'];
 						$estado = $value['estado'];
 						
 						if(!isset($value['idProdMod'])){
-						
+							
+							//Agrego producto
+							
+							if($estado == 'Retirado'){
+								//Decremento el stock del modelo agregado a la produccion
+								$res = $this->Modelos->baja($idModelo, 1,'','BajaProduccion');
+								if(!$res['success'])
+									throw new BadRequestException($res['msg']);
+							}	
+							
 							// Nuevo modelo para la produccion
-							$sql = "INSERT INTO producciones_modelos (producciones_id,modelos_id,estado) VALUES ($idProduccion, $idModelo, '$estado') ";	
+							$sql = "INSERT INTO producciones_modelos (producciones_id,modelos_id,estado) 
+									VALUES ($idProduccion, $idModelo, '$estado') ";	
 						
 
 						}else{
-							// Edicion de un modelo ya cargado a la produccion	
-						
+							
+							// Edicion de un modelo ya cargado a la produccion
+								
 							$idProdMod = $value['idProdMod'];
-							$sql = "UPDATE producciones_modelos SET producciones_id = $idProduccion,modelos_id=$idModelo,estado='$estado' WHERE (id = $idProdMod)";
-						
-						}
-						
-						$query = $this->con->query($sql);
-						
-						if(@PEAR::isError($query))
-							throw new BadRequestException('Hubo un error con los modelos de la producción.');
-			
-					}
-				}else
+							
+							//Busco el prducto a actualizar	
+							$found = false;  
+							foreach($produccionBefore['modelos'] as $index => $value) {
+								if ($value['idProdMod'] == $idProdMod) {
+					        		$found = true;
+					        		break;
+					        	}
+					        }
+
+
+					        if (!$found){
+					        
+						        throw new BadRequestException('Hubo un error al actualizar los productos de la producción.');
+					        
+					        }else{
+						       
+						        //Si encontró el prod en la produccion, hace el cambio
+						        
+						        $estadoBefore = $produccionBefore['modelos'][$index]['estado'];
+							
+								if(( $estadoBefore == 'Retirado') && ($estado == 'Devuelto')){
+									
+										//Incremento el stock del modelo agregado a la produccion
+										$res = $this->Modelos->reponer($idModelo, 1,'AltaProduccion');
+										if(!$res['success'])
+											throw new BadRequestException($res['msg']);
+									
+										
+								}else{
+									
+									if(( $estadoBefore == 'Devuelto') && ($estado == 'Retirado')){
+										
+											//Decremento el stock del modelo agregado a la produccion
+											$res = $this->Modelos->baja($idModelo, 1,'','BajaProduccion');	
+											if(!$res['success'])
+												throw new BadRequestException($res['msg']);
+									}
+										
+								}	
+								
+								$sql = "UPDATE producciones_modelos 
+										SET producciones_id = $idProduccion,modelos_id=$idModelo,estado='$estado' 
+										WHERE (id = $idProdMod)";
+								
+								$query = $this->con->query($sql);
+								
+								if(@PEAR::isError($query))
+									throw new BadRequestException('Hubo un error con los modelos de la producción.');
+									
+							    unset($produccionBefore['modelos'][$index]); 
+						        
+						        
+					        } //else !found
+					        
+					        
+						} //else isset idProdMod 
+					
+					}//for
+					
+				}else  
 					throw new BadRequestException('Hubo un error al actualizar la producción.');				
-			}
+					
+					
+					
+			}// else UPDATE
 
 			
 			$this->commitTransaction();
@@ -177,7 +286,7 @@ class Producciones extends AppModel {
 			
 		} catch (Exception $e) {
 			
-			$this->rollbackTransaction();
+			$this->rollbackTransaction();			
 			return array('success'=>false, 'msg'=>$e->getMsg());
 		}
 		
@@ -194,6 +303,9 @@ class Producciones extends AppModel {
 	function removeModelo($idProdModelo){
 		
 		try{
+		
+			$this->beginTransaction();
+			
 			$sql = "DELETE FROM produccion_modelos WHERE id = $idProdModelo";
 
 			$result = $this->con->query($sql);

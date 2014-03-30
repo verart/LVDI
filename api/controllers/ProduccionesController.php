@@ -117,6 +117,10 @@ class ProduccionesController extends AppController {
 			
 			$params = getPutParameters();
 			
+			// Campos obligatorios
+			if (!$this->parametrosRequeridosEn(array('id', 'fecha_devolucion', 'fecha', 'responsables_id', 'estado'), $params))
+				throw new BadRequestException('Los datos de la producción están incompletos'); 
+			
 			$prod = array(
 				'id'=>$params['id'],
 				'fecha'=>$params['fecha'],
@@ -138,9 +142,13 @@ class ProduccionesController extends AppController {
 			
 			
 			// DELETE de modelos de la produccion
-			if(!empty($params['mod2delete']))
+			if(isset($params['mod2delete']) && !empty($params['mod2delete']))
+			
 				foreach($params['mod2delete'] as $field => $value){
 					$result = $this->Producciones->removeModelo($value['id']);
+					
+					//DOy de alta el modelo
+					//??
 					
 					if(!$result['success'])
 						throw new BadRequestException($result['msg']);									

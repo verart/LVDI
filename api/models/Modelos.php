@@ -105,14 +105,12 @@ class Modelos extends AppModel {
 	
 	/**
 	* REPONER
-	* Incrementa en 1 el stock del modelo y registra el movimiento
+	* Incrementa en 1 el stock del modelo y registra el movimiento con el tipo: 
 	*/
-	function reponer($idModelo, $cantidad =1){
+	function reponer($idModelo, $cantidad =1, $tipo="Reposicion"){
 		
 		try{
-			$this->beginTransaction();
-			$this->MovimientosStock->beginTransaction();	
-		
+			
 			$mod = $this->getModeloPorId($idModelo);
 	
 			$modelo = array('id'=>$idModelo,'stock'=>$mod['stock']+$cantidad);
@@ -121,23 +119,16 @@ class Modelos extends AppModel {
 				throw new BadRequestException('Hubo un error al reponer el modelo '.$idModelo);
 				
 			$movimiento = array(
-				'modelos_id'=> $idModelo, 'created'=> date('Y/m/d h:i:s', time()), 'tipo'=> 'Reposicion', 'cantidad'=> $cantidad);
+				'modelos_id'=> $idModelo, 'created'=> date('Y/m/d h:i:s', time()), 'tipo'=> $tipo, 'cantidad'=> $cantidad);
 					
 			if(!$this->MovimientosStock->setMovimiento($movimiento))
 				throw new BadRequestException('Hubo un error al crear el movimiento para el modelo '.$idModelo);
 							
 			
-			$this->MovimientosStock->commitTransaction();
-			$this->commitTransaction();
-
-			
 			return (array('success'=>true, 'msg'=>'El modelo ha sido dado de alta.'));
 
 		} catch (Exception $e) {
-			//echo $e->getMsg();
-			$this->MovimientosStock->rollbackTransaction();
-			$this->rollbackTransaction();
-			
+		
 			return (array('success'=>false, 'msg'=>$e->getMsg()));
 			
 		}
@@ -149,16 +140,14 @@ class Modelos extends AppModel {
 	* BAJA
 	* Decrementa en 1 el stock del modelo y registra el movimiento
 	*/
-	function baja($idModelo, $cantidad = 1,$motivo=''){
+	function baja($idModelo, $cantidad = 1,$motivo='', $tipoBaja='Baja'){
 		
 		try{
-			$this->beginTransaction();
-			$this->MovimientosStock->beginTransaction();	
 		
 			$mod = $this->getModeloPorId($idModelo);
 			
 			if($mod['stock'] < 1)
-				throw new BadRequestException('Este modelo no tiene stock para dar de baja.');
+				throw new BadRequestException('No pudo darse de baja un producto porque no tiene stock disponible.');
 				
 			$modelo = array('id'=>$idModelo,'stock'=>($mod['stock']-$cantidad));
 			
@@ -166,21 +155,16 @@ class Modelos extends AppModel {
 				throw new BadRequestException('Hubo un error al dar de baja el modelo');
 				
 			$movimiento = array(
-				'modelos_id'=> $idModelo, 'created'=> date('Y/m/d h:i:s', time()), 'tipo'=> 'Baja', 'cantidad'=> $cantidad, 'nota'=>$motivo);
+				'modelos_id'=> $idModelo, 'created'=> date('Y/m/d h:i:s', time()), 'tipo'=> $tipoBaja, 'cantidad'=> $cantidad, 'nota'=>$motivo);
 					
 			if(!$this->MovimientosStock->setMovimiento($movimiento))
 				throw new BadRequestException('Hubo un error al crear el movimiento de baja.');
 							
-			
-			$this->MovimientosStock->commitTransaction();
-			$this->commitTransaction();
-			
-			
+
 			return (array('success'=>true, 'msg'=>'El modelo ha sido dado de baja.'));
 			
 		} catch (Exception $e) {
-			$this->MovimientosStock->rollbackTransaction();
-			$this->rollbackTransaction();
+
 			return (array('success'=>false, 'msg'=>$e->getMsg()));
 			
 		}

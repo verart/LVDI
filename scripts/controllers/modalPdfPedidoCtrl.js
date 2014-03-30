@@ -80,14 +80,14 @@ var modalPdfPedidoCtrl = function ($scope, $modalInstance, $sce, $filter, pedido
 			doc.text(50, row, $filter('currency')(pedido.total));
 				
 			row = row+7;
-			var bonif = (pedido.total * pedido.bonificacion / 100);
 			doc.setFontType("bold");
 			doc.text(25, row, 'Bonif. : ');
-			doc.text(50, row, $filter('currency')(bonif.toString()));
+			doc.text(50, row, (pedido.bonificacion.toString())+ '%');
 			row = row+3;
 			doc.line(23, row, 90, row); 
 			
 			doc.setFontSize(13);
+			var bonif = (pedido.total * pedido.bonificacion / 100);
 			var totalPed = (pedido.total - bonif);
 			row = row+6;
 			doc.setFontType("bold");

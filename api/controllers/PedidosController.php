@@ -84,7 +84,8 @@ class PedidosController extends AppController {
 			
 			if (isset($params['FP'])) $pedido['FP'] = $params['FP'];
 			
-			$pedido['bonificacion'] = (isset($params['bonificacion']))?$params['bonificacion']:0;	
+			$pedido['bonificacion'] = (isset($params['bonificacion']))?$params['bonificacion']:0;				
+			if(isset($params['fecha_entrega'])) $pedido['fecha_entrega'] = $params['fecha_entrega'];
 			
 			$mod = isset($params['modelos'])?$params['modelos']:array();
 			
@@ -131,7 +132,7 @@ class PedidosController extends AppController {
 			$params = (isset($params['pedido']))? $params['pedido'] : array();
 	
 			// Campos obligatorios
-			if (!$this->parametrosRequeridosEn(array('clientesPM_id', 'estado', 'fecha', 'total','id'), $params))
+			if (!$this->parametrosRequeridosEn(array('clientesPM_id', 'estado', 'fecha', 'total', 'id', 'bonificacion'), $params))
 				throw new BadRequestException('Los datos del pedido están incompletos');
 			
 			//Datos del producto
@@ -143,6 +144,7 @@ class PedidosController extends AppController {
 							'fecha'=>$params['fecha']);
 							
 			if(isset($params['FP'])) $ped['FP'] = $params['FP'];
+			if(isset($params['fecha_entrega'])) $ped['fecha_entrega'] = $params['fecha_entrega'];
 			if(isset($params['nota'])) $ped['nota'] = $params['nota'];
 			
 			

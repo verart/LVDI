@@ -17,9 +17,9 @@ class ProductosController extends AppController {
 			$params = getPutParameters(); 
 			
 			if(isset($params['enProduccion']))
-				$opciones['conditions']=array('enProduccion'=>1);
+				$opciones['conditions']= array('enProduccion'=>1);
 			else	
-				$opciones['conditions']=array(); 
+				$opciones['conditions']= array(); 
 			
 				
 			$prods = $this->Productos->getProductos($opciones);
@@ -215,7 +215,7 @@ class ProductosController extends AppController {
 			
 			$idModelo = $_POST['idMod']; 
 		
-			$this->Modelos->reponer($idModelo);
+			$this->Productos->reponer($idModelo);
 
 		} catch (Exception $e) {	
 			echo 'error con el modelo '.$idModelo;
@@ -240,7 +240,7 @@ class ProductosController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'baja'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$this->Modelos->baja($idModelo,$nota);
+			$this->Productos->baja($idModelo,$nota);
 
 		} catch (Exception $e) {	
 
@@ -277,6 +277,39 @@ class ProductosController extends AppController {
 
 
 
+
+
+	
+	
+	
+	function productosDisponibles(){
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('productos', 'index'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+
+			$options = array('conditions'=>array('enProduccion' => 1,'stock >' => 1));
+				
+			$prods = $this->Productos->getProductosNames($options);
+
+			echo $this->json('Productos', $prods);
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}
+		
+		
+	}
+
+
+
+
+
+
+
 	function productosName() {
 		
 		try {
@@ -286,12 +319,13 @@ class ProductosController extends AppController {
 
 		
 			$params = getPutParameters(); 
-			
-			$enProduccion = (isset($params['enProduccion']))?1:"";
-		
 
-			$enProduccion = 1;
-			$prods = $this->Productos->getProductosNames($enProduccion);
+			$options = array('conditions'=>array());
+
+			if(isset($params['enProduccion']))
+				$options['conditions'] = array('enProduccion' => 1);
+				
+			$prods = $this->Productos->getProductosNames($options);
 
 			echo $this->json('Productos', $prods);
 
@@ -301,6 +335,9 @@ class ProductosController extends AppController {
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}
 	}
+	
+
+
 
 
 

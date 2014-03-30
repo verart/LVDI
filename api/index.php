@@ -16,12 +16,6 @@ if (ENTORNO == 'DESARROLLO'){
 }else
 	error_reporting(E_NONE);
 
-/*
-ini_set('display_errors',1);
-ini_set('display_startup_errors',1);
-error_reporting(-1);
-*/
-
 
 
 ini_set('include_path', constant('INCLUDE_PATH'));
@@ -42,6 +36,7 @@ $route = new Route();
 $route->add('/sesion','POST','Sesion','login');
 $route->add('/productos/index','GET','Productos','index');
 $route->add('/productos/productosName','GET','Productos','productosName');
+$route->add('/productos/productosDisponibles','GET','Productos','productosDisponibles');
 $route->add('/productos/show','GET','Productos','show');
 $route->add('/productos/delete','DELETE','Productos','delete');
 $route->add('/productos/update','PUT','Productos','update');

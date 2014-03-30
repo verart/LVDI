@@ -72,9 +72,9 @@ class Productos extends AppModel {
 	/**
 	 * Retorna los nombres de los productos
 	 */
-	function getProductosNames($enProduccion) {
+	function getProductosNames($opciones='') {
 		
-		$conditions = ($enProduccion)? 'WHERE enProduccion = 1': "";	
+		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";
 		
 
 		$sql = "SELECT P.nombre nombre_prod, P.precio, M.id as id, M.nombre as nombre_mod
@@ -159,7 +159,7 @@ class Productos extends AppModel {
 	* SETPRODUCTO
 	* $producto = array( ['id'=>''], 'nombre'=>'', 'precio'=>'' )
 	* $modelos  = array( 	
-	* 					array(['id'=>''], 'nombre'=>'') stock no viene. 
+	* 					array(['id'], 'nombre', 'stock')
 	* 
 	* 
 	* Nota: Stock solo se actualiza stock desde reponer/vender/baja. (Se debe registrar el movimiento por cada reposición.)
@@ -168,7 +168,6 @@ class Productos extends AppModel {
 		
 		try{
 			$this->beginTransaction();
-			$this->Modelos->beginTransaction();
 			
 			if(!isset($producto['id'])){
 			
@@ -184,10 +183,11 @@ class Productos extends AppModel {
 					
 					// varios modelos
 					if (!empty($modelos)){ 
+					
 						foreach($modelos as $field => $value) {
 						
 							$value['productos_id'] = $idProducto;
-							$value['stock'] = 1;
+							$value['stock'] = (isset($value['stock']))?$value['stock']:0;
 							$value['created'] = date('Y/m/d', time());
 							$value['nombre'] = utf8_decode($value['nombre']);
 							unset($value['fechaVenta']); unset($value['fechaRep']);unset($value['$$hashKey']);
@@ -195,16 +195,19 @@ class Productos extends AppModel {
 							if(!$this->Modelos->create($value) )
 								throw new BadRequestException('Hubo un error al crear el modelo.');
 	
-							// Agrego un movimiento
-							// tipo de movimiento:  'Nueva','Reposicion','produccion','venta','baja'
-							$movimiento = array(
-									'modelos_id'=> $this->Modelos->getLastId(), 
-									'created'=> date('Y/m/d h:i:s', time()), 
-									'tipo'=> 'Nuevo', 
-									'cantidad'=> $value['stock']);
-	
-							if(!$this->MovimientosStock->setMovimiento($movimiento))
-								throw new BadRequestException('Hubo un error al crear el movimiento.');
+							//Solo creo el movimiento si hay stock	
+							if($value['stock'] > 0){
+								// Agrego un movimiento
+								// tipo de movimiento:  'Reposicion','produccion','venta','baja'
+								$movimiento = array(
+										'modelos_id'=> $this->Modelos->getLastId(), 
+										'created'=> date('Y/m/d h:i:s', time()), 
+										'tipo'=> 'Reposicion', 
+										'cantidad'=> $value['stock']);
+		
+								if(!$this->MovimientosStock->setMovimiento($movimiento))
+									throw new BadRequestException('Hubo un error al crear el movimiento.');
+							}		
 						}
 					
 					}else{
@@ -216,15 +219,14 @@ class Productos extends AppModel {
 							throw new BadRequestException('Hubo un error al crear el modelo.');
 	
 						// Agrego un movimiento
-						// tipo de movimiento:  'Nueva','Reposicion','produccion','venta','baja'
+						// tipo de movimiento:  'Reposicion','produccion','venta','baja'
 						$movimiento = array(
 									'modelos_id'=> $this->Modelos->getLastId(), 
 									'created'=> date('Y/m/d h:i:s', time()), 
-									'tipo'=> 'Nuevo', 
-									'cantidad'=> '1');
+									'tipo'=> 'Reposicion', 
+									'cantidad'=> '0');
 									
-						if(!$this->MovimientosStock->setMovimiento($movimiento))
-								throw new BadRequestException('Hubo un error al crear el movimiento.');
+
 					}
 					
 				}else
@@ -244,25 +246,33 @@ class Productos extends AppModel {
 						if(!isset($value['id'])){
 						
 							$value['productos_id'] = $idProducto;
-							$value['stock'] = 1;
+							$value['stock'] = (isset($value['stock']))?$value['stock']:0;
 							$value['created'] = date('Y/m/d', time());
 							unset($value['fechaVenta']); unset($value['fechaRep']);unset($value['$$hashKey']);
 								
 							if(!$this->Modelos->create($value))
 								throw new BadRequestException('Hubo un error al crear el modelo.');
 								
-							// Agrego un movimiento 'Nuevo'
-							$movimiento = array(
-										'modelos_id'=> $this->Modelos->getLastId(), 
-										'created'=> date('Y/m/d h:i:s', time()), 
-										'tipo'=> 'Nuevo', 
-										'cantidad'=> '1');
-										
-							if(!$this->MovimientosStock->setMovimiento($movimiento))
-									throw new BadRequestException('Hubo un error al crear el movimiento.');
-									
+							//Solo creo el movimiento si hay stock	
+							if($value['stock'] > 0){
+								
+								$movimiento = array(
+											'modelos_id'=> $this->Modelos->getLastId(), 
+											'created'=> date('Y/m/d h:i:s', time()), 
+											'tipo'=> 'Reposicion', 
+											'cantidad'=> $value['stock']);
+											
+								if(!$this->MovimientosStock->setMovimiento($movimiento))
+										throw new BadRequestException('Hubo un error al crear el movimiento.');
+							}			
 									
 						}else{ 
+						
+							// OJO! Aquí SOLO se modifica el nombre del modelo. 
+							// Si se incrementó la cantidad de stock NO se guarda acá la modificación.
+							/*  La modificación en el stock de un modelo del producto se realiza con la function reponer(). 
+								La invoca el controller de producto por cada reposición hecha. */
+								
 							if(!$this->Modelos->update(array('nombre'=>$value['nombre']), array('id'=>$value['id'])))
 								throw new BadRequestException('Hubo un error al modificar el modelo.');
 						}
@@ -308,6 +318,45 @@ class Productos extends AppModel {
 			echo $e->getMsg();
 			$this->rollbackTransaction();
 		}
+		
+	}
+	
+	
+	
+	/**
+	* REPONER
+	* Incrementa en 1 el stock del modelo
+	*/
+	function reponer($idMod){
+		
+		
+			$this->beginTransaction();
+			
+			$res = $this->Modelos->responer($idMod);
+			
+			if($res['success'])
+				$this->commitTransaction();
+			else
+				$this->rollbackTransaction();
+		
+	}
+	
+	
+	/**
+	* BAJA
+	* Decrementa en 1 el stock del modelo
+	*/
+	function baja($idMod, $nota=''){
+		
+		
+			$this->beginTransaction();
+			
+			$res = $this->Modelos->baja($idMod,$nota);
+			
+			if($res['success'])
+				$this->commitTransaction();
+			else
+				$this->rollbackTransaction();
 		
 	}
 	

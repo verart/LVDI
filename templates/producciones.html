@@ -22,7 +22,7 @@
 	      </ul>
 	      
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="#">Salir</a></li>
+	        <li><a href="#!/">Salir</a></li>
 	      </ul>
 	      
 	    </div><!-- /.navbar-collapse -->
@@ -48,9 +48,29 @@
 					ng-model="query" id='inputSearch' 
 					placeholder="Filtro de producciones" >
 					
-					<select class="form-control small filterInput" ng-model="filterProds" ng-options="opt for opt in optFilter" style="margin-top: 30px;">
-						<option value=""> Filtrar por estado </option> 
-					</select> 
+					<div class="formElement">
+					
+						<label class="control-label">Mostrar</label>
+						
+						<div class="controls opciones">
+							<label class="radio small">
+								<input type="radio" value="Retirado" ng-model="filterProds.estado"
+								name="pedido[estado]"> 
+								Sólo los Retirados
+							</label>
+							<label class="radio small">
+								<input type="radio" value="Devuelto" ng-model="filterProds.estado"
+								name="pedido[estado]"> 
+								Sólo los Devueltos
+							</label>						
+							<label class="radio small">
+								<input type="radio" value="" ng-model="filterProds.estado" 
+								name="pedido[estado]"> 
+								Todos
+							</label>
+							
+						</div>	
+					</div>
 					
 					<hr/>
 					
@@ -81,8 +101,8 @@
 			  						class="prodsList link"  ng-click="openProduccion(prod.id)">
 			  						
 						<td> {{prod.responsable}} </td>
-						<td> {{prod.fecha}} </td>
-						<td> {{prod.fecha_devolucion}} </td>				
+						<td> {{prod.fecha | date:'dd/MM/yyyy' }} </td>
+						<td> {{prod.fecha_devolucion | date:'dd/MM/yyyy'}} </td>				
 						<td> {{prod.estado}} </td>
 						
 					</tr>
