@@ -30,7 +30,7 @@ class AppModel {
 	function _buildConditions($conditions = array()) {
 		$result = " WHERE ";
 		foreach($conditions as $field => $value)
-			$result .= " $field = '$value' AND ";
+			$result .= " $field= '$value' AND ";
 		$result .= " (1 = 1) ";
 		
 		return $result;		
@@ -135,9 +135,9 @@ class AppModel {
 		}
 		$sql = substr($sql,0,strlen($sql)-1);// Saco la ultima coma
 		$sql .= $this->_buildConditions($conditions);
-		
+				
 		$query = $this->con->query($sql);
-		
+
 		if(@PEAR::isError($query)) {
 		    return false;
 		}

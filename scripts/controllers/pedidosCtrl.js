@@ -5,9 +5,8 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
        
        
         
-	    $scope.optFilter = ['Pendiente', 'Terminado', 'Entregado'];
-	     $scope.order = '-fecha';
-	    
+	    $scope.order = '-fecha';
+	    $scope.filterPedidos = {estado:''};
 	    
 	    
 	    /*****************************************************************************************************
@@ -263,6 +262,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 			  $scope.pedido = {
 			  			fecha: (new Date()).toISOString().slice(0, 10),
+			  			fecha_entrega: (new Date()).toISOString().slice(0, 10),
 			  			estado:'Pendiente', 
 			  			total:'0', 
 			  			clientesPM_id: "", 

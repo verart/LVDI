@@ -41,7 +41,8 @@
 		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-3 sidebar">
 			<form class="navbar-form navbar-left" role="search">
-				<div class="form-group">
+
+				<div class="form-group filterInput">
 					
 					
 					<input 	type="text" class="form-control small filterInput" 
@@ -49,10 +50,35 @@
 							placeholder="Filtro por cliente" >
 					
 					
-					<select class="form-control small filterInput" ng-model="filterPedidos" ng-options="opt for opt in optFilter" style="margin-top: 30px;">
-						<option value=""> Filtrar por estado </option> 
-					</select> 					
+					<div class="formElement">
 					
+						<label class="control-label">Mostrar</label>
+						
+						<div class="controls opciones">
+							<label class="radio small">
+								<input type="radio" value="Pendiente" ng-model="filterPedidos.estado"
+								name="pedido[estado]"> 
+								Sólo los Pendientes
+							</label>
+							<label class="radio small">
+								<input type="radio" value="Terminado" ng-model="filterPedidos.estado"
+								name="pedido[estado]"> 
+								Sólo los Terminados
+							</label>						
+							<label class="radio small">
+								<input type="radio" value="Entregado" ng-model="filterPedidos.estado"
+								name="pedido[estado]"> 
+								Sólo los Entregados
+							</label>
+							<label class="radio small">
+								<input type="radio" value="" ng-model="filterPedidos.estado" 
+								name="pedido[estado]"> 
+								Todos
+							</label>
+							
+						</div>	
+					</div>
+			
 					<hr/>
 					
 					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo Pedido </button>
@@ -72,8 +98,9 @@
 			  			<tr>
 			  				<th>Cliente</th>
 			  				<th>Fecha</th>
+			  				<th>Entrega</th>
 			  				<th>Total</th>
-			  				<th>Bonificación</th>
+			  				<th>Bon.</th>
 			  				<th>Estado</th>
 			  			</tr>
 			  		</thead>	
@@ -81,7 +108,8 @@
 			  			<tr ng-repeat="pedido in filteredPedidos = (data | orderBy:order:false | filter:query | filter:filterPedidos)" 
 			  						class="pedidosList link" ng-click="openPedido(pedido.id)">
 			  				<td> {{pedido.cliente}}</td>
-			  				<td> {{pedido.fecha}}</td>
+			  				<td> {{pedido.fecha | date:'dd/MM/yyyy'}}</td>
+			  				<td> {{(pedido.fecha_entrega | date:'dd/MM/yyyy') || 'Sin datos'}}</td>
 			  				<td> {{pedido.total | currency}}</td>
 		 					<td> {{pedido.bonificacion}}%</td>						
 		 					<td> {{pedido.estado}}</td>

@@ -93,6 +93,7 @@ app.service('productosService', ['$http', function ($http) {
             /******************************
             PRODUCTOS EN PRODUCCION
             ******************************/
+          
             nombresProductos:function(enProd) {
 	            return $http({
 	            	method: 'GET',
@@ -100,7 +101,21 @@ app.service('productosService', ['$http', function ($http) {
 	            	data: $.param({enProduccion:enProd}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-            } 
+            },
+
+            
+             
+            /******************************
+            PRODUCTOS EN PRODUCCION CON STOCK > 0
+            ******************************/
+            nombresProductosDisponibles:function() {
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/productos/productosDisponibles',	     
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            }
+            
                   
         }
 }]);

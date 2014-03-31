@@ -50,7 +50,6 @@ class MovimientosStock extends AppModel {
 			return true;
 
 		} catch (Exception $e) {
-			//echo $e->getMsg();
 			$this->rollbackTransaction();
 			return false;
 		}
