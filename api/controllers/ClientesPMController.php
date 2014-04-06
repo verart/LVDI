@@ -52,7 +52,7 @@ class ClientesPMController extends AppController {
 		
 		try {
 			
-			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'index'))
+			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'clientesName'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
 			$clientes = $this->ClientesPM->getClientesNames();

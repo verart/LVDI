@@ -42,3 +42,15 @@ body {
 .bienvenido{
 	font-size: x-large: 
 }
+
+.loggedUser{
+	text-align: right;
+	margin-right: 31px;
+	font-size: 12px;
+	color: gray;
+}
+
+.logout{
+	margin-top: 6px;
+	margin-right: 6px;
+}

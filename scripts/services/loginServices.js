@@ -1,6 +1,7 @@
 
 app.factory('AuthService', function ($http, Session) {
   return {
+    
     login: function (credentials) {
       
       return $http({
@@ -9,18 +10,27 @@ app.factory('AuthService', function ($http, Session) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	                data: $.param(credentials),
 	          }).then(
-		          function (res) { Session.create(res.id, res.userid, res.role); }
+		          function (res) { 
+		          	Session.create(res.data.DATA.id, res.data.DATA.nombre, res.data.DATA.perfil); 
+		          }
 		      );
     },
+    
     isAuthenticated: function () {
-      return !!Session.userId;
+      return !!Session.getUserId();
     },
+    
     isAuthorized: function (authorizedRoles) {
       if (!angular.isArray(authorizedRoles)) {
         authorizedRoles = [authorizedRoles];
       }
-      return (this.isAuthenticated() &&
-        authorizedRoles.indexOf(Session.userRole) !== -1);
+
+
+      var isAuthe = this.isAuthenticated();
+      var isAutho =  (authorizedRoles.indexOf(Session.getUserRole())!= -1);
+      
+      return isAuthe && isAutho;
+
     }
   };
 })
@@ -28,46 +38,43 @@ app.factory('AuthService', function ($http, Session) {
 
 
 
-.service('Session', function () {
-
-  this.create = function (sessionId, userId, userRole) {
-    this.id = sessionId;
-    this.userId = userId;
-    this.userRole = userRole;
-  };
-  this.destroy = function () {
-    this.id = null;
-    this.userId = null;
-    this.userRole = null;
-  };
-  return this;
-  
-})
-
-
-
-
-.controller('ApplicationController', 
+.service('Session', function (AlertService, $rootScope) {
 	
-	function ($scope, USER_ROLES, AuthService) {
-  
-		$scope.currentUser = null;
-		$scope.userRoles = USER_ROLES;
-		$scope.isAuthorized = AuthService.isAuthorized;
-})
-
-
-
-
-
-
-.config(function ($httpProvider) {  
-
-	$httpProvider.interceptors.push([    
-		'$injector',    
-		function ($injector) {      
-			return $injector.get('AuthInterceptor');
-	}]);
+	  this.create = function (userId, userName, userRole) {
+	  
+		  if(typeof(Storage)!=="undefined"){
+		  	sessionStorage.userId = userId;
+		  	sessionStorage.userName=userName;
+		  	sessionStorage.userRole=userRole;
+			
+		
+		  }else{
+		  	AlertService.add('danger', "El navegador no soporta sessionStorage", 5000);;
+		  }
+	  };
+	  
+	  this.destroy = function () {
+		  sessionStorage.userId = null;
+		  sessionStorage.userName = null;
+		  sessionStorage.userRole = null;
+		  
+	  };
+	  
+	   
+	  this.getUserName= function(){
+	  	var name = (sessionStorage.userName != 'null')?sessionStorage.userName:''; 
+		  return name;
+	  };
+	  
+	  this.getUserId= function(){
+		  return sessionStorage.userId;
+	  };
+	  this.getUserRole= function(){
+		  return sessionStorage.userRole;
+	  };
+	  
+	  return this;
+	 
 })
 
 
@@ -93,27 +100,10 @@ app.factory('AuthService', function ($http, Session) {
 
 
 
-.directive('formAutofillFix', function ($timeout) {
 
-  return function (scope, element, attrs) {
-    element.prop('method', 'post');
-    if (attrs.ngSubmit) {
-      $timeout(function () {
-        element
-          .unbind('submit')
-          .bind('submit', function (event) {
-            event.preventDefault();
-            element
-              .find('input, textarea, select')
-              .trigger('input')
-              .trigger('change')
-              .trigger('keydown');
-            scope.$apply(attrs.ngSubmit);
-          });
-      });
-    }
-  };
 
-});
+
+
+
 
 
