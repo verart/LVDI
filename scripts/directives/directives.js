@@ -91,33 +91,6 @@ app.directive('uploader', [function() {
 
 
 
-/*******************************************************************************************************
-NG-ALERTS (Element)
-Muestra la lista de alertas
-Necesita en el scope un array 'alerts' {type,msg,show} 
-*******************************************************************************************************/
-app.directive('ngAlerts', [function() {
-
-	return{
-		restrict: 'E',
-		templateUrl: 'templates/alerts.html',
-		transclude: true,
-		link: function(scope, element, attrs) {
-            scope.$watch('alerts', function(newValue, oldValue) {
-                if (newValue !== oldValue)
-                    console.log("I see a data change!" + oldValue +'--'+newValue );
-            });
-        },
-        controller: function($scope){
-				    
-			$scope.closeAlert = function(index) {
-				$scope.alerts.splice(index, 1);
-			};
-	    
-		}
-	}
-}]);
-
 
 
 
@@ -158,6 +131,36 @@ app.directive('focusMe', function($timeout) {
             }
         });
     }
+});
+
+
+
+/*******************************************************************************************************
+FORMAUTOFILLFIL
+Cuando en un input tiene un valor cargado por defecto (caso de los inputs del login), el controller no detecta 
+que el dato esta cargado y el scope queda sin actualizar y cuando el usuario hace submit no lo loguea.
+*******************************************************************************************************/
+app.directive('formAutofillFix', function ($timeout) {
+
+  return function (scope, element, attrs) {
+    element.prop('method', 'post');
+    if (attrs.ngSubmit) {
+      $timeout(function () {
+        element
+          .unbind('submit')
+          .bind('submit', function (event) {
+            event.preventDefault();
+            element
+              .find('input, textarea, select')
+              .trigger('input')
+              .trigger('change')
+              .trigger('keydown');
+            scope.$apply(attrs.ngSubmit);
+          });
+      });
+    }
+  };
+
 });
 
 

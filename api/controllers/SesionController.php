@@ -49,7 +49,7 @@ class SesionController extends AppController {
 			
 			$this->SesionComponent->guardarEnSesion('usuario', $respuesta);
 			
-			echo $this->json('Usuario logueado con éxito', $usuario['nombre']);
+			echo $this->json('Usuario logueado con éxito', $respuesta);
 
 		} catch (Exception $e) {	
 		

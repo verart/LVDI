@@ -13,17 +13,23 @@
 	        </li>
 	        
 	        <li class="active middle"><a href="#">Productos</a></li>
-	        <li class="middle"><a href="#!/pedidos">Pedidos</a></li>
-	        <li class="middle"><a href="#!/producciones">Producciones</a></li>
-	        <li class="middle"><a href="#!/ventas">Ventas</a></li>
-	        <li class="middle"><a href="#!/clientesPM">Clientes Por mayor</a></li>
-	        <li class="middle"><a href="#!/clientes">Clientes</a></li>
-	        <li class="middle"><a href="#!/reportes">Reportes</a></li>
+	        <li ng-if="(usuario.getUserRole() =='admin')||(usuario.getUserRole()  =='taller')" class="middle">
+	        	<a href="#!/pedidos">Pedidos</a></li>
+	        <li ng-if="(usuario.getUserRole() =='admin')" class="middle">
+	        	<a href="#!/producciones">Producciones</a></li>
+	        <li ng-if="(usuario.getUserRole() =='admin')||(usuario.getUserRole() =='local')" class="middle">
+	        	<a href="#!/ventas">Ventas</a></li>
+	        <li ng-if="(usuario.getUserRole() =='admin')" class="middle">
+	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/clientes">Clientes</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/reportes">Reportes</a></li>
 	      
 	      </ul>
 	      
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="#">Salir</a></li>
+	        <li><p class="link logout" ng-click="logout()">Salir</p></li>
 	      </ul>
 	      
 	    </div><!-- /.navbar-collapse -->
