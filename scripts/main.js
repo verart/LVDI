@@ -2,13 +2,7 @@
 var app = angular.module('app', ['ngRoute','xeditable', 'ui.bootstrap']);
 
 
-app.run(function(editableOptions) {
-  editableOptions.theme = 'bs3';
-});
 
-
-
-/*
 app.constant('AUTH_EVENTS', {
   loginSuccess: 'auth-login-success',
   loginFailed: 'auth-login-failed',
@@ -16,39 +10,52 @@ app.constant('AUTH_EVENTS', {
   sessionTimeout: 'auth-session-timeout',
   notAuthenticated: 'auth-not-authenticated',
   notAuthorized: 'auth-not-authorized'
-})
+});
 
-.constant('USER_ROLES', {
+
+
+app.constant('USER_ROLES', {
   all: '*',
   admin: 'admin',
-  editor: 'editor',
-  guest: 'guest'
+  taller: 'taller',
+  local: 'local'
+});
+
+
+
+app.run(function(editableOptions) {
+  editableOptions.theme = 'bs3';
 });
 
 
 
 
 
-app.run(function ($rootScope, AUTH_EVENTS, AuthService) {
+app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthService) {
 
-  $rootScope.$on('$stateChangeStart', function (event, next) {
+  $rootScope.$on('$locationChangeStart', function (event, next) {
   
-    var authorizedRoles = next.data.authorizedRoles;
+    var nextPath = $location.path();
+    var nextRoute = $route.routes[nextPath];
     
-    if (!AuthService.isAuthorized(authorizedRoles)) {
-      
-      event.preventDefault();
-      if (AuthService.isAuthenticated()) {
-        // user is not allowed
-        $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
-      } else {
-        // user is not logged in
-        $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-      }
-      
-    }
-    
+    if((typeof(nextRoute) !== "undefined")&&(nextRoute.auth.needAuth)){
+	
+	    var authorizedRoles = nextRoute.auth.authorizedRoles;
+
+	    if (!AuthService.isAuthorized(authorizedRoles)) {
+	      
+	      event.preventDefault();
+	      if (AuthService.isAuthenticated()) {
+	        // user is not allowed
+	        $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+	      } else {
+	        // user is not logged in
+	        $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+	      }
+	      
+	    }
+	}
   });
 
   
-})*/
+})

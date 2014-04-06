@@ -6,8 +6,8 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 		$scope.order = '-nombre';
 	    $scope.filterProds = {enProduccion:1};
 	    $scope.selectedProd = ''; 
-	    
-	    
+
+		
 	    
 	    /**********************************************************************
 	    ALERTS
