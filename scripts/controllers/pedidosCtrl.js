@@ -64,13 +64,14 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    Abre un modal con un form para crear un nuevo pedido o editarlo
 	    param: idPed -> id de pedido. Si viene en blanco es un create 
 	    *************************************************************************/	
-        $scope.openPedido = function (idPed) {
-     
+        $scope.openPedido = function (idPed, userRole) {
+  
      		if(idPed != '')
 	 			$scope.infoModal.pedido = $filter('getById')($scope.data, idPed);
 	 		else
 	 			$scope.infoModal.pedido = '';
 	 		
+	 		$scope.infoModal.userRole = userRole;
 	 			
 	 		angular.element("#fechaPedido").focus();
 	 	
@@ -241,6 +242,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  $scope.fps = ['Efectivo', 'Tarjeta', 'Cheque'];	 
 		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	  		  
 		  
+		  $scope.userRole = info.userRole;
 		  $scope.form = {};
 		  $scope.p = {};
 		  $scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
@@ -273,8 +275,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 			  			FP:'',
 			  			nota: ''};
 		  			
-			  			var original = $scope.pedido;
-			  			$scope.form.cliente = {nombre:'', id:'', bonificacion:0};
+			  var original = $scope.pedido;
+			  $scope.form.cliente = {nombre:'', id:'', bonificacion:0};
 		  }
 		  
 		  $scope.pedido.mod2delete = [];

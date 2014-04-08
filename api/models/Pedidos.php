@@ -171,7 +171,7 @@ class Pedidos extends AppModel {
 							
 			}else{
 				
-				// UPDATE PRODUCTO
+				// UPDATE PEDIDO
 				
 				if($this->update($pedido, array('id'=>$pedido['id']))){
 				
@@ -187,9 +187,9 @@ class Pedidos extends AppModel {
 						
 							// Nuevo modelo para el Pedido
 							
-							$estado = isset($value['estado'])?$value['estado']:'Pendiente';	
+							$estado = isset($value['estado'])?"'".$value['estado']."'" :"'Pendiente'";	
 							$fields = '(pedidos_id,modelos_id,cantidad,estado)';
-							$values = "($idPedido, $idModelo, $cantidad, ".$value['estado'].')';
+							$values = "($idPedido, $idModelo, $cantidad, $estado)";
 							
 							$sql = "INSERT INTO pedidos_modelos $fields VALUES $values ";	
 						
@@ -202,7 +202,8 @@ class Pedidos extends AppModel {
 							$sql = "UPDATE pedidos_modelos SET cantidad=$cantidad $estado WHERE (id = $id)";
 						
 						}
-						//print_r($sql);
+
+					
 						$query = $this->con->query($sql);
 						
 						if(@PEAR::isError($query))
