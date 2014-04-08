@@ -82,8 +82,8 @@
 							<tr>
 								<th class="col-md-5">Productos</th>
 							  	<th class="col-md-2 text-center">Cant</th>
-							  	<th class="col-md-2 text-center">P.U.</th>
-							  	<th class="col-md-1 text-center">P.Tot</th>
+							  	<th ng-if="(userRole == 'admin')" class="col-md-2 text-center">P.U.</th>
+							  	<th ng-if="(userRole == 'admin')" class="col-md-1 text-center">P.Tot</th>
 							  	<th class="col-md-1 text-center">Estado</th>
 							  	<th class="col-md-2 text-center"> </th>
 							  </tr>
@@ -94,8 +94,10 @@
 								<td class="col-md-2 text-center editableCell">
 									<span editable-text="mod.cantidad">{{mod.cantidad || 1}}</span>
 								</td>
-								<td class="col-md-2 text-center"> {{mod.precio | currency}} </td>
-								<td class="col-md-1 text-center"> {{(mod.precio * mod.cantidad) | currency}}  </td>
+								<td ng-if="(userRole == 'admin')" class="col-md-2 text-center"> 
+									{{mod.precio | currency}} </td>
+								<td ng-if="(userRole == 'admin')" class="col-md-1 text-center"> 
+									{{(mod.precio * mod.cantidad) | currency}}  </td>
 								<td class="col-md-1 text-center editableCell"> 
 									<a href="#" editable-select="mod.estado" e-ng-options="s for s in estadosProductos">
 										{{ mod.estado }}
@@ -121,7 +123,7 @@
 				
 					<br/>
 			
-					<div class="resumenPedido form-horizontal pull-right" role="form">
+					<div ng-if="(userRole == 'admin')" class="resumenPedido form-horizontal pull-right" role="form">
 						
 						<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
 						
@@ -133,7 +135,7 @@
 						    	<input type="text" class="form-control" id="bonif" ng-model="pedido.bonificacion">
 						    </div>
 						    
-						    <label for="bonif" class="col-sm-1 control-label small" style="text-align:left;padding-left: 6px;">%</label>
+						    <label for="bonif" class="col-sm-1 control-label small" style="text-align:left;padding-left:6px;">%</label>
 				
 						</div>
 						
