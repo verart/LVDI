@@ -5,12 +5,13 @@ app.service('clientesPMService', ['$http', function ($http) {
         	/******************************
             CLIENTES POR MAYOR
             ******************************/        
-            clientes:function() {
+            clientes:function(success) {
 	            return $http({
 	            	method: 'GET',
 	            	url: dir_api + '/clientesPM/index',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
+	            .success(function(data) { success(data.DATA);} );
             },
             
             
@@ -35,6 +36,50 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
+            
+            
+            /******************************
+            ADDCLIENTE
+            ******************************/
+            addCliente:function (cliente) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/clientesPM/create',
+	            	data: $.param(cliente),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
+            
+            /******************************
+            EDITCLIENTE
+            ******************************/
+            editCliente: function(cliente){ 
+	            
+	            return $http({
+	            	method: 'PUT',
+	            	url: dir_api + '/clientesPM/update',
+	            	data: $.param(cliente),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
+             
+             
+                   
+            /******************************
+            DELETEPEDIDO
+            ******************************/
+            deleteCliente:function (id) { 
+	                    
+	            return $http({
+	            	method: 'DELETE',
+	            	url: dir_api + '/clientesPM/'+id+'/delete',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            }
+            
             
         }
 }])

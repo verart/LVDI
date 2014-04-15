@@ -119,6 +119,37 @@ class Producciones extends AppModel {
 	
 	
 	
+	
+	
+	/**
+	 * Retorna un modelo de una produccion que coincide con el id de relacion
+	 * @param $idModeloProduccion
+	 */
+	function getModeloEnProduccionPorId($idModeloProduccion) {
+		
+				
+		$sql = "SELECT * 
+				FROM producciones_modelos PM 
+				WHERE PM.id = ?";
+				
+    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+		$query = $query->execute(array($idModeloProduccion));
+		$results = $query->fetchAll();
+		
+		return $results;	
+	}
+	
+	
+
+
+
+
+	
+	
+	
+	
+	
+	
 	/**
 	* SETPRODUCCION
 	* @param $pedido (array)  ( ['id'], 'responsables_id', 'motivo', 'fecha', 'fecha_devolucion', 'nota', 'estado')
@@ -127,10 +158,10 @@ class Producciones extends AppModel {
 	* 
 	* Los estado pueden ser: 'Retirado','Devuelto'
 	*/
-	function setProduccion($produccion, $modelos){
+	function setProduccion($produccion, $modelos, $mod2delete=array()){
 						
 		try{
-			$this->beginTransaction();
+			$this->beginTransaction(); 
 		
 			if(isset($producto['motivo'])) $producto['motivo'] = utf8_decode($producto['motivo']);
 			if(isset($producto['nota'])) $producto['nota'] = utf8_decode($producto['nota']);
@@ -145,18 +176,14 @@ class Producciones extends AppModel {
 					$idProduccion = $this->con->lastInsertID('producciones', 'id');
 					
 					foreach($modelos as $field => $value) {
-					
+										
 						$idModelo = $value['id'];
 						
-					
-					
 						//Decremento el stock del modelo agregado a la produccion
 						$res = $this->Modelos->baja($idModelo, 1,'','BajaProduccion');
 						if(!$res['success'])
 							throw new BadRequestException($res['msg']);
 						
-					
-					
 					
 						$sql = "INSERT INTO producciones_modelos (producciones_id,modelos_id,estado) 
 								VALUES ($idProduccion, $idModelo,  'Retirado') ";
@@ -179,7 +206,7 @@ class Producciones extends AppModel {
 				
 				/*********** UPDATE produccion *************************/
 				
-				$idProduccion =  $produccion['id'];
+				$idProduccion =  $produccion['id']; 
 
 				if($this->update($produccion, array('id'=>$produccion['id']))){
 
@@ -189,7 +216,7 @@ class Producciones extends AppModel {
 					foreach($modelos as $field => $value) {
 					
 						$idModelo = $value['id'];
-						$estado = $value['estado'];
+						$estado = $value['estado']; 
 						
 						if(!isset($value['idProdMod'])){
 							
@@ -206,7 +233,14 @@ class Producciones extends AppModel {
 							$sql = "INSERT INTO producciones_modelos (producciones_id,modelos_id,estado) 
 									VALUES ($idProduccion, $idModelo, '$estado') ";	
 						
-
+							
+							$query = $this->con->query($sql);
+								
+							if(@PEAR::isError($query))
+								throw new BadRequestException('Hubo un error al agregar modelos a la producción.');
+									
+									
+							
 						}else{
 							
 							// Edicion de un modelo ya cargado a la produccion
@@ -270,11 +304,24 @@ class Producciones extends AppModel {
 					        
 						} //else isset idProdMod 
 					
-					}//for
+					}//for modelos
+					
+					
+					// DELETE de modelos de la produccion
+					if(!empty($mod2delete)){
+					
+						foreach($mod2delete as $field => $value){
+							$result = $this->removeModelo($value['id']);
+														
+							if(!$result['success'])
+								throw new BadRequestException($result['msg']);									
+						}
+					}
+					
+					
 					
 				}else  
 					throw new BadRequestException('Hubo un error al actualizar la producción.');				
-					
 					
 					
 			}// else UPDATE
@@ -300,13 +347,24 @@ class Producciones extends AppModel {
 	 * Quita un modelo de producto de la produccion
 	 * @param $idProdModelo
 	 */
-	function removeModelo($idProdModelo){
+	function removeModelo($idModeloProduccion){
 		
 		try{
 		
-			$this->beginTransaction();
 			
-			$sql = "DELETE FROM produccion_modelos WHERE id = $idProdModelo";
+			//Recupero el estado del producto de la produccion
+			$prod = $this->getModeloEnProduccionPorId($idModeloProduccion);
+			
+			if( $prod['estado'] == 'Retirado'){
+									
+				//Incremento el stock del modelo que se va a eliminar de la produccion
+				$res = $this->Modelos->reponer($prod['modelos_id'], 1,'');
+				if(!$res['success'])
+					throw new BadRequestException($res['msg']);
+			
+			}
+			
+			$sql = "DELETE FROM produccion_modelos WHERE id = $idModeloProduccion";
 
 			$result = $this->con->query($sql);
 		
@@ -314,17 +372,44 @@ class Producciones extends AppModel {
 		    	throw new BadRequestException('Ocurrió un error al quitar el producto de la producción.');				
 		    }
 		    
-			$this->commitTransaction();
-			
 			return array('success'=>true, 'msg'=>'');
 			
 		} catch (Exception $e) {
-			$this->rollbackTransaction();
 			
 			return array('success'=>false, 'msg'=>$e->getMsg());
 
 		}
 		
+	}
+	
+	
+	
+	
+	
+	
+	function eliminarProduccion($idProd){
+	
+		try{
+		
+			$this->beginTransaction();
+		
+			$prod = $this->getProduccionPorId($idProd);
+		
+			foreach($prod['modelos'] as $field => $value)
+				$result = $this->removeModelo($value['idProdMod']);
+		
+			$this->delete($idProd);
+			
+			
+			$this->commitTransaction();
+		
+		}catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}
+	
 	}
 	
 

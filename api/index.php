@@ -37,6 +37,7 @@ $route->add('/sesion','POST','Sesion','login');
 $route->add('/productos/index','GET','Productos','index');
 $route->add('/productos/productosName','GET','Productos','productosName');
 $route->add('/productos/productosDisponibles','GET','Productos','productosDisponibles');
+$route->add('/productos/productoModelo','GET','Productos','productoModelo');
 $route->add('/productos/show','GET','Productos','show');
 $route->add('/productos/delete','DELETE','Productos','delete');
 $route->add('/productos/update','PUT','Productos','update');
@@ -54,9 +55,10 @@ $route->add('/pedidos/create','POST','Pedidos','create');
 
 $route->add('/clientesPM/index','GET','ClientesPM','index');
 $route->add('/clientesPM/clientesName','GET','ClientesPM','clientesName');
-$route->add('/clientesPM/show','GET','clientesPM','show');
-$route->add('/clientesPM/delete','DELETE','clientesPM','delete');
-$route->add('/clientesPM/update','PUT','clientesPM','update');
+$route->add('/clientesPM/show','GET','ClientesPM','show');
+$route->add('/clientesPM/delete','DELETE','ClientesPM','delete');
+$route->add('/clientesPM/update','PUT','ClientesPM','update');
+$route->add('/clientesPM/create','POST','ClientesPM','create');
 
 $route->add('/responsables/index','GET','Responsables','index');
 $route->add('/responsables/show','GET','Responsables','show');
@@ -70,6 +72,18 @@ $route->add('/producciones/update','PUT','Producciones','update');
 $route->add('/producciones/create','POST','Producciones','create');
 
 
+$route->add('/clientes/index','GET','Clientes','index');
+$route->add('/clientes/show','GET','Clientes','show');
+$route->add('/clientes/delete','DELETE','Clientes','delete');
+$route->add('/clientes/update','PUT','Clientes','update');
+$route->add('/clientes/create','POST','Clientes','create');
+
+
+
+$route->add('/ventas/index','GET','Ventas','index');
+$route->add('/ventas/show','GET','Ventas','show');
+$route->add('/ventas/delete','DELETE','Ventas','delete');
+$route->add('/ventas/create','POST','Ventas','create');
 
 $route->submit();
 ?>

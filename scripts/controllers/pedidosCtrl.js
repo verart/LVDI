@@ -190,8 +190,8 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	     
 	     		
 		/* NUEVO *******************/
-	 	$scope.nuevo = function () {
-            $scope.openPedido('');
+	 	$scope.nuevo = function (userRole) {
+            $scope.openPedido('',userRole);
         };
         
         

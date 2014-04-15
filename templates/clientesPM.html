@@ -33,17 +33,18 @@
 
 
 
-<div class="container-fluid" ng-controller="clientesPMCtrl" >
+<div class="container-fluid" ng-controller="clientesPMCtrl" > 
 
 	<div class="row-fluid">
 	
-		<div class="h2 titleh2"> Clientes por mayor </div>
+		<div class="h2 titleh2"> Clientes por mayor</div>
 
 
 		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-3 sidebar">
-			<form class="navbar-form navbar-left" role="search">
-				<div class="form-group">
+			<form class="navbar-form navbar-left filterInput" role="search">
+			
+				<div class="form-group filterInput">
 					
 					
 					<input 	type="text" class="form-control small filterInput" 
@@ -54,13 +55,13 @@
 					
 					<hr/>
 					
-					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo cliente </button>
+					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo cliente por mayor </button>
 					
 					      
 				</div>
 			</form>
 		</div>
-
+		
 	
 		<!-- BODY-->
 		<div class="col-xs-12 col-md-9 ">
@@ -77,13 +78,13 @@
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
-			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query | filter:filterCl)" 
-			  						class="clienteList link" ng-click="opencliente(cl.id)">
-			  				<td> {{cliente.nombre}}</td>
-			  				<td> {{cliente.local}}</td>
-			  				<td> {{cliente.tel}}</td>
-		 					<td> {{cliente.tel2}}%</td>						
-		 					<td> {{cliente.email}}</td>
+			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query | orderBy:order:true)" 
+			  						class="clienteList link" ng-click="openCliente(cl.id)">
+			  				<td> {{cl.nombre}}</td>
+			  				<td> {{cl.local || 'Sin datos' }}</td>
+			  				<td> {{cl.tel || 'Sin datos'}}</td>
+		 					<td> {{cl.tel2 || 'Sin datos'}}</td>						
+		 					<td> {{cl.email || 'Sin datos'}}</td>
 		  				</tr>
 		  				<tr ng-show="(filteredClientes.length < 1)" class="aviso"> <td colspan="5"> No hay clientes</td></tr>
 		   			</tbody>

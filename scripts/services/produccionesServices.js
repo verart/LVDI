@@ -5,12 +5,13 @@ app.service('responsablesService', ['$http', function ($http) {
         	/******************************
 			RESPONSABLES
 			******************************/        
-            responsables:function() {
+            responsables:function(success) {
 	            return $http({
 	            	method: 'GET',
 	            	url: dir_api + '/responsables/index',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
+	            .success(function(data) { success(data.DATA);} );
             },
             
             
