@@ -57,7 +57,7 @@ class PedidosController extends AppController {
 	/**
 	* CREATE
 	* Crea un pedido.
-	* Params (POST): array([FP], [bonificacion], clientesPM_id, [estado], fecha, total, modelos=array(cantidad,estado,id)
+	* Params (POST): pedidos = array([FP], [bonificacion], clientesPM_id, [estado], fecha, total, modelos=array(cantidad,estado,id)
 	*/
 	function create() {
 		

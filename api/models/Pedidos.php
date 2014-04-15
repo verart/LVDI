@@ -144,7 +144,7 @@ class Pedidos extends AppModel {
 			if(!isset($pedido['id'])){ 
 			
 			
-				// NUEVO MODELO
+				// NUEVO PEDIDO
 			
 				if($this->create($pedido)) {
 					

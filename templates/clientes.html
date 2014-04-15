@@ -33,7 +33,7 @@
 
 
 
-<div class="container-fluid" ng-controller="clientesPMCtrl" >
+<div class="container-fluid" ng-controller="clientesCtrl" >
 
 	<div class="row-fluid">
 	
@@ -42,8 +42,8 @@
 
 		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-3 sidebar">
-			<form class="navbar-form navbar-left" role="search">
-				<div class="form-group">
+			<form class="navbar-form navbar-left filterInput" role="search">
+				<div class="form-group filterInput">
 					
 					
 					<input 	type="text" class="form-control small filterInput" 
@@ -56,6 +56,9 @@
 					
 					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo cliente </button>
 					
+					<hr/>
+					
+					<button type="button" class="btn btn-primary" ng-click="exportarMails()"> Exportar mails </button> 
 					      
 				</div>
 			</form>
@@ -70,20 +73,16 @@
 			  		<thead>
 			  			<tr>
 			  				<th>Cliente</th>
-			  				<th>Local</th>
-			  				<th>Tel</th>
-			  				<th>Tel2</th>
 			  				<th>email</th>
+			  				<th>Nota</th>
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
-			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query | filter:filterCl)" 
-			  						class="clienteList link" ng-click="opencliente(cl.id)">
-			  				<td> {{cliente.nombre}}</td>
-			  				<td> {{cliente.local}}</td>
-			  				<td> {{cliente.tel}}</td>
-		 					<td> {{cliente.tel2}}%</td>						
-		 					<td> {{cliente.email}}</td>
+			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query)" 
+			  						class="clienteList link" ng-click="openCliente(cl.id)">
+			  				<td> {{cl.nombre | truncate:40}}</td>
+			  				<td> {{cl.email | truncate:40}}</td>
+			  				<td> {{(cl.nota | truncate:40) || 'Sin nota'}}</td>
 		  				</tr>
 		  				<tr ng-show="(filteredClientes.length < 1)" class="aviso"> <td colspan="5"> No hay clientes</td></tr>
 		   			</tbody>

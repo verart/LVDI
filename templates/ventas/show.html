@@ -1,0 +1,103 @@
+
+        <div id= "wndOpenVenta" class="modal-body">
+		
+		
+			<div class="modal-header"  style="margin-bottom: 18px;">
+			   		<h3>Datos de la venta</h3>
+			</div>
+			       
+		
+		
+			<div class="form-group row">
+						
+						<div class="colForm col-sm-4">
+							<input type="date" class="form-control small" 
+									placeholder="Fecha" id="fechaVenta"  
+									ng-model="venta.fecha" style="padding-right:0px;"/>
+						</div>
+							
+						
+
+			</div>
+        
+			
+			<br/>
+        
+			
+			
+			<div class="row">
+			
+				
+				<!-- DETALLE  -->
+				<div class="col-xs-12 col-sm-12">
+				
+					<div class="tableContainer">
+					<table class="table table-condensed table-hover small">
+						<thead>
+							<tr>
+								<th class="col-md-6">Productos</th>
+							  	<th>Precio</th>
+							  	<th ng-if="venta.id == null"  class="col-md-1 text-center"> </th>
+							  </tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="mod in venta.modelos">
+								<td class="col-md-5">{{mod.nombre}}</span></td>
+								<td class="col-md-1 text-center"> 
+									{{mod.precio | currency}}  </td>
+							</tr>
+							<tr><td class="avisoSmall" colspan="6" style="text-align=center" ng-if="venta.modelos.length == 0">
+								No hay productos en la venta</td>
+							</tr>
+						</tbody>
+					</table>										
+					</div>
+				
+					<br/>
+			
+					<div ng-if="(userRole == 'admin')" class="resumenPedido form-horizontal pull-right" role="form">
+						
+						<label style="margin-right:15px;"> Subtotal:  {{venta.total | currency}} </label>
+						
+						<div class="form-group">
+				
+						    <label for="bonif" class="col-sm-9 control-label small">Bonificación:</label>
+						    
+						    <div class="col-sm-2"  style="padding:0px">
+						    	<input type="text" class="form-control" id="bonif" ng-model="venta.bonificacion" disabled>
+						    </div>
+						    
+						    <label for="bonif" class="col-sm-1 control-label small" style="text-align:left;padding-left:6px;">%</label>
+				
+						</div>
+						
+						<hr/>
+						
+						<label style="margin-right:15px;"> Total:  {{ venta.totalFinal | currency }} </label>
+						
+						<br>
+						
+						<div class="colForm pull-right autocompleteFP">
+							<input type="text" ng-model="pedido.FP"  class="form-control small" 
+									placeholder="Forma de pago" disabled />
+						</div>
+	 				
+	 				</div>
+	 			</div>	
+				
+			</div>	
+			
+
+
+
+		</div> <!-- / modal-body -->
+						
+						            
+        <div class="modal-footer">
+        	
+	        <button ng-if="venta.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteVenta()">Eliminar venta</button>
+            
+            <button class="btn btn-warning" ng-click="cancel()">Cerrar</button>
+            
+        </div>
+   

@@ -1,8 +1,8 @@
 <?php
-class ClientesPMController extends AppController {
+class ClientesController extends AppController {
 
-	var $name = "ClientesPM";
-	var $uses = array('ClientesPM');
+	var $name = "Clientes";
+	var $uses = array('Clientes');
 	
 	
 	
@@ -12,10 +12,10 @@ class ClientesPMController extends AppController {
 		
 		try {
 			
-			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'index'))
+			if (!$this->PermisosComponent->puedeAcceder('clientes', 'index'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
-			$clientes = $this->ClientesPM->getClientes();
+			$clientes = $this->Clientes->getClientes();
 			echo $this->json('Clientes', $clientes);
 
 		} catch (Exception $e) {	
@@ -33,10 +33,10 @@ class ClientesPMController extends AppController {
 		
 		try {
 			
-			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'show'))
+			if (!$this->PermisosComponent->puedeAcceder('clientes', 'show'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
-			$cliente = $this->ClientesPM->getClientePorId($idCliente); 
+			$cliente = $this->Clientes->getClientePorId($idCliente); 
 			echo $this->json('', $cliente[0]); 
 
 		} catch (Exception $e) {	
@@ -48,48 +48,26 @@ class ClientesPMController extends AppController {
 	
 	
 	
-	function clientesName() {
-		
-		try {
-			
-			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'clientesName'))
-				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
-
-			$clientes = $this->ClientesPM->getClientesNames();
-		
-			echo $this->json('Clientes por mayor', $clientes);
-
-		} catch (Exception $e) {	
-
-			if ($e instanceof RequestException) 
-				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
-		}
-	}
-	
-	
-	
-	
-	
 	function create() {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'create'))
+			if (!$this->PermisosComponent->puedeAcceder('clientes', 'create'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
 				
-			$params = (isset($_POST['clientesPM']))? $_POST['clientesPM'] : array(); 
+			$params = (isset($_POST['clientes']))? $_POST['clientes'] : array();
 
 			// Campos obligatorios
-			if ( !$this->parametrosRequeridosEn(array('nombre'), $params) )
+			if ( !$this->parametrosRequeridosEn(array('nombre', 'email'), $params) )
 				throw new BadRequestException('Debe completar los campos obligatorios'); 
-
-			$res = $this->ClientesPM->setCliente($params);
+			
+			$res = $this->Clientes->setCliente($params);
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
-		
-
-			echo $this->json('clientePM', $res['clientesPM']);
+				
+	
+			echo $this->json('cliente', $res['cliente']);
 				
 
 		} catch (Exception $e) {	
@@ -108,12 +86,12 @@ class ClientesPMController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'update'))
+			if (!$this->PermisosComponent->puedeAcceder('clientes', 'update'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
 				
 			$params = getPutParameters();	
-			$params = (isset($params['clientesPM']))? $params['clientesPM'] : array();
+			$params = (isset($params['clientes']))? $params['clientes'] : array();
 			
 			unset($params['$$hashKey']); 
 			
@@ -121,12 +99,12 @@ class ClientesPMController extends AppController {
 			if ( !$this->parametrosRequeridosEn(array('nombre','id'), $params) )
 				throw new BadRequestException('Debe completar los campos obligatorios'); 
 			
-			$res = $this->ClientesPM->setCliente($params);			
+			$res = $this->Clientes->setCliente($params);			
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
 				
 	
-			echo $this->json('clientesPM', $res['clientesPM']);
+			echo $this->json('clientes', $res['clientes']);
 					
 
 		} catch (Exception $e) {	
@@ -142,10 +120,10 @@ class ClientesPMController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'delete'))
+			if (!$this->PermisosComponent->puedeAcceder('clientes', 'delete'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
-			$this->ClientesPM->delCliente($idCliente);
+			$this->Clientes->delCliente($idCliente);
 
 		} catch (Exception $e) {	
 

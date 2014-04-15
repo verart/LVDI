@@ -1,0 +1,120 @@
+	<!-- barra -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+	  
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav">
+	        
+	        <li>
+	        	<img src="/LVDI/img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px;margin-bottom:5px;" />
+	        </li>
+	        
+	        <li class="middle"><a href="#!/productos">Productos</a></li>
+	        <li ng-if="(usuario.getUserRole() =='admin')||(usuario.getUserRole()  =='taller')" class="middle">
+	        	<a href="#!/pedidos">Pedidos</a></li>
+	        <li ng-if="(usuario.getUserRole() =='admin')" class="middle">
+	        	<a href="#!/producciones">Producciones</a></li>
+	        <li class="active middle">
+	        	<a href="#">Ventas</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/clientes">Clientes</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/reportes">Reportes</a></li>
+	        
+	        
+	      </ul>
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="#!/">Salir</a></li>
+	      </ul>
+	      
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+
+
+<div class="container-fluid" ng-controller="ventasCtrl" >
+
+	<div class="row-fluid">
+	
+		<div class="h2 titleh2"> Ventas </div>
+
+
+		<!-- SIDEBAR-->			
+		<div class=" col-xs-12 col-md-3 sidebar">
+			<form class="navbar-form navbar-left" role="search">
+
+				<div class="form-group filterInput">
+					
+					<div class="formElement">
+					
+						<label class="control-label">Mostrar</label>
+						
+						<div class="controls opciones">
+							<label class="radio small">
+								<input type="radio" ng-value="hoy" ng-model="filterVentas.fecha"
+								name="venta[fecha]"> 
+								Sólo hoy
+							</label>
+							<label class="radio small">
+								<input type="radio" value="" ng-model="filterVentas.fecha" 
+								name="venta[fecha]"> 
+								Todos
+							</label>
+							
+						</div>	
+					</div>
+					
+					<hr/>
+					
+					<button type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nueva Venta </button>
+					
+					      
+				</div>
+			</form>
+		</div>
+
+	
+		<!-- BODY-->
+		<div class="col-xs-12 col-md-9 ">
+			<div class="tableContainer" >
+			
+				<table class="table table-hover table-condense">
+			  		<thead>
+			  			<tr>
+			  				<th>Fecha</th>
+			  				<th>Detalle</th>
+			  				<th>Total</th>
+			  				<th>Bon.</th>
+			  			</tr>
+			  		</thead>	
+			  		<tbody>
+			  			<tr ng-repeat="venta in filteredVentas = (data | orderBy:order:false)" 
+			  						class="link" ng-click="showVenta(venta.id, usuario.getUserRole())">
+			  				<td> {{venta.fecha | date:'dd/MM/yyyy' }}</td>
+			  				<td>
+			  					<ul ng-repeat="mod in venta.modelos">  
+				  					<li> {{mod.nombre}}</li>			  			
+			  					</ul>	
+			  				</td>
+			  				<td> {{venta.total | currency}}</td>
+		 					<td> {{venta.bonificacion}}%</td>	
+		  				</tr>
+		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="5"> No hay ventas</td></tr>
+		   			</tbody>
+		  		</table>
+	
+			</div>
+			
+			
+		</div>
+		
+	       
+       			
+	</div>
+</div>

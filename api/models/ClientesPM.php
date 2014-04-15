@@ -8,7 +8,7 @@ class ClientesPM extends AppModel {
 	
 	/**
 	 * GETCLIENTES
-	 * Retorna todos los pedidos
+	 * Retorna todos los clientes
 	 * params (array) $opciones = array([conditions], [order])
 	 */
 	function getClientes($opciones = array()) {
@@ -84,25 +84,27 @@ class ClientesPM extends AppModel {
 	
 	/**
 	* SETCLIENTE
-	* $cliente = array( ['id'=>''], 'nombre'=>'', 'local'=>'','bonificacion'=>'', 'fecha'=>'' )
+	* $cliente = array( ['id'], 'nombre', 'local','bonificacion', 'fecha'=>' )
 	*/
 	function setCliente($cliente){
 		
 		try{
-			$this->beginTransaction();
+			$cl = $cliente;
 			
 			if(isset($cliente['nombre'])) $cliente['nombre'] = utf8_decode($cliente['nombre']);
 			if(isset($cliente['local']))  $cliente['local'] = utf8_decode($cliente['local']);
 			if(isset($cliente['direccion'])) $cliente['direccion'] = utf8_decode($cliente['direccion']);
 			if(isset($cliente['localidad'])) $cliente['localidad'] = utf8_decode($cliente['localidad']);
 		
-				
+		
 			if(!isset($cliente['id'])){ 
 				
 				$cliente['created'] = date('Y/m/d h:i:s', time());
 	
 				if(!$this->create($cliente))				
 					throw new BadRequestException('Hubo un error al crear el cliente.');
+				
+				$cl['id'] = $this->getLastId();
 							
 			}else{
 				
@@ -110,12 +112,13 @@ class ClientesPM extends AppModel {
 					throw new BadRequestException('Hubo un error al actualizar el cliente.');				
 					
 			}
-
-			$this->commitTransaction();
+			
+				
+			return array('success'=>true, 'clientesPM'=>$cl);
 
 		} catch (Exception $e) {
-			echo $e->getMsg();
-			$this->rollbackTransaction();
+
+			return array('success'=>false, 'msg'=>$e->getMsg());
 
 		}
 		

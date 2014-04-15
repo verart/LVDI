@@ -42,17 +42,19 @@ class ProduccionesController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('produccion', 'create'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$prod = array(
-				'fecha'=>$_POST['fecha'],
-				'fecha_devolucion'=>$_POST['fecha_devolucion'],
-				'responsables_id'=>$_POST['responsables_id'],
-				'estado'=>$_POST['estado']);
+			$params = $_POST['produccion'];
 			
-			if (isset($_POST['nota'])) $prod['nota'] = $_POST['nota'];
-			if (isset($_POST['motivo'])) $prod['motivo'] = $_POST['motivo'];
+			$prod = array(
+				'fecha'=>$params['fecha'],
+				'fecha_devolucion'=>$params['fecha_devolucion'],
+				'responsables_id'=>$params['responsables_id'],
+				'estado'=>$params['estado']);
+			
+			if (isset($params['nota'])) $prod['nota'] = $params['nota'];
+			if (isset($params['motivo'])) $prod['motivo'] = $params['motivo'];
 	
 
-			$mod = isset($_POST['modelos'])?$_POST['modelos']:array();
+			$mod = isset($params['modelos'])?$params['modelos']:array();
 			
 			$res =  $this->Producciones->setProduccion($prod,$mod);
 
@@ -63,7 +65,7 @@ class ProduccionesController extends AppController {
 			// Retorna la info del pedido actualizado	
 			$prod['id'] = $res['id'];
 			$prod['modelos'] = $mod; 
-			$prod['responsable'] = $_POST['responsable'];		
+			$prod['responsable'] = $params['responsable'];		
 			
 			echo $this->json('Produccion', $prod);
 			
@@ -111,11 +113,14 @@ class ProduccionesController extends AppController {
 	function update() {
 		
 		try {
-		
+			
+			
 			if (!$this->PermisosComponent->puedeAcceder('producciones', 'update'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
 			$params = getPutParameters();
+			
+			$params = (isset($params['produccion']))? $params['produccion'] : array(); 
 			
 			// Campos obligatorios
 			if (!$this->parametrosRequeridosEn(array('id', 'fecha_devolucion', 'fecha', 'responsables_id', 'estado'), $params))
@@ -126,37 +131,25 @@ class ProduccionesController extends AppController {
 				'fecha'=>$params['fecha'],
 				'fecha_devolucion'=>$params['fecha_devolucion'],
 				'responsables_id'=>$params['responsables_id'],
-				'estado'=>$params['estado']);
+				'estado'=>$params['estado']); 
 			
 			if (isset($params['nota'])) $prod['nota'] = $params['nota'];
 			if (isset($params['motivo'])) $prod['motivo'] = $params['motivo'];
 	
 			if(!isset($params['modelos'])) $params['modelos']=array();
-
+			if(!isset($params['mod2delete'])) $params['mod2delete']=array();
+			
 			
 			// UPDATE de producción
-			$res = $this->Producciones->setProduccion($prod,$params['modelos']);
+			$res = $this->Producciones->setProduccion($prod,$params['modelos'],$params['mod2delete']);
 				
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
 			
 			
-			// DELETE de modelos de la produccion
-			if(isset($params['mod2delete']) && !empty($params['mod2delete']))
 			
-				foreach($params['mod2delete'] as $field => $value){
-					$result = $this->Producciones->removeModelo($value['id']);
-					
-					//DOy de alta el modelo
-					//??
-					
-					if(!$result['success'])
-						throw new BadRequestException($result['msg']);									
-			}
-			
-
 		} catch (Exception $e) {	
-
+		
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
@@ -173,14 +166,20 @@ class ProduccionesController extends AppController {
 	function delete($idProduccion) {
 		
 		try {
+			
+			
+			
 		
 			if (!$this->PermisosComponent->puedeAcceder('producciones', 'delete'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$this->Producciones->delete($idProduccion);
+			$this->Producciones->eliminarProduccion($idProduccion);
+				
+			
+			
 
 		} catch (Exception $e) {	
-
+			
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	

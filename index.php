@@ -30,15 +30,20 @@
 	<script type="text/javascript" src="scripts/services/productosServices.js"></script>
 	<script type="text/javascript" src="scripts/services/pedidosServices.js"></script>
 	<script type="text/javascript" src="scripts/services/produccionesServices.js"></script>
+	<script type="text/javascript" src="scripts/services/clientesServices.js"></script>
 	<script type="text/javascript" src="scripts/services/commonServices.js"></script>	
+	<script type="text/javascript" src="scripts/services/ventasServices.js"></script>	
   	<script type="text/javascript" src="scripts/controllers/loginCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalConfirmCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfProduccionCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfPedidoCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/modalPdfClientesMailsCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/productosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/produccionesCtrl.js"></script>
-	
+	<script type="text/javascript" src="scripts/controllers/clientesPMCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/clientesCtrl.js"></script>	
+	<script type="text/javascript" src="scripts/controllers/ventasCtrl.js"></script>	
 	
 
 
@@ -53,6 +58,7 @@
     <link rel="stylesheet" href='css/productos.css' type="text/css" />
     <link rel="stylesheet" href='css/pedidos.css' type="text/css" />
     <link rel="stylesheet" href='css/producciones.css' type="text/css" />
+    <link rel="stylesheet" href='css/ventas.css' type="text/css" />
   
 </head>
 <body ng-controller="ApplicationController">
