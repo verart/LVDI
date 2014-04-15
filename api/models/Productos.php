@@ -101,7 +101,7 @@ class Productos extends AppModel {
 	
 	
 	/**
-	 * Retorna el usuario que coincide con el id
+	 * Retorna el producto que coincide con el id
 	 * @param $idProducto
 	 */
 	function getProductoPorId($idProducto) {
@@ -129,30 +129,84 @@ class Productos extends AppModel {
 		//Se formatea el resultado para que queden los datos del producto con su arreglo de modelos.
 		$results = $query->fetchAll();
 		$resultsFormat = array();
-		$dir = '/img/productos/';
 		
-		$resultsFormat['nombre'] = utf8_encode($results[0]['nomProducto']);
-		$resultsFormat['precio'] = $results[0]['precio'];
-		$resultsFormat['id'] = $results[0]['producto_id'];
-		$resultsFormat['img'] = file_exists('../img/productos/'.$results[0]['producto_id'].'.jpg')?$dir.$results[0]['producto_id'].'.jpg': $dir.'noimg.jpg';
-		$resultsFormat['enProduccion'] = $results[0]['enProduccion'];
-		$resultsFormat['reponer'] = 0; //Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
+		if(!empty($results)){
+			$dir = '/img/productos/';
 			
-		$resultsFormat['modelos'] = array();
-		$m = 0;
-		while($m < count($results)){
-			$resultsFormat['modelos'][$m]['id'] = $results[$m]['modelo_id'];
-			$resultsFormat['modelos'][$m]['fechaRep'] = $results[$m]['fechaRep'];
-			$resultsFormat['modelos'][$m]['fechaVenta'] = $results[$m]['fechaVenta'];
-			$resultsFormat['modelos'][$m]['nombre'] = utf8_encode($results[$m]['nomModelo']);
-			if($results[$m]['stock'] == 0) $resultsFormat['reponer'] = 1;
-			$resultsFormat['modelos'][$m]['stock'] = $results[$m]['stock'];
-			$m++;		
-		}
+			$resultsFormat['nombre'] = utf8_encode($results[0]['nomProducto']);
+			$resultsFormat['precio'] = $results[0]['precio'];
+			$resultsFormat['id'] = $results[0]['producto_id'];
+			$resultsFormat['img'] = file_exists('../img/productos/'.$results[0]['producto_id'].'.jpg')?$dir.$results[0]['producto_id'].'.jpg': $dir.'noimg.jpg';
+			$resultsFormat['enProduccion'] = $results[0]['enProduccion'];
+			$resultsFormat['reponer'] = 0; //Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
+				
+			$resultsFormat['modelos'] = array();
+			$m = 0;
+			while($m < count($results)){
+				$resultsFormat['modelos'][$m]['id'] = $results[$m]['modelo_id'];
+				$resultsFormat['modelos'][$m]['fechaRep'] = $results[$m]['fechaRep'];
+				$resultsFormat['modelos'][$m]['fechaVenta'] = $results[$m]['fechaVenta'];
+				$resultsFormat['modelos'][$m]['nombre'] = utf8_encode($results[$m]['nomModelo']);
+				if($results[$m]['stock'] == 0) $resultsFormat['reponer'] = 1;
+				$resultsFormat['modelos'][$m]['stock'] = $results[$m]['stock'];
+				$m++;		
+			}
+		}	
 		return $resultsFormat;
 		
 		
 	}
+	
+	
+	
+	
+	
+	/**
+	 * Retorna el producto-modelo que coincide con el id
+	 * @param $idModelo
+	 */
+	function getProductoModeloPorId($idModelo) {
+		
+		$sql = "SELECT P.precio,P.nombre as nomProducto, M.nombre as nomModelo
+				FROM Modelos M
+				INNER JOIN productos P ON P.id = M.productos_id
+				WHERE M.id = ?";
+		
+		try{
+				
+	    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+			$query = $query->execute(array($idModelo));
+			
+			//Se formatea el resultado para que queden los datos del producto con su arreglo de modelos.
+			$results = $query->fetchAll();
+			$resultsFormat = array();
+			
+			if(!empty($results)){
+				
+				$resultsFormat['nombre'] = utf8_encode($results[0]['nomProducto'].'-'.$results[0]['nomModelo']);
+				$resultsFormat['precio'] = $results[0]['precio'];
+				$resultsFormat['id'] = $idModelo;
+			
+				
+				return array('success'=>true, 'producto'=>$resultsFormat);
+				
+			}else
+				throw new BadRequestException('No existe producto con id '.$idModelo.'.');
+			
+				
+			
+		}catch(Exception $e){
+			return array('success'=>false,'msg'=>$e->getMsg());
+		}	
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	/**

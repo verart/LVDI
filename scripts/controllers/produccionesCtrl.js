@@ -95,7 +95,7 @@ app.controller('produccionesCtrl', ['$scope','$modal', '$filter', 'produccionesS
 		    		******************************************/
 			    	if($scope.infoModal.produccion == '') {
 			    		
-				    	produccionesService.addProduccion(res.produccion).then(
+				    	produccionesService.addProduccion(res).then(
 			    			//Success
 			    			function(promise){ 
 			    				$scope.data.push(promise.data.DATA);
@@ -114,7 +114,7 @@ app.controller('produccionesCtrl', ['$scope','$modal', '$filter', 'produccionesS
 				    	/******************************************
 				    	UPDATE PRODUCCION
 				    	******************************************/
-			    		produccionesService.editProduccion(res.produccion).then(
+			    		produccionesService.editProduccion(res).then(
 			    			//SUCCESS
 			    			function(promise){
 				    		
@@ -183,8 +183,8 @@ app.controller('produccionesCtrl', ['$scope','$modal', '$filter', 'produccionesS
 	     
 	     		
 		/* NUEVO *******************/
-	 	$scope.nuevo = function () {
-            $scope.openProduccion('');
+	 	$scope.nuevo = function (userRole) {
+            $scope.openProduccion('',userRole);
         };
 	   
 	   

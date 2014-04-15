@@ -1,6 +1,6 @@
-app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService', 
+app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','clientesService','$timeout', 
 
-	function ($scope, $modal, $filter,$log, AlertService, $timeout) {
+	function ($scope, $modal, $filter,$log, AlertService, clientesService, $timeout) {
        
         
 		$scope.order = '-nombre';
@@ -13,7 +13,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 	    listClientes = function(data){	    		
 		    $scope.data = data;
 	    }	    	    
-	    clientesPMService.clientes(listClientes);
+	    clientesService.clientes(listClientes);
 	   
  
  
@@ -28,11 +28,13 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		$scope.openCliente = function(idCl) {
 	 	
 	 	
-	 		if(idProd != ''){
-	 			$scope.selectedProd = $filter('getById')($scope.data, idCl);
+	 		if(idCl != ''){
+	 			$scope.selectedCliente = $filter('getById')($scope.data, idCl);
 	 		}else{
-	 			$scope.selectedProd = '';
+	 			$scope.selectedCliente = '';
 	 		}	
+	 	    
+	 	    angular.element("#nombre").focus();
 	 	    
 	 	    var modalInstance = $modal.open({
 		    	templateUrl: '/LVDI/templates/clientes/addedit.html',
@@ -41,7 +43,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		    	backdrop: 'static',
 		    	keyboard: true,
 		    	resolve: {
-		        	cliente: function () { return $scope.selectedCliente; }
+		        	clientes: function () { return $scope.selectedCliente; }
 		        }
 		    });
 		    
@@ -59,7 +61,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		    		 NUEVO CLIENTE
 		    		******************************************/
 			    	if($scope.selectedCliente == '') {
-			    		clientesPMService.addCliente(res).then(
+			    		clientesService.addCliente(res).then(
 			    			//Success
 			    			function(promise){
 			    				$scope.data.push(promise.data.DATA);
@@ -78,12 +80,9 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				    	/******************************************
 				    	UPDATE CLIENTE
 				    	******************************************/
-			    		clientesPMService.editProducto(res).then(
+			    		clientesService.editCliente(res).then(
 			    			//SUCCESS
-			    			function(promise){
-				    			if(promise.data.DATA.img != '')
-					    			res.img = promise.data.DATA.img;
-			    			},
+			    			function(promise){ },
 			    			//Error al actualizar
 			    			function(error){
 				    			AlertService.add('danger', error.data.MSG);
@@ -119,10 +118,10 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 					    .then( 
 					    	// Si el modal cierra por ACEPTAR
 					    	function (r) {
-						    	 clientesPMService.deleteProducto(idProd).then(
+						    	 clientesPMService.deleteProducto(idCliente).then(
 					    			//Success
 					    			function(promise){
-					    				var index = $filter('getIndexById')($scope.data, idCl);
+					    				var index = $filter('getIndexById')($scope.data, idCliente);
 					    				$scope.data.splice(index, 1);
 					    			},
 					    			//Error al eliminar
@@ -143,8 +142,27 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		
 		/* NUEVO *******************/
 	 	$scope.nuevo = function () {
-            $scope.openClientesPM('');
+            $scope.openCliente('');
         };			
+        
+        
+        
+        
+       /************************************************************
+		IMPRIMIR mails
+		************************************************************/
+		$scope.exportarMails = function () {
+		  	
+		  	
+		  	var printDoc = $modal.open({
+							    	templateUrl: '/LVDI/templates/printDoc.html',
+							    	windowClass: 'wndPdf',
+							    	controller: modalPdfClientesMailsCtrl,
+							    	resolve: { clientes: function(){return $scope.data;} }
+			});
+			
+		}
+        
         
                
 }]);
@@ -156,19 +174,16 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
  ModalClientesInstanceCtrl
  Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, producto) {
+var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, clientes) {
 		  		  		  
 		  
-		  if(producto != ''){
-		  	var original = angular.copy(producto);
-		  	$scope.producto = producto;
+		  if(clientes != ''){
+		  	var original = angular.copy(clientes);
+		  	$scope.clientes = clientes;
 		  }else{
-		  	$scope.producto = {nombre:'',precio:'', img:'LVDI/img/productos/noimg.jpg', modelos:[], enProduccion:"1"}
-		  	var original = $scope.producto;
+		  	$scope.clientes	 = {nombre:'',email:'', nota:''};
+		  	var original = $scope.clientes;
 		  }
-		  $scope.producto.mod2delete = [];
-		  $scope.producto.mod2baja = [];
-		  $scope.producto.mod2alta = [];
 		  
 		  
 		  /***************************************************
@@ -176,7 +191,7 @@ var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, produ
 		   Se cierra el modal y retornan los datos del producto
 		  ****************************************************/ 
 		  $scope.ok = function () {
-		  	$modalInstance.close($scope.producto);
+		  	$modalInstance.close({clientes: $scope.clientes});
 		  };
 		  
 		  
@@ -194,9 +209,9 @@ var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, produ
 		   DELETE
 		   Se cierra el modal y retornan un indicador de que hay que eliminar el producto
 		  ****************************************************/
-		  $scope.deleteProducto = function () {
+		  $scope.deleteCliente = function () {
 			  $scope.back2original();	
-			  var res = {action:'delete', idProd:$scope.producto.id};	  		
+			  var res = {action:'delete', idCliente:$scope.clientes.id};	  		
 			  $modalInstance.dismiss(res);
 		  };
 		  
@@ -204,106 +219,10 @@ var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, produ
 		  // back2original
 		  // Copia en producto los campos originales que se enviaron.  
 		  $scope.back2original = function(){
-			  $scope.producto.nombre = original.nombre;
-			  $scope.producto.precio = original.precio;			  
-			  $scope.producto.stock = original.stock;			  
-			  $scope.producto.enProduccion = original.enProduccion;
-			  $scope.producto.modelos = original.modelos;
-			  $scope.producto.img = original.img;
-			  $scope.producto.mod2delete = [];
-			  $scope.producto.mod2baja = [];
-			  $scope.producto.mod2alta = [];
+			  $scope.clientes.nombre = original.nombre;
+			  $scope.clientes.email = original.email;			  
+			  $scope.clientes.nota = original.nota;	
 		  };	
 		  	  
 		  	  
-		  	  
-		  	
-		  /***************************************************
-		   Manejo de tabla de modelos
-		  ****************************************************/		  
-		  
-		  //REMOVE
-		  // Elimina un modelo de la tabla y guarda su id en el array de modelos para eliminar
-		  $scope.remove = function(indexMod){
-		  	idMod = $scope.producto.modelos[indexMod].id; 
-		  	
-		  	$scope.producto.modelos.splice(indexMod,1); 
-
-		  	if(idMod != null)
-		  		$scope.producto.mod2delete.push({id:idMod});
-		  	
-		  };
-		  
-
-
-		  // ADD
-		  // Agrega un modelo a la tabla
-		  $scope.add = function(mod){
-			  $scope.producto.modelos.push({nombre: mod, fechaVenta:'', fechaRep:(new Date()), stock:1});
-			  $scope.nuevoModelo = {nombre: '', fechaVenta:'', fechaRep:''};
-			  angular.element("#newMod").focus();
-
-		  };
-
-
-
-		  // BAJA
-		  // Decrementa el stock en 1
-		  $scope.baja = function(indexMod){
-		    
-			  $scope.producto.modelos[indexMod].stock --;
-			  var idMod = $scope.producto.modelos[indexMod].id;
-		    
-			  //Busco el id de modelo en el array de elementos dado de baja
-			  var index2baja = $filter('getIndexById')($scope.producto.mod2baja, idMod); 
-		    
-			  //Actualizo mod2baja
-			  if(index2baja != null)
-			  	$scope.producto.mod2baja[index2baja].cantBaja = $scope.producto.mod2baja[index2baja].cantBaja + 1;
-			  else{ 
-			  
-			  	//Busco el id de modelo en el array de elementos dado de alta
-			  	var index2alta = $filter('getIndexById')($scope.producto.mod2alta, idMod);
-			  	
-			  	//Actualizo mod2alta
-				  if(index2alta != null){
-				  	$scope.producto.mod2alta[index2alta].cantAlta = $scope.producto.mod2alta[index2alta].cantAlta - 1;
-				  	if($scope.producto.mod2alta[index2alta].cantAlta == 0) 
-			  			$scope.producto.mod2alta.splice(index2alta,1);
-			  	  }else
-			  	  	$scope.producto.mod2baja.push({id: idMod, cantBaja: 1});
-			  }
-		  		  		
-		  };
-		  
-		
-		  // ALTA
-		  // Decrementa el stock en 1
-		  $scope.alta = function(indexMod){
-		    
-			  $scope.producto.modelos[indexMod].stock ++;
-			  var idMod = $scope.producto.modelos[indexMod].id;
-		    
-			  //Busco el id de modelo en el array de elementos dado de alta
-			  var index2alta = $filter('getIndexById')($scope.producto.mod2alta, idMod);
-			
-			  //Actualizo mod2alta
-			  if(index2alta != null)
-			  	$scope.producto.mod2alta[index2alta].cantAlta = $scope.producto.mod2alta[index2alta].cantAlta + 1; 		
-			  
-			  else{ 				   
-				  //Busco el id de modelo en el array de elementos dado de baja
-		    	  var index2baja = $filter('getIndexById')($scope.producto.mod2baja, idMod); 
-		    	  
-				  //Actualizo mod2baja
-				  if(index2baja != null){
-				  	$scope.producto.mod2baja[index2baja].cantBaja = $scope.producto.mod2baja[index2baja].cantBaja - 1;
-				  	if($scope.producto.mod2baja[index2baja].cantBaja == 0) 
-			  			$scope.producto.mod2baja.splice(index2baja,1)
-			  	  }else
-					$scope.producto.mod2alta.push({id: idMod, cantAlta: 1});
-		  	  }  		
-		  };		  		  
 }
-
-

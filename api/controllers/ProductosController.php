@@ -55,6 +55,41 @@ class ProductosController extends AppController {
 	
 	
 	
+	
+	/*******************************************************************************************
+	PRODUCTOMODELO
+	Muestra monProducto-NomModelo con el precio
+	
+	*******************************************************************************************/
+	function productoModelo($idModelo) {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('productos', 'productoModelo'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			$res = $this->Productos->getProductoModeloPorId($idModelo); 
+			if($res['success'])
+				echo $this->json('', $res['producto']);
+			else
+				throw new BadRequestException($res['msg']); 
+
+		} catch (Exception $e) {	
+
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	* UPDATE
 	* Actualiza un producto.

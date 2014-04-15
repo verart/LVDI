@@ -42,6 +42,22 @@ app.service('productosService', ['$http', function ($http) {
 	            })
             },
             
+            
+            
+            /******************************
+            GETPRODUCTOMODELO
+            ******************************/
+            getProductoModelo:function(idMod) {
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/productos/'+idMod+'/productoModelo',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
+            
+            
+            
             /******************************
             EDITPRODUCTO
             ******************************/

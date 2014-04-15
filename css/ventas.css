@@ -1,0 +1,9 @@
+
+
+.wndVenta > .modal-dialog{
+	width:75%;
+}
+
+.wndShowVenta > .modal-dialog{
+	width: 50%;
+}
