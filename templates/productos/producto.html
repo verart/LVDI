@@ -9,9 +9,11 @@
 			 
 	</div>
 	
-	<div class="col-xs-6 col-md-6 link" ng-click="openProducto(producto.id)">
+	<div class="col-xs-6 col-md-6 link" ng-click="openProducto(producto.id,usuario.getUserRole())">
 		<h4>{{producto.nombre}}</h4>
-		<p class="small"> Precio: {{producto.precio | currency}} </p>
+		<p  ng-if="(usuario.getUserRole() == 'admin') || (usuario.getUserRole() == 'local')" class="small"> 
+			Precio: {{producto.precio | currency}} 
+		</p>
 	</div>
 
 	<div class="col-xs-12 col-md-4 modelosCol">

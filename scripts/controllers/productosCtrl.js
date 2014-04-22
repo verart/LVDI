@@ -5,7 +5,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
         
 		$scope.order = '-nombre';
 	    $scope.filterProds = {enProduccion:1};
-	    $scope.selectedProd = ''; 
+	    $scope.infoModal = {};
 
 		
 	    
@@ -51,8 +51,11 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 		   	
 		   	var prodFound = $filter('getById')($scope.data, idProd);
 		   	
-			productosService.reponerProducto(prodFound.modelos[indexMod].id)
-			prodFound.modelos[indexMod].stock ++ 
+			productosService.reponerProducto(prodFound.modelos[indexMod].id);
+			prodFound.modelos[indexMod].stock ++; 
+			
+			//Agrego a la cola de impresion de códigos
+			
 			
 			
 		}
@@ -65,14 +68,18 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 	    Abre un modal con un form para crear un nuevo producto o editarlo
 	    param: idProd -> id de producto. Si viene en blanco es un create 
 	    *************************************************************************/	
-		$scope.openProducto = function(idProd) {
+		$scope.openProducto = function(idProd, userRole) {
 	 	
 	 	
 	 		if(idProd != ''){
-	 			$scope.selectedProd = $filter('getById')($scope.data, idProd);
+	 			$scope.infoModal.producto = $filter('getById')($scope.data, idProd);
 	 		}else{
-	 			$scope.selectedProd = '';
+	 			$scope.infoModal.producto = '';
 	 		}	
+	 		
+	 		$scope.infoModal.userRole = userRole;
+	 		
+	 		angular.element("#nombre").focus();
 	 	    
 	 	    var modalInstance = $modal.open({
 		    	templateUrl: '/LVDI/templates/productos/addedit.html',
@@ -81,7 +88,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 		    	backdrop: 'static',
 		    	keyboard: true,
 		    	resolve: {
-		        	producto: function () { return $scope.selectedProd; }
+		        	info: function () { return $scope.infoModal; }
 		        }
 		    });
 		    
@@ -182,8 +189,8 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 		}
 		
 		/* NUEVO *******************/
-	 	$scope.nuevo = function () {
-            $scope.openProducto('');
+	 	$scope.nuevo = function (userRole) {
+            $scope.openProducto('',userRole);
         };			
         
                
@@ -196,20 +203,22 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
  ModalInstanceCtrl
  Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, producto) {
+var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  		  		  
 		  
-		  if(producto != ''){
-		  	var original = angular.copy(producto);
-		  	$scope.producto = producto;
+		  if(info.producto != ''){
+		  	var original = angular.copy(info.producto);
+		  	$scope.producto = info.producto;
 		  }else{
 		  	$scope.producto = {nombre:'',precio:'', img:'img/productos/noimg.jpg', modelos:[], enProduccion:"1"}
 		  	var original = $scope.producto;
 		  }
+		  
 		  $scope.producto.mod2delete = [];
 		  $scope.producto.mod2baja = [];
 		  $scope.producto.mod2alta = [];
 		  
+		  $scope.userRole = info.userRole; 
 		  
 		  /***************************************************
 		   OK

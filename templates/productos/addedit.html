@@ -18,7 +18,8 @@
 								<input type="text" class="form-control small inputForm" ng-model="producto.nombre"
 										placeholder="Nombre de producto">
 							</div>
-							<div class="colForm col-xs-6 col-lg-4">
+
+							<div ng-if="(userRole == 'admin') || (userRole == 'local')" class="colForm col-xs-6 col-lg-4">
 								<input type="text" class="form-control small" ng-model="producto.precio" placeholder="Precio" style="padding-right:0px;">
 							</div>
 						</div>

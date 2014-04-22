@@ -16,7 +16,7 @@ class Producciones extends AppModel {
 	
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
-		$sql = "SELECT P.*, R.nombre as responsable, Pr.nombre as producto, 
+		$sql = "SELECT P.*, R.nombre as responsable, Pr.nombre as producto, Pr.precio,
 				M.id as modelos_id, M.nombre as modelo,PM.estado as estadoProducto, 
 				PM.id as idProdMod 
 				FROM producciones P
@@ -50,6 +50,7 @@ class Producciones extends AppModel {
 			while(($i < count($results))&&($resultsFormat[$iF]['id'] == $results[$i]['id'])){
 				$resultsFormat[$iF]['modelos'][$m]['id'] = $results[$i]['modelos_id'];
 				$resultsFormat[$iF]['modelos'][$m]['idProdMod'] = $results[$i]['idProdMod'];
+				$resultsFormat[$iF]['modelos'][$m]['precio'] = $results[$i]['precio'];
 				$resultsFormat[$iF]['modelos'][$m]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
 				$resultsFormat[$iF]['modelos'][$m++]['estado'] = $results[$i++]['estadoProducto'];				
 			}

@@ -38,7 +38,7 @@ var modalPdfProduccionCtrl = function ($scope, $modalInstance, $sce, produccion)
 			doc.setFontType("normal");
 			doc.text(33, row, produccion.motivo);
 			
-			row = row + 17;
+			row = row + 20;
 			doc.setFontSize(14);
 			doc.text(16, row, 'Detalle');
 			
@@ -46,6 +46,7 @@ var modalPdfProduccionCtrl = function ($scope, $modalInstance, $sce, produccion)
 			row = row + 10;
 			produccion.modelos.forEach(function(m){
 				doc.text(30, row, m.nombre);
+				doc.text(140, row, '$'+m.precio);
 				row = row +10;
 			});
 			

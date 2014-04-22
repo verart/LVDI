@@ -19,6 +19,9 @@
 	<script type="text/javascript" src="lib/angular-xeditable/js/xeditable.min.js"></script>
 	<script type="text/javascript" src="lib/javascript/jspdf/jspdf.js"></script>
 	<script type="text/javascript" src="lib/javascript/jspdf/jspdf.plugin.standard_fonts_metrics.js"></script>
+  
+	<script type="text/javascript" src="lib/javascript/barcode/jquery-barcode.js"></script>  
+	
 	
 	<!-- Propios -->
  	<script type="text/javascript" src="scripts/main.js"></script>
@@ -32,18 +35,21 @@
 	<script type="text/javascript" src="scripts/services/produccionesServices.js"></script>
 	<script type="text/javascript" src="scripts/services/clientesServices.js"></script>
 	<script type="text/javascript" src="scripts/services/commonServices.js"></script>	
-	<script type="text/javascript" src="scripts/services/ventasServices.js"></script>	
+	<script type="text/javascript" src="scripts/services/ventasServices.js"></script>
+	<script type="text/javascript" src="scripts/services/colaImpresionServices.js"></script>	
   	<script type="text/javascript" src="scripts/controllers/loginCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalConfirmCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfProduccionCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfPedidoCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfClientesMailsCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/imprimirCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/productosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/produccionesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/clientesPMCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/clientesCtrl.js"></script>	
-	<script type="text/javascript" src="scripts/controllers/ventasCtrl.js"></script>	
+	<script type="text/javascript" src="scripts/controllers/ventasCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/colaImpresionCtrl.js"></script>		
 	
 
 
@@ -59,6 +65,7 @@
     <link rel="stylesheet" href='css/pedidos.css' type="text/css" />
     <link rel="stylesheet" href='css/producciones.css' type="text/css" />
     <link rel="stylesheet" href='css/ventas.css' type="text/css" />
+    <link rel="stylesheet" href='css/impresion.css' type="text/css" />
   
 </head>
 <body ng-controller="ApplicationController">
