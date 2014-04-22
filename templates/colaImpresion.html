@@ -1,0 +1,146 @@
+	<!-- barra -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+	  
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav">
+	        
+	        <li>
+	        	<img src="/LVDI/img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px;margin-bottom:5px;" />
+	        </li>
+	        
+	        <li class="middle"><a href="#!/productos">Productos</a></li>
+	        <li class="middle"><a href="#">Pedidos</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/producciones">Producciones</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" class="middle">
+	        	<a href="#!/ventas">Ventas</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/clientes">Clientes</a></li>
+	        <li class="active middle">
+	        	<a href="#!/reportes">Cola de Impresión</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/reportes">Reportes</a></li>
+	        
+	        
+	      </ul>
+	      
+	      <ul class="nav navbar-nav navbar-right">
+	        <li><a href="#!/">Salir</a></li>
+	      </ul>
+	      
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+
+
+<div class="container-fluid" ng-controller="colaImpresionCtrl" >
+
+	<div class="row-fluid">
+	
+		<div class="h2 titleh2"> Cola de impresión </div>
+
+
+		<!-- SIDEBAR-->			
+		<div class=" col-xs-12 col-md-3 sidebar" style="margin-top:28px;">
+			<form class="navbar-form navbar-left filterInput" role="search">
+
+				<div class="form-group filterInput">
+				
+					<h5>Agregar producto</h5>
+					
+					<input type="text" id="newMod" autocomplete="off" ng-model="modelo" class="form-control small filterInput" 
+									placeholder="Nombre de producto"
+									typeahead="mod_option as mod_option.nombre for mod_option in mod_options | filter:$viewValue" />
+
+								
+					<div class="colForm col-xs-6 col-md-6" style="margin-top:10px;">
+							<button class="btn btn-default" ng-click="add()" > Agregar </button>
+						</div>
+					
+					      
+				</div>
+			</form>
+		</div>
+
+	
+		<!-- BODY-->
+		<div class="col-xs-12 col-md-9 ">
+		
+		
+			<h3>Productos por reposición</h3>
+		
+		
+			<div class="tableContainer" >
+			
+				<table class="table table-hover table-condense">
+			  		<thead>
+			  			<tr> <th>Producto</th><th></th> </tr>
+			  		</thead>	
+			  		<tbody>
+			  			<tr ng-repeat="imp in data.reposicion.modelos" class="pedidosList">
+			  				<td> {{imp.nombre}}</td>
+							<td class="col-md-2 text-center">							
+								<span 	class="glyphicon glyphicon-remove accionesLst link"  
+										title="Quitar producto de la cola"
+										ng-click="removeFromReposicion(imp.id, $index)">
+								</span>									
+							</td>				
+		  				</tr>
+		  				<tr ng-show="(data.length < 1)" class="aviso"> <td colspan="5"> No hay productos para imprimir</td></tr>
+		   			</tbody>
+		  		</table>
+		  		<div class="btnCola">
+			  		<button ng-if="data.reposicion.modelos.length > 0" 
+			  				class="btn btn-danger btn-sm" ng-click="vaciarColaReposiciones()">Vaciar cola</button>
+			  		<button class="btn btn-primary btn-sm" ng-click="imprimirReposiciones()" target="_blank">Imprimir</button>
+		  		</div>	
+			</div>
+			
+			
+			<h3>Productos por pedidos</h3>
+			
+			<div ng-repeat="($index, productosPedidos) in data.pedidos" >
+			
+				<div class="tableContainer">
+				
+					<table class="table table-hover table-condense">
+				  		<thead>
+				  			<tr> <th>Producto</th><th></th> </tr>
+				  		</thead>	
+				  		<tbody>
+				  			<tr ng-repeat="($index2, imp) in productosPedidos.modelos" class="pedidosList">
+				  				<td> {{imp.nombre}}</td>
+								<td class="col-md-2 text-center">							
+									<span 	class="glyphicon glyphicon-remove accionesLst link"  
+											title="Quitar producto de la cola"
+											ng-click="removeFromPedidos(imp.id, $index,$index2)">
+									</span>									
+								</td>				
+			  				</tr>
+			  				<tr ng-show="(data.length < 1)" class="aviso"> <td colspan="5"> No hay productos para imprimir</td></tr>
+			   			</tbody>
+			  		</table>
+			  		<div class="btnCola">
+				  		<button ng-if="data.reposicion.modelos.length >0" 
+			  				class="btn btn-danger btn-sm" ng-click="vaciarColaPedidos()">Vaciar cola</button>
+			  			<button class="btn btn-primary btn-sm" ng-click="imprimirPedidos($index)" target="_blank" >Imprimir</button>
+		  			</div>
+				</div>
+				<br/>
+			</div>
+			
+			
+		</div>
+		
+	       
+       			
+	</div>
+</div>
+
+<div class="toPrint" id="codes"></div>

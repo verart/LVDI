@@ -24,6 +24,8 @@
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/clientes">Clientes</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/colaImpresion">Cola de Impresión</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/reportes">Reportes</a></li>
 	      
 	      </ul>
@@ -72,7 +74,7 @@
 					
 					<hr/>
 					
-					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo Producto </button>
+					<button ng-if="(usuario.getUserRole() == 'admin')" type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nuevo Producto </button>
 					      
 				</div>
 			</form>

@@ -60,6 +60,22 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         	needAuth: true,
 	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
         }
+    })    
+    .when("/colaImpresion", {
+        controller : "colaImpresionCtrl",
+        templateUrl :  dir_root + "/templates/colaImpresion.html",
+        auth: {
+        	needAuth: true,
+	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
+        }
+    })    
+    .when("/imprimir", {
+        controller : "imprimirCtrl",
+        templateUrl :  dir_root + "/templates/imprimir.html",
+        auth: {
+        	needAuth: true,
+	        authorizedRoles:  [USER_ROLES.admin]
+        }
     })
     .otherwise({
        redirectTo: '/index'
