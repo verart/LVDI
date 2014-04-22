@@ -1,0 +1,57 @@
+.etiqueta {
+	font-size: 9px;
+	width: 155px;
+	margin-bottom: 10px;
+}
+
+.etiqueta > p {
+	margin-bottom: 2px;
+	text-align: right;
+}
+
+.toPrint{
+	visibility:hidden;
+}
+
+@media print {
+	.toPrint{
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 6px;
+        line-height: 10px;
+        visibility: visible; 
+        font-stretch: condensed;
+    }
+    
+    .toPrint >p{
+	    line-height: 2px;
+        font-stretch: condensed;
+        font-size: 6px;
+    }
+    
+    .container-fluid{
+	    display:none;
+    }
+    
+    .modal-header{
+	    display:none;
+    }
+    
+    .loggedUser{
+	    display:none;
+	    
+    }
+
+}
+
+ @page 
+        {
+            size: auto;   /* auto is the current printer page size */
+            margin: 0mm;  /* this affects the margin in the printer settings */
+        }
