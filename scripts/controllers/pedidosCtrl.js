@@ -124,7 +124,8 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    		pedidosService.editPedido(res).then(
 			    			//SUCCESS
 			    			function(promise){
-				    		
+				    			var index = $filter('getIndexById')($scope.data, res.pedido.id);
+					    		$scope.data[index] = promise.data.DATA;
 			    			},
 			    			//Error al actualizar
 			    			function(error){
@@ -238,9 +239,9 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		  
-		  $scope.estados = ['Pendiente', 'Terminado', 'Entregado'];	  		  
+		  $scope.estados = ['Pendiente', 'Terminado', 'Entregado-Pago', 'Entregado-Debe'];	  		  
 		  $scope.fps = ['Efectivo', 'Tarjeta', 'Cheque'];	 
-		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	  		  
+		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	 
 		  
 		  $scope.userRole = info.userRole;
 		  $scope.form = {};
@@ -260,6 +261,9 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  	
 		  	$scope.pedido.fecha= (new Date($scope.pedido.fecha)).toISOString().slice(0, 10);
 		  	
+		  	$scope.EditEnabled = ( ($scope.pedido.estado != 'Entregado-Debe') && ($scope.pedido.estado != 'Entregado-Pago') && ($scope.userRole=='admin')) ;		  
+				
+		  	
 		  }else{
 		  
 			  $scope.pedido = {
@@ -277,6 +281,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  			
 			  var original = $scope.pedido;
 			  $scope.form.cliente = {nombre:'', id:'', bonificacion:0};
+			  
+			  $scope.EditEnabled =true;
 		  }
 		  
 		  $scope.pedido.mod2delete = [];

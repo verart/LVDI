@@ -39,11 +39,11 @@
         
 			
 			
-			<div class="row">
+			<div  class="row">
 			
 				<div class="col-xs-12 col-sm-4">
 				
-					<div class="boxPeak">
+					<div ng-if="EditEnabled" class="boxPeak">
 						
 						<div class="pull-right arrow-right"></div>
 										
@@ -106,10 +106,10 @@
 								<td class="col-md-2 text-center">				
 										
 									<!-- ELIMINAR  - Si es el unico modelo del producto no se permite eliminarlo -->
-									<span 	ng-class="{true: 'disabled'}[(pedido.estado == 'Terminado')]"
+									<span 	ng-class="{true: 'disabled'}[!EditEnabled]"
 											class="glyphicon glyphicon-remove accionesLst link"  
 											title="Quitar producto del pedido"
-											ng-click="(pedido.estado == 'Terminado') || remove($index)">
+											ng-click="(!EditEnabled) || remove($index)">
 									</span>
 				 
 								</td>
@@ -123,7 +123,7 @@
 				
 					<br/>
 			
-					<div ng-if="(userRole == 'admin')" class="resumenPedido form-horizontal pull-right" role="form">
+					<div ng-if="userRole == 'admin'" class="resumenPedido form-horizontal pull-right" role="form">
 						
 						<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
 						

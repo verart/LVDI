@@ -17,9 +17,8 @@ class Pedidos extends AppModel {
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
 		
-		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.id as clientesPM_id, P.estado, P.fecha,
-		 		P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
-		 		PM.estado as estadoProducto, PM.id as idPedMod
+		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.id as clientesPM_id, P.estado, 					P.fecha,P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
+		 		PM.estado as estadoProducto, PM.id as idPedMod, PM.precio as PedProdPrecio
 				FROM pedidos P
 				INNER JOIN clientesPM C ON C.id = P.clientesPM_id
 				INNER JOIN pedidos_modelos PM ON PM.pedidos_id = P.id
@@ -40,25 +39,31 @@ class Pedidos extends AppModel {
 			$resultsFormat[$iF]['id'] = $results[$i]['id'];
 			$resultsFormat[$iF]['fecha'] = $results[$i]['fecha'];
 			$resultsFormat[$iF]['fecha_entrega'] = $results[$i]['fecha_entrega'];
-			$resultsFormat[$iF]['total'] = $results[$i]['total'];
 			$resultsFormat[$iF]['bonificacion'] = $results[$i]['bonificacion'];
 			$resultsFormat[$iF]['clientesPM_id'] = $results[$i]['clientesPM_id']; 
 			$resultsFormat[$iF]['cliente'] = utf8_encode($results[$i]['cliente']);
 			$resultsFormat[$iF]['estado'] = $results[$i]['estado']; 
 			$resultsFormat[$iF]['FP'] = $results[$i]['FP']; 
 			$resultsFormat[$iF]['nota'] = $results[$i]['nota'];
+			$resultsFormat[$iF]['total'] =$results[$i]['total'];
 			
 			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
 			$resultsFormat[$iF]['modelos'] = array();
 			$m = 0;
+			$total = 0;
 			while(($i < count($results))&&($resultsFormat[$iF]['id'] == $results[$i]['id'])){
 				$resultsFormat[$iF]['modelos'][$m]['id'] = $results[$i]['modelos_id'];
 				$resultsFormat[$iF]['modelos'][$m]['idPedMod'] = $results[$i]['idPedMod'];
 				$resultsFormat[$iF]['modelos'][$m]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
 				$resultsFormat[$iF]['modelos'][$m]['estado'] = $results[$i]['estadoProducto'];
 				$resultsFormat[$iF]['modelos'][$m]['cantidad'] = $results[$i]['cantidad'];
-				$resultsFormat[$iF]['modelos'][$m++]['precio'] = $results[$i++]['precio'];						
+				//Tomo el precio actual del producto o el que se le asigno al pedido, dependiendo del estado.
+				//Cuando el estado es entregado-* el precio de los productos se congela.
+				$resultsFormat[$iF]['modelos'][$m]['precio'] = (($resultsFormat[$iF]['estado'] == 'Entregado-Pago')||($resultsFormat[$iF]['estado'] == 'Entregado-Debe'))?$results[$i]['PedProdPrecio'] : $results[$i]['precio'];	
+				$total = $total + $resultsFormat[$iF]['modelos'][$m++]['precio'];	
+				$i++;				
 			}
+			$resultsFormat[$iF]['total'] = (($resultsFormat[$iF]['estado'] == 'Entregado-Pago')||($resultsFormat[$iF]['estado'] == 'Entregado-Debe'))?$resultsFormat[$iF]['total']:$total;
 			$iF++;
 		}
 		
@@ -79,7 +84,8 @@ class Pedidos extends AppModel {
 	function getPedidoPorId($idPedido) {
 		
 				
-		$sql = "SELECT P.total, P.bonificacion, C.nombre as cliente, Pr.nombre as producto, M.nombre as modelo, Pr.precio
+		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.id as clientesPM_id, P.estado, 					P.fecha,P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
+		 		PM.estado as estadoProducto, PM.id as idPedMod, PM.precio as PedProdPrecio
 				FROM pedidos P
 				INNER JOIN clientesPM C ON C.id = P.clientesPM_id
 				INNER JOIN pedidos_modelos PM ON P.id = PM.pedidos_id
@@ -94,8 +100,7 @@ class Pedidos extends AppModel {
 		
 		$i = 0;
 		$resultsFormat = array();
-		//Proceso los pedidos 
-		while($i < count($results)){
+
 			$resultsFormat['id'] = $results[$i]['id'];
 			$resultsFormat['fecha'] = $results[$i]['fecha'];
 			$resultsFormat['fecha_entrega'] = $results[$i]['fecha_entrega'];
@@ -110,17 +115,18 @@ class Pedidos extends AppModel {
 			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
 			$resultsFormat['modelos'] = array();
 			$m = 0;
-			while(($i < count($results))&&($resultsFormat[$iF]['id'] == $results[$i]['id'])){
+			$total = 0;
+			while($i < count($results)){
 				$resultsFormat['modelos'][$m]['id'] = $results[$i]['modelos_id'];
 				$resultsFormat['modelos'][$m]['idPedMod'] = $results[$i]['idPedMod'];
 				$resultsFormat['modelos'][$m]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
 				$resultsFormat['modelos'][$m]['estado'] = $results[$i]['estadoProducto'];
 				$resultsFormat['modelos'][$m]['cantidad'] = $results[$i]['cantidad'];
-				$resultsFormat['modelos'][$m++]['precio'] = $results[$i++]['precio'];						
+				$resultsFormat['modelos'][$m]['precio'] = (($resultsFormat['estado'] == 'Entregado-Pago')||($resultsFormat['estado'] == 'Entregado-Debe'))?$results[$i]['PedProdPrecio'] : $results[$i]['precio'];	
+				$total = $total + $resultsFormat['modelos'][$m++]['precio'];	
+				$i++;										
 			}
-		}
-		
-		
+			$resultsFormat['total'] = (($resultsFormat['estado'] == 'Entregado-Pago')||($resultsFormat['estado'] == 'Entregado-Debe'))?$resultsFormat['total']:$total;
 		return $resultsFormat;
 	}
 	
@@ -156,8 +162,9 @@ class Pedidos extends AppModel {
 						$idModelo = $value['id'];
 						$cantidad = $value['cantidad'];
 						$estado = isset($value['estado'])?$value['estado']:"'Pendiente'";
+						$precio = (($pedido['estado']=='Entregado-Pago')||($pedido['estado']=='Entregado-Debe'))?$value['precio']:0;
 						
-						$sql = "INSERT INTO pedidos_modelos (pedidos_id,modelos_id,cantidad,estado) VALUES ($idPedido, $idModelo, $cantidad, '$estado') ";
+						$sql = "INSERT INTO pedidos_modelos (pedidos_id,modelos_id,cantidad,estado,precio) VALUES ($idPedido, $idModelo, $cantidad, '$estado',$precio) "; 
 						$query = $this->con->query($sql);
 						
 						if(@PEAR::isError($query))
@@ -180,26 +187,27 @@ class Pedidos extends AppModel {
 					foreach($modelos as $field => $value) {
 					
 						$cantidad = $value['cantidad'];
-						$idModelo = $value['id'];
-						
+						$idModelo = $value['id'];						
+
 						
 						if(!isset($value['idPedMod'])){
 						
 							// Nuevo modelo para el Pedido
 							
 							$estado = isset($value['estado'])?"'".$value['estado']."'" :"'Pendiente'";	
-							$fields = '(pedidos_id,modelos_id,cantidad,estado)';
-							$values = "($idPedido, $idModelo, $cantidad, $estado)";
+							$precio = (($pedido['estado']=='Entregado-Pago')||($pedido['estado']=='Entregado-Debe'))?$value['precio']:0;
+							$fields = '(pedidos_id,modelos_id,cantidad,estado,precio)';
+							$values = "($idPedido, $idModelo, $cantidad, $estado,$precio)";
 							
 							$sql = "INSERT INTO pedidos_modelos $fields VALUES $values ";	
 						
 						}else{
-						
 							// Edicion de un modelo ya cargado al pedido	
 						
 							$id = $value['idPedMod'];
+							$precio = (($pedido['estado']=='Entregado-Pago')||($pedido['estado']=='Entregado-Debe'))?$value['precio']:0;
 							$estado = (isset($value['estado'])) ? ", estado='".$value['estado']."'" : '' ;
-							$sql = "UPDATE pedidos_modelos SET cantidad=$cantidad $estado WHERE (id = $id)";
+							$sql = "UPDATE pedidos_modelos SET cantidad=$cantidad, precio=$precio $estado WHERE (id = $id)"; 	
 						
 						}
 
