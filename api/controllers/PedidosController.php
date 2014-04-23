@@ -164,7 +164,7 @@ class PedidosController extends AppController {
 						throw new BadRequestException($result['msg']);									
 			}
 
-
+			echo $this->json('Pedido', $this->Pedidos->getPedidoPorId($res['pedidos_id']));
 
 		} catch (Exception $e) {	
 
