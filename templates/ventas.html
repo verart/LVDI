@@ -104,7 +104,7 @@
 				  					<li> {{mod.nombre}}</li>			  			
 			  					</ul>	
 			  				</td>
-			  				<td> {{venta.total | currency}}</td>
+			  				<td> {{venta.total - venta.montoFavor| currency}}</td>
 		 					<td> {{venta.bonificacion}}%</td>	
 		  				</tr>
 		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="5"> No hay ventas</td></tr>

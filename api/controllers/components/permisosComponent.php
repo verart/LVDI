@@ -24,21 +24,19 @@ class PermisosComponent extends AppComponent{
 			
 			switch ($this->perfil) {
 			    case 'admin':
-					$this->acceso['cuentas'] = array('crear','eliminar');
-					$this->acceso['pedidos'] = array('index','show','update','create');
-					$this->acceso['producciones']= array('index', 'show', 'update', 'create');
-					$this->acceso['ventas']=array('index');
-					$this->acceso['clientesPM']=array('index','clientesName');
-					$this->acceso['clientes']=array('index', 'clientesName');
 			        break;
 			    case 'taller':
-					$this->acceso['pedidos'] = array('index','show','update','create'); 
+					$this->acceso['productos']= array('index', 'show', 'update');
+					$this->acceso['pedidos'] = array('index','show'); 
 					$this->acceso['clientesPM']=array('clientesName');
+					$this->edicion['pedidos']=array('update');
 			        break;
 			    case 'local':
-					$this->acceso['producciones']= array('index', 'show', 'update', 'create');
-					$this->acceso['ventas']=array('index');
-	
+					$this->acceso['productos']= array('index', 'show', 'update');
+					$this->acceso['ventas']=array('index','show');
+					$this->acceso['clientes']=array('index');
+					$this->edicion['ventas']=array('create','delete');					
+					$this->edicion['clientes']=array('create','update', 'delete');
 			        break;
 			}
 		

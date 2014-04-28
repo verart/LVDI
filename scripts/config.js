@@ -76,6 +76,14 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         	needAuth: true,
 	        authorizedRoles:  [USER_ROLES.admin]
         }
+    })       
+    .when("/reportes", {
+        controller : "reportesCtrl",
+        templateUrl :  dir_root + "/templates/reportes.html",
+        auth: {
+        	needAuth: true,
+	        authorizedRoles:  [USER_ROLES.admin]
+        }
     })
     .otherwise({
        redirectTo: '/index'

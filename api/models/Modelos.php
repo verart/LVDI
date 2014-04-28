@@ -145,10 +145,7 @@ class Modelos extends AppModel {
 		try{
 		
 			$mod = $this->getModeloPorId($idModelo);
-			
-			if($mod['stock'] < 1)
-				throw new BadRequestException('No pudo darse de baja un producto porque no tiene stock disponible.');
-				
+					
 			$modelo = array('id'=>$idModelo,'stock'=>($mod['stock']-$cantidad));
 			
 			if(!$this->update($modelo, array('id'=>$idModelo)))

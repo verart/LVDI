@@ -13,7 +13,6 @@ class ColaImpresionController extends AppController {
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
 			$imp = $this->ColaImpresion->getProductos(); 
-			
 			echo $this->json('ColaImpresion', $imp);
 
 		} catch (Exception $e) {	

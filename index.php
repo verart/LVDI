@@ -49,7 +49,8 @@
 	<script type="text/javascript" src="scripts/controllers/clientesPMCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/clientesCtrl.js"></script>	
 	<script type="text/javascript" src="scripts/controllers/ventasCtrl.js"></script>
-	<script type="text/javascript" src="scripts/controllers/colaImpresionCtrl.js"></script>		
+	<script type="text/javascript" src="scripts/controllers/colaImpresionCtrl.js"></script>	
+	<script type="text/javascript" src="scripts/controllers/reportesCtrl.js"></script>	
 	
 
 

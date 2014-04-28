@@ -6,8 +6,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 		$scope.order = '-nombre';
 	    $scope.filterProds = {enProduccion:1};
 	    $scope.infoModal = {};
-
-		
+	    
 	    
 	    /**********************************************************************
 	    ALERTS
@@ -105,7 +104,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 		    		/******************************************
 		    		 NUEVO PRODUCTO
 		    		******************************************/
-			    	if($scope.selectedProd == '') {
+			    	if(idProd == '') {
 			    		productosService.addProducto(res).then(
 			    			//Success
 			    			function(promise){

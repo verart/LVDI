@@ -7,3 +7,9 @@
 .wndShowVenta > .modal-dialog{
 	width: 50%;
 }
+
+.inputMontoFavor{
+	width: 116px;
+	font-size: small;
+	margin-left: 155px;
+}

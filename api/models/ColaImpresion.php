@@ -17,10 +17,12 @@ class ColaImpresion extends AppModel {
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
 		
-		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo
+		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo, CL.nombre as clientePM
 		 		FROM ColaImpresion CI
 				INNER JOIN modelos M ON CI.modelos_id = M.id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
+				LEFT JOIN pedidos Ped ON Ped.id = CI.pedidos_id
+				LEFT JOIN clientesPM CL ON CL.id = Ped.clientesPM_id
 				ORDER BY CI.pedidos_id"; 
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -45,6 +47,7 @@ class ColaImpresion extends AppModel {
 		//Proceso los pedidos 
 		while($i < count($results)){
 			$resultsFormat['pedidos'][$iF]['pedidos_id'] = $results[$i]['pedidos_id'];
+			$resultsFormat['pedidos'][$iF]['clientePM']= utf8_encode($results[$i]['clientePM']);
 			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
 			$resultsFormat['pedidos'][$iF]['modelos'] = array();
 			$m = 0;

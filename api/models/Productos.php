@@ -131,7 +131,7 @@ class Productos extends AppModel {
 		$resultsFormat = array();
 		
 		if(!empty($results)){
-			$dir = '/img/productos/';
+			$dir = 'img/productos/';
 			
 			$resultsFormat['nombre'] = utf8_encode($results[0]['nomProducto']);
 			$resultsFormat['precio'] = $results[0]['precio'];
@@ -271,14 +271,6 @@ class Productos extends AppModel {
 							
 						if(!$this->Modelos->create($modUnico) )
 							throw new BadRequestException('Hubo un error al crear el modelo.');
-	
-						// Agrego un movimiento
-						// tipo de movimiento:  'Reposicion','produccion','venta','baja'
-						$movimiento = array(
-									'modelos_id'=> $this->Modelos->getLastId(), 
-									'created'=> date('Y/m/d h:i:s', time()), 
-									'tipo'=> 'Reposicion', 
-									'cantidad'=> '0');
 									
 
 					}

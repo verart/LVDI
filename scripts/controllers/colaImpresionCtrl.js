@@ -209,10 +209,9 @@ app.controller('colaImpresionCtrl',
 		    		
 			if($scope.data.pedidos[index].modelos.length > 0){
 			
-				$scope.data.pedidos[index].modelos.forEach(function (prod) {
-					
-			    	
-		            style = {barWidth:2, barHeight:25};
+				$scope.data.pedidos[index].modelos.forEach(function (prod) {	    	
+		            
+		            style = {barWidth:2, barHeight:25, fontSize:8};
 		            
 		            var cod = prod.modelos_id   
 		            var long = cod.length;
@@ -234,7 +233,7 @@ app.controller('colaImpresionCtrl',
 					$("#bcTarget"+index).append(d);
 					
 					$("#prod"+index).text(prod.nombre + ' $'+ prod.precio );
-					$("#bd"+index++).barcode(cod, "ean8", style);
+					$("#bd"+index++).barcode({'code':cod,crc:false} , "ean8", style);
 					                  
 				});
 				
@@ -263,7 +262,7 @@ app.controller('colaImpresionCtrl',
 				$scope.data.reposicion.modelos.forEach(function (prod) {
 					
 			    	
-		            style = {barWidth:2, barHeight:25, fontSize:8};
+		           style = {barWidth:2, barHeight:25, fontSize:8};
 		            
 		            var cod = prod.modelos_id   
 		            var long = cod.length;
@@ -284,7 +283,7 @@ app.controller('colaImpresionCtrl',
 					$("#bcTarget"+index).append(p);
 					$("#bcTarget"+index).append(d);
 					
-					$("#prod"+index).text('$'+ prod.precio+' '+prod.nombre );
+					$("#prod"+index).text(prod.nombre + ' $'+ prod.precio );
 					$("#bd"+index++).barcode({'code':cod,crc:false} , "ean8", style);
 					                  
 				});

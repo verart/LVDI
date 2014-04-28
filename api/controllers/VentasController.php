@@ -37,7 +37,7 @@ class VentasController extends AppController {
 		try {
 			
 			if (!$this->PermisosComponent->puedeAcceder('ventas', 'show'))
-				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+				throw new ForbiddenException('No tiene permiso para ver una venta.'); 
 			
 			$venta = $this->Ventas->getVentaPorId($idVenta); 
 			echo $this->json('', $venta); 
@@ -57,14 +57,14 @@ class VentasController extends AppController {
 	/**
 	* CREATE
 	* Crea una venta.
-	* Params (POST): array([FP], [bonificacion],  fecha, total, modelos=array(cantidad,id)
+	* Params (POST): array([FP], [bonificacion], [montoFavor], fecha, total, modelos=array(cantidad,id)
 	*/
 	function create() {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('ventas', 'create'))
-				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			if (!$this->PermisosComponent->puedeEditar('ventas', 'create'))
+				throw new ForbiddenException('No tiene permiso para crear una venta.'); 
 
 
 			$params = (isset($_POST['venta']))? $_POST['venta'] : array();
@@ -81,6 +81,7 @@ class VentasController extends AppController {
 				'total'=>$params['total']);
 			
 			if (isset($params['FP'])) $venta['FP'] = $params['FP'];
+			if (isset($params['montoFavor'])) $venta['montoFavor'] = $params['montoFavor'];
 			
 			$venta['bonificacion'] = (isset($params['bonificacion']))?$params['bonificacion']:0;				
 			
@@ -119,10 +120,10 @@ class VentasController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('venta', 'delete'))
-				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			if (!$this->PermisosComponent->puedeEditar('venta', 'delete'))
+				throw new ForbiddenException('No tiene permiso para eliminar una venta'); 
 			
-			$this->Ventas->delete($idVenta);
+			$this->Ventas->eliminarVenta($idVenta);
 
 		} catch (Exception $e) {	
 
