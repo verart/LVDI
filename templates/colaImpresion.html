@@ -106,12 +106,12 @@
 			<h3>Productos por pedidos</h3>
 			
 			<div ng-repeat="($index, productosPedidos) in data.pedidos" >
-			
-				<div class="tableContainer">
 				
+				
+				<div class="tableContainer">
 					<table class="table table-hover table-condense">
 				  		<thead>
-				  			<tr> <th>Producto</th><th></th> </tr>
+				  			<tr> <th> Cliente: {{productosPedidos.clientePM}}</th><th></th></tr>
 				  		</thead>	
 				  		<tbody>
 				  			<tr ng-repeat="($index2, imp) in productosPedidos.modelos" class="pedidosList">

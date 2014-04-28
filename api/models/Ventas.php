@@ -40,6 +40,7 @@ class Ventas extends AppModel {
 			$resultsFormat[$iF]['id'] = $results[$i]['id'];
 			$resultsFormat[$iF]['fecha'] = $results[$i]['fecha'];
 			$resultsFormat[$iF]['total'] = $results[$i]['total'];
+			$resultsFormat[$iF]['montoFavor'] = $results[$i]['montoFavor'];
 			$resultsFormat[$iF]['bonificacion'] = $results[$i]['bonificacion'];
 			$resultsFormat[$iF]['FP'] = $results[$i]['FP']; 
 			
@@ -91,6 +92,7 @@ class Ventas extends AppModel {
 		$resultsFormat['id'] = $results[$i]['id'];
 		$resultsFormat['fecha'] = $results[$i]['fecha'];
 		$resultsFormat['total'] = $results[$i]['total'];
+		$resultsFormat['montoFavor'] = $results[$i]['montoFavor'];
 		$resultsFormat['bonificacion'] = $results[$i]['bonificacion'];
 		$resultsFormat['FP'] = $results[$i]['FP'];
 			
@@ -140,7 +142,6 @@ class Ventas extends AppModel {
 						$idModelo = $value['id'];
 						$precio = $value['precio'];
 						
-						
 						//Decremento el stock del modelo agregado a la venta
 						$res = $this->Modelos->baja($idModelo, 1,'','venta');
 						if(!$res['success'])
@@ -185,11 +186,11 @@ class Ventas extends AppModel {
 		try{
 		
 			$prod = $this->getVentaPorId($idVenta);
-		
+
 			foreach($prod['modelos'] as $field => $value)
-				$result = $this->removeModelo($value['idProdMod']);
+				$result = $this->removeModelo($value['idVenMod'],$value['id']);
 		
-			$this->delete($idProd);
+			$this->delete($idVenta);
 		
 		}catch (Exception $e) {
 			$this->rollbackTransaction();
@@ -201,6 +202,33 @@ class Ventas extends AppModel {
 	}
 	
 	
+	
+	function removeModelo($idVenMod, $idModelo){
+	
+		try{
+		
+			$res = $this->Modelos->reponer($idModelo,1,'');
+		    if(!$res['success'])
+					throw new BadRequestException($res['msg']);	
+		
+			$sql = "DELETE FROM ventas_modelos WHERE id = $idVenMod";
+
+			$result = $this->con->query($sql);
+		
+			if(@PEAR::isError($result)) {
+		    	throw new BadRequestException('Ocurrió un error al retornar un producto.');				
+		    }
+		    
+			return array('success'=>true, 'msg'=>'');
+		
+		}catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}
+	
+	}
 	
 	
 }

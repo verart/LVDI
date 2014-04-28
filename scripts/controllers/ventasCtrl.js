@@ -440,7 +440,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  
 		  /***************************************************
 		   WATCH VENTA.BONIFICACION
-		   Actualiza los totalFinal
+		   Actualiza  totalFinal
 		  ****************************************************/	 
 		  $scope.$watch('venta.bonificacion', function(newValue, oldValue) {
 		  		
@@ -455,12 +455,26 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  
 		  /***************************************************
 		   WATCH VENTA.TOTAL
-		   Actualiza los totalFinal
+		   Actualiza  totalFinal
 		  ****************************************************/	 
 		  $scope.$watch('venta.total', function(newValue, oldValue) {
 		  		
 		    	var desc =  parseInt($scope.venta.total,10) * (parseInt($scope.venta.bonificacion,10)/100);
 		    	$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - desc;
+			   			    
+		  });
+		  
+		  
+		  
+		  
+		  /***************************************************
+		   WATCH VENTA.MONTOFAVOR
+		   Actualiza  totalFinal
+		  ****************************************************/	 
+		  $scope.$watch('venta.montoFavor', function(newValue, oldValue) {
+		  		
+		  		var mon = ($scope.venta.montoFavor != null)? parseInt($scope.venta.montoFavor,10):'0';
+		    	$scope.venta.totalFinal = parseInt($scope.venta.total,10) -mon ;
 			   			    
 		  });
 		  
