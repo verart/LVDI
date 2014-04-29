@@ -52,6 +52,14 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         	needAuth: true,
 	        authorizedRoles:  [USER_ROLES.admin]
         }
+    })    
+    .when("/responsables", {
+        controller : "responsablesCtrl",
+        templateUrl :  dir_root + "/templates/responsables.html",
+        auth: {
+        	needAuth: true,
+	        authorizedRoles:  [USER_ROLES.admin]
+        }
     })
     .when("/ventas", {
         controller : "ventasCtrl",
@@ -67,14 +75,6 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         auth: {
         	needAuth: true,
 	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
-        }
-    })    
-    .when("/imprimir", {
-        controller : "imprimirCtrl",
-        templateUrl :  dir_root + "/templates/imprimir.html",
-        auth: {
-        	needAuth: true,
-	        authorizedRoles:  [USER_ROLES.admin]
         }
     })       
     .when("/reportes", {

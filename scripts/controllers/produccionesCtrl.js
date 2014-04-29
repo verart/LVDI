@@ -1,4 +1,6 @@
-app.controller('produccionesCtrl', ['$scope','$modal', '$filter', 'produccionesService', 'productosService', 'responsablesService', 'AlertService',
+app.controller('produccionesCtrl', 
+
+	['$scope','$modal', '$filter', 'produccionesService', 'productosService', 'responsablesService', 'AlertService',
 
 	function ($scope, $modal, $filter, produccionesService, productosService, responsablesService, AlertService) {
        

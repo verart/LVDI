@@ -15,6 +15,50 @@ app.service('responsablesService', ['$http', function ($http) {
             },
             
             
+            
+            
+            /******************************
+            ADDRES
+            ******************************/
+            addRes:function (res) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/responsables/create',
+	            	data: $.param(res),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
+            
+            /******************************
+            EDITRES
+            ******************************/
+            editRes: function(res){ 
+	            
+	            return $http({
+	            	method: 'PUT',
+	            	url: dir_api + '/responsables/update',
+	            	data: $.param(res),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
+             
+             
+                   
+            /******************************
+            DELETERES
+            ******************************/
+            deleteRes:function (id) { 
+	                    
+	            return $http({
+	            	method: 'DELETE',
+	            	url: dir_api + '/responsables/'+id+'/delete',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
+            
             /******************************
             NOMBRES DE RESPONSABLES
             ******************************/        

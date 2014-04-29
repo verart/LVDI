@@ -64,6 +64,7 @@ $route->add('/responsables/index','GET','Responsables','index');
 $route->add('/responsables/show','GET','Responsables','show');
 $route->add('/responsables/delete','DELETE','Responsables','delete');
 $route->add('/responsables/update','PUT','Responsables','update');
+$route->add('/responsables/create','POST','Responsables','create');
 
 $route->add('/producciones/index','GET','Producciones','index');
 $route->add('/producciones/show','GET','Producciones','show');

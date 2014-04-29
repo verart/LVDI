@@ -5,16 +5,15 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      
-	      <ul class="nav navbar-nav">
-	        
+	      <ul class="nav navbar-nav">	        
 	        <li>
 	        	<img src="/LVDI/img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px; margin-bottom:5px;" />
-	        </li>
-	      
+	        </li>	      
 	        <li class="middle"><a href="#!/productos">Productos</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='taller')" class="middle">
 	        	<a href="#!/pedidos">Pedidos</a></li>
-	        <li class="active middle"><a href="#">Producciones</a></li>
+	        <li class="active middle">
+	        	<a href="#">Producciones</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" class="middle">
 	        	<a href="#!/ventas">Ventas</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
@@ -22,13 +21,12 @@
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/clientes">Clientes</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/responsables">Resp. de prod</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/colaImpresion">Cola de Impresión</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/reportes">Reportes</a></li>
-	      
-	      
+	        	<a href="#!/reportes">Reportes</a></li>	      
 	      </ul>
-	      
 	      <ul class="nav navbar-nav navbar-right">
 	        <li><a href="#!/">Salir</a></li>
 	      </ul>
