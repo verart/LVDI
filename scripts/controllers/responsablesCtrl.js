@@ -1,49 +1,46 @@
-app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','clientesService','$timeout', 
+app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','responsablesService', '$timeout', 
 
-	function ($scope, $modal, $filter, $log, AlertService, clientesService, $timeout) {
+	function ($scope, $modal, $filter,$log, AlertService, responsablesService, $timeout) {
        
         
 		$scope.order = '-nombre';
-	    
 	    
 	    	    
 	    /**********************************************************************
 	     Recupera en data los clientesPM
 	    **********************************************************************/
-	    listClientes = function(data){	    		
+	    listRes = function(data){	    		
 		    $scope.data = data;
 	    }	    	    
-	    clientesService.clientes(listClientes);
+	    responsablesService.responsables(listRes);
 	   
- 
- 
-	 
-	
+
 	    
 	   /************************************************************************
 	    OPENCLIENTE
 	    Abre un modal con un form para crear un nuevo cliente o editarlo
-	    param: idCl -> id de cliente. Si viene en blanco es un create 
+	    param: idR -> id de resp. Si viene en blanco es un create 
 	    *************************************************************************/	
-		$scope.openCliente = function(idCl) {
+		$scope.openRes = function(idR) {
 	 	
 	 	
-	 		if(idCl != ''){
-	 			$scope.selectedCliente = $filter('getById')($scope.data, idCl);
+	 		if(idR != ''){
+	 			$scope.selectedRes = $filter('getById')($scope.data, idR);
 	 		}else{
-	 			$scope.selectedCliente = '';
+	 			$scope.selectedRes = '';
 	 		}	
-	 	    
-	 	    angular.element("#nombre").focus();
+	 		
+	 		
+	 		angular.element("#nombre").focus();
 	 	    
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: '/LVDI/templates/clientes/addedit.html',
-		    	windowClass: 'wndClientes',
-		    	controller: 'ModalClientesInstanceCtrl',
+		    	templateUrl: '/LVDI/templates/responsables/addedit.html',
+		    	windowClass: 'wndClientesPM',
+		    	controller: 'ModalResponsablesInstanceCtrl',
 		    	backdrop: 'static',
 		    	keyboard: true,
 		    	resolve: {
-		        	clientes: function () { return $scope.selectedCliente; }
+		        	responsable: function () { return $scope.selectedRes; }
 		        }
 		    });
 		    
@@ -58,12 +55,12 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		    	
 		    	
 		    		/******************************************
-		    		 NUEVO CLIENTE
+		    		 NUEVO RESPONSABLE
 		    		******************************************/
-			    	if($scope.selectedCliente == '') {
-			    		clientesService.addCliente(res).then(
+			    	if($scope.selectedRes == '') {
+			    		responsablesService.addRes(res).then(
 			    			//Success
-			    			function(promise){
+			    			function(promise){ console.log(promise.data.DATA);
 			    				$scope.data.push(promise.data.DATA);
 			    			},
 			    			//Error al guardar
@@ -78,11 +75,12 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				    	
 				    	
 				    	/******************************************
-				    	UPDATE CLIENTE
+				    	UPDATE RESPONSABLE
 				    	******************************************/
-			    		clientesService.editCliente(res).then(
+			    		responsablesService.editRes(res).then(
+			    		
 			    			//SUCCESS
-			    			function(promise){ },
+			    			function(promise){},
 			    			//Error al actualizar
 			    			function(error){
 				    			AlertService.add('danger', error.data.MSG);
@@ -103,8 +101,8 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				    if(res.action == 'delete'){
 				    	
 				    	//Solicita confirmación
-				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar este cliente?", accept:"Si", cancel:"No"};
-				    	var idProd = res.idProd;
+				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar este responsables de producción?", accept:"Si", cancel:"No"};
+				    	var idR = res.idR;
 				    	
 				    	var confirm = $modal.open({
 					    	templateUrl: '/LVDI/templates/confirm.html',
@@ -118,10 +116,10 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 					    .then( 
 					    	// Si el modal cierra por ACEPTAR
 					    	function (r) {
-						    	 clientesPMService.deleteProducto(idCliente).then(
+						    	 responsablesService.deleteRes(idR).then(
 					    			//Success
 					    			function(promise){
-					    				var index = $filter('getIndexById')($scope.data, idCliente);
+					    				var index = $filter('getIndexById')($scope.data, idR);
 					    				$scope.data.splice(index, 1);
 					    			},
 					    			//Error al eliminar
@@ -142,27 +140,8 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		
 		/* NUEVO *******************/
 	 	$scope.nuevo = function () {
-            $scope.openCliente('');
+            $scope.openRes('');
         };			
-        
-        
-        
-        
-       /************************************************************
-		IMPRIMIR mails
-		************************************************************/
-		$scope.exportarMails = function () {
-		  	
-		  	
-		  	var printDoc = $modal.open({
-							    	templateUrl: '/LVDI/templates/printDoc.html',
-							    	windowClass: 'wndPdf',
-							    	controller: modalPdfClientesMailsCtrl,
-							    	resolve: { clientes: function(){return $scope.data;} }
-			});
-			
-		}
-        
         
                
 }]);
@@ -171,33 +150,34 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 	
 	  
 /*************************************************************************************************************************
- ModalClientesInstanceCtrl
- Controller del modal para agregar/editar productos  
+ ModalClientesPMInstanceCtrl
+ Controller del modal para agregar/editar clientes  
 **************************************************************************************************************************/
-var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, clientes) {
+var ModalResponsablesInstanceCtrl = function ($scope, $modalInstance, $filter, responsable) {
 		  		  		  
 		  
-		  if(clientes != ''){
-		  	var original = angular.copy(clientes);
-		  	$scope.clientes = clientes;
+		  if(responsable != ''){
+		  	var original = angular.copy(responsable);
+		  	$scope.responsable = responsable;
 		  }else{
-		  	$scope.clientes	 = {nombre:'',email:'', nota:''};
-		  	var original = $scope.clientes;
+		  	$scope.responsable = {nombre:'',local:'', tel:'', tel2:'', direccion:'', localidad:'', email:'' ,bonificacion:'', nota:''}
+		  	var original = $scope.responsable;
 		  }
+		
 		  
 		  
 		  /***************************************************
 		   OK
-		   Se cierra el modal y retornan los datos del producto
+		   Se cierra el modal y retornan los datos del responsable
 		  ****************************************************/ 
 		  $scope.ok = function () {
-		  	$modalInstance.close({clientes: $scope.clientes});
+		  	$modalInstance.close({responsables:$scope.responsable});
 		  };
 		  
 		  
 		  /***************************************************
 		   CANCEL
-		   Se cierra el modal y retornan los datos del producto original, sin cambios
+		   Se cierra el modal y retornan los datos del responsable original, sin cambios
 		  ****************************************************/
 		  $scope.cancel = function () {
 		  	$scope.back2original();
@@ -207,22 +187,29 @@ var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, clien
 		  
 		  /***************************************************
 		   DELETE
-		   Se cierra el modal y retornan un indicador de que hay que eliminar el producto
+		   Se cierra el modal y retornan un indicador de que hay que eliminar el cliente
 		  ****************************************************/
-		  $scope.deleteCliente = function () {
+		  $scope.deleteRes = function () { console.log($scope.responsable);
 			  $scope.back2original();	
-			  var res = {action:'delete', idCliente:$scope.clientes.id};	  		
+			  var res = {action:'delete', idR:$scope.responsable.id};	  		
 			  $modalInstance.dismiss(res);
 		  };
 		  
 
 		  // back2original
-		  // Copia en producto los campos originales que se enviaron.  
+		  // Copia en cliente los campos originales que se enviaron.  
 		  $scope.back2original = function(){
-			  $scope.clientes.nombre = original.nombre;
-			  $scope.clientes.email = original.email;			  
-			  $scope.clientes.nota = original.nota;	
+			  $scope.responsable.id = original.id;
+			  $scope.responsable.nombre = original.nombre;
+			  $scope.responsable.marca = original.local
+			  $scope.responsable.tel = original.tel
+			  $scope.responsable.tel2 = original.tel2
+			  $scope.responsable.direccion = original.direccion
+			  $scope.responsable.localidad = original.localidad
+			  $scope.responsable.email = original.email
+			  $scope.responsable.nota = original.nota
 		  };	
-		  	  
-		  	  
+		  	  		  		  
 }
+
+

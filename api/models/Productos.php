@@ -350,6 +350,8 @@ class Productos extends AppModel {
 	function delProducto($idProducto){
 		
 		try{
+			$this->beginTransaction();
+						
 			if($this->Modelos->notUsedPorProducto($idProducto)){
 
 				if (!$this->delete($idProducto))				

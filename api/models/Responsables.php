@@ -60,9 +60,19 @@ class Responsables extends AppModel {
 	function setResponsable($responsable){
 		
 		try{
-			$this->beginTransaction();
-				
+		
+			$res = $responsable;
+			
+			if(isset($responsable['nombre'])) $responsable['nombre'] = utf8_decode($responsable['nombre']);
+			if(isset($responsable['marca'])) $responsable['marca'] = utf8_decode($responsable['marca']);
+			if(isset($responsable['local']))  $responsable['local'] = utf8_decode($responsable['local']);
+			if(isset($responsable['direccion'])) $responsable['direccion'] = utf8_decode($responsable['direccion']);
+			if(isset($responsable['localidad'])) $responsable['localidad'] = utf8_decode($responsable['localidad']);
+			
+			
 			if(!isset($responsable['id'])){ 
+			
+				$responsable['created'] = date('Y/m/d h:i:s', time());
 				
 				if(!$this->create($responsable))				
 					throw new BadRequestException('Hubo un error al crear el responsable de producción.');
@@ -74,12 +84,12 @@ class Responsables extends AppModel {
 					
 			}
 
-			$this->commitTransaction();
+			return array('success'=>true, 'responsables'=>$res);
 
 		} catch (Exception $e) {
-			echo $e->getMsg();
-			$this->rollbackTransaction();
-
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());		
+		
 		}
 		
 		
@@ -106,6 +116,8 @@ class Responsables extends AppModel {
 			
 	}
 
+
+
 	/**
 	 * DELRESPONSABLE
 	 * Elimina el responsable de producción que coincide con el id
@@ -122,9 +134,11 @@ class Responsables extends AppModel {
 			}else
 					throw new BadRequestException('Existen producciones de este responsable. No se puede eliminar. ');		
 					
+			return array('success'=>true, 'responsables'=>$idResponsable);
 					
 		}catch (Exception $e) {
-			echo $e->getMsg();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
 
 		}
 			

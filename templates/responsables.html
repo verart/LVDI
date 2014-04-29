@@ -5,28 +5,28 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      
-	      <ul class="nav navbar-nav">
+	      <ul class="nav navbar-nav">	        
 	        <li>
 	        	<img src="/LVDI/img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px; margin-bottom:5px;" />
-	        </li>	        
+	        </li>	      
 	        <li class="middle"><a href="#!/productos">Productos</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='taller')" class="middle">
 	        	<a href="#!/pedidos">Pedidos</a></li>
-	        <li ng-if="(usuario.getUserRole() =='admin')" class="middle">
-	        	<a href="#!/producciones">Producciones</a></li>
+	        <li class="middle">
+	        	<a href="#">Producciones</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" class="middle">
 	        	<a href="#!/ventas">Ventas</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="active middle">
-	        	<a href="#!/clientes">Clientes Por mayor</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/clientes">Clientes</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/responsables">Resp. de prod</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="active middle">
+	        	<a href="#">Resp. de prod</a></li>	
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/colaImpresion">Cola de Impresión</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/reportes">Reportes</a></li>
-	      </ul>     
+	        	<a href="#!/reportes">Reportes</a></li>	      
+	      </ul>
 	      <ul class="nav navbar-nav navbar-right">
 	        <li><a href="#!/">Salir</a></li>
 	      </ul>
@@ -37,12 +37,11 @@
 
 
 
-
-<div class="container-fluid" ng-controller="clientesPMCtrl" > 
+<div class="container-fluid" ng-controller="responsablesCtrl" > 
 
 	<div class="row-fluid">
 	
-		<div class="h2 titleh2"> Clientes por mayor</div>
+		<div class="h2 titleh2"> Responsables de producciones</div>
 
 
 		<!-- SIDEBAR-->			
@@ -54,13 +53,13 @@
 					
 					<input 	type="text" class="form-control small filterInput" 
 							ng-model="query" id='inputSearch' 
-							placeholder="Filtro de clientes" >
+							placeholder="Filtro de resp. de prod." >
 					
 									
 					
 					<hr/>
 					
-					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo cliente por mayor </button>
+					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo resp. de prod </button>
 					
 					      
 				</div>
@@ -75,23 +74,23 @@
 				<table class="table table-hover table-condense">
 			  		<thead>
 			  			<tr>
-			  				<th>Cliente</th>
-			  				<th>Local</th>
+			  				<th>Nombre</th>
+			  				<th>Marca</th>
 			  				<th>Tel</th>
 			  				<th>Tel2</th>
 			  				<th>email</th>
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
-			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query | orderBy:order:true)" 
-			  						class="clienteList link" ng-click="openCliente(cl.id)">
-			  				<td> {{cl.nombre}}</td>
-			  				<td> {{cl.local || 'Sin datos' }}</td>
-			  				<td> {{cl.tel || 'Sin datos'}}</td>
-		 					<td> {{cl.tel2 || 'Sin datos'}}</td>						
-		 					<td> {{cl.email || 'Sin datos'}}</td>
+			  			<tr ng-repeat="res in filteredRes = (data | filter:query | orderBy:order:true)" 
+			  						class="resList link" ng-click="openRes(res.id)">
+			  				<td> {{res.nombre}}</td>
+			  				<td> {{res.marca || 'Sin datos' }}</td>
+			  				<td> {{res.tel || 'Sin datos'}}</td>
+		 					<td> {{res.tel2 || 'Sin datos'}}</td>						
+		 					<td> {{res.email || 'Sin datos'}}</td>
 		  				</tr>
-		  				<tr ng-show="(filteredClientes.length < 1)" class="aviso"> <td colspan="5"> No hay clientes</td></tr>
+		  				<tr ng-show="(filteredRes.length < 1)" class="aviso"> <td colspan="5"> No hay responsables de producciones</td></tr>
 		   			</tbody>
 		  		</table>
 	

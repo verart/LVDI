@@ -42,11 +42,11 @@
 	<script type="text/javascript" src="scripts/controllers/modalPdfProduccionCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfPedidoCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfClientesMailsCtrl.js"></script>
-	<script type="text/javascript" src="scripts/controllers/imprimirCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/productosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/produccionesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/clientesPMCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/responsablesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/clientesCtrl.js"></script>	
 	<script type="text/javascript" src="scripts/controllers/ventasCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/colaImpresionCtrl.js"></script>	
