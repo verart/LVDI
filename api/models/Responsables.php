@@ -120,7 +120,7 @@ class Responsables extends AppModel {
 
 	/**
 	 * DELRESPONSABLE
-	 * Elimina el responsable de producción que coincide con el id
+	 * Elimina el responsable de producción que coincide con el id 
 	 * @param $idResponsable
 	 */
 	function delResponsable($idResponsable){
