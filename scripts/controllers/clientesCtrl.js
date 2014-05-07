@@ -37,7 +37,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 	 	    angular.element("#nombre").focus();
 	 	    
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: '/LVDI/templates/clientes/addedit.html',
+		    	templateUrl: dir_root+'/templates/clientes/addedit.html',
 		    	windowClass: 'wndClientes',
 		    	controller: 'ModalClientesInstanceCtrl',
 		    	backdrop: 'static',
@@ -104,10 +104,10 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				    	
 				    	//Solicita confirmación
 				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar este cliente?", accept:"Si", cancel:"No"};
-				    	var idProd = res.idProd;
+				    	var idCliente = res.idCliente;
 				    	
 				    	var confirm = $modal.open({
-					    	templateUrl: '/LVDI/templates/confirm.html',
+					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
 					    	controller: modalConfirmCtrl,
 					    	resolve: { txt: function(){ return txt_confirm } }
@@ -118,7 +118,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 					    .then( 
 					    	// Si el modal cierra por ACEPTAR
 					    	function (r) {
-						    	 clientesPMService.deleteProducto(idCliente).then(
+						    	 clientesService.deleteCliente(idCliente).then(
 					    			//Success
 					    			function(promise){
 					    				var index = $filter('getIndexById')($scope.data, idCliente);
@@ -155,7 +155,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		  	
 		  	
 		  	var printDoc = $modal.open({
-							    	templateUrl: '/LVDI/templates/printDoc.html',
+							    	templateUrl: dir_root+'/templates/printDoc.html',
 							    	windowClass: 'wndPdf',
 							    	controller: modalPdfClientesMailsCtrl,
 							    	resolve: { clientes: function(){return $scope.data;} }

@@ -48,7 +48,7 @@ app.controller('colaImpresionCtrl',
 			var txt_confirm = { msj: "¿Está seguro que desea eliminar este producto de la cola de impresión?", accept:"Si", cancel:"No"};
 			
 			var confirm = $modal.open({
-				templateUrl: '/LVDI/templates/confirm.html',
+				templateUrl: dir_root+'/templates/confirm.html',
 				windowClass: 'wndConfirm',
 				controller: modalConfirmCtrl,
 				resolve: { txt: function(){ return txt_confirm } }

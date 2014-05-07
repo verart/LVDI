@@ -34,7 +34,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 	 		angular.element("#nombre").focus();
 	 	    
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: '/LVDI/templates/responsables/addedit.html',
+		    	templateUrl: dir_root+'/templates/responsables/addedit.html',
 		    	windowClass: 'wndClientesPM',
 		    	controller: 'ModalResponsablesInstanceCtrl',
 		    	backdrop: 'static',
@@ -105,7 +105,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 				    	var idR = res.idR;
 				    	
 				    	var confirm = $modal.open({
-					    	templateUrl: '/LVDI/templates/confirm.html',
+					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
 					    	controller: modalConfirmCtrl,
 					    	resolve: { txt: function(){ return txt_confirm } }

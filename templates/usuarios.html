@@ -20,16 +20,16 @@
 	        	<a href="#!/ventas">Ventas</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="active middle">
-	        	<a href="#">Clientes</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        	<a href="#!/clientes">Clientes</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/responsables">Resp. de prod</a></li>	
 	        <li ng-if="(usuario.getUserRole()=='admin')" class=" middle">
 	        	<a href="#!/colaImpresion">Cola de Impresión</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/reportes">Reportes</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/usuarios">Cuentas</a></li>
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="active middle">
+	        	<a href="#">Cuentas</a></li>	
 	      </ul>  
 	      
 	      <ul class="nav navbar-nav navbar-right">
@@ -43,33 +43,22 @@
 
 
 
-<div class="container-fluid" ng-controller="clientesCtrl" >
+<div class="container-fluid" ng-controller="usuariosCtrl" >
 
 	<div class="row-fluid">
 	
-		<div class="h2 titleh2"> Clientes </div>
+		<div class="h2 titleh2"> Cuentas </div>
 
 
 		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-3 sidebar">
 			<form class="navbar-form navbar-left filterInput" role="search">
 				<div class="form-group filterInput">
+
 					
+					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo usuario </button>
 					
-					<input 	type="text" class="form-control small filterInput" 
-							ng-model="query" id='inputSearch' 
-							placeholder="Filtro de clientes" >
-					
-									
-					
-					<hr/>
-					
-					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo cliente </button>
-					
-					<hr/>
-					
-					<button type="button" class="btn btn-primary" ng-click="exportarMails()"> Exportar mails </button> 
-					      
+										      
 				</div>
 			</form>
 		</div>
@@ -82,19 +71,15 @@
 				<table class="table table-hover table-condense">
 			  		<thead>
 			  			<tr>
-			  				<th>Cliente</th>
-			  				<th>email</th>
-			  				<th>Nota</th>
+			  				<th>Usuario</th>
+			  				<th>Perfil</th>
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
-			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query)" 
-			  						class="clienteList link" ng-click="openCliente(cl.id)">
-			  				<td> {{cl.nombre | truncate:40}}</td>
-			  				<td> {{cl.email | truncate:40}}</td>
-			  				<td> {{(cl.nota | truncate:40) || 'Sin nota'}}</td>
+			  			<tr ng-repeat="us in data" class="link" ng-click="openUsuario(us.id)">
+			  				<td> {{us.nombre }}</td>
+			  				<td> {{us.perfil }}</td>
 		  				</tr>
-		  				<tr ng-show="(filteredClientes.length < 1)" class="aviso"> <td colspan="5"> No hay clientes</td></tr>
 		   			</tbody>
 		  		</table>
 	

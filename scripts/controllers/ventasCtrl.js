@@ -68,7 +68,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	 	
 	 		
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: '/LVDI/templates/ventas/addedit.html',
+		    	templateUrl: dir_root+'/templates/ventas/addedit.html',
 		    	windowClass: 'wndVenta',
 		    	controller: 'ModalVentaInstanceCtrl',
 		    	backdrop: 'static',
@@ -125,7 +125,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 				    	var idVenta = res.idVenta;
 				    	
 				    	var confirm = $modal.open({
-					    	templateUrl: '/LVDI/templates/confirm.html',
+					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
 					    	controller: modalConfirmCtrl,
 					    	resolve: { txt: function(){ return txt_confirm } }
@@ -178,7 +178,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
      		$scope.infoModal.userRole = userRole;
 	 		
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: '/LVDI/templates/ventas/show.html',
+		    	templateUrl: dir_root+'/templates/ventas/show.html',
 		    	windowClass: 'wndShowVenta',
 		    	controller: 'ModalVentaInstanceCtrl',
 		    	backdrop: 'static',
@@ -214,7 +214,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 				    	var idVenta = res.idVenta;
 				    	
 				    	var confirm = $modal.open({
-					    	templateUrl: '/LVDI/templates/confirm.html',
+					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
 					    	controller: modalConfirmCtrl,
 					    	resolve: { txt: function(){ return txt_confirm } }
