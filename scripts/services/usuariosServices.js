@@ -1,14 +1,13 @@
-
-app.service('clientesService', ['$http', function ($http) {
+app.service('usuariosService', ['$http', function ($http) {
         return {
         
         	/******************************
-            CLIENTES
+            USUARIOS
             ******************************/        
-            clientes:function(success) {
+            usuarios:function(success) {
 	            return $http({
 	            	method: 'GET',
-	            	url: dir_api + '/clientes/index',
+	            	url: dir_api + '/usuarios/index',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
 	            .success(function(data) { success(data.DATA);} );
@@ -16,57 +15,45 @@ app.service('clientesService', ['$http', function ($http) {
             
             
             /******************************
-            CLIENTE
-            ******************************/        
-            cliente:function(idCl) {
-	            return $http({
-	            	method: 'GET',
-	            	url: dir_api + '/clientes/'+idCl+'/show',
-	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-            },
-            
-            
-            /******************************
-            ADDCLIENTE
+            ADDUSUARIO
             ******************************/
-            addCliente:function (cliente) {
+            addUsuario:function (usuario) {
 	            return $http({
 	            	method: 'POST',
-	            	url: dir_api + '/clientes/create',
-	            	data: $.param(cliente),
+	            	url: dir_api + '/usuarios/create',
+	            	data: $.param(usuario),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
             
             
             /******************************
-            EDITCLIENTE
+            EDITUSUARIO
             ******************************/
-            editCliente: function(cliente){ 
+            editUsuario: function(usuario){ 
 	            
 	            return $http({
 	            	method: 'PUT',
-	            	url: dir_api + '/clientes/update',
-	            	data: $.param(cliente),
+	            	url: dir_api + '/usuarios/update',
+	            	data: $.param(usuario),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	            
             },
             
             
+                   
             /******************************
-            DELETECLIENTE
+            DELETEUSUARIOS
             ******************************/
-            deleteCliente:function (id) { 
+            deleteUsuario:function (id) { 
 	                    
 	            return $http({
 	            	method: 'DELETE',
-	            	url: dir_api + '/clientes/'+id+'/delete',
+	            	url: dir_api + '/usuarios/'+id+'/delete',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	            
             }
-            
         }
 }]);

@@ -1,0 +1,43 @@
+
+        <div id= "wndOpenProduccion" class="modal-body">
+		
+		
+			<div class="modal-header"  style="margin-bottom: 18px;">
+			   		<h3>Datos del usuario </h3>
+			</div>
+			       
+		
+		
+			<div class="modal-body form-group">
+						
+					<div class="form-group">
+						<input type="text" class="form-control small" placeholder="Nombre" 
+							ng-model="usuarios.nombre" id="nombre" focus-me="{{true}}" />
+					</div>
+					
+					<div class="form-group colForm">
+						<input type="text" class="form-control small" placeholder="Clave" ng-model="usuarios.clave"/>
+					</div>
+					
+					<div class="form-group colForm">					
+							<select class="form-control small selectpicker" ng-model="usuarios.perfiles_id" 
+								ng-options="obj.value as obj.text for obj in perfiles">
+							</select> 
+					</div>			
+			</div>
+        
+	
+		</div> <!-- / modal-body -->
+						
+						            
+        <div class="modal-footer">
+        	
+	        <button ng-if="usuarios.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteUsuario()">
+	        	Eliminar usuario
+	        </button>
+
+	        <button class="btn btn-primary" ng-click="ok()">Guardar</button>
+            <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+            
+        </div>
+   

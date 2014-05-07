@@ -72,7 +72,7 @@ app.controller('produccionesCtrl',
 	 	
 	 		
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: '/LVDI/templates/producciones/addedit.html',
+		    	templateUrl: dir_root+'/templates/producciones/addedit.html',
 		    	windowClass: 'wndProduccion',
 		    	controller: 'ModalProduccionInstanceCtrl',
 		    	backdrop: 'static',
@@ -150,7 +150,7 @@ app.controller('produccionesCtrl',
 				    	var idProd = res.idProduccion;
 				    	
 				    	var confirm = $modal.open({
-					    	templateUrl: '/LVDI/templates/confirm.html',
+					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
 					    	controller: modalConfirmCtrl,
 					    	resolve: { txt: function(){ return txt_confirm } }
@@ -196,7 +196,7 @@ app.controller('produccionesCtrl',
 		$scope.print = function (prod) {
 		  	
 		  	var printDoc = $modal.open({
-					    	templateUrl: '/LVDI/templates/printDoc.html',
+					    	templateUrl: dir_root+'/templates/printDoc.html',
 					    	windowClass: 'wndPdf',
 					    	controller: modalPdfProduccionCtrl,
 					    	resolve: { produccion: function(){return prod;} }

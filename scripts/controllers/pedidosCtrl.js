@@ -77,7 +77,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	 	
 	 		
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: '/LVDI/templates/pedidos/addedit.html',
+		    	templateUrl: dir_root+'/templates/pedidos/addedit.html',
 		    	windowClass: 'wndPedido',
 		    	controller: 'ModalPedidoInstanceCtrl',
 		    	backdrop: 'static',
@@ -156,7 +156,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 				    	var idPed = res.idPedido;
 				    	
 				    	var confirm = $modal.open({
-					    	templateUrl: '/LVDI/templates/confirm.html',
+					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
 					    	controller: modalConfirmCtrl,
 					    	resolve: { txt: function(){ return txt_confirm } }
@@ -209,7 +209,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 				    pedido.datosCliente = promise.data.DATA;
 			
 				  	var printDoc = $modal.open({
-							    	templateUrl: '/LVDI/templates/printDoc.html',
+							    	templateUrl: dir_root+'/templates/printDoc.html',
 							    	windowClass: 'wndPdf',
 							    	controller: modalPdfPedidoCtrl,
 							    	resolve: { pedido: function(){return pedido;} }

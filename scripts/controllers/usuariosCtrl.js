@@ -1,46 +1,47 @@
-app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','clientesPMService', '$timeout', 
+app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','usuariosService','$timeout', 
 
-	function ($scope, $modal, $filter,$log, AlertService, clientesPMService, $timeout) {
+	function ($scope, $modal, $filter, $log, AlertService, usuariosService, $timeout) {
        
         
 		$scope.order = '-nombre';
+	    
 	    
 	    	    
 	    /**********************************************************************
 	     Recupera en data los clientesPM
 	    **********************************************************************/
-	    listClientes = function(data){	    		
-		    $scope.data = data;
+	    listusuarios = function(data){	    		
+		    $scope.data = data;console.log($scope.data);
 	    }	    	    
-	    clientesPMService.clientes(listClientes);
-	   
-
+	    usuariosService.usuarios(listusuarios);
+	  
+ 
+	
 	    
 	   /************************************************************************
-	    OPENCLIENTE
-	    Abre un modal con un form para crear un nuevo cliente o editarlo
-	    param: idCl -> id de cliente. Si viene en blanco es un create 
+	    OPENUSUARIO
+	    Abre un modal con un form para crear un nuevo usuario o editarlo
+	    param: idUs -> id de usuario. Si viene en blanco es un create 
 	    *************************************************************************/	
-		$scope.openCliente = function(idCl) {
+		$scope.openUsuario = function(idUs) {
 	 	
 	 	
-	 		if(idCl != ''){
-	 			$scope.selectedCliente = $filter('getById')($scope.data, idCl);
+	 		if(idUs != ''){
+	 			$scope.selectedUsuario = $filter('getById')($scope.data, idUs);
 	 		}else{
-	 			$scope.selectedCliente = '';
+	 			$scope.selectedUsuario = '';
 	 		}	
-	 		
-	 		
-	 		angular.element("#nombre").focus();
+	 	    
+	 	    angular.element("#nombre").focus();
 	 	    
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: dir_root+'/templates/clientesPM/addedit.html',
-		    	windowClass: 'wndClientesPM',
-		    	controller: 'ModalClientesPMInstanceCtrl',
+		    	templateUrl: dir_root+'/templates/usuarios/addedit.html',
+		    	windowClass: 'wndUsuarios',
+		    	controller: 'ModalUsuariosInstanceCtrl',
 		    	backdrop: 'static',
 		    	keyboard: true,
 		    	resolve: {
-		        	clientePM: function () { return $scope.selectedCliente; }
+		        	usuarios: function () { return $scope.selectedUsuario; }
 		        }
 		    });
 		    
@@ -55,12 +56,12 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 		    	
 		    	
 		    		/******************************************
-		    		 NUEVO CLIENTE
+		    		 NUEVO USUARIO
 		    		******************************************/
-			    	if($scope.selectedCliente == '') {
-			    		clientesPMService.addCliente(res).then(
+			    	if($scope.selectedUsuario == '') {
+			    		usuariosService.addUsuario(res).then(
 			    			//Success
-			    			function(promise){ console.log(promise.data.DATA);
+			    			function(promise){
 			    				$scope.data.push(promise.data.DATA);
 			    			},
 			    			//Error al guardar
@@ -75,12 +76,11 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 				    	
 				    	
 				    	/******************************************
-				    	UPDATE CLIENTE
+				    	UPDATE USUARIO
 				    	******************************************/
-			    		clientesPMService.editCliente(res).then(
-			    		
+			    		usuariosService.editUsuario(res).then(
 			    			//SUCCESS
-			    			function(promise){},
+			    			function(promise){ },
 			    			//Error al actualizar
 			    			function(error){
 				    			AlertService.add('danger', error.data.MSG);
@@ -96,13 +96,13 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    function (res){
 			    
 			    	/******************************************
-				    DELETE CLIENTE
+				    DELETE USUARIO
 				    ******************************************/
 				    if(res.action == 'delete'){
 				    	
 				    	//Solicita confirmación
-				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar este cliente?", accept:"Si", cancel:"No"};
-				    	var idCliente = res.idCliente;
+				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar este usuario?", accept:"Si", cancel:"No"};
+				    	var idUsuario = res.idUsuario;
 				    	
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
@@ -116,10 +116,10 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 					    .then( 
 					    	// Si el modal cierra por ACEPTAR
 					    	function (r) {
-						    	 clientesPMService.deleteCliente(idCliente).then(
+						    	 usuariosService.deleteUsuario(idUsuario).then(
 					    			//Success
 					    			function(promise){
-					    				var index = $filter('getIndexById')($scope.data, idCliente);
+					    				var index = $filter('getIndexById')($scope.data, idUsuario);
 					    				$scope.data.splice(index, 1);
 					    			},
 					    			//Error al eliminar
@@ -140,8 +140,9 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 		
 		/* NUEVO *******************/
 	 	$scope.nuevo = function () {
-            $scope.openCliente('');
+            $scope.openUsuario('');
         };			
+        
         
                
 }]);
@@ -150,34 +151,34 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 	
 	  
 /*************************************************************************************************************************
- ModalClientesPMInstanceCtrl
- Controller del modal para agregar/editar clientes  
+ ModalClientesInstanceCtrl
+ Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalClientesPMInstanceCtrl = function ($scope, $modalInstance, $filter, clientePM) {
+var ModalUsuariosInstanceCtrl = function ($scope, $modalInstance, $filter, usuarios) {
 		  		  		  
 		  
-		  if(clientePM != ''){
-		  	var original = angular.copy(clientePM);
-		  	$scope.clientePM = clientePM;
+		  if(usuarios != ''){
+		  	var original = angular.copy(usuarios);
+		  	$scope.usuarios = usuarios;
 		  }else{
-		  	$scope.clientePM = {nombre:'',local:'', tel:'', tel2:'', direccion:'', localidad:'', email:'' ,bonificacion:'', nota:''}
-		  	var original = $scope.clientePM;
+		  	$scope.usuarios	 = {nombre:'',clave:'', perfiles_id:'', perfil:''};
+		  	var original = $scope.usuarios;
 		  }
-		
 		  
+		  $scope.perfiles = [{value:"1",text:'Admin'}, {value:"3", text:'Local'}, {value:"2", text:'Taller'}];	  		  
 		  
 		  /***************************************************
 		   OK
-		   Se cierra el modal y retornan los datos del cliente
+		   Se cierra el modal y retornan los datos del producto
 		  ****************************************************/ 
 		  $scope.ok = function () {
-		  	$modalInstance.close({clientesPM:$scope.clientePM});
+		  	$modalInstance.close({usuarios: $scope.usuarios});
 		  };
 		  
 		  
 		  /***************************************************
 		   CANCEL
-		   Se cierra el modal y retornan los datos del cliente original, sin cambios
+		   Se cierra el modal y retornan los datos del producto original, sin cambios
 		  ****************************************************/
 		  $scope.cancel = function () {
 		  	$scope.back2original();
@@ -187,30 +188,22 @@ var ModalClientesPMInstanceCtrl = function ($scope, $modalInstance, $filter, cli
 		  
 		  /***************************************************
 		   DELETE
-		   Se cierra el modal y retornan un indicador de que hay que eliminar el cliente
+		   Se cierra el modal y retornan un indicador de que hay que eliminar el producto
 		  ****************************************************/
-		  $scope.deleteCliente = function () { console.log($scope.clientePM);
+		  $scope.deleteUsuario = function () {
 			  $scope.back2original();	
-			  var res = {action:'delete', idCliente:$scope.clientePM.id};	  		
+			  var res = {action:'delete', idUsuario:$scope.usuarios.id};	  		
 			  $modalInstance.dismiss(res);
 		  };
 		  
 
 		  // back2original
-		  // Copia en cliente los campos originales que se enviaron.  
+		  // Copia en producto los campos originales que se enviaron.  
 		  $scope.back2original = function(){
-			  $scope.clientePM.id = original.id;
-			  $scope.clientePM.nombre = original.nombre;
-			  $scope.clientePM.local = original.local
-			  $scope.clientePM.tel = original.tel
-			  $scope.clientePM.tel2 = original.tel2
-			  $scope.clientePM.direccion = original.direccion
-			  $scope.clientePM.localidad = original.localidad
-			  $scope.clientePM.email = original.email
-			  $scope.clientePM.bonificacion = original.bonificacion
-			  $scope.clientePM.nota = original.nota
+			  $scope.usuarios.nombre = original.nombre;
+			  $scope.usuarios.clave = original.email;			  
+			  $scope.usuarios.perfiles_id = original.perfiles_id;	
 		  };	
-		  	  		  		  
+		  	  
+		  	  
 }
-
-

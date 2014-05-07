@@ -80,7 +80,6 @@ $route->add('/clientes/update','PUT','Clientes','update');
 $route->add('/clientes/create','POST','Clientes','create');
 
 
-
 $route->add('/ventas/index','GET','Ventas','index');
 $route->add('/ventas/show','GET','Ventas','show');
 $route->add('/ventas/delete','DELETE','Ventas','delete');
@@ -91,6 +90,13 @@ $route->add('/colaImpresion/index','GET','colaImpresion','index');
 $route->add('/colaImpresion/delete','DELETE','colaImpresion','delete');
 $route->add('/colaImpresion/create','POST','colaImpresion','create');
 
+
+
+$route->add('/usuarios/index','GET','Usuarios','index');
+$route->add('/usuarios/show','GET','Usuarios','show');
+$route->add('/usuarios/delete','DELETE','Usuarios','delete');
+$route->add('/usuarios/update','PUT','Usuarios','update');
+$route->add('/usuarios/create','POST','Usuarios','create');
 
 $route->submit();
 ?>

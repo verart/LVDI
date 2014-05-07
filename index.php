@@ -37,6 +37,7 @@
 	<script type="text/javascript" src="scripts/services/commonServices.js"></script>	
 	<script type="text/javascript" src="scripts/services/ventasServices.js"></script>
 	<script type="text/javascript" src="scripts/services/colaImpresionServices.js"></script>	
+	<script type="text/javascript" src="scripts/services/usuariosServices.js"></script>
   	<script type="text/javascript" src="scripts/controllers/loginCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalConfirmCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfProduccionCtrl.js"></script>
@@ -51,6 +52,7 @@
 	<script type="text/javascript" src="scripts/controllers/ventasCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/colaImpresionCtrl.js"></script>	
 	<script type="text/javascript" src="scripts/controllers/reportesCtrl.js"></script>	
+	<script type="text/javascript" src="scripts/controllers/usuariosCtrl.js"></script>	
 	
 
 

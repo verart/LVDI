@@ -81,7 +81,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 	 		angular.element("#nombre").focus();
 	 	    
 	 	    var modalInstance = $modal.open({
-		    	templateUrl: '/LVDI/templates/productos/addedit.html',
+		    	templateUrl: dir_root+'/templates/productos/addedit.html',
 		    	windowClass: 'wndProducto',
 		    	controller: 'ModalInstanceCtrl',
 		    	backdrop: 'static',
@@ -154,7 +154,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 				    	var idProd = res.idProd;
 				    	
 				    	var confirm = $modal.open({
-					    	templateUrl: '/LVDI/templates/confirm.html',
+					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
 					    	controller: modalConfirmCtrl,
 					    	resolve: { txt: function(){ return txt_confirm } }
