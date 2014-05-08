@@ -5,6 +5,7 @@ class Pedidos extends AppModel {
 	public $primaryKey = 'id';	
 	
 	
+	public $hasMany = array('ColaImpresion'); 
 	
 	
 	
@@ -167,6 +168,10 @@ class Pedidos extends AppModel {
 						$sql = "INSERT INTO pedidos_modelos (pedidos_id,modelos_id,cantidad,estado,precio) VALUES ($idPedido, $idModelo, $cantidad, '$estado',$precio) "; 
 						$query = $this->con->query($sql);
 						
+						
+						if(($cantidad >= 1) && ($estado == 'Terminado'))
+							$res = $this->ColaImpresion->set($idMod);
+						
 						if(@PEAR::isError($query))
 							throw new BadRequestException('Hubo un error al agregar los modelos al pedido.');
 			
@@ -179,6 +184,9 @@ class Pedidos extends AppModel {
 			}else{
 				
 				// UPDATE PEDIDO
+				
+				$estadoPedido = $this->getPedidoPorId($pedido['id']);
+				$estadoModelosPedidos = $estadoPedido['modelos'];
 				
 				if($this->update($pedido, array('id'=>$pedido['id']))){
 				
@@ -200,14 +208,31 @@ class Pedidos extends AppModel {
 							$values = "($idPedido, $idModelo, $cantidad, $estado,$precio)";
 							
 							$sql = "INSERT INTO pedidos_modelos $fields VALUES $values ";	
+							
+							if(($cantidad >= 1) && ($estado == 'Terminado'))
+								$res = $this->ColaImpresion->set($idModelo,$idPedido);
 						
 						}else{
 							// Edicion de un modelo ya cargado al pedido	
 						
+							//Busco el modelo en el pedido
+							$modPed = null; 
+							foreach($estadoModelosPedidos as $mod) {
+							    if ($value['idPedMod'] == $mod['idPedMod']) {
+							        $modPed = $mod;
+							        break;
+							    }
+							}
+						
 							$id = $value['idPedMod'];
+							$idModelo = $value['id'];
 							$precio = (($pedido['estado']=='Entregado-Pago')||($pedido['estado']=='Entregado-Debe'))?$value['precio']:0;
 							$estado = (isset($value['estado'])) ? ", estado='".$value['estado']."'" : '' ;
-							$sql = "UPDATE pedidos_modelos SET cantidad=$cantidad, precio=$precio $estado WHERE (id = $id)"; 	
+							$sql = "UPDATE pedidos_modelos SET cantidad=$cantidad, precio=$precio $estado WHERE (id = $id)";
+							
+							if(($modPed['estado'] == 'Pendiente')&&($value['estado'] == 'Terminado')){
+								$res = $this->ColaImpresion->set($idModelo,$idPedido);	
+							}
 						
 						}
 

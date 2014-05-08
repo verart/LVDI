@@ -12,7 +12,7 @@
 	        </li>
 	        
 	        <li class="middle"><a href="#!/productos">Productos</a></li>
-	        <li class="middle"><a href="#">Pedidos</a></li>
+	        <li class="middle"><a href="#!/pedidos">Pedidos</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/producciones">Producciones</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" class="middle">
@@ -132,7 +132,7 @@
 			  		</table>
 			  		<div class="btnCola">
 				  		<button ng-if="data.reposicion.modelos.length >0" 
-			  				class="btn btn-danger btn-sm" ng-click="vaciarColaPedidos()">Vaciar cola</button>
+			  				class="btn btn-danger btn-sm" ng-click="vaciarColaPedidos($index)">Vaciar cola</button>
 			  			<button class="btn btn-primary btn-sm" ng-click="imprimirPedidos($index)" target="_blank" >Imprimir</button>
 		  			</div>
 				</div>

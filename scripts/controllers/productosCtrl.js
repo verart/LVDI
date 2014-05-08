@@ -53,9 +53,6 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 			productosService.reponerProducto(prodFound.modelos[indexMod].id);
 			prodFound.modelos[indexMod].stock ++; 
 			
-			//Agrego a la cola de impresion de códigos
-			
-			
 			
 		}
 		

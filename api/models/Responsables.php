@@ -65,17 +65,18 @@ class Responsables extends AppModel {
 			
 			if(isset($responsable['nombre'])) $responsable['nombre'] = utf8_decode($responsable['nombre']);
 			if(isset($responsable['marca'])) $responsable['marca'] = utf8_decode($responsable['marca']);
-			if(isset($responsable['local']))  $responsable['local'] = utf8_decode($responsable['local']);
 			if(isset($responsable['direccion'])) $responsable['direccion'] = utf8_decode($responsable['direccion']);
 			if(isset($responsable['localidad'])) $responsable['localidad'] = utf8_decode($responsable['localidad']);
 			
 			
 			if(!isset($responsable['id'])){ 
 			
-				$responsable['created'] = date('Y/m/d h:i:s', time());
+				$responsable['created'] = date('Y/m/d h:i:s', time()); 
 				
 				if(!$this->create($responsable))				
 					throw new BadRequestException('Hubo un error al crear el responsable de producción.');
+				
+				$res['id'] = $this->getLastId();
 							
 			}else{
 				

@@ -92,17 +92,23 @@
 							<tr ng-repeat="mod in pedido.modelos">
 								<td class="col-md-5">{{mod.nombre}}</span></td>
 								<td class="col-md-2 text-center editableCell">
-									<span editable-text="mod.cantidad">{{mod.cantidad || 1}}</span>
+									<span ng-if="EditEnabled" editable-text="mod.cantidad">{{mod.cantidad || 1}}</span>
+									<p ng-if="!EditEnabled">
+										{{mod.cantidad || 1}}
+									</p>
 								</td>
 								<td ng-if="(userRole == 'admin')" class="col-md-2 text-center"> 
 									{{mod.precio | currency}} </td>
 								<td ng-if="(userRole == 'admin')" class="col-md-1 text-center"> 
 									{{(mod.precio * mod.cantidad) | currency}}  </td>
-								<td class="col-md-1 text-center editableCell"> 
-									<a href="#" editable-select="mod.estado" e-ng-options="s for s in estadosProductos">
+								<td class="col-md-1 text-center editableCell" > 
+									<a ng-if="EditEnabled" href="#" editable-select="mod.estado" e-ng-options="s for s in estadosProductos">
 										{{ mod.estado }}
 									</a>
-					
+									<p ng-if="!EditEnabled">
+										{{ mod.estado }}
+									</p>
+									
 								<td class="col-md-2 text-center">				
 										
 									<!-- ELIMINAR  - Si es el unico modelo del producto no se permite eliminarlo -->
