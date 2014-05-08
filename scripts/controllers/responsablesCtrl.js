@@ -160,7 +160,7 @@ var ModalResponsablesInstanceCtrl = function ($scope, $modalInstance, $filter, r
 		  	var original = angular.copy(responsable);
 		  	$scope.responsable = responsable;
 		  }else{
-		  	$scope.responsable = {nombre:'',local:'', tel:'', tel2:'', direccion:'', localidad:'', email:'' ,bonificacion:'', nota:''}
+		  	$scope.responsable = {nombre:'', tel:'', tel2:'', direccion:'', localidad:'', email:'', marca:'', nota:''}
 		  	var original = $scope.responsable;
 		  }
 		

@@ -70,7 +70,7 @@ class AppModel {
 		
 		$values = implode(',',$values);
 
-		$sql = " INSERT INTO ".$this->table." ($fields) VALUES ($values) "; 
+		$sql = " INSERT INTO ".$this->table." ($fields) VALUES ($values) ";
 
 		$query = $this->con->query($sql);
 

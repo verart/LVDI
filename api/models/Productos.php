@@ -4,7 +4,7 @@ class Productos extends AppModel {
 	public $name = "Productos";
 	public $primaryKey = 'id';	
 	
-	public $hasMany = array('Modelos', 'MovimientosStock'); 
+	public $hasMany = array('Modelos', 'MovimientosStock', 'ColaImpresion'); 
 
 
     
@@ -377,15 +377,28 @@ class Productos extends AppModel {
 	*/
 	function reponer($idMod){
 		
+		try{
 		
 			$this->beginTransaction();
 			
 			$res = $this->Modelos->reponer($idMod);
 			
 			if($res['success'])
+				$res = $this->ColaImpresion->set($idMod); 
+			else
+				throw new BadRequestException($res['msg']);
+				
+			if($res['success'])
 				$this->commitTransaction();
 			else
-				$this->rollbackTransaction();
+				throw new BadRequestException($res['msg']);
+			
+			return array('success'=>true, 'modelos_id'=>$idMod);	
+					
+		} catch (Exception $e) {
+			$this->rollbackTransaction();
+			return array('success'=>false, 'msg'=>$e->getMsg());
+		}
 		
 	}
 	

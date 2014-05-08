@@ -192,12 +192,15 @@ class ProductosController extends AppController {
 			$id_producto = $this->Productos->setProducto($prod,$mod);
 	
 			// Si se recibe un archivo del producto, se lo busca en el dir tmp y se lo ubica el el dir definitivo 	
+			$urlImg='';
 			if(isset($_POST['fileName'])){
 				$urlImg = $this->saveFile($id_producto, $_POST['fileName']);
 			}
 
 			// Retorna la info del producto actualizado				
-			$prod = $this->Productos->getProductoPorId($id_producto);
+			$prod['id'] = $id_producto;
+			$prod['modelos'] = $mod;
+			$prod['img'] = $urlImg;
 			echo $this->json('Producto', $prod);
 
 		} catch (Exception $e) {	
@@ -247,7 +250,7 @@ class ProductosController extends AppController {
 			
 			$idModelo = $_POST['idMod']; 
 		
-			$this->Productos->reponer($idModelo);
+				$this->Productos->reponer($idModelo);
 
 		} catch (Exception $e) {	
 			echo 'error con el modelo '.$idModelo;

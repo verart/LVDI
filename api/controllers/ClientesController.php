@@ -67,7 +67,7 @@ class ClientesController extends AppController {
 				throw new BadRequestException($res['msg']);
 				
 	
-			echo $this->json('cliente', $res['cliente']);
+			echo $this->json('cliente', $res['clientes']);
 				
 
 		} catch (Exception $e) {	
