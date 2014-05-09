@@ -1,5 +1,3 @@
-var dir_root = '/LVDI';
-var dir_api = '/LVDI/api';
 
 
 app.config(function($locationProvider, $routeProvider, USER_ROLES){
