@@ -24,6 +24,7 @@
 	
 	
 	<!-- Propios -->
+	<script type="text/javascript" src="scripts/constants.js"></script>
  	<script type="text/javascript" src="scripts/main.js"></script>
  	<script type="text/javascript" src="scripts/services/services.js"></script>
 	<script type="text/javascript" src="scripts/config.js"></script>
