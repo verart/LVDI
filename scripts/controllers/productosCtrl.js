@@ -284,7 +284,7 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  // ADD
 		  // Agrega un modelo a la tabla
 		  $scope.add = function(mod){
-			  $scope.producto.modelos.push({nombre: mod, fechaVenta:'', fechaRep:(new Date()), stock:1});
+			  $scope.producto.modelos.push({nombre: mod, fechaVenta:'', fechaRep:(new Date()), stock:0});
 			  $scope.nuevoModelo = {nombre: '', fechaVenta:'', fechaRep:''};
 			  angular.element("#newMod").focus();
 
