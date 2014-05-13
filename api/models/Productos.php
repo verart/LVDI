@@ -291,6 +291,8 @@ class Productos extends AppModel {
 
 						if(!isset($value['id'])){
 						
+							// Modelo nuevo para el producto
+						
 							$value['productos_id'] = $idProducto;
 							$value['stock'] = (isset($value['stock']))?$value['stock']:0;
 							$value['created'] = date('Y/m/d', time());
@@ -310,6 +312,8 @@ class Productos extends AppModel {
 											
 								if(!$this->MovimientosStock->setMovimiento($movimiento))
 										throw new BadRequestException('Hubo un error al crear el movimiento.');
+								
+								//Agrego a la cola de impresion 
 							}			
 									
 						}else{ 
@@ -329,13 +333,15 @@ class Productos extends AppModel {
 			}
 			
 			$this->commitTransaction();
+			
+			
+			return array('success'=>true, 'productos_id'=>$idProducto);	
 
 		} catch (Exception $e) {
 			$this->rollbackTransaction();
-			throw new BadRequestException($e->getMsg());
+			return array('success'=>false, 'msg'=>$e->getMsg());	
 		
 		}
-		return($idProducto);
 	}
 
 

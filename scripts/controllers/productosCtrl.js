@@ -124,8 +124,8 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 			    		productosService.editProducto(res).then(
 			    			//SUCCESS
 			    			function(promise){
-				    			if(promise.data.DATA.img != '')
-					    			res.img = promise.data.DATA.img;
+				    			var index = $filter('getIndexById')($scope.data, promise.data.DATA.id);
+					    		$scope.data[index] = promise.data.DATA;
 			    			},
 			    			//Error al actualizar
 			    			function(error){
@@ -284,8 +284,8 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  // ADD
 		  // Agrega un modelo a la tabla
 		  $scope.add = function(mod){
-			  $scope.producto.modelos.push({nombre: mod, fechaVenta:'', fechaRep:(new Date()), stock:0});
-			  $scope.nuevoModelo = {nombre: '', fechaVenta:'', fechaRep:''};
+			  $scope.producto.modelos.push({nombre: mod, fechaVenta:'', fechaRep:'', stock:0});
+			  angular.element("#newMod").val('');
 			  angular.element("#newMod").focus();
 
 		  };

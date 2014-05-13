@@ -32,8 +32,8 @@ class ColaImpresion extends AppModel {
 		$i = 0;
 		$resultsFormat = array();
 		//Proceso los reposicion 
-		if($results[0]['pedidos_id'] == null){
-			$resultsFormat['reposicion']['modelos'] = array();		
+		$resultsFormat['reposicion']['modelos'] = array();
+		if($results[0]['pedidos_id'] == null){		
 			$m = 0;
 			while(($i < count($results))&&($results[$i]['pedidos_id'] == null)){
 				$resultsFormat['reposicion']['modelos'][$m]['modelos_id'] = $results[$i]['modelos_id'];
