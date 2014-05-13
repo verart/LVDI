@@ -1,7 +1,7 @@
 <?php
 class ColaImpresion extends AppModel {
 	
-	public $name = "colaImpresion";
+	public $name = "colaimpresion";
 	public $primaryKey = 'id';	
 	
 	
@@ -18,7 +18,7 @@ class ColaImpresion extends AppModel {
 		
 		
 		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo, CL.nombre as clientePM
-		 		FROM ColaImpresion CI
+		 		FROM colaimpresion CI
 				INNER JOIN modelos M ON CI.modelos_id = M.id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
 				LEFT JOIN pedidos Ped ON Ped.id = CI.pedidos_id

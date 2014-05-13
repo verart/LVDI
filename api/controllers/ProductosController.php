@@ -403,7 +403,7 @@ class ProductosController extends AppController {
 			copy(COMPLETE_ROOT_DIR."img/tmp/".$fileName, COMPLETE_ROOT_DIR."img/productos/".$id.'.jpg');
 			unlink(COMPLETE_ROOT_DIR."img/tmp/".$fileName);
 			
-			return ROOT_URL."/img/productos/".$id.'.jpg';
+			return ROOT_URL."img/productos/".$id.'.jpg';
 		}else
 			return '';
 	}
