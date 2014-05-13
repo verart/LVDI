@@ -114,7 +114,10 @@ class ProductosController extends AppController {
 
 			
 			// UPDATE de producto
-			$this->Productos->setProducto($prod,$params['modelos']);
+			$res =  $this->Productos->setProducto($prod,$params['modelos']);
+				
+			if(!$res['success'])	
+				throw new BadRequestException($res['msg']);
 			
 			
 			// IMG del producto
@@ -154,10 +157,7 @@ class ProductosController extends AppController {
 			
 						
 			
-			// Retorna la info del producto actualizado	
-			$prod['modelos'] = $params['modelos'];
-			$prod['img'] = $urlImg;
-			echo $this->json('Producto', $prod);
+			echo $this->json('Producto', $this->Productos->getProductoPorId($res['productos_id']));
 			
 		} catch (Exception $e) {	
 
@@ -189,19 +189,18 @@ class ProductosController extends AppController {
 				
 			$mod = isset($_POST['modelos']) ? $_POST['modelos']:array();
 			
-			$id_producto = $this->Productos->setProducto($prod,$mod);
-	
+			$res = $this->Productos->setProducto($prod,$mod);
+			
+			if(!($res['success'])){
+				throw new BadRequestException($res['msg']);
+			}
+			
 			// Si se recibe un archivo del producto, se lo busca en el dir tmp y se lo ubica el el dir definitivo 	
-			$urlImg='';
 			if(isset($_POST['fileName'])){
-				$urlImg = $this->saveFile($id_producto, $_POST['fileName']);
+				$this->saveFile($res['productos_id'], $_POST['fileName']);
 			}
 
-			// Retorna la info del producto actualizado				
-			$prod['id'] = $id_producto;
-			$prod['modelos'] = $mod;
-			$prod['img'] = $urlImg;
-			echo $this->json('Producto', $prod);
+			echo $this->json('Producto', $this->Productos->getProductoPorId($res['productos_id']));
 
 		} catch (Exception $e) {	
 

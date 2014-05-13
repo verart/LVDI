@@ -34,7 +34,7 @@ class ClientesPM extends AppModel {
 	function getClientesNames() {
 		
 		$sql = "SELECT C.nombre, C.id, C.bonificacion
-				FROM clientesPM C
+				FROM clientespm C
 				ORDER BY nombre ASC";
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -61,7 +61,7 @@ class ClientesPM extends AppModel {
 		
 				
 		$sql = "SELECT *
-				FROM clientesPM C	
+				FROM clientespm C	
 				WHERE C.id = ?";
 				
     	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
@@ -134,7 +134,7 @@ class ClientesPM extends AppModel {
 		
 		// Chequeo que alguno de los modelos no este en algun pedido
 		$sql = "SELECT *
-				FROM clientesPM C
+				FROM clientespm C
 				INNER JOIN pedidos P ON P.clientesPM_id = C.id
 				WHERE C.id = ?";
 							
