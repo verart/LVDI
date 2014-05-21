@@ -430,7 +430,9 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  ****************************************************/	  
 		  $scope.remove= function(index) {		  	
 		  	
-		  	$scope.venta.total =  parseInt($scope.venta.total,10) - (parseInt($scope.venta.modelos[index].precio,10) *  parseInt($scope.venta.modelos[index].cantidad,10));
+		  	/* $scope.venta.total =  parseInt($scope.venta.total,10) - (parseInt($scope.venta.modelos[index].precio,10) *  parseInt($scope.venta.modelos[index].cantidad,10)); */
+		  		  	
+		  	$scope.venta.total =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) - (parseInt($scope.venta.modelos[index].precio,10) *  parseInt($scope.venta.modelos[index].cantidad,10));
 		  		  	
 		  	$scope.venta.modelos.splice(index,1);
 		  	
@@ -444,7 +446,9 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  ****************************************************/	 
 		  $scope.$watch('venta.bonificacion', function(newValue, oldValue) {
 		  		
-		    	var desc =  parseInt($scope.venta.total,10) * (parseInt($scope.venta.bonificacion,10)/100);
+/* 		    	var desc =  parseInt($scope.venta.total,10) * (parseInt($scope.venta.bonificacion,10)/100); */
+				var desc =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) * (parseInt($scope.venta.bonificacion,10)/100); 
+
 		    	$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - desc;
 			  			    
 		  });
@@ -473,8 +477,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  ****************************************************/	 
 		  $scope.$watch('venta.montoFavor', function(newValue, oldValue) {
 		  		
-		  		var mon = ($scope.venta.montoFavor != null)? parseInt($scope.venta.montoFavor,10):'0';
-		    	$scope.venta.totalFinal = parseInt($scope.venta.total,10) -mon ;
+		  		var mon = ($scope.venta.montoFavor != '')? parseInt($scope.venta.montoFavor,10):0.0;
+		    	$scope.venta.totalFinal = parseInt($scope.venta.total,10) - mon ;
 			   			    
 		  });
 		  

@@ -14,17 +14,17 @@
 	        <li class="middle"><a href="#!/productos">Productos</a></li>
 	        <li ng-if="(usuario.getUserRole() =='admin')||(usuario.getUserRole()  =='taller')" class="middle">
 	        	<a href="#!/pedidos">Pedidos</a></li>
-	        <li ng-if="(usuario.getUserRole() =='admin')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
 	        	<a href="#!/producciones">Producciones</a></li>
 	        <li class="middle">
 	        	<a href="#!/ventas">Ventas</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
 	        	<a href="#!/clientes">Clientes</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
 	        	<a href="#!/responsables">Resp. de prod</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
 	        	<a href="#!/colaImpresion">Cola de Impresión</a></li>
 	        <li class=" active middle">
 	        	<a href="#">Reportes</a></li>
