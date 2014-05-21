@@ -21,7 +21,7 @@ class Pedidos extends AppModel {
 		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.id as clientesPM_id, P.estado, 					P.fecha,P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
 		 		PM.estado as estadoProducto, PM.id as idPedMod, PM.precio as PedProdPrecio
 				FROM pedidos P
-				INNER JOIN clientesPM C ON C.id = P.clientesPM_id
+				INNER JOIN clientespm C ON C.id = P.clientesPM_id
 				INNER JOIN pedidos_modelos PM ON PM.pedidos_id = P.id
 				INNER JOIN modelos M ON PM.modelos_id = M.id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
@@ -88,7 +88,7 @@ class Pedidos extends AppModel {
 		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.id as clientesPM_id, P.estado, 					P.fecha,P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
 		 		PM.estado as estadoProducto, PM.id as idPedMod, PM.precio as PedProdPrecio
 				FROM pedidos P
-				INNER JOIN clientesPM C ON C.id = P.clientesPM_id
+				INNER JOIN clientespm C ON C.id = P.clientesPM_id
 				INNER JOIN pedidos_modelos PM ON P.id = PM.pedidos_id
 				INNER JOIN modelos M ON M.id = PM.modelos_id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id	

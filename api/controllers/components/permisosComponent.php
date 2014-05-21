@@ -33,10 +33,12 @@ class PermisosComponent extends AppComponent{
 			        break;
 			    case 'local':
 					$this->acceso['productos']= array('index', 'show', 'update');
+					$this->acceso['producciones']= array('index', 'show', 'update');
 					$this->acceso['ventas']=array('index','show');
 					$this->acceso['clientes']=array('index');
 					$this->edicion['ventas']=array('create','delete');					
 					$this->edicion['clientes']=array('create','update', 'delete');
+					$this->edicion['producciones']= array('create','update', 'delete');
 			        break;
 			}
 		

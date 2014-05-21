@@ -1,4 +1,3 @@
-
 	<!-- barra -->
 	<nav class="navbar navbar-default" role="navigation">
 	  <div class="container-fluid">
@@ -6,41 +5,38 @@
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      
-	      <ul class="nav navbar-nav">
-	        
+	      <ul class="nav navbar-nav">	        
 	        <li>
-	        	<img src="img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px;margin-bottom:5px;" />
-	        </li>
-	        
+	        	<img src="img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px; margin-bottom:5px;" />
+	        </li>	
 	        <li class="active middle"><a href="#">Productos</a></li>
-	        <li ng-if="(usuario.getUserRole() =='admin')||(usuario.getUserRole()  =='taller')" class="middle">
+	        <li ng-if="((usuario.getUserRole() =='admin')||(usuario.getUserRole()=='taller'))" class="middle">
 	        	<a href="#!/pedidos">Pedidos</a></li>
-	        <li ng-if="(usuario.getUserRole() =='admin')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
 	        	<a href="#!/producciones">Producciones</a></li>
-	        <li ng-if="(usuario.getUserRole() =='admin')||(usuario.getUserRole() =='local')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
 	        	<a href="#!/ventas">Ventas</a></li>
-	        <li ng-if="(usuario.getUserRole() =='admin')" class="middle">
+	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" class="middle">
 	        	<a href="#!/clientes">Clientes</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" class="middle">
 	        	<a href="#!/responsables">Resp. de prod</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
+	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" class="middle">
 	        	<a href="#!/colaImpresion">Cola de Impresión</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/reportes">Reportes</a></li>
+	        	<a href="#!/reportes">Reportes</a></li>	 
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/usuarios">Cuentas</a></li>
-	      
+	        	<a href="#!/usuarios">Cuentas</a></li>     
 	      </ul>
-	      
 	      <ul class="nav navbar-nav navbar-right">
-	        <li><p class="link logout" ng-click="logout()">Salir</p></li>
+	        <li><a href="#!/">Salir</a></li>
 	      </ul>
 	      
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
 	</nav>
+
 
 
 

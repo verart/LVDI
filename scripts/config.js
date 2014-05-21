@@ -32,7 +32,7 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         templateUrl :  dir_root + "/templates/producciones.html",
         auth: {
         	needAuth: true,
-	        authorizedRoles:  [USER_ROLES.admin]
+	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
         }
     })
     .when("/clientesPM", {
@@ -48,7 +48,7 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         templateUrl :  dir_root + "/templates/clientes.html",
         auth: {
         	needAuth: true,
-	        authorizedRoles:  [USER_ROLES.admin]
+	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
         }
     })    
     .when("/responsables", {
@@ -56,7 +56,7 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         templateUrl :  dir_root + "/templates/responsables.html",
         auth: {
         	needAuth: true,
-	        authorizedRoles:  [USER_ROLES.admin]
+	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
         }
     })
     .when("/ventas", {

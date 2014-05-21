@@ -22,7 +22,7 @@ class ColaImpresion extends AppModel {
 				INNER JOIN modelos M ON CI.modelos_id = M.id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
 				LEFT JOIN pedidos Ped ON Ped.id = CI.pedidos_id
-				LEFT JOIN clientesPM CL ON CL.id = Ped.clientesPM_id
+				LEFT JOIN clientespm CL ON CL.id = Ped.clientesPM_id
 				ORDER BY CI.pedidos_id"; 
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -84,7 +84,7 @@ class ColaImpresion extends AppModel {
 				throw new BadRequestException('Hubo un error al agregar el código del producto a la cola.');
 			
 			//Agrego los modelos
-			$idImp = $this->con->lastInsertID('colaImpresion', 'id');
+			$idImp = $this->con->lastInsertID('colaimpresion', 'id');
 			$prod['id']=$idImp;
 							
 			return array('success'=>true, 'ColaImpresion'=>$prod);
