@@ -3,8 +3,4 @@ database.php
 Common.php
 Route.php
 api/img/*
-<<<<<<< HEAD
 *.jpg
-=======
-*.jpg
->>>>>>> desarrollo
