@@ -261,7 +261,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  	
 		  	$scope.pedido.fecha= (new Date($scope.pedido.fecha)).toISOString().slice(0, 10);
 		  	
-		  	$scope.EditEnabled = ( ($scope.pedido.estado != 'Entregado-Debe') && ($scope.pedido.estado != 'Entregado-Pago') && ($scope.userRole=='admin')) ;		  
+		  	$scope.EditEnabled = ( ($scope.pedido.estado != 'Entregado-Debe') && ($scope.pedido.estado != 'Entregado-Pago') && (($scope.userRole=='admin') || ($scope.userRole=='taller'))) ;		  
 				
 		  	
 		  }else{
