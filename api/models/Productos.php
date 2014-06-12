@@ -118,7 +118,7 @@ class Productos extends AppModel {
 					SELECT MovS.modelos_id, MAX(created) as ultVenta
 					FROM movimientos_stock MovS
 					WHERE tipo= 'venta'
-					GROUP BY modelos_id) Venta ON Rep.modelos_id = M.id	
+					GROUP BY modelos_id) Venta ON Venta.modelos_id = M.id	
 				
 				WHERE P.id = ?
 				ORDER BY M.nombre";

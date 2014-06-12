@@ -39,7 +39,6 @@
 
 
 
-
 <div class="container-fluid" ng-controller="clientesPMCtrl" > 
 
 	<div class="row-fluid">
@@ -80,7 +79,7 @@
 			  				<th>Cliente</th>
 			  				<th>Local</th>
 			  				<th>Tel</th>
-			  				<th>Tel2</th>
+			  				<th>Localidad</th>
 			  				<th>email</th>
 			  			</tr>
 			  		</thead>	
@@ -90,7 +89,7 @@
 			  				<td> {{cl.nombre}}</td>
 			  				<td> {{cl.local || 'Sin datos' }}</td>
 			  				<td> {{cl.tel || 'Sin datos'}}</td>
-		 					<td> {{cl.tel2 || 'Sin datos'}}</td>						
+		 					<td> {{cl.localidad || 'Sin datos'}}</td>						
 		 					<td> {{cl.email || 'Sin datos'}}</td>
 		  				</tr>
 		  				<tr ng-show="(filteredClientes.length < 1)" class="aviso"> <td colspan="5"> No hay clientes</td></tr>
