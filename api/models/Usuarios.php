@@ -14,10 +14,10 @@ class Usuarios extends AppModel {
 		
 		$sql = "SELECT U.*, P.perfil as perfil 
 				FROM usuarios U 
-				INNER JOIN perfiles P ON P.id = U.perfiles_id
+				INNER JOIN perfiles P ON P.id = U.perfiles_id 
 				WHERE U.nombre = ? and U.clave = ?";
 				
-	   	$query = $this->con->prepare($sql, array('text','text'), MDB2_PREPARE_RESULT);    	
+	   	$query = $this->con->prepare($sql, array('text','text'), MDB2_PREPARE_RESULT); 
 	   	$query = $query->execute(array($usuario,$clave));
 	   	
 		return $query->fetchRow();
@@ -52,7 +52,7 @@ class Usuarios extends AppModel {
 		$sql = "SELECT U.*, P.perfil as perfil 
 				FROM usuarios U 
 				INNER JOIN perfiles P ON P.id = U.perfiles_id
-				WHERE U.id = ?";
+				WHERE U.id = ?"; 
 				
     	$query = $this->con->prepare($sql, array('integer'));	
 		$query = $query->execute(array($idUsuario));

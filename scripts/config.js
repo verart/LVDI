@@ -35,6 +35,14 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
 	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
         }
     })
+    .when("/ventas", {
+        controller : "ventasCtrl",
+        templateUrl :  dir_root + "/templates/ventas.html",
+        auth: {
+        	needAuth: true,
+	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
+        }
+    }) 
     .when("/clientesPM", {
         controller : "clientesPMCtrl",
         templateUrl :  dir_root + "/templates/clientesPM.html",
@@ -58,15 +66,7 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         	needAuth: true,
 	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
         }
-    })
-    .when("/ventas", {
-        controller : "ventasCtrl",
-        templateUrl :  dir_root + "/templates/ventas.html",
-        auth: {
-        	needAuth: true,
-	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
-        }
-    })    
+    })   
     .when("/colaImpresion", {
         controller : "colaImpresionCtrl",
         templateUrl :  dir_root + "/templates/colaImpresion.html",
