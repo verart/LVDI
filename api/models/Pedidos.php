@@ -61,10 +61,13 @@ class Pedidos extends AppModel {
 				//Tomo el precio actual del producto o el que se le asigno al pedido, dependiendo del estado.
 				//Cuando el estado es entregado-* el precio de los productos se congela.
 				$resultsFormat[$iF]['modelos'][$m]['precio'] = (($resultsFormat[$iF]['estado'] == 'Entregado-Pago')||($resultsFormat[$iF]['estado'] == 'Entregado-Debe'))?$results[$i]['PedProdPrecio'] : $results[$i]['precio'];	
-				$total = $total + $resultsFormat[$iF]['modelos'][$m++]['precio'];	
+				$total = $total + ($resultsFormat[$iF]['modelos'][$m++]['precio'] * $results[$i]['cantidad']);	
 				$i++;				
 			}
-			$resultsFormat[$iF]['total'] = (($resultsFormat[$iF]['estado'] == 'Entregado-Pago')||($resultsFormat[$iF]['estado'] == 'Entregado-Debe'))?$resultsFormat[$iF]['total']:$total;
+			
+			//Si el pedido ya fue entregado el precio es el que tenian lo productos es en ese momento. En cualquier otro estado del pedido
+			// se calcula el total del pedido en base a los precios actuales de los productos
+			$resultsFormat[$iF]['total'] = (($resultsFormat[$iF]['estado'] == 'Entregado-Pago')||($resultsFormat[$iF]['estado'] == 'Entregado-Debe'))? $resultsFormat[$iF]['total'] : $total;
 			$iF++;
 		}
 		
@@ -152,7 +155,7 @@ class Pedidos extends AppModel {
 			
 			
 				// NUEVO PEDIDO
-			
+
 				if($this->create($pedido)) {
 					
 					//Agrego los modelos
@@ -187,7 +190,7 @@ class Pedidos extends AppModel {
 				
 				$estadoPedido = $this->getPedidoPorId($pedido['id']);
 				$estadoModelosPedidos = $estadoPedido['modelos'];
-				
+
 				if($this->update($pedido, array('id'=>$pedido['id']))){
 				
 					$idPedido =  $pedido['id'];

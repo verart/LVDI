@@ -446,11 +446,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  ****************************************************/	 
 		  $scope.$watch('venta.bonificacion', function(newValue, oldValue) {
 		  		
-/* 		    	var desc =  parseInt($scope.venta.total,10) * (parseInt($scope.venta.bonificacion,10)/100); */
-				var desc =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) * (parseInt($scope.venta.bonificacion,10)/100); 
-
-		    	$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - desc;
-			  			    
+		    		$scope.refreshTotal() ;		  			    
 		  });
 		  
 		  
@@ -463,8 +459,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  ****************************************************/	 
 		  $scope.$watch('venta.total', function(newValue, oldValue) {
 		  		
-		    	var desc =  parseInt($scope.venta.total,10) * (parseInt($scope.venta.bonificacion,10)/100);
-		    	$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - desc;
+		    	$scope.refreshTotal() ;
 			   			    
 		  });
 		  
@@ -477,10 +472,19 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  ****************************************************/	 
 		  $scope.$watch('venta.montoFavor', function(newValue, oldValue) {
 		  		
-		  		var mon = ($scope.venta.montoFavor != '')? parseInt($scope.venta.montoFavor,10):0.0;
-		    	$scope.venta.totalFinal = parseInt($scope.venta.total,10) - mon ;
+		    	$scope.refreshTotal() ;
 			   			    
 		  });
+		  
+		  $scope.refreshTotal = function(){
+		  
+			  var desc =  parseInt($scope.venta.total,10) * (parseInt($scope.venta.bonificacion,10)/100);
+/* 				var desc =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) * (parseInt($scope.venta.bonificacion,10)/100);  */
+				var mon = !(($scope.venta.montoFavor == "" || $scope.venta.montoFavor == null))? parseInt($scope.venta.montoFavor,10):0.0;
+				
+		    	$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - desc - mon;
+
+		  }
 		  
 		  
 		  		  

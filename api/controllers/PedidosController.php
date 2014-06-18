@@ -96,11 +96,7 @@ class PedidosController extends AppController {
 			}
 			
 			// Retorna la info del pedido actualizado	
-			$pedido['id'] = $res['pedidos_id'];
-			$pedido['modelos'] = $mod; 
-			$pedido['cliente'] = $params['clientesPM'];		
-			echo $this->json('Pedido', $pedido);
-			
+			echo $this->json('Pedido', $this->Pedidos->getPedidoPorId($res['pedidos_id']));
 
 		} catch (Exception $e) {	
 
@@ -132,7 +128,7 @@ class PedidosController extends AppController {
 			$params = (isset($params['pedido']))? $params['pedido'] : array();
 	
 			// Campos obligatorios
-			if (!$this->parametrosRequeridosEn(array('clientesPM_id', 'estado', 'fecha', 'total', 'id', 'bonificacion'), $params))
+			if (!$this->parametrosRequeridosEn(array('clientesPM_id', 'estado', 'fecha', 'total', 'id'), $params))
 				throw new BadRequestException('Los datos del pedido están incompletos');
 			
 			//Datos del producto

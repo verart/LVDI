@@ -66,9 +66,9 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    *************************************************************************/	
         $scope.openPedido = function (idPed, userRole) {
   
-     		if(idPed != '')
+     		if(idPed != ''){
 	 			$scope.infoModal.pedido = $filter('getById')($scope.data, idPed);
-	 		else
+	 		}else
 	 			$scope.infoModal.pedido = '';
 	 		
 	 		$scope.infoModal.userRole = userRole;
@@ -125,7 +125,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    			//SUCCESS
 			    			function(promise){
 				    			var index = $filter('getIndexById')($scope.data, res.pedido.id);
-					    		$scope.data[index] = promise.data.DATA;
+					    		$scope.data[index] = res.pedido;
 			    			},
 			    			//Error al actualizar
 			    			function(error){
@@ -257,7 +257,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		  	var original = angular.copy(info.pedido);
 		  	$scope.pedido = info.pedido;
-		  	$scope.form.cliente = {nombre:$scope.pedido.cliente, id:$scope.pedido.clientesPM_id, bonificacion:''};
+		  	$scope.pedido.bonificacion = parseInt($scope.pedido.bonificacion,10);
+		  	$scope.form.cliente = {nombre:$scope.pedido.cliente, id:$scope.pedido.clientesPM_id, bonificacion:'0'};
 		  	
 		  	$scope.pedido.fecha= (new Date($scope.pedido.fecha)).toISOString().slice(0, 10);
 		  	
@@ -405,6 +406,22 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		 
 		 
 		 
+		 
+		 /*************************************************************************
+		 Cuando se modifica una cantidad debe actualizar los totales.
+		 Antes de modificarlo se quita la cantidad anterior y despues se suma el producto con la nueva cantidad
+		 *************************************************************************/		 
+		 $scope.removeOld= function(index){		 
+			 $scope.pedido.total =  parseInt($scope.pedido.total,10) - (parseInt($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
+		 }
+		 
+		 $scope.refreshTotal= function(index){		 
+			 $scope.pedido.total =  parseInt($scope.pedido.total,10) + (parseInt($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
+			 	 
+		 }
+		 
+		 
+		 
 		 /***************************************************
 		   WATCH FORM.CLIENTE
 		   Cuando se cambia el cliente:
@@ -415,7 +432,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		    	
 		    	if (($scope.form.cliente.id != null) && ($scope.form.cliente.id != 0)) {
 			    	
-			    	if(($scope.pedido.bonificacion != null) && ($scope.pedido.bonificacion == 0))
+			    	if(($scope.pedido.bonificacion != null) && ($scope.pedido.bonificacion == "0"))
 			    		$scope.pedido.bonificacion =  angular.copy($scope.form.cliente.bonificacion); 				    	
 			   
 			    	$scope.pedido.clientesPM_id = $scope.form.cliente.id;
@@ -423,7 +440,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 			    }
 		  });
 		  
-		  
+
 		  /***************************************************
 		   WATCH PEDIDO.BONIFICACION
 		   Actualiza los totalFinal
@@ -445,9 +462,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		    	$scope.pedido.totalFinal =  parseInt($scope.pedido.total,10) - desc;
 			   			    
 		  });
-		  
-		  
-		  		  
+	  		  
 }
 
 
