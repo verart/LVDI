@@ -22,7 +22,7 @@
 						</div>	
 						<div class="colForm col-xs-6 col-sm-4">
 							<input type="text" autocomplete="off" ng-model="form.cliente"  class="form-control small" 
-									placeholder="Nombre de cliente"
+									placeholder="Nombre de cliente" required
 									typeahead="cl_option as cl_option.nombre for cl_option in p.cl_options | filter:$viewValue" />
 						</div>
 							
@@ -92,7 +92,8 @@
 							<tr ng-repeat="mod in pedido.modelos">
 								<td class="col-md-5">{{mod.nombre}}</span></td>
 								<td class="col-md-2 text-center editableCell">
-									<span ng-if="EditEnabled" editable-text="mod.cantidad">{{mod.cantidad || 1}}</span>
+									<span ng-if="EditEnabled" onbeforesave="removeOld($index)" onaftersave="refreshTotal($index)"
+									editable-text="mod.cantidad">{{mod.cantidad || 1}}</span>
 									<p ng-if="!EditEnabled">
 										{{mod.cantidad || 1}}
 									</p>
@@ -134,20 +135,20 @@
 						<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
 						
 						<div class="form-group">
-				
+		
 						    <label for="bonif" class="col-sm-9 control-label small">Bonificación:</label>
 						    
 						    <div class="col-sm-2"  style="padding:0px">
-						    	<input type="text" class="form-control" id="bonif" ng-model="pedido.bonificacion">
+						    	<input class="form-control" id="bonif" ng-model="pedido.bonificacion">
 						    </div>
 						    
 						    <label for="bonif" class="col-sm-1 control-label small" style="text-align:left;padding-left:6px;">%</label>
 				
 						</div>
-						
+
 						<hr/>
 						
-						<label style="margin-right:15px;"> Total:  {{ pedido.totalFinal | currency }} </label>
+						<label style="margin-right:15px;"> Total a pagar:  {{ pedido.totalFinal | currency }} </label>
 						
 						<br>
 						
