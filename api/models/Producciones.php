@@ -72,7 +72,7 @@ class Producciones extends AppModel {
 	function getProduccionPorId($idProduccion) {
 		
 				
-		$sql = "SELECT P.*, R.nombre as responsable, Pr.nombre as producto, 
+		$sql = "SELECT P.*, R.nombre as responsable, Pr.nombre as producto, Pr.precio as precio, 
 				M.id as modelos_id, M.nombre as modelo,PM.estado as estadoProducto, 
 				PM.id as idProdMod 
 				FROM producciones P
@@ -105,6 +105,7 @@ class Producciones extends AppModel {
 			while($i < count($results)){
 				$resultsFormat['modelos'][$i]['id'] = $results[$i]['modelos_id'];
 				$resultsFormat['modelos'][$i]['idProdMod'] = $results[$i]['idProdMod'];
+				$resultsFormat['modelos'][$i]['precio'] = $results[$i]['precio'];
 				$resultsFormat['modelos'][$i]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
 				$resultsFormat['modelos'][$i]['estado'] = $results[$i]['estadoProducto'];	
 				$i++;			
@@ -329,7 +330,7 @@ class Producciones extends AppModel {
 
 			
 			$this->commitTransaction();
-			return array('success'=>true, 'id'=>$idProduccion);
+			return array('success'=>true, 'producciones_id'=>$idProduccion);
 			
 			
 		} catch (Exception $e) {

@@ -91,7 +91,6 @@ app.controller('produccionesCtrl',
 		    	************************************************************/
 		    	function (res) {
 			    		
-			    	
 			    	/******************************************
 		    		 NUEVA PRODUCCION
 		    		******************************************/
@@ -101,6 +100,12 @@ app.controller('produccionesCtrl',
 			    			//Success
 			    			function(promise){ 
 			    				$scope.data.push(promise.data.DATA);
+			    				
+			    				//Imprimo el comprobante
+						    	if(res.action == 'print'){
+						    		$scope.print(promise.data.DATA);
+						    	}
+
 			    			},
 			    			//Error al guardar
 			    			function(error){
@@ -119,19 +124,21 @@ app.controller('produccionesCtrl',
 			    		produccionesService.editProduccion(res).then(
 			    			//SUCCESS
 			    			function(promise){
-				    		
+				    			var index = $filter('getIndexById')($scope.data, promise.data.DATA.id);
+					    		$scope.data[index] = promise.data.DATA;
+					    		
+			    				//Imprimo el comprobante
+						    	if(res.action == 'print'){
+						    		$scope.print(promise.data.DATA);
+						    	}
 			    			},
 			    			//Error al actualizar
 			    			function(error){
-						    	AlertService.add('danger', error.data.MSG);
+				    			AlertService.add('danger', error.data.MSG);
 			    			}
 			    		);
 			    	};	
 			    	
-			    	
-			    	if(res.action == 'print'){
-			    		$scope.print(res.produccion);
-			    	}
 			    		
 			    }, 
 			    /************************************************************

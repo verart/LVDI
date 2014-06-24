@@ -6,25 +6,26 @@ var modalPdfProduccionCtrl = function ($scope, $modalInstance, $sce, produccion)
 			doc.setFont("helvetica");
 			
 			doc.setFontSize(18);
-			doc.text(15, 20, 'Los Vados del Isen');
+			doc.text(13, 20, 'Los Vados del Isen');
 			doc.setFontSize(10);
-			doc.text(15, 27, 'Dirección: Araoz 1928 - Capital Federal');
-			doc.text(15, 32, 'Tel: 4802-8969');
+			doc.text(13, 27, 'Dirección: Araoz 2918 - Capital Federal');
+			doc.text(13, 32, 'Tel: 4802-8969');
+			doc.text(13, 37, 'Mail: losvadosdelisen@hotmail.com');
 			
-			doc.line(15, 35, 200, 35); 
+			doc.line(13, 40, 200, 39); 
 			
 			doc.setFontSize(14);
-			doc.text(15, 45, 'Producción');
-			var row = 57;
+			doc.text(15, 52, 'Producción');
+			var row = 60;
 			doc.setFontSize(11);
 			doc.setFontType("bold");
-			doc.text(17, row, 'Fecha: ');
+			doc.text(17, row, 'Fecha devolución: ');
 			doc.setFontType("normal");
-			doc.text(31, row, produccion.fecha);			
+			doc.text(54, row, produccion.fecha_devolucion);			
 			doc.setFontType("bold");
-			doc.text(78, row, 'Fecha devolución:');
+			doc.text(88, row, 'Fecha:');
 			doc.setFontType("normal");
-			doc.text(115, row, produccion.fecha_devolucion);
+			doc.text(102, row, produccion.fecha);
 			
 			row = row + 7;
 			doc.setFontType("bold");
