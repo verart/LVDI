@@ -5,49 +5,39 @@ var modalPdfPedidoCtrl = function ($scope, $modalInstance, $sce, $filter, pedido
 			var doc = new jsPDF("portrait", "mm", "a4");
 			doc.setFont("helvetica");
 			
-			console.log(pedido);
-			doc.setFontSize(20);
-			doc.text(10, 18, 'Pedido');
+			doc.setFontSize(18);
+			doc.text(13, 19, 'Los Vados del Isen');
 			doc.setFontSize(9);
 			doc.setTextColor(100);
-			doc.setFontType("italic");
-			doc.text(10, 22, 'No válido como factura');
+			doc.text(13, 24, 'Dirección: Araoz 2918 - Capital Federal');
+			doc.text(13, 28, 'Tel: 4802-8969');
+			doc.text(13, 32, 'Mail: losvadosdelisen@hotmail.com');
 			
+			row = 32;
 			doc.setTextColor(0, 0, 0);
 			doc.setLineWidth(0.3);
-			doc.line(10, 26, 200, 26); 
-			row = 35;
-			doc.setFontSize(13);
+			doc.line(10, 36, 200, 36); 
+			row = row + 17;
+			doc.setFontSize(12);
 			doc.setFontType("bold");
 			doc.text(15, row, 'Cliente: ');
 			doc.setFontType("normal");
 			doc.text(33, row, pedido.datosCliente.nombre);
 			doc.setFontType("bold");
-			doc.text(140, row, 'Fecha: ');
+			doc.text(120, row, 'Fecha de entrega: ');
 			doc.setFontType("normal");
-			doc.text(160, row, $filter('date')(pedido.fecha, 'dd/MM/yyyy'));	
+			doc.text(160, row, ($filter('date')(pedido.fecha_entrega, 'dd/MM/yyyy')) || 'Sin datos');	
+			doc.setFontType("bold");
+			row = row + 6;
+			doc.setFontSize(10);
+			doc.text(15, row, 'Localidad: ');
+			doc.setFontType("normal");			
+			doc.text(37, row, (pedido.datosCliente.localidad || 'Sin datos'));
 			
-			var row = 43;
-			doc.setFontSize(10);			
-			doc.setFontType("bold");
-			doc.text(17, row, 'Tel: ');
-			doc.setFontType("normal");
-			doc.text(25, row,  (pedido.datosCliente.Tel || 'Sin datos'));
-			row = row+5;
-			doc.setFontType("bold");
-			doc.text(17, row, 'email: ');
-			doc.setFontType("normal");
-			doc.text(29, row,  (pedido.datosCliente.email || 'Sin datos'));
-			row = row+5;
-			doc.setFontType("bold");
-			doc.text(17, row, 'Dirección: ');
-			doc.setFontType("normal");
-			doc.text(37, row,  (pedido.datosCliente.direccion || 'Sin datos'));
-
-			row = row+15;
-			doc.setLineWidth(0.2);
-			doc.setDrawColor(120,120,120);
-			doc.line(20, row, 190, row); 		
+			row = row+10;
+			doc.setLineWidth(0.1);
+			doc.setDrawColor(100,100,100);
+			doc.line(21, row, 190, row); 		
 			doc.setFontSize(11);
 			doc.setFontType("bold");
 			row = row+5;
@@ -56,10 +46,13 @@ var modalPdfPedidoCtrl = function ($scope, $modalInstance, $sce, $filter, pedido
 			doc.text(150, row, 'P. Unit.');
 			doc.text(170, row, 'P. Tot.');
 			row = row + 3;
-			doc.line(20, row, 190, row); 
+			doc.line(21, row, 190, row); 
 			
-			doc.setLineWidth(0.1);
-			doc.setDrawColor(150);
+			pageHeight = doc.internal.pageSize.height;
+			pageHeight = pageHeight - 25;
+				
+			doc.setLineWidth(0.05);
+			doc.setDrawColor(200);
 			doc.setFontSize(11);
 			doc.setFontType("normal");
 			pedido.modelos.forEach(function(m){
@@ -70,9 +63,27 @@ var modalPdfPedidoCtrl = function ($scope, $modalInstance, $sce, $filter, pedido
 				doc.text(150, row, $filter('currency')(m.precio));
 				doc.text(170, row, $filter('currency')(pTot.toString()));
 				row = row +3;
-				doc.line(20, row, 190, row); 				
+				doc.line(21, row, 190, row); 
+				
+				// Before adding new content
+				if ((row + 5) >= pageHeight){
+				  doc.addPage();
+				  row = 20 // Restart height position
+				  doc.setLineWidth(0.05);
+				  doc.setDrawColor(200);
+				  doc.setFontSize(11);
+				  doc.setFontType("normal");
+				}
+				
 			});
 			
+
+			// Before adding new content
+			if (row + 28 >= pageHeight){	
+			  doc.addPage();
+			  row = 20 // Restart height position
+			}	
+				
 			row = row+12;
 			doc.setFontType("bold");
 			doc.text(25, row, 'Subtotal: ');
@@ -84,6 +95,7 @@ var modalPdfPedidoCtrl = function ($scope, $modalInstance, $sce, $filter, pedido
 			doc.text(25, row, 'Bonif. : ');
 			doc.text(50, row, (pedido.bonificacion.toString())+ '%');
 			row = row+3;
+			doc.setDrawColor(0);
 			doc.line(23, row, 90, row); 
 			
 			doc.setFontSize(13);
@@ -95,6 +107,7 @@ var modalPdfPedidoCtrl = function ($scope, $modalInstance, $sce, $filter, pedido
 			doc.text(50, row, $filter('currency')(totalPed.toString()));	
 			
 			
+
 				
 			var output = $sce.trustAsResourceUrl(doc.output('datauristring'));
 
