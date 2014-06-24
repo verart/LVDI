@@ -63,12 +63,8 @@ class ProduccionesController extends AppController {
 			}
 			
 			// Retorna la info del pedido actualizado	
-			$prod['id'] = $res['id'];
-			$prod['modelos'] = $mod; 
-			$prod['responsable'] = $params['responsable'];		
-			
-			echo $this->json('Produccion', $prod);
-			
+			echo $this->json('Producción', $this->Producciones->getProduccionPorId($res['producciones_id']));
+
 
 		} catch (Exception $e) {	
 
@@ -146,7 +142,8 @@ class ProduccionesController extends AppController {
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
 			
-			
+			echo $this->json('Producción', $this->Producciones->getProduccionPorId($res['producciones_id']));
+
 			
 		} catch (Exception $e) {	
 		

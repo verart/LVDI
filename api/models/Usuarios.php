@@ -51,7 +51,7 @@ class Usuarios extends AppModel {
 
 		$sql = "SELECT U.*, P.perfil as perfil 
 				FROM usuarios U 
-				INNER JOIN perfiles P ON P.id = U.perfiles_id
+				INNER JOIN perfiles P ON P.id = U.perfiles_id 
 				WHERE U.id = ?"; 
 				
     	$query = $this->con->prepare($sql, array('integer'));	
