@@ -125,7 +125,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    			//SUCCESS
 			    			function(promise){
 				    			var index = $filter('getIndexById')($scope.data, res.pedido.id);
-					    		$scope.data[index] = res.pedido;
+					    		$scope.data[index] = promise.data.DATA;
 			    			},
 			    			//Error al actualizar
 			    			function(error){
