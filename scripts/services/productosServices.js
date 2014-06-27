@@ -5,17 +5,11 @@ app.service('productosService', ['$http', function ($http) {
             /******************************
             PRODUCTOS
             ******************************/
-            productos:function(success) {
-	            $http({
+            productos:function() {
+	            return $http({
 	            	method: 'GET',
 	            	url: dir_api + '/productos/index',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-	            .success(function(data) { 
-	            	success(data.DATA);
-	            })
-	            .error(function(data, status) { 
-	            	error(data);
 	            })
             },
             

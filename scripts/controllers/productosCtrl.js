@@ -19,12 +19,19 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 	    /**********************************************************************
 	     Recupera en data los productos
 	    **********************************************************************/
-	    listProductos = function(data){	    		
-		    $scope.data = data;
-	    }	    	    
-	    productosService.productos(listProductos);
-	   
- 
+	    $scope.loading = true;
+	    productosService.productos().then(
+	    	//Success
+			function(promise){
+				$scope.data = promise.data.DATA;
+				$scope.loading = false;
+			},
+			//Error al guardar
+			function(error){
+				$scope.loading = false;
+			}
+		);
+
  
 	    /**********************************************************************
 	      exceptEmptyComparator

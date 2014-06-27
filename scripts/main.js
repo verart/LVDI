@@ -58,4 +58,6 @@ app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthSe
   });
 
   
-})
+});
+
+

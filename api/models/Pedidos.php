@@ -127,7 +127,7 @@ class Pedidos extends AppModel {
 				$resultsFormat['modelos'][$m]['estado'] = $results[$i]['estadoProducto'];
 				$resultsFormat['modelos'][$m]['cantidad'] = $results[$i]['cantidad'];
 				$resultsFormat['modelos'][$m]['precio'] = (($resultsFormat['estado'] == 'Entregado-Pago')||($resultsFormat['estado'] == 'Entregado-Debe'))?$results[$i]['PedProdPrecio'] : $results[$i]['precio'];	
-				$total = $total + $resultsFormat['modelos'][$m++]['precio'];	
+				$total = $total + ($resultsFormat['modelos'][$m++]['precio']*$results[$i]['cantidad']);	
 				$i++;										
 			}
 			$resultsFormat['total'] = (($resultsFormat['estado'] == 'Entregado-Pago')||($resultsFormat['estado'] == 'Entregado-Debe'))?$resultsFormat['total']:$total;
