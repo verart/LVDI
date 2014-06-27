@@ -121,10 +121,21 @@
 
 .textForInput{
 	padding-left: 0px;
-padding-top: 7px;
+	padding-top: 7px;
 }
 
 .btnCola{
 	text-align: right;
 	margin-right: 5px;
+}
+
+.loading { 
+	padding:20px; 
+	width:65px;
+	height:65px;
+	line-height: 1.42857143;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	transition: all .2s ease-in-out;
+	max-width: 100%;
 }
