@@ -18,7 +18,7 @@ class Pedidos extends AppModel {
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
 		
-		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.id as clientesPM_id, P.estado, 					P.fecha,P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
+		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.localidad as localidad, C.id as clientesPM_id, P.estado, P.fecha,P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
 		 		PM.estado as estadoProducto, PM.id as idPedMod, PM.precio as PedProdPrecio
 				FROM pedidos P
 				INNER JOIN clientespm C ON C.id = P.clientesPM_id
@@ -43,6 +43,7 @@ class Pedidos extends AppModel {
 			$resultsFormat[$iF]['bonificacion'] = $results[$i]['bonificacion'];
 			$resultsFormat[$iF]['clientesPM_id'] = $results[$i]['clientesPM_id']; 
 			$resultsFormat[$iF]['cliente'] = utf8_encode($results[$i]['cliente']);
+			$resultsFormat[$iF]['localidad'] = utf8_encode($results[$i]['localidad']);
 			$resultsFormat[$iF]['estado'] = $results[$i]['estado']; 
 			$resultsFormat[$iF]['FP'] = $results[$i]['FP']; 
 			$resultsFormat[$iF]['nota'] = $results[$i]['nota'];
@@ -88,7 +89,7 @@ class Pedidos extends AppModel {
 	function getPedidoPorId($idPedido) {
 		
 				
-		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.id as clientesPM_id, P.estado, 					P.fecha,P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
+		$sql = "SELECT P.id, P.total, P.bonificacion, P.FP as FP, P.nota as nota, C.nombre as cliente, C.localidad as localidad, C.id as clientesPM_id, P.estado, P.fecha,P.fecha_entrega, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
 		 		PM.estado as estadoProducto, PM.id as idPedMod, PM.precio as PedProdPrecio
 				FROM pedidos P
 				INNER JOIN clientespm C ON C.id = P.clientesPM_id
@@ -112,6 +113,7 @@ class Pedidos extends AppModel {
 			$resultsFormat['bonificacion'] = $results[$i]['bonificacion'];
 			$resultsFormat['clientesPM_id'] = $results[$i]['clientesPM_id']; 
 			$resultsFormat['cliente'] = utf8_encode($results[$i]['cliente']);
+			$resultsFormat['localidad'] = utf8_encode($results[$i]['localidad']);
 			$resultsFormat['estado'] = $results[$i]['estado']; 
 			$resultsFormat['FP'] = $results[$i]['FP']; 
 			$resultsFormat['nota'] = $results[$i]['nota'];

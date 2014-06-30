@@ -4,6 +4,9 @@ var modalPdfProduccionCtrl = function ($scope, $modalInstance, $sce, produccion)
 
 			var doc = new jsPDF("Portrait", "mm", "a4");
 			doc.setFont("helvetica");
+
+			pageHeight = doc.internal.pageSize.height;
+			pageHeight = pageHeight - 25;
 			
 			doc.setFontSize(18);
 			doc.text(13, 20, 'Los Vados del Isen');
@@ -39,16 +42,38 @@ var modalPdfProduccionCtrl = function ($scope, $modalInstance, $sce, produccion)
 			doc.setFontType("normal");
 			doc.text(33, row, produccion.motivo);
 			
-			row = row + 20;
-			doc.setFontSize(14);
-			doc.text(16, row, 'Detalle');
-			
+			row = row+10;
+			doc.setLineWidth(0.1);
+			doc.setDrawColor(100,100,100);
+			doc.line(24, row, 190, row); 		
 			doc.setFontSize(11);
-			row = row + 10;
-			produccion.modelos.forEach(function(m){
-				doc.text(30, row, m.nombre);
+			doc.setFontType("bold");
+			row = row+5;
+			doc.text(25, row, 'Detalle');
+			row = row + 3;
+			doc.line(24, row, 190, row); 
+			
+			doc.setLineWidth(0.05);
+			doc.setDrawColor(200);
+			doc.setFontSize(11);
+			doc.setFontType("normal");
+			produccion.modelos.forEach(function(m){			
+				row = row + 5;
+				doc.text(25, row, m.nombre);
 				doc.text(140, row, '$'+m.precio);
-				row = row +10;
+				row = row + 3;
+				doc.line(24, row, 190, row);
+				
+				// Before adding new content
+				if ((row + 7) >= pageHeight){
+				  doc.addPage();
+				  row = 20; // Restart height position
+				  doc.setLineWidth(0.05);
+				  doc.setDrawColor(200);
+				  doc.setFontSize(11);
+				  doc.setFontType("normal");
+				}
+				
 			});
 			
 		

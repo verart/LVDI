@@ -201,39 +201,50 @@ app.controller('colaImpresionCtrl',
 		 imprimir la cola. 
 		 ****************************************************/
 		 $scope.imprimirPedidos= function(index) {	  
-		  	
-		    var index = 0;	
+		  
 		    var d;
 		    	
 		    $('#codes').empty();
 		    		
 			if($scope.data.pedidos[index].modelos.length > 0){
-			
+				
+				var i = 0;
+				 
 				$scope.data.pedidos[index].modelos.forEach(function (prod) {	    	
 		            
-		            style = {barWidth:2, barHeight:25, fontSize:8};
+		            style = {barWidth:1.5, barHeight:20, fontSize:5};
 		            
+		            // Completo el código de modelo con 0
 		            var cod = prod.modelos_id   
 		            var long = cod.length;
 					var cant = 7 - long;
-					for(var i=0; i<cant; i++)
+					for(var k=0; k<cant; k++)
 						cod = "0"+cod;
 					
 					bcdiv = document.createElement("div");
-					bcdiv.setAttribute('id',"bcTarget"+index);
+					bcdiv.setAttribute('id',"bcTarget"+i);
 					bcdiv.setAttribute('class',"etiqueta");
 					$("#codes").append(bcdiv);
 					
 					
 					d = document.createElement("div");
-					d.setAttribute('id',"bd"+index);
+					d.setAttribute('id',"bc"+i);
+					d.setAttribute('class',"bc");
 					p = document.createElement("p");
-					p.setAttribute('id',"prod"+index);
-					$("#bcTarget"+index).append(p);
-					$("#bcTarget"+index).append(d);
+					p.setAttribute('class',"nombre");
+					p.setAttribute('id',"prod"+i);
+					pr = document.createElement("p");
+					pr.setAttribute('class',"precio");
+					pr.setAttribute('id',"prec"+i);
 					
-					$("#prod"+index).text(prod.nombre + ' $'+ prod.precio );
-					$("#bd"+index++).barcode({'code':cod,crc:false} , "ean8", style);
+					$("#bcTarget"+i).append(pr);
+					$("#bcTarget"+i).append(d);
+					$("#bcTarget"+i).append(p);
+					
+					$("#prec"+i).text('$'+ prod.precio);
+					$("#bc"+i).barcode({'code':cod,crc:false} , "ean8", style);
+					$("#prod"+i++).text(prod.nombre);
+										
 					                  
 				});
 				
@@ -262,7 +273,7 @@ app.controller('colaImpresionCtrl',
 				$scope.data.reposicion.modelos.forEach(function (prod) {
 					
 			    	
-		           style = {barWidth:2, barHeight:25, fontSize:8};
+		           style = {barWidth:1.5, barHeight:20, fontSize:5};
 		            
 		            var cod = prod.modelos_id   
 		            var long = cod.length;
@@ -277,15 +288,24 @@ app.controller('colaImpresionCtrl',
 					
 					
 					d = document.createElement("div");
-					d.setAttribute('id',"bd"+index);
+					d.setAttribute('id',"bc"+index);
+					d.setAttribute('class',"bc");
 					p = document.createElement("p");
 					p.setAttribute('id',"prod"+index);
-					$("#bcTarget"+index).append(p);
-					$("#bcTarget"+index).append(d);
+					p.setAttribute('class',"nombre");
+					pr = document.createElement("p");
+					pr.setAttribute('class',"precio");
+					pr.setAttribute('id',"prec"+index);
 					
-					$("#prod"+index).text(prod.nombre + ' $'+ prod.precio );
-					$("#bd"+index++).barcode({'code':cod,crc:false} , "ean8", style);
-					                  
+					
+					$("#bcTarget"+index).append(pr);
+					$("#bcTarget"+index).append(d);
+					$("#bcTarget"+index).append(p);
+					
+					$("#prec"+index).text('$'+ prod.precio);
+					$("#bc"+index).barcode({'code':cod,crc:false,} , "ean8", style);
+					$("#prod"+index++).text(prod.nombre);
+					                 
 				});
 	
 	
