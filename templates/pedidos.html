@@ -108,7 +108,7 @@
 				<table class="table table-hover table-condense">
 			  		<thead>
 			  			<tr>
-			  				<th>Cliente</th>
+			  				<th>Localidad</th>
 			  				<th>Fecha</th>
 			  				<th>Entrega</th>
 			  				<th ng-if="(usuario.getUserRole()=='admin')">Total</th>
@@ -119,10 +119,10 @@
 			  		<tbody>
 			  			<tr ng-repeat="pedido in filteredPedidos = (data | orderBy:order:false | filter:query | filter:filterPedidos)" 
 			  						class="pedidosList link" ng-click="openPedido(pedido.id, usuario.getUserRole())">
-			  				<td> {{pedido.cliente}}</td>
+			  				<td> {{pedido.localidad}}</td>
 			  				<td> {{pedido.fecha | date:'dd/MM/yyyy'}}</td>
 			  				<td> {{(pedido.fecha_entrega | date:'dd/MM/yyyy') || 'Sin datos'}}</td>
-			  				<td ng-if="(usuario.getUserRole()=='admin')"> {{pedido.total | currency}}</td>
+			  				<td ng-if="(usuario.getUserRole()=='admin')"> {{(pedido.total - ((pedido.total*pedido.bonificacion)/100)) | currency}}</td>
 		 					<td ng-if="(usuario.getUserRole()=='admin')" > {{pedido.bonificacion}}%</td>						
 		 					<td> {{pedido.estado}}</td>
 		  				</tr>

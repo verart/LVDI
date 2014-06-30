@@ -1,16 +1,42 @@
+#codes{
+	margin: 0px;
+}
+/*
 .etiqueta {
-	font-size: 9px;
-	width: 155px;
+	font-size: 8px;
+	width: 80px;
 	margin-bottom: 10px;
+	margin-left: 2px;
+	padding: 0px;
+}
+*/
+
+.etiqueta {
+	font-size: 8px;
+	width: 38mm;
+	margin-bottom: 0px;
+	margin-left: 2px;
+	padding: 7px;
+	border: 1px solid #CCCCCC;
+	height: 20mm;
+}
+
+.etiqueta > p.nombre {
+	text-align: center;
 }
 
 .etiqueta > p {
+	font-stretch: condensed;
+	font-family: "Helvetica Neue";
+}
+
+.etiqueta > p.precio {
 	margin-bottom: 2px;
 	text-align: right;
 }
 
-.toPrint{
-	visibility:hidden;
+.bc{
+	margin-left: 17px;
 }
 
 @media print {
@@ -50,8 +76,10 @@
 
 }
 
- @page 
-        {
-            size: auto;   /* auto is the current printer page size */
-            margin: 0mm;  /* this affects the margin in the printer settings */
-        }
+@page 
+{
+	size: auto;   /* auto is the current printer page size */
+	margin-top: 0.01mm;  /* this affects the margin in the printer settings */
+	margin-left: 0.01mm;  /* this affects the margin in the printer settings */
+	padding: 0mm;
+}
