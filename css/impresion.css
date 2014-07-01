@@ -1,64 +1,18 @@
-#codes{
-	margin: 0px;
-}
 /*
-.etiqueta {
-	font-size: 8px;
-	width: 80px;
-	margin-bottom: 10px;
-	margin-left: 2px;
-	padding: 0px;
+
+.toPrint{
+	visibility:hidden;
 }
 */
 
-.etiqueta {
-	font-size: 8px;
-	width: 38mm;
-	margin-bottom: 0px;
-	margin-left: 2px;
-	padding: 7px;
-	border: 1px solid #CCCCCC;
-	height: 20mm;
+#codes{
+	margin-top: 0px;
 }
 
-.etiqueta > p.nombre {
-	text-align: center;
-}
-
-.etiqueta > p {
-	font-stretch: condensed;
-	font-family: "Helvetica Neue";
-}
-
-.etiqueta > p.precio {
-	margin-bottom: 2px;
-	text-align: right;
-}
-
-.bc{
-	margin-left: 17px;
-}
 
 @media print {
 	.toPrint{
-        background-color: white;
-        height: 100%;
-        width: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        margin: 0;
-        padding: 15px;
-        font-size: 6px;
-        line-height: 10px;
         visibility: visible; 
-        font-stretch: condensed;
-    }
-    
-    .toPrint >p{
-	    line-height: 2px;
-        font-stretch: condensed;
-        font-size: 6px;
     }
     
     .container-fluid{
@@ -71,15 +25,55 @@
     
     .loggedUser{
 	    display:none;
-	    
     }
+   
+    #bcTarget0 > div.etiqueta{
+    	margin-top: 0px;
+    }
+	
+	.etiqueta {
+	 	padding: 10px 40px 40px 40px;
+		margin: 20px;
+	}
+	
+	.etiqueta > div.bc {
+		margin-top: 90px;
+	}
+	
+	.etiqueta > p.nombre {
+		text-align: left;
+		line-height: 95%;
+		height: 230px;
+	}
+	
+	.etiqueta > p.nombreSeparado {
+		text-align: left;
+		margin-top: 40px;
+		margin-bottom: 40px;
+		height: 160px;
+	}
+	
+	.etiqueta > p {
+	    font-family: Helvetica;
+		font-size: 140px;
+	}
+	
+	.etiqueta > p.precio {	
+		font-size: 170px;
+		text-align: right;
+		font-weight: bold;
+	}
+	
+	div.saltopagina{ 
+      display:block; 
+      page-break-after:always;
+   }
+   
 
 }
 
-@page 
-{
-	size: auto;   /* auto is the current printer page size */
-	margin-top: 0.01mm;  /* this affects the margin in the printer settings */
-	margin-left: 0.01mm;  /* this affects the margin in the printer settings */
-	padding: 0mm;
+
+@page {
+	size: 38mm 20mm; /* 304mm 160mm; *//* auto; */   /* auto is the current printer page size */
+	margin: 10mm
 }

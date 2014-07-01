@@ -209,10 +209,10 @@ app.controller('colaImpresionCtrl',
 			if($scope.data.pedidos[index].modelos.length > 0){
 				
 				var i = 0;
+				style = {barWidth:20, barHeight:350, fontSize:90};
 				 
 				$scope.data.pedidos[index].modelos.forEach(function (prod) {	    	
-		            
-		            style = {barWidth:1.5, barHeight:20, fontSize:5};
+
 		            
 		            // Completo el código de modelo con 0
 		            var cod = prod.modelos_id   
@@ -237,9 +237,9 @@ app.controller('colaImpresionCtrl',
 					pr.setAttribute('class',"precio");
 					pr.setAttribute('id',"prec"+i);
 					
-					$("#bcTarget"+i).append(pr);
 					$("#bcTarget"+i).append(d);
 					$("#bcTarget"+i).append(p);
+					$("#bcTarget"+i).append(pr);
 					
 					$("#prec"+i).text('$'+ prod.precio);
 					$("#bc"+i).barcode({'code':cod,crc:false} , "ean8", style);
@@ -270,11 +270,13 @@ app.controller('colaImpresionCtrl',
 		    
 		    if($scope.data.reposicion.modelos.length >0){
 		    		
+		    	style = {barWidth:20, barHeight:350, fontSize:90};
+		    	salto = document.createElement("div");
+		    	salto.setAttribute('class',"saltopagina");
+		    	
+		    		
 				$scope.data.reposicion.modelos.forEach(function (prod) {
-					
-			    	
-		           style = {barWidth:1.5, barHeight:20, fontSize:5};
-		            
+					  
 		            var cod = prod.modelos_id   
 		            var long = cod.length;
 					var cant = 7 - long;
@@ -290,35 +292,42 @@ app.controller('colaImpresionCtrl',
 					d = document.createElement("div");
 					d.setAttribute('id',"bc"+index);
 					d.setAttribute('class',"bc");
+					
 					p = document.createElement("p");
 					p.setAttribute('id',"prod"+index);
-					p.setAttribute('class',"nombre");
+					p.setAttribute('class',"nombre");			
+					if(prod.nombre.length <= 25)
+						p.setAttribute('class',"nombreSeparado")
+						
 					pr = document.createElement("p");
 					pr.setAttribute('class',"precio");
 					pr.setAttribute('id',"prec"+index);
 					
 					
-					$("#bcTarget"+index).append(pr);
 					$("#bcTarget"+index).append(d);
 					$("#bcTarget"+index).append(p);
+					$("#bcTarget"+index).append(pr);
+					
 					
 					$("#prec"+index).text('$'+ prod.precio);
-					$("#bc"+index).barcode({'code':cod,crc:false,} , "ean8", style);
-					$("#prod"+index++).text(prod.nombre);
-					                 
+					$("#bc"+index).barcode({'code':cod, crc:false} , "int25", style);
+					$("#prod"+index).text(prod.nombre);
+					 
+					$("#bcTarget"+index++).append(salto);                 
+				
 				});
-	
-	
-	
-	
+				index--;
+				$("#bcTarget" + index + " :last-child").last().remove();
+				
 				$window.print();
+				
+				
 			}	
 		}
 		  
 		  
 		  
-		  
-		
+				
 		       
 }]);
 
