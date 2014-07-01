@@ -1,37 +1,32 @@
-
-
 .toPrint{
 	visibility:hidden;
 }
 
 
+
 @media print {
 	
 	.toPrint{
-        visibility: visible; 
+        visibility: visible;     	
     }
-    
     
     .container-fluid{
 	    display:none;
     }
     
-    .modal-header{
+    .modal-header{    	
 	    display:none;
     }
     
-    .loggedUser{
+    .loggedUser{    	
 	    display:none;
     }
    
 	.etiqueta {
 		width: 38mm;
-/*
-		border: 1px solid #EEEEEE;
-*/
 		height: 20mm;
 		padding: 5px 7px;
-	}
+ 	}
 	
 	.etiqueta > div.bc {
 		margin-left: 20px;
@@ -72,4 +67,6 @@
 
 @page {
 	size: auto;  /* auto is the current printer page size */
+	margin:0;
+	padding: 0;
 }

@@ -271,10 +271,6 @@ app.controller('colaImpresionCtrl',
 		    if($scope.data.reposicion.modelos.length >0){
 		    		
 		    	style = {barWidth:1, barHeight:20, fontSize:8};
-		    	
-		    	salto = document.createElement("div");
-		    	salto.setAttribute('class',"saltopagina");
-		    	
 		    		
 				$scope.data.reposicion.modelos.forEach(function (prod) {
 					  
@@ -289,7 +285,6 @@ app.controller('colaImpresionCtrl',
 					bcdiv.setAttribute('class',"etiqueta");
 					$("#codes").append(bcdiv);
 					
-					
 					d = document.createElement("div");
 					d.setAttribute('id',"bc"+index);
 					d.setAttribute('class',"bc");
@@ -302,8 +297,7 @@ app.controller('colaImpresionCtrl',
 						
 					pr = document.createElement("p");
 					pr.setAttribute('class',"precio");
-					pr.setAttribute('id',"prec"+index);
-					
+					pr.setAttribute('id',"prec"+index);			
 					
 					$("#bcTarget"+index).append(d);
 					$("#bcTarget"+index).append(p);
@@ -312,14 +306,15 @@ app.controller('colaImpresionCtrl',
 					
 					$("#prec"+index).text('$'+ prod.precio);
 					$("#bc"+index).barcode({'code':cod, crc:false} , "int25", style);
-					$("#prod"+index).text(prod.nombre);
+					$("#prod"+index++).text(prod.nombre);
 					 
-					$("#bcTarget"+index++).append(salto);                 
-				
+					salto = document.createElement("div");
+					salto.setAttribute('class',"saltopagina"); 
+					$("#codes").append(salto);                 
 				});
 				
-				index--;
-				$("#bcTarget" + index + " :last-child").last().remove();
+					
+				$("#codes :last-child").last().remove();
 				
 				$window.print();
 				
