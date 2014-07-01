@@ -242,7 +242,7 @@ app.controller('colaImpresionCtrl',
 					$("#bcTarget"+i).append(pr);
 					
 					$("#prec"+i).text('$'+ prod.precio);
-					$("#bc"+i).barcode({'code':cod,crc:false} , "ean8", style);
+					$("#bc"+i).barcode({'code':cod,crc:false} , "int25", style);
 					$("#prod"+i++).text(prod.nombre);
 										
 					                  
@@ -270,7 +270,8 @@ app.controller('colaImpresionCtrl',
 		    
 		    if($scope.data.reposicion.modelos.length >0){
 		    		
-		    	style = {barWidth:20, barHeight:350, fontSize:90};
+		    	style = {barWidth:1, barHeight:20, fontSize:8};
+		    	
 		    	salto = document.createElement("div");
 		    	salto.setAttribute('class',"saltopagina");
 		    	
@@ -316,6 +317,7 @@ app.controller('colaImpresionCtrl',
 					$("#bcTarget"+index++).append(salto);                 
 				
 				});
+				
 				index--;
 				$("#bcTarget" + index + " :last-child").last().remove();
 				
