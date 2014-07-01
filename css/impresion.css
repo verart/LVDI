@@ -1,19 +1,16 @@
-/*
+
 
 .toPrint{
 	visibility:hidden;
 }
-*/
-
-#codes{
-	margin-top: 0px;
-}
 
 
 @media print {
+	
 	.toPrint{
         visibility: visible; 
     }
+    
     
     .container-fluid{
 	    display:none;
@@ -27,39 +24,39 @@
 	    display:none;
     }
    
-    #bcTarget0 > div.etiqueta{
-    	margin-top: 0px;
-    }
-	
 	.etiqueta {
-	 	padding: 10px 40px 40px 40px;
-		margin: 20px;
+		width: 38mm;
+/*
+		border: 1px solid #EEEEEE;
+*/
+		height: 20mm;
+		padding: 5px 7px;
 	}
 	
 	.etiqueta > div.bc {
-		margin-top: 90px;
+		margin-left: 20px;
 	}
 	
 	.etiqueta > p.nombre {
 		text-align: left;
 		line-height: 95%;
-		height: 230px;
+		
 	}
 	
 	.etiqueta > p.nombreSeparado {
 		text-align: left;
-		margin-top: 40px;
-		margin-bottom: 40px;
-		height: 160px;
 	}
 	
 	.etiqueta > p {
-	    font-family: Helvetica;
-		font-size: 140px;
+	    font-family:"Arial Narrow";
+		font-size: 12px;
+		margin-bottom: 3px;
+		margin-top: 1px;
+		height: 13px;
 	}
 	
 	.etiqueta > p.precio {	
-		font-size: 170px;
+		font-size: 13px;
 		text-align: right;
 		font-weight: bold;
 	}
@@ -74,6 +71,5 @@
 
 
 @page {
-	size: 38mm 20mm; /* 304mm 160mm; *//* auto; */   /* auto is the current printer page size */
-	margin: 10mm
+	size: auto;  /* auto is the current printer page size */
 }
