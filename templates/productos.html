@@ -51,7 +51,7 @@
 			<form class="navbar-form navbar-left" role="search">
 				<div class="form-group">
 					
-					<input type="text" class="form-control small filterInput" ng-model="queryId.id" placeholder="Id de producto" >
+					<input type="text" class="form-control small filterInput" ng-model="queryId" placeholder="Id de producto" >
 					
 					<hr/>
 					
@@ -83,7 +83,8 @@
        	<!-- BODY-->
 		<div class="col-xs-12 col-md-9 productosList">
 	       
-	       	<div ng-repeat= "producto in filteredProducts = (data |  orderBy:order:true | filter:query | filter:filterProds | filter:queryId:exceptEmptyComparator)" >
+			
+	       	<div ng-repeat= "producto in filteredProducts = (data |  orderBy:order:true | filter:query | filter:filterProds | filter:search)" >
 					<ng-producto producto="producto" > </ng-producto>
 			</div>
 			<p ng-show="(filteredProducts.length < 1)" class="aviso"> No hay productos</p>
