@@ -194,9 +194,25 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 		/* NUEVO *******************/
 	 	$scope.nuevo = function (userRole) {
             $scope.openProducto('',userRole);
-        };			
+        };		
+
         
-               
+        $scope.search = function (producto) {
+
+		    if ($scope.queryId === undefined || $scope.queryId.length === 0) {
+		        return true;
+		    }
+		
+		    var found = false;
+		    angular.forEach(producto.modelos, function (mod) {          
+		        if (mod.id == parseInt($scope.queryId)) { 
+		            found = true;
+		        }
+		    });
+		
+		    return found;
+		};
+     
 }]);
 
 	
