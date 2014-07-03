@@ -270,7 +270,7 @@ app.controller('colaImpresionCtrl',
 		    
 		    if($scope.data.reposicion.modelos.length >0){
 		    		
-		    	style = {barWidth:1, barHeight:21, fontSize:8};
+		    	style = {barWidth:2, barHeight:21, fontSize:8};
 		    		
 				$scope.data.reposicion.modelos.forEach(function (prod) {
 					  
@@ -292,7 +292,6 @@ app.controller('colaImpresionCtrl',
 					p = document.createElement("p");
 					p.setAttribute('id',"prod"+index);
 					p.setAttribute('class',"nombre");			
-
 					if(prod.nombre.length > 52)
 						p.setAttribute('class',"nombreChico")
 						
