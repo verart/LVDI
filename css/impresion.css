@@ -1,10 +1,6 @@
-
 .toPrint{
 	visibility:hidden;
 }
-
-
-
 
 @media print {
 	
@@ -45,23 +41,23 @@
 		left:0;
  	}
 	
-	
+
  	.etiqueta > div.bc {
-		margin-left: -21px;
+		margin-left: -5px;
 	}
 
 	
 	.etiqueta > p.nombre {
-		text-align: left;
-		line-height: 95%;
-		font-size: 12px;
-		width: 90px;
+		text-align: center;
+		width: 120px;
+		font-size: 13px;
+		line-height: 100%;
 	}
 	
 	.etiqueta > p.nombreChico {
-		text-align: left;
-		width: 90px;
-		font-size: 10px;
+		text-align: center;
+		width: 120px;
+		font-size: 11px;
 	}
 	
 	.etiqueta > p {
@@ -72,14 +68,12 @@
 	}
 	
 	.etiqueta > p.precio {	
-		font-size: 13px;
+		font-size: 17px;
 		text-align: center;
 		font-weight: bold;
-		margin-top: -15px;
-		margin-right:-20px; 
-		width:36px;
-		float: right;
-		
+		margin-top: -43px;
+		margin-left: 70px;
+		width: 55px;
 	}
 	
 	div.saltopagina{ 

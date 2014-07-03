@@ -292,7 +292,8 @@ app.controller('colaImpresionCtrl',
 					p = document.createElement("p");
 					p.setAttribute('id',"prod"+index);
 					p.setAttribute('class',"nombre");			
-					if(prod.nombre.length > 40)
+
+					if(prod.nombre.length > 52)
 						p.setAttribute('class',"nombreChico")
 						
 					pr = document.createElement("p");
