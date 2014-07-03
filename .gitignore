@@ -1,6 +1,6 @@
-constants.js
-database.php
-Common.php
-Route.php
+scripts/constants.js
+api/config/database.php
+api/lib/Common.php
+api/lib/Route.php
 api/img/*
 *.jpg
