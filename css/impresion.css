@@ -44,14 +44,16 @@
 	.etiqueta {
 		width: 1.5in;
 		height: 0.8in;
-		padding: 7px 7px 7px 13px;
+		padding: 10px 7px 7px 30px;
 		top:0;
 		left:0;
  	}
 	
-	.etiqueta > div.bc {
-		margin-left: 20px;
+	
+ 	.etiqueta > div.bc {
+		margin-left: -5px;
 	}
+
 	
 	.etiqueta > p.nombre {
 		text-align: left;
@@ -75,6 +77,7 @@
 		font-size: 13px;
 		text-align: right;
 		font-weight: bold;
+		margin-top: -40px;
 	}
 	
 	div.saltopagina{ 
