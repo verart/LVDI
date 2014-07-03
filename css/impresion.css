@@ -13,13 +13,9 @@
         background-color: white;
         height: 100%;
         width: 100%;
-/*
-        position: fixed;
-*/
         top: 0;
         left: 0;
         margin: 0;
-/*         padding: 15px; */
         font-size: 6px;
         line-height: 10px;
         font-stretch: condensed;  	
@@ -38,43 +34,52 @@
     }
     
     #bcTarget0{
-	    margin-top: -40px;
+	    margin-top: -43px;
     }
     
 	.etiqueta {
 		width: 1.5in;
 		height: 0.8in;
-		padding: 7px 7px 7px 13px;
+		padding: 10px 7px 7px 30px;
 		top:0;
 		left:0;
  	}
 	
-	.etiqueta > div.bc {
-		margin-left: 20px;
+	
+ 	.etiqueta > div.bc {
+		margin-left: -21px;
 	}
+
 	
 	.etiqueta > p.nombre {
 		text-align: left;
 		line-height: 95%;
-		
+		font-size: 12px;
+		width: 90px;
 	}
 	
-	.etiqueta > p.nombreSeparado {
+	.etiqueta > p.nombreChico {
 		text-align: left;
+		width: 90px;
+		font-size: 10px;
 	}
 	
 	.etiqueta > p {
 	    font-family:"Arial Narrow";
-		font-size: 12px;
 		margin-bottom: 3px;
-		margin-top: 1px;
+		margin-top: 3px;
 		height: 13px;
 	}
 	
 	.etiqueta > p.precio {	
 		font-size: 13px;
-		text-align: right;
+		text-align: center;
 		font-weight: bold;
+		margin-top: -15px;
+		margin-right:-20px; 
+		width:36px;
+		float: right;
+		
 	}
 	
 	div.saltopagina{ 
