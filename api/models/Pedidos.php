@@ -175,7 +175,7 @@ class Pedidos extends AppModel {
 						
 						
 						if(($cantidad >= 1) && ($estado == 'Terminado'))
-							$res = $this->ColaImpresion->set($idMod);
+							$res = $this->ColaImpresion->set($idMod,$idPedido);
 						
 						if(@PEAR::isError($query))
 							throw new BadRequestException('Hubo un error al agregar los modelos al pedido.');

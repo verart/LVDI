@@ -119,8 +119,8 @@
 				  			<tr> <th> Cliente: {{productosPedidos.clientePM}}</th><th></th></tr>
 				  		</thead>	
 				  		<tbody>
-				  			<tr ng-repeat="($index2, imp) in productosPedidos.modelos" class="pedidosList">
-				  				<td> {{imp.nombre}}</td>
+				  			<tr ng-repeat="($index2, imp) in productosPedidos.productos" class="pedidosList">
+				  				<td> {{imp.nombre}}  x  {{imp.cantidad}} </td>
 								<td class="col-md-2 text-center">							
 									<span 	class="glyphicon glyphicon-remove accionesLst link"  
 											title="Quitar producto de la cola"
