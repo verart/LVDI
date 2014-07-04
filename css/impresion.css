@@ -58,6 +58,22 @@
 		font-size: 11px;
 	}
 	
+	.etiqueta > p.cantidadPedido {
+		font-weight: bold;
+		text-align: right;
+		width: 120px;
+		font-size: 20px;
+		margin-top: 24px;
+	}
+	
+	.etiqueta > p.nombrePedido {
+		text-align: center;
+		width: 120px;
+		font-size: 15px;
+		margin-top: 5px;
+		line-height: 100%;
+	}
+	
 	.etiqueta > p {
 	    font-family:"Arial Narrow";
 		margin-bottom: 3px;

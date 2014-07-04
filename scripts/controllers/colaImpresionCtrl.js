@@ -206,47 +206,40 @@ app.controller('colaImpresionCtrl',
 		    	
 		    $('#codes').empty();
 		    		
-			if($scope.data.pedidos[index].modelos.length > 0){
+			if($scope.data.pedidos[index].productos.length > 0){
 				
 				var i = 0;
-				style = {barWidth:20, barHeight:350, fontSize:90};
-				 
-				$scope.data.pedidos[index].modelos.forEach(function (prod) {	    	
+				
+				$scope.data.pedidos[index].productos.forEach(function (prod) {	    	
 
 		            
-		            // Completo el código de modelo con 0
-		            var cod = prod.modelos_id   
-		            var long = cod.length;
-					var cant = 7 - long;
-					for(var k=0; k<cant; k++)
-						cod = "0"+cod;
-					
-					bcdiv = document.createElement("div");
+		            bcdiv = document.createElement("div");
 					bcdiv.setAttribute('id',"bcTarget"+i);
 					bcdiv.setAttribute('class',"etiqueta");
 					$("#codes").append(bcdiv);
 					
 					
-					d = document.createElement("div");
-					d.setAttribute('id',"bc"+i);
-					d.setAttribute('class',"bc");
 					p = document.createElement("p");
-					p.setAttribute('class',"nombre");
+					p.setAttribute('class',"nombrePedido");
 					p.setAttribute('id',"prod"+i);
-					pr = document.createElement("p");
-					pr.setAttribute('class',"precio");
-					pr.setAttribute('id',"prec"+i);
+					c = document.createElement("p");
+					c.setAttribute('class',"cantidadPedido");
+					c.setAttribute('id',"cant"+i);
 					
-					$("#bcTarget"+i).append(d);
 					$("#bcTarget"+i).append(p);
-					$("#bcTarget"+i).append(pr);
+					$("#bcTarget"+i).append(c);
 					
-					$("#prec"+i).text('$'+ prod.precio);
-					$("#bc"+i).barcode({'code':cod,crc:false} , "int25", style);
-					$("#prod"+i++).text(prod.nombre);
-										
+					
+					$("#prod"+i).text(prod.nombre);
+					$("#cant"+i++).text(' x '+ prod.cantidad);					
 					                  
+					salto = document.createElement("div");
+					salto.setAttribute('class',"saltopagina"); 
+					$("#codes").append(salto);                 
+				
 				});
+				
+				$("#codes :last-child").last().remove();
 				
 				$window.print();
 			}	
