@@ -155,19 +155,43 @@ app.controller('colaImpresionCtrl',
 		 ****************************************************/
 		 $scope.vaciarColaReposiciones= function() {
 		  
-		  	$scope.data.reposicion.modelos.forEach(function (imp) {
-		  	
-		        colaImpresionService.deleteModeloImpresion(imp.id).then(
-					//Success
-					function(promise){},
-					//Error al eliminar
-					function(promise){
-						AlertService.add('danger', promise.data.MSG);
-					}
-				)
+		  
+		  
+		  		  	//Solicita confirmación
+			var txt_confirm = { msj: "¿Está seguro que desea vaciar esta cola?", accept:"Si", cancel:"No"};
+			
+			var confirm = $modal.open({
+				templateUrl: dir_root+'/templates/confirm.html',
+				windowClass: 'wndConfirm',
+				controller: modalConfirmCtrl,
+				resolve: { txt: function(){ return txt_confirm } }
 			});
-				
-			$scope.data.reposicion.modelos = [];
+
+			// Comportamiento al cerrar el modal		    
+			confirm.result
+			.then( 
+				// Si el modal cierra por ACEPTAR
+				function (r) {
+							
+				  	$scope.data.reposicion.modelos.forEach(function (imp) {
+				  	
+				        colaImpresionService.deleteModeloImpresion(imp.id).then(
+							//Success
+							function(promise){},
+							//Error al eliminar
+							function(promise){
+								AlertService.add('danger', promise.data.MSG);
+							}
+						)
+					});
+						
+					$scope.data.reposicion.modelos = [];
+					
+				}, 
+				// Si el modal cierra por CANCELAR
+				function (res){}
+			);
+
 		}
 		
 		
@@ -178,20 +202,42 @@ app.controller('colaImpresionCtrl',
 		 ****************************************************/
 		 $scope.vaciarColaPedidos = function(index) {
 		  
-		  	$scope.data.pedidos[index].modelos.forEach(function (imp) {
 		  	
-		        colaImpresionService.deleteModeloImpresion(imp.id).then(
-					//Success
-					function(promise){},
-					//Error al eliminar
-					function(promise){
-						AlertService.add('danger', promise.data.MSG);
-					}
-				);
-			});
+		  	//Solicita confirmación
+			var txt_confirm = { msj: "¿Está seguro que desea vaciar esta cola?", accept:"Si", cancel:"No"};
 			
-			$scope.data.pedidos[index].modelos = [];
-		
+			var confirm = $modal.open({
+				templateUrl: dir_root+'/templates/confirm.html',
+				windowClass: 'wndConfirm',
+				controller: modalConfirmCtrl,
+				resolve: { txt: function(){ return txt_confirm } }
+			});
+
+			// Comportamiento al cerrar el modal		    
+			confirm.result
+			.then( 
+				// Si el modal cierra por ACEPTAR
+				function (r) {
+					
+					$scope.data.pedidos[index].productos.forEach(function (imp) {
+				  	
+				        colaImpresionService.deleteModeloImpresion(imp.id).then(
+							//Success
+							function(promise){},
+							//Error al eliminar
+							function(promise){
+								AlertService.add('danger', promise.data.MSG);
+							}
+						);
+					});
+					$scope.data.pedidos.splice(index, 1);
+					
+				}, 
+				// Si el modal cierra por CANCELAR
+				function (res){}
+			);
+		  	
+		  	
 		  }
 		
 		
@@ -320,6 +366,8 @@ app.controller('colaImpresionCtrl',
 				
 		       
 }]);
+
+
 
 
 
