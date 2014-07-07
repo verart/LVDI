@@ -45,6 +45,7 @@
 	<script type="text/javascript" src="scripts/controllers/modalConfirmCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfProduccionCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfPedidoCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/modalPdfPedidoNotAdminCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfClientesMailsCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/productosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosCtrl.js"></script>

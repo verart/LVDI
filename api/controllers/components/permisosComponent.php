@@ -27,9 +27,10 @@ class PermisosComponent extends AppComponent{
 			        break;
 			    case 'taller':
 					$this->acceso['productos']= array('index', 'show', 'update');
-					$this->acceso['pedidos'] = array('index','show'); 
-					$this->acceso['clientesPM']=array('clientesName');
-					$this->edicion['pedidos']=array('update');
+					$this->acceso['pedidos'] = array('index','show','update'	); 
+					$this->acceso['clientesPM']=array('clientesName','show');			
+					$this->acceso['colaImpresion']=array('index');
+					$this->edicion['pedidos']=array('update');		
 			        break;
 			    case 'local':
 					$this->acceso['productos']= array('index', 'show', 'update');

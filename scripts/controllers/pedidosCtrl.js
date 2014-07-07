@@ -4,7 +4,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	function ($scope, $modal, pedidosService, productosService, clientesPMService, AlertService, $filter) {
        
        
-        
+       	$scope.userRole =''; 
 	    $scope.order = '-fecha';
 	    $scope.filterPedidos = {estado:''};
 	    
@@ -66,6 +66,9 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    *************************************************************************/	
         $scope.openPedido = function (idPed, userRole) {
   
+  
+	 		$scope.userRole = userRole;
+
      		if(idPed != ''){
 	 			$scope.infoModal.pedido = $filter('getById')($scope.data, idPed);
 	 		}else
@@ -192,6 +195,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	     		
 		/* NUEVO *******************/
 	 	$scope.nuevo = function (userRole) {
+	 		$scope.userRole = userRole;
             $scope.openPedido('',userRole);
         };
         
@@ -201,6 +205,10 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 		************************************************************/
 		$scope.print = function (pedido) {
 		  	
+		  	if(($scope.userRole == '') || ($scope.userRole == 'admin'))
+		  		controllerPrint = modalPdfPedidoCtrl;
+		  	else
+		  		controllerPrint = modalPdfPedidoNotAdminCtrl;
 		  	
 		  	//Datos completos del cliente del pedido
 			clientesPMService.cliente(pedido.clientesPM_id).then(
@@ -211,7 +219,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 				  	var printDoc = $modal.open({
 							    	templateUrl: dir_root+'/templates/printDoc.html',
 							    	windowClass: 'wndPdf',
-							    	controller: modalPdfPedidoCtrl,
+							    	controller: controllerPrint,
 							    	resolve: { pedido: function(){return pedido;} }
 					});
 
