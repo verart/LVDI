@@ -27,7 +27,7 @@ class PermisosComponent extends AppComponent{
 			        break;
 			    case 'taller':
 					$this->acceso['productos']= array('index', 'show', 'update');
-					$this->acceso['pedidos'] = array('index','show','update'	); 
+					$this->acceso['pedidos'] = array('index','show','update'); 
 					$this->acceso['clientesPM']=array('clientesName','show');			
 					$this->acceso['colaImpresion']=array('index');
 					$this->edicion['pedidos']=array('update');		
@@ -41,7 +41,8 @@ class PermisosComponent extends AppComponent{
 					$this->edicion['ventas']=array('create','delete');					
 					$this->edicion['clientes']=array('create','update', 'delete');
 					$this->edicion['producciones']= array('create','update', 'delete');
-					$this->edicion['responsables']= array('create','update', 'delete');
+					$this->edicion['responsables']= array('create','update', 'delete');	
+					$this->acceso['ColaImpresion']=array('index','create');
 			        break;
 			}
 		
