@@ -1,5 +1,6 @@
 <div ng-class="{1: 'enProduccion', 0: 'fueraDeProduccion'}[producto.enProduccion]" class="row thumbnail productoList">
 	
+<!--
 	<div class="col-xs-6 col-md-2 center">
 
 		<img src="{{producto.img | noCache}}" 
@@ -10,6 +11,7 @@
 		<loading></loading>
 			 
 	</div>
+-->
 	
 	<div class="col-xs-6 col-md-6 link" ng-click="openProducto(producto.id,usuario.getUserRole())">
 		<h4>{{producto.nombre}}</h4>
