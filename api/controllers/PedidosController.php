@@ -120,7 +120,7 @@ class PedidosController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'update'))
+			if (!$this->PermisosComponent->puedeAcceder('pedidos','update'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
 			$params = getPutParameters();

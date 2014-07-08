@@ -9,7 +9,20 @@
 	
 	<title>LVDI</title>
 
-    <!-- Agregamos primero jQuery antes que angular es una buena practica -->
+   
+</head>
+<body ng-controller="ApplicationController">
+	<div id="alertGlobal">
+		<alert ng-repeat="alert in alerts" type="alert.type" close="alert.close()">{{ alert.msg }}</alert>
+	</div>
+	
+	<div class="loggedUser" ng-if="usuario">{{ usuario.getUserName() || ''}}</div>
+
+	      
+	<div ng-view > </div>
+	
+	
+	 <!-- Agregamos primero jQuery antes que angular es una buena practica -->
 	<script type="text/javascript" src="lib/javascript/jquery.js"></script>
 	<script type="text/javascript" src="lib/javascript/jquery.form.js"></script>
 	<script type="text/javascript" src="lib/javascript/angular.min.js"></script>
@@ -74,16 +87,8 @@
     <link rel="stylesheet" href='css/ventas.css' type="text/css" />
     <link rel="stylesheet" href='css/impresion.css' type="text/css" />
   
-</head>
-<body ng-controller="ApplicationController">
-	<div id="alertGlobal">
-		<alert ng-repeat="alert in alerts" type="alert.type" close="alert.close()">{{ alert.msg }}</alert>
-	</div>
-	
-	<div class="loggedUser" ng-if="usuario">{{ usuario.getUserName() || ''}}</div>
 
-	      
-	<div ng-view > </div>
+
 
 </body>
 </html>

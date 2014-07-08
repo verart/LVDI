@@ -21,19 +21,19 @@ class PermisosComponent extends AppComponent{
 			$usuario = $this->Usuarios->getUsuarioPorId($idUsuario);	
 			$this->perfil = $usuario['perfil'];
 			
-			
+										
 			switch ($this->perfil) {
 			    case 'admin':
 			        break;
 			    case 'taller':
-					$this->acceso['productos']= array('index', 'show', 'update');
-					$this->acceso['pedidos'] = array('index','show','update'); 
-					$this->acceso['clientesPM']=array('clientesName','show');			
-					$this->acceso['colaImpresion']=array('index');
-					$this->edicion['pedidos']=array('update');		
+					$this->acceso['productos'] = array('index', 'show', 'update');
+					$this->acceso['pedidos'] = array('index', 'show', 'update'); 
+					$this->acceso['clientesPM'] = array('clientesName','show');			
+					$this->acceso['colaImpresion'] = array('index');
+					$this->edicion['pedidos'] = array('update');		
 			        break;
 			    case 'local':
-					$this->acceso['productos']= array('index', 'show', 'update');
+					$this->acceso['productos']= array('index', 'show', 'update','productoModelo');
 					$this->acceso['producciones']= array('index', 'show', 'update');
 					$this->acceso['ventas']=array('index','show');
 					$this->acceso['clientes']=array('index');
