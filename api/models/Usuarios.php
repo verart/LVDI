@@ -70,6 +70,7 @@ class Usuarios extends AppModel {
 		
 		try{
 			$us = $usuario;
+			unset($usuario['$$hashKey']);
 			
 			if(isset($usuario['nombre'])) $usuario['nombre'] = utf8_decode($usuario['nombre']);
 			
@@ -79,7 +80,6 @@ class Usuarios extends AppModel {
 				if(!$this->create($usuario)){			
 					throw new BadRequestException('Hubo un error al crear el usuario.');
 				}
-				print_r('creado');
 				$us['id'] = $this->getLastId();
 							
 			}else{

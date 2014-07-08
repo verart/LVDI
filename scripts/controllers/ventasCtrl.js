@@ -370,7 +370,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  	productosService.getProductoModelo($scope.form.modelo.id).then(
 					//success
 					function(promise){
-					     $mod = promise.data.DATA; 
+					    $mod = promise.data.DATA; 
 					     
 					     console.log($mod);
 			
@@ -431,8 +431,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  ****************************************************/	  
 		  $scope.remove= function(index) {		  	
 		  	
-		  	$scope.venta.total =  parseInt($scope.venta.total,10) - (parseInt($scope.venta.modelos[index].precio,10) *  parseInt($scope.venta.modelos[index].cantidad,10));
-		  		  	
+		  	$scope.venta.total =  parseInt($scope.venta.total,10) - parseInt($scope.venta.modelos[index].precio,10);
+		  		  		
 		  	/* $scope.venta.total =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) - (parseInt($scope.venta.modelos[index].precio,10) *  parseInt($scope.venta.modelos[index].cantidad,10)); */
 		  		  	
 		  	$scope.venta.modelos.splice(index,1);
@@ -477,12 +477,13 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			   			    
 		  });
 		  
+		  
 		  $scope.refreshTotal = function(){
 		  
 /* 				var desc =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) * (parseInt($scope.venta.bonificacion,10)/100);  */
 				var mon = !(($scope.venta.montoFavor == "" || $scope.venta.montoFavor == null))? parseInt($scope.venta.montoFavor,10):0.0;
 				
-		    	$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - mon;
+		    	$scope.venta.totalFinal = parseInt($scope.venta.total,10) - mon;
 		    	
 		    	var desc =  parseInt($scope.venta.totalFinal,10) * (parseInt($scope.venta.bonificacion,10)/100);
 		    	$scope.venta.totalFinal = $scope.venta.totalFinal - desc;
