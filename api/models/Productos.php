@@ -82,7 +82,7 @@ class Productos extends AppModel {
 				INNER JOIN modelos M ON (M.productos_id = P.id)
 				$conditions
 				ORDER BY nombre_prod, nombre_mod ASC";
-				
+
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	
 		$results = $query->fetchAll();
@@ -216,7 +216,8 @@ class Productos extends AppModel {
 	* 					array(['id'], 'nombre', 'stock')
 	* 
 	* 
-	* Nota: Stock solo se actualiza stock desde reponer/vender/baja. (Se debe registrar el movimiento por cada reposición.)
+	* Este módulo no carga stock. Si se crea un modelo de producto se crea con stock en 0, por lo tanto no se manda a imprimir.
+	* Nota: Stock solo se actualiza desde reponer/vender/baja. (Se debe registrar el movimiento por cada reposición.)
 	*/
 	function setProducto($producto, $modelos){
 		
@@ -249,6 +250,7 @@ class Productos extends AppModel {
 							if(!$this->Modelos->create($value) )
 								throw new BadRequestException('Hubo un error al crear el modelo.');
 	
+/*
 							//Solo creo el movimiento si hay stock	
 							if($value['stock'] > 0){
 								// Agrego un movimiento
@@ -261,7 +263,9 @@ class Productos extends AppModel {
 		
 								if(!$this->MovimientosStock->setMovimiento($movimiento))
 									throw new BadRequestException('Hubo un error al crear el movimiento.');
-							}		
+								
+							}	
+*/	
 						}
 					
 					}else{
@@ -301,7 +305,8 @@ class Productos extends AppModel {
 							if(!$this->Modelos->create($value))
 								throw new BadRequestException('Hubo un error al crear el modelo.');
 								
-							//Solo creo el movimiento si hay stock	
+							/*
+							//Solo creo el movimiento y mando a imprimir si hay stock	
 							if($value['stock'] > 0){
 								
 								$movimiento = array(
@@ -311,10 +316,9 @@ class Productos extends AppModel {
 											'cantidad'=> $value['stock']);
 											
 								if(!$this->MovimientosStock->setMovimiento($movimiento))
-										throw new BadRequestException('Hubo un error al crear el movimiento.');
-								
-								//Agrego a la cola de impresion 
-							}			
+										throw new BadRequestException('Hubo un error al crear el movimiento.');	
+							}	
+							*/		
 									
 						}else{ 
 						
@@ -387,7 +391,7 @@ class Productos extends AppModel {
 		
 			$this->beginTransaction();
 			
-			$res = $this->Modelos->reponer($idMod);
+			$res = $this->Modelos->reponer($idMod); // Incrementa el stcok del modelo y marca el movimiento de stock
 			
 			if($res['success'])
 				$res = $this->ColaImpresion->set($idMod); 

@@ -102,8 +102,7 @@ app.service('productosService', ['$http', function ($http) {
                
             /******************************
             PRODUCTOS EN PRODUCCION
-            ******************************/
-          
+            ******************************/  
             nombresProductos:function(enProd) {
 	            return $http({
 	            	method: 'GET',

@@ -140,7 +140,7 @@ class ProductosController extends AppController {
 			// ALTA de modelos
 			if(!empty($params['mod2alta']))
 				foreach($params['mod2alta'] as $field => $value){
-					$result = $this->Modelos->reponer($value['id'],$value['cantAlta']);
+					$result = $this->Productos->reponer($value['id'],$value['cantAlta']);
 					
 					if(!$result['success'])
 						throw new BadRequestException($result['msg']);									
@@ -249,10 +249,9 @@ class ProductosController extends AppController {
 			
 			$idModelo = $_POST['idMod']; 
 		
-				$this->Productos->reponer($idModelo);
+			$this->Productos->reponer($idModelo);
 
 		} catch (Exception $e) {	
-			echo 'error con el modelo '.$idModelo;
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
