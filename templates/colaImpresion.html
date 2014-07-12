@@ -44,7 +44,7 @@
 
 
 
-<div class="container-fluid" ng-controller="colaImpresionCtrl" >
+<div class="container-fluid" ng-controller="colaImpresionCtrl"  ng-init="init('Meli','1')">
 
 	<div class="row-fluid">
 	
@@ -60,7 +60,7 @@
 					<h5>Agregar producto</h5>
 					
 					<input type="text" id="newMod" autocomplete="off" ng-model="modelo" class="form-control small filterInput" 
-									placeholder="Nombre de producto"
+									placeholder="Nombre de producto" ng-enter="add()"
 									typeahead="mod_option as mod_option.nombre for mod_option in mod_options | filter:$viewValue" />
 
 								
@@ -78,32 +78,69 @@
 		<div class="col-xs-12 col-md-9 ">
 		
 		
-			<h3>Productos por reposición</h3>
-		
+			<h3>Mis productos </h3>
 		
 			<div class="tableContainer" >
-			
-				<table class="table table-hover table-condense">
+
+				<table class="table table-hover table-condense tableCola">
+<!--
 			  		<thead>
 			  			<tr> <th>Producto</th><th></th> </tr>
-			  		</thead>	
+			  		</thead>
+-->	
+			  		<tbody>
+			  			<tr ng-repeat="imp in data.sueltos.modelos" class="pedidosList">
+			  				<td> {{imp.nombre}}</td>
+							<td class="col-md-2 text-center">							
+								<span 	class="glyphicon glyphicon-remove accionesLst link"  
+										title="Quitar producto de la cola"
+										ng-click="removeProducto(imp.id, $index, 'sueltos')">
+								</span>									
+							</td>				
+		  				</tr>
+		  				<tr ng-show="(data.sueltos.modelos.length < 1)" class="aviso"> <td colspan="5"> No hay productos para imprimir</td></tr>
+		   			</tbody>
+		  		</table>
+		  		<div class="btnCola">
+			  		<button  ng-disabled="data.sueltos.modelos.length == 0"
+			  				class="btn btn-danger btn-sm" ng-click="vaciarCola('sueltos')">Vaciar cola</button>
+			  		<button  ng-disabled="(data.sueltos.modelos.length == 0)" 
+			  				class="btn btn-primary btn-sm" ng-click="imprimir('sueltos')" target="_blank">Imprimir</button>
+		  		</div>
+		  			
+			</div>
+
+
+
+
+			<h3>Productos por reposición</h3>
+		
+			<div class="tableContainer" >
+
+				<table class="table table-hover table-condense tableCola">
+<!--
+			  		<thead>
+			  			<tr> <th>Producto</th><th></th> </tr>
+			  		</thead>
+-->	
 			  		<tbody>
 			  			<tr ng-repeat="imp in data.reposicion.modelos" class="pedidosList">
 			  				<td> {{imp.nombre}}</td>
 							<td class="col-md-2 text-center">							
 								<span 	class="glyphicon glyphicon-remove accionesLst link"  
 										title="Quitar producto de la cola"
-										ng-click="removeFromReposicion(imp.id, $index)">
+										ng-click="removeProductos(imp.id, $index,'reposicion')">
 								</span>									
 							</td>				
 		  				</tr>
-		  				<tr ng-show="(data.length < 1)" class="aviso"> <td colspan="5"> No hay productos para imprimir</td></tr>
+		  				<tr ng-show="(data.reposicion.modelos.length < 1)" class="aviso"> <td colspan="5"> No hay productos para imprimir</td></tr>
 		   			</tbody>
 		  		</table>
 		  		<div class="btnCola">
-			  		<button ng-if="data.reposicion.modelos.length > 0" 
-			  				class="btn btn-danger btn-sm" ng-click="vaciarColaReposiciones()">Vaciar cola</button>
-			  		<button class="btn btn-primary btn-sm" ng-click="imprimirReposiciones()" target="_blank">Imprimir</button>
+			  		<button  ng-disabled="data.reposicion.modelos.length == 0" 
+			  				class="btn btn-danger btn-sm" ng-click="vaciarCola('reposicion')">Vaciar cola</button>
+			  		<button  ng-disabled="data.reposicion.modelos.length == 0" 
+			  				class="btn btn-primary btn-sm" ng-click="imprimir('reposicion')" target="_blank">Imprimir</button>
 		  		</div>	
 			</div>
 			
@@ -132,9 +169,10 @@
 			   			</tbody>
 			  		</table>
 			  		<div class="btnCola">
-				  		<button ng-if="data.reposicion.modelos.length >0" 
-			  				class="btn btn-danger btn-sm" ng-click="vaciarColaPedidos($index)">Vaciar cola</button>
-			  			<button class="btn btn-primary btn-sm" ng-click="imprimirPedidos($index)" target="_blank" >Imprimir</button>
+				  		<button ng-disabled="productosPedidos.productos.length == 0"
+				  				 class="btn btn-danger btn-sm" ng-click="vaciarCola($index)">Eliminar cola</button>
+			  			<button  ng-disabled="productosPedidos.productos.length == 0"
+			  					class="btn btn-primary btn-sm" ng-click="imprimir($index)" target="_blank" >Imprimir</button>
 		  			</div>
 				</div>
 				<br/>

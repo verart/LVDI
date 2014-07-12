@@ -125,7 +125,7 @@ class Modelos extends AppModel {
 				throw new BadRequestException('Hubo un error al crear el movimiento para el modelo '.$idModelo);
 							
 			
-			return (array('success'=>true, 'msg'=>'El modelo ha sido dado de alta.'));
+			return (array('success'=>true, 'msg'=>'El modelo se repuso con éxito.'));
 
 		} catch (Exception $e) {
 		

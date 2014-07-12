@@ -10,28 +10,23 @@ app.service('colaImpresionService', ['$http', function ($http) {
             /******************************
             IMPRESION
             ******************************/
-            impresiones:function(success) {
-	            $http({
+            impresiones:function(userId) {
+	            return $http({
 	            	method: 'GET',
-	            	url: dir_api + '/colaImpresion/index',
+	            	url: dir_api + '/colaImpresion/'+userId+'/index',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-	            .success(function(data) { 
-	            	success(data.DATA);
-	            })
-	            .error(function(data, status) { 
-	            	error(data);
-	            })
+	    
             },
             
             /******************************
             ADDIMPRESION
             ******************************/
-            addModeloImpresion:function (idProducto) {
+            addModeloImpresion:function (idProducto,belongsTo) {
 	            return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/colaImpresion/create',
-	            	data: $.param(idProducto),
+	            	data: $.param(idProducto,belongsTo),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },

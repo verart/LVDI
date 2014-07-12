@@ -5,14 +5,14 @@ class ColaImpresionController extends AppController {
 	var $uses = array('ColaImpresion');
 	
 
-	function index() {
+	function index($userId) {
 		
 		try {
 			
 			if (!$this->PermisosComponent->puedeAcceder('ColaImpresion', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
-			$imp = $this->ColaImpresion->getProductos(); 
+			$imp = $this->ColaImpresion->getProductos($userId); 
 			echo $this->json('ColaImpresion', $imp);
 
 		} catch (Exception $e) {	
@@ -26,19 +26,21 @@ class ColaImpresionController extends AppController {
 	/*******
 	* CREATE
 	* Agrega un producto a imprimir.
-	* Params (POST): modelos_id, [pedidos_id]
+	* Params (POST): modelos_id, [pedidos_id], [belongsTo]
 	*/
 	function create() {
 		
 		try {
 			$idModelo = $_POST['modelos_id'];
 			$idPedido = (isset($_POST['pedidos_id']))? $_POST['pedidos_id'] : null;
+			$belongsTo = (isset($_POST['belongsTo']))? $_POST['belongsTo'] : NULL;
+
 			
 		
 			if (!$this->PermisosComponent->puedeAcceder('ColaImpresion', 'create'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$res = $this->ColaImpresion->set($idModelo, $idPedido);
+			$res = $this->ColaImpresion->set($idModelo, $idPedido, $belongsTo);
 			
 			if(!$res['success'])
 				throw new BadRequestException($res['msg']);
@@ -64,7 +66,7 @@ class ColaImpresionController extends AppController {
 		try {
 		
 			if (!$this->PermisosComponent->puedeAcceder('ColaImpresion', 'delete'))
-				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+				throw new ForbiddenException('No tiene permiso para quitar los productos a imprimir.'); 
 			
 			$this->ColaImpresion->delete($idImpresion);
 
@@ -74,7 +76,7 @@ class ColaImpresionController extends AppController {
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 	}
-	
+
 
 	
 	

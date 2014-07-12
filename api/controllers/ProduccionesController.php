@@ -39,7 +39,7 @@ class ProduccionesController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('produccion', 'create'))
+			if (!$this->PermisosComponent->puedeAcceder('producciones', 'create'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
 			$params = $_POST['produccion'];

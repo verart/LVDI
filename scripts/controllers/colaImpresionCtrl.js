@@ -1,23 +1,25 @@
 app.controller('colaImpresionCtrl', 
-	['$scope', '$modal', '$filter','$log', 'AlertService','colaImpresionService','productosService', '$location','$window', '$timeout', 
-	function ($scope, $modal, $filter,$log, AlertService, colaImpresionService, productosService, $location,$window, $timeout) {
-       
-
+	['$scope', '$modal', '$filter','$log', 'AlertService','colaImpresionService','productosService', '$location','$window', '$timeout', 'Session',
+	function ($scope, $modal, $filter,$log, AlertService, colaImpresionService, productosService, $location,$window, $timeout, Session) {
+       		
+ 
 	    	    
 	    /**********************************************************************
 	     Recupera en data los codigo de producutos de la cola a imprimir
 	    **********************************************************************/
-	    listImpresiones = function(data){	    		
-		    $scope.data = data;
-	    }	    	    
-	    colaImpresionService.impresiones(listImpresiones);
-	   
+	    colaImpresionService.impresiones(Session.getUserId()).then(
+	    	//Success
+			function(promise){
+				$scope.data = promise.data.DATA;
+			},
+			//Error al guardar
+			function(error){}
+		);
+		
+
 
 	    $scope.mod_options = [];
 	    $scope.modelo = {nombre:'', id:'', precio:'', cantidad:''};
-	     
-	     
-	     
 	     
 	     
 	    /************************************************************************
@@ -87,10 +89,12 @@ app.controller('colaImpresionCtrl',
 		  $scope.add= function() {
 		  
 		  	if( $scope.modelo.nombre  !=  '') {
-		  		colaImpresionService.addModeloImpresion({modelos_id:$scope.modelo.id}).then(
+		  		colaImpresionService.addModeloImpresion({modelos_id:$scope.modelo.id, belongsTo:Session.getUserId()}).then(
 						//Success
 						function(promise){
-							$scope.data.reposicion.modelos.push({'nombre':$scope.modelo.nombre, 'modelos_id':$scope.modelo.id, 'precio':$scope.modelo.precio});	
+							$scope.data.sueltos.modelos.push({'nombre':$scope.modelo.nombre, 'modelos_id':$scope.modelo.id, 'precio':$scope.modelo.precio});	
+							angular.element("#newMod").val('');
+							angular.element("#newMod").focus();
 						},
 						//Error al eliminar
 						function(promise){
@@ -104,15 +108,18 @@ app.controller('colaImpresionCtrl',
 		
 		
 		/***************************************************
-		 REMOVEFROMREPOSICION producto
-		 Elimina un modelo de la cola. 
+		 REMOVEPRODUCTO 
+		 Elimina el modelo 'id' de la cola de impresion. Lo quita de la tabla 'from' en el indice 'index'. 
 		 ****************************************************/
-		 $scope.removeFromReposicion= function(id, index) {
+		 $scope.removeProducto= function(id, index, from) {
 		  
 		  	colaImpresionService.deleteModeloImpresion(id).then(
 				//Success
 				function(promise){
-					$scope.data.reposicion.modelos.splice(index,1);	
+					switch(from){
+						case 'reposicion': $scope.data.reposicion.modelos.splice(index,1);
+						case 'sueltos': $scope.data.sueltos.modelos.splice(index,1);
+					} 	
 				},
 				//Error al eliminar
 				function(promise){
@@ -121,10 +128,8 @@ app.controller('colaImpresionCtrl',
 			);
 		
 		  }
-		
-		
-		
-		
+				  
+		  
 		
 		/***************************************************
 		 REMOVEFROMPEDIDOS producto
@@ -146,159 +151,130 @@ app.controller('colaImpresionCtrl',
 		  }
 		
 		
+		/*******************************************************************
+		 VACIARCOLA
+		 vacia la cola 'from' (resposicion / sueltos / indexDePedido). 
+		 ********************************************************************/
+		 $scope.vaciarCola = function(from) {
 		  
-		  
-		  
-		 /***************************************************
-		 VACIARCOLAREPOSICIONES producto
-		 vacia la cola. 
-		 ****************************************************/
-		 $scope.vaciarColaReposiciones= function() {
-		  
-		  
-		  
-		  		  	//Solicita confirmación
-			var txt_confirm = { msj: "¿Está seguro que desea vaciar esta cola?", accept:"Si", cancel:"No"};
-			
-			var confirm = $modal.open({
-				templateUrl: dir_root+'/templates/confirm.html',
-				windowClass: 'wndConfirm',
-				controller: modalConfirmCtrl,
-				resolve: { txt: function(){ return txt_confirm } }
-			});
-
-			// Comportamiento al cerrar el modal		    
-			confirm.result
-			.then( 
-				// Si el modal cierra por ACEPTAR
-				function (r) {
-							
-				  	$scope.data.reposicion.modelos.forEach(function (imp) {
-				  	
-				        colaImpresionService.deleteModeloImpresion(imp.id).then(
-							//Success
-							function(promise){},
-							//Error al eliminar
-							function(promise){
-								AlertService.add('danger', promise.data.MSG);
-							}
-						)
-					});
-						
-					$scope.data.reposicion.modelos = [];
-					
-				}, 
-				// Si el modal cierra por CANCELAR
-				function (res){}
-			);
-
-		}
-		
-		
-		
-		 /***************************************************
-		 VACIARCOLAPEDIDOS 
-		 vacia la cola. 
-		 ****************************************************/
-		 $scope.vaciarColaPedidos = function(index) {
-		  
-		  	
 		  	//Solicita confirmación
-			var txt_confirm = { msj: "¿Está seguro que desea vaciar esta cola?", accept:"Si", cancel:"No"};
-			
+		  	var txt_confirm;
+			switch(from){
+				
+				case 'reposicion': 
+					txt_confirm = { msj: "Se eliminarán todos los productos de la cola de impresión de resposición. ¿Desea continuar?", 
+									accept:"Si", cancel:"No"};
+					break;
+					
+				case 'sueltos': 
+					txt_confirm = { msj: "Se eliminarán todos los productos de su cola de impresión. ¿Desea continuar?", 
+									accept:"Si", cancel:"No"};
+					break;
+					
+				default:
+					txt_confirm = { msj: "Se eliminará la cola de impresión del pedido de "+$scope.data.pedidos[from].clientePM+". ¿Desea continuar?", 
+									accept:"Si", cancel:"No"};	
+				
+			}		
+				
+				
 			var confirm = $modal.open({
 				templateUrl: dir_root+'/templates/confirm.html',
 				windowClass: 'wndConfirm',
 				controller: modalConfirmCtrl,
 				resolve: { txt: function(){ return txt_confirm } }
 			});
+			
 
 			// Comportamiento al cerrar el modal		    
-			confirm.result
-			.then( 
+			confirm.result.then( 
+			
 				// Si el modal cierra por ACEPTAR
 				function (r) {
 					
-					$scope.data.pedidos[index].productos.forEach(function (imp) {
-				  	
-				        colaImpresionService.deleteModeloImpresion(imp.id).then(
-							//Success
-							function(promise){},
-							//Error al eliminar
-							function(promise){
-								AlertService.add('danger', promise.data.MSG);
-							}
-						);
-					});
-					$scope.data.pedidos.splice(index, 1);
+					switch(from){
 					
+						case 'reposicion': 		
+					
+						  	$scope.data.reposicion.modelos.forEach(function (imp) {						  	
+						        colaImpresionService.deleteModeloImpresion(imp.id).then(
+									function(promise){},
+									function(promise){ AlertService.add('danger', promise.data.MSG);}
+								)
+							});		
+							$scope.data.reposicion.modelos = [];
+							break;	
+					
+						
+						
+						case 'sueltos': 
+					
+							$scope.data.sueltos.modelos.forEach(function (imp) {					  	
+						        colaImpresionService.deleteModeloImpresion(imp.id).then(
+									function(promise){},
+									function(promise){ AlertService.add('danger', promise.data.MSG);}
+								)
+							});
+							$scope.data.sueltos.modelos = [];
+							break;			
+						
+						
+						
+						default:  // Productos de pedidos
+						
+							var stop = false;
+							var prods = $scope.data.pedidos[from].productos
+							
+							prods.every(function (imp) {
+						  	  		
+						        colaImpresionService.deleteModeloImpresion(imp.id).then(
+									function(promise){},
+									function(promise){ 	AlertService.add('danger', promise.data.MSG);
+														stop = true;
+									}
+								);
+		
+								return (stop === false);
+							});
+							$scope.data.pedidos.splice(index, 1);
+
+							
+							
+					}; //switch	
 				}, 
+				
 				// Si el modal cierra por CANCELAR
 				function (res){}
-			);
-		  	
-		  	
-		  }
-		
-		
+
+			); //then
+
+		};
+
+		 
+		 
 		
 		 /***************************************************
-		 IMPRIMIRPEDIDOS 
-		 imprimir la cola. 
-		 ****************************************************/
-		 $scope.imprimirPedidos= function(index) {	  
-		  
-		    var d;
-		    	
-		    $('#codes').empty();
-		    		
-			if($scope.data.pedidos[index].productos.length > 0){
-				
-				var i = 0;
-				
-				$scope.data.pedidos[index].productos.forEach(function (prod) {	    	
-
-		            
-		            bcdiv = document.createElement("div");
-					bcdiv.setAttribute('id',"bcTarget"+i);
-					bcdiv.setAttribute('class',"etiqueta");
-					$("#codes").append(bcdiv);
-					
-					
-					p = document.createElement("p");
-					p.setAttribute('class',"nombrePedido");
-					p.setAttribute('id',"prod"+i);
-					c = document.createElement("p");
-					c.setAttribute('class',"cantidadPedido");
-					c.setAttribute('id',"cant"+i);
-					
-					$("#bcTarget"+i).append(p);
-					$("#bcTarget"+i).append(c);
-					
-					
-					$("#prod"+i).text(prod.nombre);
-					$("#cant"+i++).text(' x '+ prod.cantidad);					
-					                  
-					salto = document.createElement("div");
-					salto.setAttribute('class',"saltopagina"); 
-					$("#codes").append(salto);                 
-				
-				});
-				
-				$("#codes :last-child").last().remove();
-				
-				$window.print();
-			}	
-		
-		}
+		 IMPRIMIR
+		 imprimir la cola from. (reposicion / sueltos / pedidoIndex) 
+		 ****************************************************/ 
+		 $scope.imprimir= function(from){
+			
+			if((from == 'reposicion') || (from == 'sueltos'))
+				$scope.imprimirReposicionesSueltos(from);
+			else
+				$scope.imprimirPedido(from);
+			
+		 }; 
 		
 		
 		
-		/***************************************************
-		 IMPRIMIRREPOSICONES 
-		 imprimir la cola. 
-		 ****************************************************/
-		 $scope.imprimirReposiciones= function() {
+				
+		
+		/***************************************************************************************
+		 IMPRIMIRREPOSICONESSUELTOS 
+		 imprime la cola de from con el formato de etiqueta de producto con código de barras. 
+		 ****************************************************************************************/
+		 $scope.imprimirReposicionesSueltos= function(from) {
 		    	
 		    var index = 0;	
 		    var d;
@@ -306,12 +282,13 @@ app.controller('colaImpresionCtrl',
 		    
 		    $('#codes').empty();
 		    
+		    productosAImprimir = (from == 'reposicion')? $scope.data.reposicion.modelos : $scope.data.sueltos.modelos;
 		    
-		    if($scope.data.reposicion.modelos.length >0){
+		    if(productosAImprimir.length >0){
 		    		
 		    	style = {barWidth:1, barHeight:21, fontSize:8};
 		    		
-				$scope.data.reposicion.modelos.forEach(function (prod) {
+				productosAImprimir.forEach(function (prod) {
 					  
 		            var cod = prod.modelos_id   
 		            var long = cod.length;
@@ -360,9 +337,61 @@ app.controller('colaImpresionCtrl',
 				
 			}	
 		}
+		
 		  
+		 
+		 
+		  /***************************************************
+		 IMPRIMIRPEDIDO
+		 imprimir la cola de pedidos. Sin codigo de barras 
+		 ****************************************************/
+		 $scope.imprimirPedido = function(index) {	  
 		  
-		  
+		    var d;
+		    	
+		    $('#codes').empty();
+		    		
+			if($scope.data.pedidos[index].productos.length > 0){
+				
+				var i = 0;
+				
+				$scope.data.pedidos[index].productos.forEach(function (prod) {	    	
+
+		            
+		            bcdiv = document.createElement("div");
+					bcdiv.setAttribute('id',"bcTarget"+i);
+					bcdiv.setAttribute('class',"etiqueta");
+					$("#codes").append(bcdiv);
+					
+					
+					p = document.createElement("p");
+					p.setAttribute('class',"nombrePedido");
+					p.setAttribute('id',"prod"+i);
+					c = document.createElement("p");
+					c.setAttribute('class',"cantidadPedido");
+					c.setAttribute('id',"cant"+i);
+					
+					$("#bcTarget"+i).append(p);
+					$("#bcTarget"+i).append(c);
+					
+					
+					$("#prod"+i).text(prod.nombre);
+					$("#cant"+i++).text(' x '+ prod.cantidad);					
+					                  
+					salto = document.createElement("div");
+					salto.setAttribute('class',"saltopagina"); 
+					$("#codes").append(salto);                 
+				
+				});
+				
+				$("#codes :last-child").last().remove();
+				
+				$window.print();
+			}	
+		
+		}
+		
+ 
 				
 		       
 }]);
