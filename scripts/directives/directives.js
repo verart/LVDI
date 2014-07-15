@@ -165,26 +165,30 @@ app.directive('formAutofillFix', function ($timeout) {
 
 
 
-
-
-
 /*******************************************************************************************************
 LOADING
 Cuando se está cargando información se muestra un gif.
 *******************************************************************************************************/
-app.directive('loading', function () {
-      return {
-        restrict: 'E',
-        replace:true,
-        template: '<div class="loading" ><img src="img/loading.gif" width="20" height="20" /></div>',
-        link: function (scope, element, attr) {
-              scope.$watch('loading', function (val) {
-                  if (val)
-                      $(element).show();
-                  else
-                      $(element).hide();
-              });
-        }
-      }
-  });
+app.directive('loading',   ['$http' ,function ($http)
+    {
+        return {
+            restrict: 'A',
+            link: function (scope, elm, attrs)
+            {
+                scope.isLoading = function () {
+                    return $http.pendingRequests.length > 0;
+                };
+
+                scope.$watch(scope.isLoading, function (v)
+                {
+                    if(v){
+                        elm.show();
+                    }else{
+                        elm.hide();
+                    }
+                });
+            }
+        };
+
+    }]);
 

@@ -12,7 +12,7 @@
    
 </head>
 <body ng-controller="ApplicationController">
-	<div id="alertGlobal">
+	<div id="alertGlobal" style="z-index: 6000;">
 		<alert ng-repeat="alert in alerts" type="alert.type" close="alert.close()">{{ alert.msg }}</alert>
 	</div>
 	
