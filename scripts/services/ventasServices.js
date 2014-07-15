@@ -1,13 +1,13 @@
 
 app.service('ventasService', ['$http', function ($http) {
         return {
-            ventas:function(success) {
-	            $http({
-	            	method: 'GET',
+            ventas:function(d, h) {
+	           return $http({
+	            	method: 'POST',
 	            	url: dir_api + '/ventas/index',
+	            	data: $.param({desde:d,hasta:h}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-	            .success(function(data) { success(data.DATA);} );
             },
             
             /******************************

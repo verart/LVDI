@@ -59,13 +59,13 @@
 						
 						<div class="controls opciones">
 							<label class="radio small">
-								<input type="radio" ng-value="hoy" ng-model="filterVentas.fecha"
-								name="venta[fecha]"> 
+								<input type="radio" value="hoy" ng-model="value"
+								ng-change="filtrarVentas(value)"> 
 								Sólo hoy
 							</label>
 							<label class="radio small">
-								<input type="radio" value="" ng-model="filterVentas.fecha" 
-								name="venta[fecha]"> 
+								<input type="radio" value="" ng-model="value" 
+								ng-change="filtrarVentas(value)"> 
 								Todos
 							</label>
 							
@@ -84,8 +84,10 @@
 	
 		<!-- BODY-->
 		<div class="col-xs-12 col-md-9 ">
-			<div class="tableContainer" >
-			
+			<div class="tableContainer" class="loading-spiner-holder" data-loading >
+				
+				<div class="loading-spiner"><img src="img/loading.gif" /></div>
+
 				<table class="table table-hover table-condense">
 			  		<thead>
 			  			<tr>

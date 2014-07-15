@@ -21,12 +21,11 @@ class Ventas extends AppModel {
 		$sql = "SELECT V.*, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, 
 		 		VM.id as idVenMod
 				FROM ventas V
-				INNER JOIN ventas_modelos VM ON VM.ventas_id = V.id
-				INNER JOIN modelos M ON VM.modelos_id = M.id
-				INNER JOIN productos Pr ON Pr.id = M.productos_id 
+				 INNER JOIN ventas_modelos VM ON VM.ventas_id = V.id
+				 INNER JOIN modelos M ON VM.modelos_id = M.id
+				 INNER JOIN productos Pr ON Pr.id = M.productos_id 
 				$conditions
-				ORDER BY V.id DESC"; 
-				
+				ORDER BY V.id DESC";
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	

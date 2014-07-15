@@ -6,17 +6,21 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
        
         
 	    $scope.order = '-fecha';
-	    $scope.filterVentas = {fecha: (new Date()).toISOString().slice(0, 10)};
-	    $scope.hoy = (new Date()).toISOString().slice(0, 10);
-	    
 	    
 	    /*****************************************************************************************************
 	     VENTAS     
-	    *****************************************************************************************************/
-	    listVentas = function(data){	    		
-		    $scope.data = data;
-	    }	    	    
-	    ventasService.ventas(listVentas);
+	    *****************************************************************************************************/    	    
+	    fechaHoy = (new Date()).toISOString().slice(0, 10);
+	    
+	    ventasService.ventas(fechaHoy,'').then(
+			//success
+			function(promise){
+			     $scope.data = promise.data.DATA;                   
+			},
+			//Error al actualizar
+			function(error){ AlertService.add('danger', error.data.MSG);}
+		);		
+
 	    
 	    
 	    
@@ -166,6 +170,25 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
         };
         
         
+        
+	     		
+		/* FILTER  *******************/
+	 	$scope.filtrarVentas = function (value) {
+	 		
+	 		if (value == 'hoy') desde = fechaHoy;
+	 		else desde = '';	
+	 		
+		    ventasService.ventas(desde,'').then(
+				//success
+				function(promise){
+				     $scope.data = promise.data.DATA;                   
+				},
+				//Error al actualizar
+				function(error){ AlertService.add('danger', error.data.MSG);}
+			);		
+
+
+        };
         
 
         /************************************************************************
@@ -372,13 +395,15 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 					function(promise){
 					    $mod = promise.data.DATA; 
 					     
-					     console.log($mod);
-			
-						$scope.venta.modelos.push($mod);
+						if($mod.stock > 0){
+							$scope.venta.modelos.push($mod);
 							  	
-						$scope.venta.total =  parseInt($scope.venta.total,10) + (parseInt($mod.precio,10));
+							$scope.venta.total =  parseInt($scope.venta.total,10) + (parseInt($mod.precio,10));
 							  
-						$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - (parseInt($scope.venta.total,10) *  parseInt($scope.venta.bonificacion,10)/100);
+							$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - (parseInt($scope.venta.total,10) *  parseInt($scope.venta.bonificacion,10)/100);
+						}else{
+							AlertService.add('danger', 'No es posible agregar este producto a la venta.	');
+						}
 						
 						$scope.form.modelo.id = '';	  	
 							  	

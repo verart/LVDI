@@ -80,7 +80,7 @@ $route->add('/clientes/update','PUT','Clientes','update');
 $route->add('/clientes/create','POST','Clientes','create');
 
 
-$route->add('/ventas/index','GET','Ventas','index');
+$route->add('/ventas/index','POST','Ventas','index');
 $route->add('/ventas/show','GET','Ventas','show');
 $route->add('/ventas/delete','DELETE','Ventas','delete');
 $route->add('/ventas/create','POST','Ventas','create');

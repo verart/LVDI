@@ -167,8 +167,8 @@ class Productos extends AppModel {
 	 */
 	function getProductoModeloPorId($idModelo) {
 		
-		$sql = "SELECT P.precio,P.nombre as nomProducto, M.nombre as nomModelo
-				FROM Modelos M
+		$sql = "SELECT P.precio,P.nombre as nomProducto, M.nombre as nomModelo, M.stock as stock 
+				FROM modelos M
 				INNER JOIN productos P ON P.id = M.productos_id
 				WHERE M.id = ?";
 		
@@ -186,7 +186,7 @@ class Productos extends AppModel {
 				$resultsFormat['nombre'] = utf8_encode($results[0]['nomProducto'].'-'.$results[0]['nomModelo']);
 				$resultsFormat['precio'] = $results[0]['precio'];
 				$resultsFormat['id'] = $idModelo;
-			
+				$resultsFormat['stock'] = $results[0]['stock'];
 				
 				return array('success'=>true, 'producto'=>$resultsFormat);
 				

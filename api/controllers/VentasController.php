@@ -11,8 +11,21 @@ class VentasController extends AppController {
 			
 			if (!$this->PermisosComponent->puedeAcceder('ventas', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+				
+			if(isset($_POST['desde']) && ($_POST['desde'] != '')){
+				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
+					$opciones = array('conditions'=>array('fecha >'=> $_POST['desde'], 'fecha<'=>$_POST['hasta']));
+				else{
+					$opciones = array('conditions'=>array('fecha >'=> $_POST['desde']));
+				}
+			}else
+				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
+					$opciones = array('conditions'=>array('fecha<'=>$_POST['hasta']));
+				else
+					$opciones = array(); 
 
-			$pedidos = $this->Ventas->getVentas(); 
+	
+			$pedidos = $this->Ventas->getVentas($opciones); 
 			
 			echo $this->json('Ventas', $pedidos);
 

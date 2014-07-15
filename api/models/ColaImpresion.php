@@ -85,7 +85,7 @@ class ColaImpresion extends AppModel {
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
 				INNER JOIN pedidos_modelos PM ON (PM.modelos_id = M.id) & (PM.pedidos_id = CI.pedidos_id)
 				INNER JOIN pedidos P ON PM.pedidos_id = P.id
-				INNER JOIN clientespm CL ON P.clientespm_id = CL.id			
+				INNER JOIN clientespm CL ON P.clientesPM_id = CL.id			
 				GROUP BY CI.pedidos_id, M.productos_id	
 				ORDER BY CI.pedidos_id";
 				
