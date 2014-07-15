@@ -247,7 +247,6 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		  
-		  $scope.estados = ['Pendiente', 'Terminado', 'Entregado-Pago', 'Entregado-Debe'];	  		  
 		  $scope.fps = ['Efectivo', 'Tarjeta', 'Cheque'];	 
 		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	 
 		  
@@ -270,8 +269,15 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  	
 		  	$scope.pedido.fecha= (new Date($scope.pedido.fecha)).toISOString().slice(0, 10);
 		  	
-		  	$scope.EditEnabled = ( ($scope.pedido.estado != 'Entregado-Debe') && ($scope.pedido.estado != 'Entregado-Pago') && (($scope.userRole=='admin') || ($scope.userRole=='taller'))) ;		  
-				
+		  	 if(($scope.pedido.estado == 'Entregado-Pago') || ($scope.pedido.estado == 'Entregado-Debe'))
+		  	 	$scope.estados = ['Entregado-Pago', 'Entregado-Debe'];
+		  	 else{
+		  	 	$scope.estados = ['Pendiente', 'Terminado', 'Entregado-Pago', 'Entregado-Debe'];	  		  
+		  	 	
+		  	 	// si el pedido no fue entregado se puede editar (solo si es admin o taller)
+		  	 	$scope.EditEnabled  = ( ($scope.userRole=='admin') || ($scope.userRole=='taller') )
+		  	 }
+		  	
 		  	
 		  }else{
 		  
@@ -345,6 +351,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  $scope.back2original = function(){
 			  $scope.pedido.cliente = original.cliente;
 			  $scope.pedido.total = original.total;
+			  $scope.pedido.estado = original.estado;
 			  $scope.pedido.nota = original.nota;			  
 			  $scope.pedido.clientesPM_id = original.clientesPM_id;			  
 			  $scope.pedido.bonificacion = original.bonificacion;
@@ -469,6 +476,24 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		    	var desc =  parseInt($scope.pedido.total,10) * (parseInt($scope.pedido.bonificacion,10)/100);
 		    	$scope.pedido.totalFinal =  parseInt($scope.pedido.total,10) - desc;
 			   			    
+		  });
+		  
+		  
+		  /***************************************************
+		   WATCH PEDIDO.ESTADO
+		   Si el nuevo estado es 'Terminado' pasa el estado de todos los productos a terminado
+		  ****************************************************/	 
+		  $scope.$watch('pedido.estado', function(newValue, oldValue) {
+		  		
+		    	if((newValue == 'Terminado')&(oldValue != 'Terminado')){
+			    	
+			    	for( i=0; i < $scope.pedido.modelos.length; i ++){
+				    	
+				    	$scope.pedido.modelos[i].estado = 'Terminado';
+				    	
+			    	}
+		    	}	
+		    		    
 		  });
 	  		  
 }

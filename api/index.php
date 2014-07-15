@@ -88,6 +88,7 @@ $route->add('/ventas/create','POST','Ventas','create');
 
 $route->add('/colaImpresion/index','GET','colaImpresion','index');
 $route->add('/colaImpresion/delete','DELETE','colaImpresion','delete');
+$route->add('/colaImpresion/deletePedido','DELETE','colaImpresion','deletePedido');
 $route->add('/colaImpresion/create','POST','colaImpresion','create');
 
 

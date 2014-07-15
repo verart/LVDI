@@ -235,8 +235,12 @@ class Pedidos extends AppModel {
 							$estado = (isset($value['estado'])) ? ", estado='".$value['estado']."'" : '' ;
 							$sql = "UPDATE pedidos_modelos SET cantidad=$cantidad, precio=$precio $estado WHERE (id = $id)";
 							
+							//Si el antiguo estado era pendiente y el nuevo es terminado, guarda la etiqueta para imprimir
 							if(($modPed['estado'] == 'Pendiente')&&($value['estado'] == 'Terminado')){
-								$res = $this->ColaImpresion->set($idModelo,$idPedido);	
+								$res = $this->ColaImpresion->set($idModelo,$idPedido, null);	
+								
+								if(!$res['success']) 
+									throw new BadRequestException('No puedo agregarse la etiqueta del producto a la cola de impresión.');
 							}
 						
 						}
