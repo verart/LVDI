@@ -78,7 +78,26 @@ class ColaImpresionController extends AppController {
 	}
 
 
-	
+	/*******
+	* DELETEPEDIDO
+	* Elimina los productos a imprimir de un pedido.
+	* Params (DELETE): $idPedido
+	*/
+	function deletePedido($idPedido) {
+		
+		try {
+		
+			if (!$this->PermisosComponent->puedeAcceder('ColaImpresion', 'delete'))
+				throw new ForbiddenException('No tiene permiso para quitar los productos a imprimir.'); 
+			
+			$this->ColaImpresion->deletePedido($idPedido);
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
 	
 }
 ?>

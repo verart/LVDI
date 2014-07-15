@@ -227,7 +227,7 @@ app.controller('colaImpresionCtrl',
 							
 							prods.every(function (imp) {
 						  	  		
-						        colaImpresionService.deleteModeloImpresion(imp.id).then(
+						        colaImpresionService.deleteModeloImpresionPedido($scope.data.pedidos[from].pedidos_id).then(
 									function(promise){},
 									function(promise){ 	AlertService.add('danger', promise.data.MSG);
 														stop = true;
@@ -236,7 +236,7 @@ app.controller('colaImpresionCtrl',
 		
 								return (stop === false);
 							});
-							$scope.data.pedidos.splice(index, 1);
+							$scope.data.pedidos.splice(from, 1);
 
 							
 							

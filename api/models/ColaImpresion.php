@@ -151,7 +151,28 @@ class ColaImpresion extends AppModel {
 	}
 	
 
-	
+	/**
+	* DELETEPEDIDO
+	* $pedidoAImprimir (int)
+	*/
+	function deletePedido($pedidoAImprimir){
+		
+		try{
+			
+			$sql = 'DELETE FROM colaimpresion WHERE pedidos_id = '.$pedidoAImprimir; 
+			
+			$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);	
+			$query = $query->execute();	
+				
+			return array('success'=>true, 'cant'=>$query);
+			
+		} catch (Exception $e) {
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+		}
+		
+		
+	}	
 
 	
 	
