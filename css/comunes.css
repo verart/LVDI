@@ -132,13 +132,7 @@
 	border: 0px;
 }
 
-.loading { 
-	padding:20px; 
-	width:65px;
-	height:65px;
-	line-height: 1.42857143;
-	border: 1px solid #ddd;
-	border-radius: 4px;
-	transition: all .2s ease-in-out;
-	max-width: 100%;
+
+.loading-spiner-holder{
+	text-align: center;
 }

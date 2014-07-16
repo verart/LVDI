@@ -35,13 +35,13 @@
 										
 						<h5>Agregar producto</h5>
 						
-						<input type="text" class="form-control small filterInput" focus-me="{{true}}"
-							ng-model="form.modelo.id" placeholder="Id de producto" ng-enter="searchAdd()">
+						<input type="text" id="newModId" class="form-control small filterInput" focus-me="{{true}}"
+							ng-model="form.modelo.id" placeholder="Id de producto" ng-change="search()" ng-enter="add()"/>
 					
 						<hr/> 
 						
 						<input type="text" id="newMod" autocomplete="off" ng-model="form.modelo" class="form-control small" 
-									placeholder="Nombre de producto"
+									placeholder="Nombre de producto"  ng-enter="add()"
 									typeahead="mod_option as mod_option.nombre for mod_option in p.mod_options | filter:$viewValue" />
 				
 						<div class="row" style="margin-top:5px;">

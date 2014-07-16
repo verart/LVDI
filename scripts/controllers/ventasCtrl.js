@@ -6,7 +6,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
        
         
 	    $scope.order = '-fecha';
-	    
+	    $scope.value = 'hoy';
 	    /*****************************************************************************************************
 	     VENTAS     
 	    *****************************************************************************************************/    	    
@@ -297,8 +297,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  $scope.p.mod_options = info.p.mod_options;		  
 		  $scope.p.cl_options = info.p.cl_options;
 
-
-
 		  //Inicializo los datos de la venta	
 		  if(info.venta != ''){
 		  
@@ -323,6 +321,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 
 
 		  
+		  $scope.nuevoModeloId = '';
+
 		  
 		  
 		  /***************************************************
@@ -416,9 +416,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			}
 			  
 		  }	
-		  
-		  
-		  
+  
 		  
 		  /***************************************************
 		   ADD producto
@@ -435,6 +433,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  			precio: $scope.form.modelo.precio, 
 			  			cantidad: 1
 			  		};
+			  		
 			  	$scope.venta.modelos.push($mod);
 			  	
 			  	$scope.venta.total =  parseInt($scope.venta.total,10) + (parseInt($scope.form.modelo.precio,10) *  parseInt($scope.form.modelo.cantidad,10));
@@ -442,7 +441,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  	$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - (parseInt($scope.venta.total,10) *  parseInt($scope.venta.bonificacion,10)/100);
 			  	
 			  	$scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
-			  	angular.element("#newMod").focus();
+			  	angular.element("#newModId").focus();
+				angular.element("#newMod").val('');
 			  }
 		  }	 
 		  
@@ -514,9 +514,21 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		    	$scope.venta.totalFinal = $scope.venta.totalFinal - desc;
 
 		  }
+		  		
+		  		
+		  $scope.search = function(){
 		  
-		  
-		  		  
+		  	if($scope.form.modelo.id == '') angular.element("#newMod").val('');
+		  	else{
+			  	$mod = $scope.p.mod_options.filter( function( value ){ return value.id == $scope.form.modelo.id })[0]; 
+			  	
+			  	if($mod != undefined){		  	
+			  		$scope.form.modelo.nombre = $mod.nombre;
+			  		$scope.form.modelo.precio = $mod.precio;
+			  		angular.element("#newMod").val($mod.nombre);
+				}
+			}
+		  }  
 }
 
 

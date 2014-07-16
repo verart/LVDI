@@ -70,7 +70,7 @@ class ProductosController extends AppController {
 			
 			$res = $this->Productos->getProductoModeloPorId($idModelo); 
 			if($res['success'])
-				echo $this->json('', $res['producto']);
+				echo $this->json('Producto', $res['producto']);
 			else
 				throw new BadRequestException($res['msg']); 
 
