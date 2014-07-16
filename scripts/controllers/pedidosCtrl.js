@@ -320,6 +320,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		   Se cierra el modal y retornan los datos del pedido original, sin cambios
 		  ****************************************************/
 		  $scope.cancel = function () {
+		  	$scope.back2original();
 		    $modalInstance.dismiss({action:'cancel'});
 		  };
 		  

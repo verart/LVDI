@@ -13,17 +13,17 @@
 						<div class="colForm col-xs-6 col-sm-3">
 							<input type="date" class="form-control small" 
 									placeholder="Fecha" id="fechaPedido" focus-me="{{true}}" 
-									ng-model="pedido.fecha" style="padding-right:0px;"/>
+									ng-model="pedido.fecha" style="padding-right:0px;" required/>
 						</div>
 						<div class="colForm col-xs-6 col-sm-3">
 							<input type="date" class="form-control small" 
 									placeholder="Fecha de entrega" id="fechaEntregaPedido"
-									ng-model="pedido.fecha_entrega" style="padding-right:0px;"/>
+									ng-model="pedido.fecha_entrega" style="padding-right:0px;" required/>
 						</div>	
 						<div class="colForm col-xs-6 col-sm-4">
 							<input type="text" autocomplete="off" ng-model="form.cliente"  class="form-control small" 
-									placeholder="Nombre de cliente" required
-									typeahead="cl_option as cl_option.nombre for cl_option in p.cl_options | filter:$viewValue" />
+									placeholder="Nombre de cliente" 
+									typeahead="cl_option as cl_option.nombre for cl_option in p.cl_options | filter:$viewValue" required/>
 						</div>
 							
 						<div class="colForm col-xs-6 col-sm-2">					
