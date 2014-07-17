@@ -129,7 +129,7 @@
 							<td class="col-md-2 text-center">							
 								<span 	class="glyphicon glyphicon-remove accionesLst link"  
 										title="Quitar producto de la cola"
-										ng-click="removeProductos(imp.id, $index,'reposicion')">
+										ng-click="removeProducto(imp.id, $index,'reposicion')">
 								</span>									
 							</td>				
 		  				</tr>
@@ -147,7 +147,7 @@
 			
 			<h3>Productos por pedidos</h3>
 			
-			<div ng-repeat="($index, productosPedidos) in data.pedidos" >
+			<div ng-repeat="($indexP, productosPedidos) in data.pedidos" >
 				
 				
 				<div class="tableContainer">
@@ -156,12 +156,12 @@
 				  			<tr> <th> Cliente: {{productosPedidos.clientePM}}</th><th></th></tr>
 				  		</thead>	
 				  		<tbody>
-				  			<tr ng-repeat="($index2, imp) in productosPedidos.productos" class="pedidosList">
+				  			<tr ng-repeat="($index2P, imp) in productosPedidos.productos" class="pedidosList">
 				  				<td> {{imp.nombre}}  x  {{imp.cantidad}} </td>
 								<td class="col-md-2 text-center">							
 									<span 	class="glyphicon glyphicon-remove accionesLst link"  
 											title="Quitar producto de la cola"
-											ng-click="removeFromPedidos(imp.id, $index,$index2)">
+											ng-click="removeFromPedidos(imp.id, $indexP, $index2P)">
 									</span>									
 								</td>				
 			  				</tr>

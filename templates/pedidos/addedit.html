@@ -1,7 +1,8 @@
+<form id="form" ng-submit="ok()">
 
-        <div id= "wndOpenPedido" class="modal-body">
+ <div id= "wndOpenPedido" class="modal-body">
 		
-		
+     		
 			<div class="modal-header"  style="margin-bottom: 18px;">
 			   		<h3>Datos del pedido</h3>
 			</div>
@@ -48,6 +49,12 @@
 						<div class="pull-right arrow-right"></div>
 										
 						<h5>Agregar producto</h5>
+						
+						<input type="text" id="newModId" class="form-control small filterInput" focus-me="{{true}}"
+							ng-model="form.modelo.id" placeholder="Id de producto" ng-change="search()" ng-enter="add()"/>
+					
+						<hr/> 
+						
 						<input type="text" id="newMod" autocomplete="off" ng-model="form.modelo" class="form-control small" 
 									placeholder="Nombre de producto"
 									typeahead="mod_option as mod_option.nombre for mod_option in p.mod_options | filter:$viewValue" />
@@ -59,7 +66,7 @@
 							</div>
 										
 							<div class="colForm col-xs-6 col-md-6">
-								<button class="btn btn-default" ng-click="add()" > Agregar </button>
+								<button type="button" class="btn btn-default" ng-click="add()" > Agregar </button>
 							</div>
 							
 						</div>
@@ -126,7 +133,7 @@
 							</tr>
 						</tbody>
 					</table>										
-					</div>
+					</div> <!-- tableContainer -->
 				
 					<br/>
 			
@@ -158,10 +165,10 @@
 									typeahead="fp for fp in fps | filter:$viewValue" />
 						</div>
 	 				
-	 				</div>
-	 			</div>	
+	 				</div> <!--ng-if  user role -->
+	 			</div> <!-- col- -->	
 				
-			</div>	
+			</div> <!-- row -->	
 			
 
 
@@ -174,8 +181,9 @@
 	        <button ng-if="pedido.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deletePedido()">Eliminar pedido</button>
 
 	        <button class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
-            <button class="btn btn-primary" ng-click="ok()">Guardar</button>
+            <button class="btn btn-primary" ng-click="save()">Guardar</button>
             <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
             
         </div>
-   
+        
+   </form>

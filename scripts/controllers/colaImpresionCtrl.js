@@ -140,7 +140,12 @@ app.controller('colaImpresionCtrl',
 		  	colaImpresionService.deleteModeloImpresion(id).then(
 				//Success
 				function(promise){
-					$scope.data.pedidos[index].modelos.splice(index2,1);
+					
+					if($scope.data.pedidos[index].productos.length == 1)
+						$scope.data.pedidos.splice(index,1);
+					else	
+						$scope.data.pedidos[index].productos.splice(index2,1);
+					
 				},
 				//Error al eliminar
 				function(promise){
@@ -153,7 +158,7 @@ app.controller('colaImpresionCtrl',
 		
 		/*******************************************************************
 		 VACIARCOLA
-		 vacia la cola 'from' (resposicion / sueltos / indexDePedido). 
+			 vacia la cola 'from' (resposicion / sueltos / indexDePedido). 
 		 ********************************************************************/
 		 $scope.vaciarCola = function(from) {
 		  
