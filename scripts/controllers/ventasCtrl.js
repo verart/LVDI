@@ -5,7 +5,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
        
        
         
-	    $scope.order = '-fecha';
+/* 	    $scope.order = '-fecha'; */
 	    $scope.value = 'hoy';
 	    /*****************************************************************************************************
 	     VENTAS     
@@ -100,7 +100,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 				    	ventasService.addVenta(res).then(
 			    			//Success
 			    			function(promise){ 
-			    				$scope.data.push(promise.data.DATA);
+			    				$scope.data.splice(0,0,promise.data.DATA);
 			    				$scope.nuevo(userRole);
 			    			},
 			    			//Error al guardar
@@ -516,17 +516,27 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  }
 		  		
 		  		
+		  /***************************************************
+		   SEARCH
+		   Busca el id ingresado en el listado de productos. Si existe lo muestra en el input de nombres
+		  ****************************************************/	 
 		  $scope.search = function(){
 		  
 		  	if($scope.form.modelo.id == '') angular.element("#newMod").val('');
 		  	else{
+		  		$scope.form.modelo.id = parseInt($scope.form.modelo.id);
 			  	$mod = $scope.p.mod_options.filter( function( value ){ return value.id == $scope.form.modelo.id })[0]; 
 			  	
 			  	if($mod != undefined){		  	
 			  		$scope.form.modelo.nombre = $mod.nombre;
 			  		$scope.form.modelo.precio = $mod.precio;
 			  		angular.element("#newMod").val($mod.nombre);
+				}else{
+					$scope.form.modelo.nombre = '';
+			  		$scope.form.modelo.precio = '';
+			  		angular.element("#newMod").val('');
 				}
+					
 			}
 		  }  
 }

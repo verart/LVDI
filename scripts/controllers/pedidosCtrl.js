@@ -108,7 +108,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 				    	pedidosService.addPedido(res).then(
 			    			//Success
 			    			function(promise){ 
-			    				$scope.data.push(promise.data.DATA);
+			    				$scope.data.splice(0,0,promise.data.DATA);
 			    			},
 			    			//Error al guardar
 			    			function(error){
@@ -257,7 +257,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  $scope.p.mod_options = info.p.mod_options;		  
 		  $scope.p.cl_options = info.p.cl_options;
 
-
+		  $scope.actionBeforeSave='';
 
 		  //Inicializo los datos del pedido	
 		  if(info.pedido != ''){
@@ -298,6 +298,9 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 			  $scope.form.cliente = {nombre:'', id:'', bonificacion:0};
 			  
 			  $scope.EditEnabled =true;
+			  
+			  
+	    	  $scope.estados = ['Pendiente', 'Terminado', 'Entregado-Pago', 'Entregado-Debe'];	
 		  }
 		  
 		  $scope.pedido.mod2delete = [];
@@ -315,6 +318,30 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  };
 		  
 		  
+		   
+		  
+		  /***************************************************
+		   IMPRIMIR
+		   Se cierra el modal e imprime la produccion modificada
+		  ****************************************************/
+		  $scope.print = function () {		  
+		  	$scope.actionBeforeSave='print';
+		  	('#form').submit();
+		  	
+		  };
+		  
+		  /***************************************************
+		   SAVE
+		   Se cierra el modal NO imprime la produccion modificada
+		  ****************************************************/
+		  $scope.save = function () {
+		  	$scope.actionBeforeSave='';
+			('#form').submit();
+		  };
+		  
+		  
+		  
+		  
 		  /***************************************************
 		   CANCEL
 		   Se cierra el modal y retornan los datos del pedido original, sin cambios
@@ -324,15 +351,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		    $modalInstance.dismiss({action:'cancel'});
 		  };
 		  
-		  
-		   
-		  /***************************************************
-		   IMPRIMIR
-		   Se cierra el modal y imprime el pedido modificado
-		  ****************************************************/
-		  $scope.print = function () {
-		    $modalInstance.close({pedido: $scope.pedido, action: 'print'});
-		  };
 		  
 		  
 		  
@@ -389,21 +407,24 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 			  			cantidad: $scope.form.modelo.cantidad,
 			  			estado: 'Pendiente'
 			  		};
+			  		
 			  	$scope.pedido.modelos.push($mod);
 			  	
 			  	$scope.pedido.total =  parseInt($scope.pedido.total,10) + (parseInt($scope.form.modelo.precio,10) *  parseInt($scope.form.modelo.cantidad,10));
 			  
 			  	$scope.pedido.totalFinal =  parseInt($scope.pedido.total,10) - (parseInt($scope.pedido.total,10) *  parseInt($scope.pedido.bonificacion,10)/100);
 			  	
+			  	
 			  	$scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
-			  	angular.element("#newMod").focus();
+			  	angular.element("#newModId").focus();
+			  	angular.element("#newMod").val('');
 			  }
 		  }	 
 		  
-		 
-		 
-		 
-		 
+		  
+		  
+		  
+		  
 		 /***************************************************
 		   REMOVE producto
 		   Quita un modelo del pedido. Actualiza los totales
@@ -496,7 +517,31 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		    	}	
 		    		    
 		  });
-	  		  
+		  
+		  
+		  		  
+		  /***************************************************
+		   SEARCH
+		   Busca el id ingresado en el listado de productos. Si existe lo muestra en el input de nombres
+		  ****************************************************/	 
+		  $scope.search = function(){
+		  
+		  	if($scope.form.modelo.id == '') angular.element("#newMod").val('');
+		  	else{
+			  	$mod = $scope.p.mod_options.filter( function( value ){ return value.id == $scope.form.modelo.id })[0]; 
+			  	
+			  	if($mod != undefined){		  	
+			  		$scope.form.modelo.nombre = $mod.nombre;
+			  		$scope.form.modelo.precio = $mod.precio;
+			  		angular.element("#newMod").val($mod.nombre);
+				}else{
+					$scope.form.modelo.nombre = '';
+			  		$scope.form.modelo.precio = '';
+			  		angular.element("#newMod").val('');
+				}
+			}
+		  }  
+		   
 }
 
 

@@ -24,7 +24,8 @@ class Producciones extends AppModel {
 				INNER JOIN producciones_modelos PM ON PM.producciones_id = P.id
 				INNER JOIN modelos M ON PM.modelos_id = M.id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
-				$conditions"; 
+				$conditions
+				 ORDER BY P.fecha DESC, P.id DESC "; 
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	
@@ -138,7 +139,7 @@ class Producciones extends AppModel {
 		$query = $query->execute(array($idModeloProduccion));
 		$results = $query->fetchAll();
 		
-		return $results;	
+		return $results[0];	
 	}
 	
 	
@@ -366,7 +367,7 @@ class Producciones extends AppModel {
 			
 			}
 			
-			$sql = "DELETE FROM produccion_modelos WHERE id = $idModeloProduccion";
+			$sql = "DELETE FROM producciones_modelos WHERE id = $idModeloProduccion";
 
 			$result = $this->con->query($sql);
 		

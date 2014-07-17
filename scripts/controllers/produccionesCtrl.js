@@ -99,7 +99,7 @@ app.controller('produccionesCtrl',
 				    	produccionesService.addProduccion(res).then(
 			    			//Success
 			    			function(promise){ 
-			    				$scope.data.push(promise.data.DATA);
+			    				$scope.data.splice(0,0,promise.data.DATA);
 			    				
 			    				//Imprimo el comprobante
 						    	if(res.action == 'print'){
@@ -267,15 +267,43 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 		  
 		  $scope.produccion.mod2delete = [];
 
-
+		  $scope.actionBeforeSave='';
+		  
+		  
+		  
 		  
 		  /***************************************************
 		   OK
 		   Se cierra el modal y retornan los datos de la produccion
 		  ****************************************************/ 
 		  $scope.ok = function () {
-		  	$modalInstance.close({produccion: $scope.produccion, action: ''});
+			  $modalInstance.close({produccion: $scope.produccion, action: $scope.actionBeforeSave});
 		  };
+		  
+
+		  
+		  /***************************************************
+		   IMPRIMIR
+		   Se cierra el modal e imprime la produccion modificada
+		  ****************************************************/
+		  $scope.print = function () {		  
+		  	$scope.actionBeforeSave='print';
+/* 		  	('#form').submit(); */
+		  	
+		  };
+		  
+		  /***************************************************
+		   SAVE
+		   Se cierra el modal NO imprime la produccion modificada
+		  ****************************************************/
+		  $scope.save = function () {
+		  	$scope.actionBeforeSave='';
+/* 			('#form').submit(); */
+		  };
+		  
+		  
+		  
+		  
 		  
 		  
 		  /***************************************************
@@ -287,17 +315,7 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 		  };
 		  
 		 
-		  
-		  
-		  /***************************************************
-		   IMPRIMIR
-		   Se cierra el modal e imprime la produccion modificada
-		  ****************************************************/
-		  $scope.print = function () {
-		    $modalInstance.close({produccion: $scope.produccion, action: 'print'});
-		  };
-		  
-		 
+		  		  
 		  
 		  
 		  /***************************************************
@@ -367,7 +385,8 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 			  	
 			  	
 			  	$scope.form.modelo = {nombre:'', id:''};
-			  	angular.element("#newMod").focus();
+			  	angular.element("#newModId").focus();
+			  	angular.element("#newMod").val('');
 			  }
 		  }	 
 		  
@@ -381,8 +400,8 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 		  ****************************************************/	  
 		  $scope.remove= function(index) {		  	
 		  	
-		  	if($scope.produccion.modelos[index].idPedMod != null)
-		  		$scope.produccion.mod2delete.push({id:$scope.produccion.modelos[index].idPedMod});
+		  	if($scope.produccion.modelos[index].idProdMod != null)
+		  		$scope.produccion.mod2delete.push({id:$scope.produccion.modelos[index].idProdMod});
 		  	
 		  	$scope.produccion.modelos.splice(index,1);
 		  	
@@ -400,6 +419,29 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 		  }	
 		  
 		  
+		  
+		  /***************************************************
+		   SEARCH
+		   Busca el id ingresado en el listado de productos. Si existe lo muestra en el input de nombres
+		  ****************************************************/	 
+		  $scope.search = function(){
+		  
+		  	if($scope.form.modelo.id == '') angular.element("#newMod").val('');
+		  	else{
+			  	$mod = $scope.p.mod_options.filter( function( value ){ return value.id == $scope.form.modelo.id })[0]; 
+			  	
+			  	if($mod != undefined){		  	
+			  		$scope.form.modelo.nombre = $mod.nombre;
+			  		$scope.form.modelo.precio = $mod.precio;
+			  		angular.element("#newMod").val($mod.nombre);
+				}else{
+					$scope.form.modelo.nombre = '';
+			  		$scope.form.modelo.precio = '';
+			  		angular.element("#newMod").val('');
+				}
+			}
+		  }  
+	  		 
 		  		  
 }
 
