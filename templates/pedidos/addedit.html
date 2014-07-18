@@ -1,4 +1,4 @@
-<form id="form" ng-submit="ok()">
+<form id="form" ng-submit="ok()" editable-form >
 
  <div id= "wndOpenPedido" class="modal-body">
 		
@@ -180,8 +180,8 @@
         	
 	        <button ng-if="pedido.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deletePedido()">Eliminar pedido</button>
 
-	        <button class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
-            <button class="btn btn-primary" ng-click="save()">Guardar</button>
+	        <button type="submit" class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
+            <button type="submit" class="btn btn-primary" ng-click="save()">Guardar</button>
             <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
             
         </div>
