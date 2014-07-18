@@ -314,7 +314,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		   Se cierra el modal y retornan los datos del pedido
 		  ****************************************************/ 
 		  $scope.ok = function () {
-		  	$modalInstance.close({pedido:$scope.pedido, action:''});
+		  	$modalInstance.close({pedido:$scope.pedido, action:$scope.actionBeforeSave});
 		  };
 		  
 		  
@@ -325,9 +325,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		   Se cierra el modal e imprime la produccion modificada
 		  ****************************************************/
 		  $scope.print = function () {		  
-		  	$scope.actionBeforeSave='print';
-		  	('#form').submit();
-		  	
+		  	$scope.actionBeforeSave='print';		  	
 		  };
 		  
 		  /***************************************************
@@ -336,7 +334,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  ****************************************************/
 		  $scope.save = function () {
 		  	$scope.actionBeforeSave='';
-			('#form').submit();
 		  };
 		  
 		  
@@ -528,6 +525,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		  	if($scope.form.modelo.id == '') angular.element("#newMod").val('');
 		  	else{
+		  		$scope.form.modelo.id = parseInt($scope.form.modelo.id);
+
 			  	$mod = $scope.p.mod_options.filter( function( value ){ return value.id == $scope.form.modelo.id })[0]; 
 			  	
 			  	if($mod != undefined){		  	

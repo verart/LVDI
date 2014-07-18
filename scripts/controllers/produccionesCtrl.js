@@ -428,6 +428,8 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 		  
 		  	if($scope.form.modelo.id == '') angular.element("#newMod").val('');
 		  	else{
+		  		$scope.form.modelo.id = parseInt($scope.form.modelo.id);
+
 			  	$mod = $scope.p.mod_options.filter( function( value ){ return value.id == $scope.form.modelo.id })[0]; 
 			  	
 			  	if($mod != undefined){		  	

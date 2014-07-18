@@ -37,7 +37,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	    
 	    
 	    //PRODUCTOS - Recupera todos los modelos de cada producto. Retorna como nombre NomProd-NomMod
-	    productosService.nombresProductos(1).then(
+	    productosService.nombresProductosDisponibles(1).then(
 			//success
 			function(promise){
 			     promise.data.DATA.forEach(function (prod) {
