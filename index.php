@@ -35,7 +35,9 @@
 	<script type="text/javascript" src="lib/javascript/jspdf/jspdf.js"></script>
 	<script type="text/javascript" src="lib/javascript/jspdf/jspdf.plugin.standard_fonts_metrics.js"></script>
   
-	<script type="text/javascript" src="lib/javascript/barcode/jquery-barcode.js"></script>  
+	<script type="text/javascript" src="lib/javascript/barcode/jquery-barcode.js"></script> 
+	
+	<script type="text/javascript" src="lib/javascript/jquery.mockjax.js"></script> 
 	
 	
 	<!-- Propios -->

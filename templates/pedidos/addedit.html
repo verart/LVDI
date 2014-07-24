@@ -110,9 +110,11 @@
 								<td ng-if="(userRole == 'admin')" class="col-md-1 text-center"> 
 									{{(mod.precio * mod.cantidad) | currency}}  </td>
 								<td class="col-md-1 text-center editableCell" > 
-									<a ng-if="EditEnabled" href="#" editable-select="mod.estado" e-ng-options="s for s in estadosProductos">
-										{{ mod.estado }}
-									</a>
+									
+									<a ng-if="EditEnabled" xeditable href="#" data-type="select" data-value="{{mod.estado}}" 
+									ng-model="mod.estado" data-source="/estadosProductos" 
+									class="editable editable-click editable-open">{{ mod.estado }}</a>
+									
 									<p ng-if="!EditEnabled">
 										{{ mod.estado }}
 									</p>
@@ -182,7 +184,7 @@
 
 	        <button type="submit" class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
             <button type="submit" class="btn btn-primary" ng-click="save()">Guardar</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+            <button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
             
         </div>
         

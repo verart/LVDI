@@ -289,6 +289,7 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  //REMOVE
 		  // Elimina un modelo de la tabla y guarda su id en el array de modelos para eliminar
 		  $scope.remove = function(indexMod){
+		  
 		  	idMod = $scope.producto.modelos[indexMod].id; 
 		  	
 		  	$scope.producto.modelos.splice(indexMod,1); 
