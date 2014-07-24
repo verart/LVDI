@@ -114,11 +114,13 @@
 						<tbody>
 							<tr ng-repeat="mod in produccion.modelos">
 								<td class="col-md-6">{{mod.nombre}}</span></td>
-								<td class="col-md-1 text-center editableCell"> 
-									<a href="#" editable-select="mod.estado" e-ng-options="s for s in estados">
-										{{ mod.estado }}
-									</a>
-					
+								<td class="col-md-1 text-center"> 
+		
+									<a xeditable href="#" data-type="select" data-value="{{mod.estado}}" 
+									ng-model="mod.estado" data-source="/estados" 
+									class="editable editable-click editable-open">{{ mod.estado }}</a>
+									
+								</td>
 								<td class="col-md-1 text-center">				
 										
 									<!-- ELIMINAR  - Si es el unico modelo del producto no se permite eliminarlo -->

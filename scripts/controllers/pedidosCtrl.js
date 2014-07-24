@@ -9,6 +9,9 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    $scope.filterPedidos = {estado:''};
 	    
 	    
+	    
+	    
+	    
 	    /*****************************************************************************************************
 	     PEDIDOS     
 	    *****************************************************************************************************/
@@ -249,6 +252,17 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		  $scope.fps = ['Efectivo', 'Tarjeta', 'Cheque'];	 
 		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	 
+		  
+		  
+		      $.mockjax({
+			    url: '/estadosProductos',
+			    status: 200,
+			    responseTime: 400,
+			    response: function(settings) {
+			        this.responseText = $scope.estadosProductos;
+			     }        
+			});
+		  
 		  
 		  $scope.userRole = info.userRole;
 		  $scope.form = {};

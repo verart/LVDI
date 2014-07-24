@@ -229,7 +229,20 @@ app.controller('produccionesCtrl',
 var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		  
-		  $scope.estados = ['Retirado', 'Devuelto'];	  			  		  
+		  $scope.estados = ['Retirado','Devuelto'];
+				
+
+			    
+		    $.mockjax({
+			    url: '/estados',
+			    status: 200,
+			    responseTime: 400,
+			    response: function(settings) {
+			        this.responseText = $scope.estados;
+			     }        
+			});
+
+  		  
 		  
 		  $scope.form = {};
 		  $scope.p = {};
@@ -311,7 +324,8 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 		   Se cierra el modal y retornan los datos de la produccion original, sin cambios
 		  ****************************************************/
 		  $scope.cancel = function () {
-		    $modalInstance.dismiss({action:'cancel'});
+		  	$scope.back2original();	
+		  	$modalInstance.dismiss({action:'cancel'});
 		  };
 		  
 		 
