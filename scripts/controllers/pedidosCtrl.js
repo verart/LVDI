@@ -459,6 +459,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		 Cuando se modifica una cantidad debe actualizar los totales.
 		 Antes de modificarlo se quita la cantidad anterior y despues se suma el producto con la nueva cantidad
 		 *************************************************************************/		 
+/*
 		 $scope.removeOld= function(index){		 
 			 $scope.pedido.total =  parseInt($scope.pedido.total,10) - (parseInt($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
 		 }
@@ -467,6 +468,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 			 $scope.pedido.total =  parseInt($scope.pedido.total,10) + (parseInt($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
 			 	 
 		 }
+*/
 		 
 		 
 		 
@@ -530,6 +532,16 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  });
 		  
 		  
+
+		  $scope.$watch('pedido.modelos', function(newValue, oldValue) {
+		  		
+		  		var tot = 0;
+		    	for( i=0; i < $scope.pedido.modelos.length; i ++){
+			    	tot = tot + $scope.pedido.modelos[i].cantidad * $scope.pedido.modelos[i].precio; 
+			    }	
+		    	$scope.pedido.total = tot;	    
+		  }, true);
+	  
 		  		  
 		  /***************************************************
 		   SEARCH

@@ -149,7 +149,7 @@ class ProductosController extends AppController {
 			// DELETE de modelos
 			if(!empty($params['mod2delete']))
 				foreach($params['mod2delete'] as $field => $value){
-					$result = $this->Modelos->delete($value['id']);
+					$result = $this->Modelos->logicDelete($value['id']);
 					
 					if(!$result['success'])
 						throw new BadRequestException($result['msg']);									
