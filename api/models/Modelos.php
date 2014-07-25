@@ -244,7 +244,7 @@ class Modelos extends AppModel {
 	 */
 	function delete($idMod) {
 		
-		// Solo se elimina si no esta en uso ninguno de los modelos
+		// Solo se elimina si no esta en uso ninguno de los pedidos/produccion
 		if($this->notUsed($idMod) ){ 
 
 			if(!($this->notUnique($idMod)) )
@@ -262,6 +262,29 @@ class Modelos extends AppModel {
 			return array('success'=>false, 'msg'=>'No se puede eliminar este modelo. Está incluido en un pedido o producción.');
 	}
 	
+	
+	/**
+	 * LOGICDELETE
+	 * elimina de manera lógica el modelo $idMod
+	 * @param (int) $idMod
+	 */
+	function logicDelete($idMod) {
+		
+		
+		if(!($this->notUnique($idMod)) )
+			return array('success'=>false, 'msg'=>'No se puede eliminar este modelo. Es el único del producto');
+			
+		$sql = "UPDATE modelos SET baja=1 WHERE id = $idMod";	
+			
+		$result = $this->con->query($sql);
+
+		if(@PEAR::isError($result))
+				return array('success'=>false, 'msg'=>'No se puede eliminar este modelo.');
+				
+		return array('success'=>true, 'msg'=>'');
+			
+		
+	}
 	
 }
 ?>

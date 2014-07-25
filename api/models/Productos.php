@@ -17,7 +17,7 @@ class Productos extends AppModel {
 		
 		$sql = "SELECT P.precio,P.nombre as nomProducto, P.id as producto_id, P.enProduccion as enProduccion, M.nombre as nomModelo, M.stock, M.id as modelo_id, Rep.ultRep as fechaRep, Venta.ultVenta as fechaVenta
 				FROM productos P
-				INNER JOIN modelos M ON P.id = M.productos_id
+				INNER JOIN modelos M ON (P.id = M.productos_id)
 				LEFT JOIN (
 					SELECT MovS.modelos_id, MAX(created) as ultRep
 					FROM movimientos_stock MovS
@@ -28,7 +28,7 @@ class Productos extends AppModel {
 					FROM movimientos_stock MovS
 					WHERE tipo= 'venta'
 					GROUP BY modelos_id) Venta ON Venta.modelos_id = M.id	
-				$conditions";
+				$conditions & (M.baja = 0)";
 
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -79,8 +79,8 @@ class Productos extends AppModel {
 
 		$sql = "SELECT P.nombre nombre_prod, P.precio, M.id as id, M.nombre as nombre_mod
 				FROM productos P
-				INNER JOIN modelos M ON (M.productos_id = P.id)
-				$conditions
+				INNER JOIN modelos M ON (M.productos_id = P.id) 
+				$conditions & (M.baja = 0) 
 				ORDER BY nombre_prod, nombre_mod ASC";
 
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -108,7 +108,7 @@ class Productos extends AppModel {
 		
 		$sql = "SELECT P.precio,P.nombre as nomProducto, P.id as producto_id, P.enProduccion as enProduccion, M.nombre as nomModelo, M.stock, M.id as modelo_id, Rep.ultRep as fechaRep, Venta.ultVenta as fechaVenta
 				FROM productos P
-				INNER JOIN modelos M ON P.id = M.productos_id
+				INNER JOIN modelos M ON (P.id = M.productos_id) & (M.baja = 0) 
 				LEFT JOIN (
 					SELECT MovS.modelos_id, MAX(created) as ultRep
 					FROM movimientos_stock MovS
@@ -120,7 +120,7 @@ class Productos extends AppModel {
 					WHERE tipo= 'venta'
 					GROUP BY modelos_id) Venta ON Venta.modelos_id = M.id	
 				
-				WHERE P.id = ?
+				WHERE (M.baja = 0) & (P.id = ?)
 				ORDER BY M.nombre";
 				
     	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
@@ -169,8 +169,8 @@ class Productos extends AppModel {
 		
 		$sql = "SELECT P.precio,P.nombre as nomProducto, M.nombre as nomModelo, M.stock as stock 
 				FROM modelos M
-				INNER JOIN productos P ON P.id = M.productos_id
-				WHERE M.id = ?";
+				INNER JOIN productos P ON (P.id = M.productos_id) 
+				WHERE (M.baja = 0)  & (M.id = ?)";
 		
 		try{
 				
