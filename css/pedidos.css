@@ -25,11 +25,17 @@
 	height: 21px;
 }
 
+/*
 .editableCell .editable-buttons > button{
 
 	width: 32px;
 	height: 21px;
 	padding: 0px;
+}
+*/
+
+.editable-input .input-mini{
+	width: 85px;
 }
 
 .editableCell .editable-buttons{

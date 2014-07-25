@@ -218,7 +218,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
  ModalInstanceCtrl
  Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
+var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info, $modal) {
 		  		  		  
 		  
 		  if(info.producto != ''){
@@ -290,12 +290,37 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  // Elimina un modelo de la tabla y guarda su id en el array de modelos para eliminar
 		  $scope.remove = function(indexMod){
 		  
-		  	idMod = $scope.producto.modelos[indexMod].id; 
-		  	
-		  	$scope.producto.modelos.splice(indexMod,1); 
+		  
+		  				//Solicita confirmación
+				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar este color del producto?", accept:"Si", cancel:"No"};
+				    	
+				    	var confirm = $modal.open({
+					    	templateUrl: dir_root+'/templates/confirm.html',
+					    	windowClass: 'wndConfirm',
+					    	controller: modalConfirmCtrl,
+					    	resolve: { txt: function(){ return txt_confirm } }
+					     });
 
-		  	if(idMod != null)
-		  		$scope.producto.mod2delete.push({id:idMod});
+					    // Comportamiento al cerrar el modal		    
+					    confirm.result
+					    .then( 
+					    	// Si el modal cierra por ACEPTAR
+					    	function (r) {
+
+							  	idMod = $scope.producto.modelos[indexMod].id; 
+							  	
+							  	$scope.producto.modelos.splice(indexMod,1); 
+					
+							  	if(idMod != null)
+							  		$scope.producto.mod2delete.push({id:idMod});							  		
+
+						    }, 
+						    // Si el modal cierra por CANCELAR
+						    function (res){}
+
+						);   	
+		  
+
 		  	
 		  };
 		  
