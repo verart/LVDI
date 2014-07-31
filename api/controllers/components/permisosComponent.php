@@ -30,7 +30,8 @@ class PermisosComponent extends AppComponent{
 					$this->acceso['pedidos'] = array('index', 'show', 'update'); 
 					$this->acceso['clientesPM'] = array('clientesName','show');			
 					$this->acceso['colaImpresion'] = array('index','delete','create');
-					$this->edicion['pedidos'] = array('update');		
+					$this->edicion['pedidos'] = array('update');	
+					$this->acceso['ventas']=array('index','show');	
 			        break;
 			    case 'local':
 					$this->acceso['productos']= array('index', 'show', 'update','productoModelo','reponer');

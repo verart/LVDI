@@ -40,7 +40,7 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         templateUrl :  dir_root + "/templates/ventas.html",
         auth: {
         	needAuth: true,
-	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local]
+	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local, , USER_ROLES.taller]
         }
     }) 
     .when("/clientesPM", {

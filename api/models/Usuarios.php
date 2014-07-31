@@ -71,6 +71,7 @@ class Usuarios extends AppModel {
 		try{
 			$us = $usuario;
 			unset($usuario['$$hashKey']);
+			unset($usuario['perfil']);
 			
 			if(isset($usuario['nombre'])) $usuario['nombre'] = utf8_decode($usuario['nombre']);
 			
