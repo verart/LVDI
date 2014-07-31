@@ -1,5 +1,5 @@
 body {
-  padding-top: 40px;
+  padding-top: 13px;
   padding-bottom: 40px;
   background-color: #f9f9f9;
 }
@@ -44,13 +44,27 @@ body {
 }
 
 .loggedUser{
-	text-align: right;
-	margin-right: 31px;
 	font-size: 12px;
-	color: gray;
 }
 
-.logout{
-	margin-top: 6px;
-	margin-right: 6px;
+
+.userName{
+	width:96%;
+	font-size: 13px;
+	color: rgba(0, 0, 0, 0.47);
+}
+
+.sessionInfo{
+	text-align: right;
+	padding-right: 30px;
+}
+
+.salir{
+	margin-top: -33px;
+	font-size: 18px;
+	color: #6b6b6b;
+}
+
+.salir a{
+	color: #6b6b6b;
 }

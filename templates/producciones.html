@@ -14,7 +14,7 @@
 	        	<a href="#!/pedidos">Pedidos</a></li>
 	        <li class="active middle">
 	        	<a href="#!/producciones">Producciones</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
+	        <li class="middle">
 	        	<a href="#!/ventas">Ventas</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
@@ -28,9 +28,6 @@
 	        	<a href="#!/reportes">Reportes</a></li>	 
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/usuarios">Cuentas</a></li>     
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="#!/">Salir</a></li>
 	      </ul>
 	      
 	    </div><!-- /.navbar-collapse -->

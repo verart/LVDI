@@ -12,11 +12,20 @@
    
 </head>
 <body ng-controller="ApplicationController">
+
 	<div id="alertGlobal" style="z-index: 6000;">
-		<alert ng-repeat="alert in alerts" type="alert.type" close="alert.close()">{{ alert.msg }}</alert>
+		<alert ng-repeat="alert in alerts" type="alert.type" close="alert.close()">
+			{{ alert.msg }}			
+		</alert>
 	</div>
 	
-	<div class="loggedUser" ng-if="usuario">{{ usuario.getUserName() || ''}}</div>
+	<div class="sessionInfo" ng-if="usuario.getUserName()!= ''" >
+		<p class="userName">
+			Usuario: <i>{{ usuario.getUserName() }} </i>    
+		</p>
+		
+		<p class="salir" ><a href="#!/" ng-click="logout()">Salir</a> </p>
+	</div>
 
 	      
 	<div ng-view > </div>

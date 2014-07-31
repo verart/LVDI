@@ -31,9 +31,6 @@
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/usuarios">Cuentas</a></li>     
 	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="#!/">Salir</a></li>
-	      </ul>
 	      
 	    </div><!-- /.navbar-collapse -->
 	  </div><!-- /.container-fluid -->
@@ -91,21 +88,23 @@
 			  			<tr>
 			  				<th>Fecha</th>
 			  				<th>Detalle</th>
-			  				<th>Total</th>
-			  				<th>Bon.</th>
+			  				<th ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" >Total</th>
+			  				<th ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" >Bon.</th>
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
 			  			<tr ng-repeat="venta in filteredVentas = (data | orderBy:order:false)" 
-			  						class="link" ng-click="showVenta(venta.id, usuario.getUserRole())">
+			  						class="link" ng-click=" !((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local')) || showVenta(venta.id, usuario.getUserRole())">
 			  				<td> {{venta.fecha | date:'dd/MM/yyyy' }}</td>
 			  				<td>
 			  					<ul ng-repeat="mod in venta.modelos">  
 				  					<li> {{mod.nombre}}</li>			  			
 			  					</ul>	
 			  				</td>
-			  				<td> {{(venta.total - venta.montoFavor) - ((venta.bonificacion*(venta.total - venta.montoFavor))/100)| currency}}</td>
-		 					<td> {{venta.bonificacion}}%</td>	
+			  				<td ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" > 
+			  					{{(venta.total - venta.montoFavor) - ((venta.bonificacion*(venta.total - venta.montoFavor))/100)| currency}}</td>
+		 					<td ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" > 
+		 						{{venta.bonificacion}}%</td>	
 		  				</tr>
 		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="5"> No hay ventas</td></tr>
 		   			</tbody>

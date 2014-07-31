@@ -1,7 +1,7 @@
-	<!-- barra -->
+	<!-- barra -->	  	       
 	<nav class="navbar navbar-default" role="navigation">
 	  <div class="container-fluid">
-	  
+
 	    <!-- Collect the nav links, forms, and other content for toggling -->
 	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 	      
@@ -14,7 +14,7 @@
 	        	<a href="#!/pedidos">Pedidos</a></li>
 	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
 	        	<a href="#!/producciones">Producciones</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
+	        <li class="middle">
 	        	<a href="#!/ventas">Ventas</a></li>
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
@@ -28,9 +28,6 @@
 	        	<a href="#!/reportes">Reportes</a></li>	 
 	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
 	        	<a href="#!/usuarios">Cuentas</a></li>     
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="#!/">Salir</a></li>
 	      </ul>
 	      
 	    </div><!-- /.navbar-collapse -->
