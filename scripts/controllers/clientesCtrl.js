@@ -47,6 +47,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		        }
 		    });
 		    
+		    var orderBy = $filter('orderBy');
 		    
 		    // Comportamiento al cerrar el modal		    
 		    modalInstance.result
@@ -65,6 +66,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 			    			//Success
 			    			function(promise){
 			    				$scope.data.push(promise.data.DATA);
+			    				orderBy($scope.data, '-nombre', false);
 			    			},
 			    			//Error al guardar
 			    			function(error){
