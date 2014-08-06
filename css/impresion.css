@@ -29,6 +29,10 @@
 	    display:none;
     }
     
+    #infoIndexSession{
+	    visibility:hidden;
+    }
+    
     #bcTarget0{
 	    margin-top: -43px;
     }

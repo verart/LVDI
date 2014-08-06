@@ -19,7 +19,7 @@
 		</alert>
 	</div>
 	
-	<div class="sessionInfo" ng-if="usuario.getUserName()!= ''" >
+	<div id="infoIndexSession" class="sessionInfo" ng-if="usuario.getUserName()!= ''" >
 		<p class="userName">
 			Usuario: <i>{{ usuario.getUserName() }} </i>    
 		</p>

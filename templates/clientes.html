@@ -82,7 +82,7 @@
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
-			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query)" 
+			  			<tr ng-repeat="cl in filteredClientes = (data | orderBy:order:true |filter:query )" 
 			  						class="clienteList link" ng-click="openCliente(cl.id)">
 			  				<td> {{cl.nombre | truncate:40}}</td>
 			  				<td> {{cl.email | truncate:40}}</td>
