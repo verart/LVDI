@@ -210,12 +210,18 @@ class Pedidos extends AppModel {
 							$estado = isset($value['estado'])?"'".$value['estado']."'" :"'Pendiente'";	
 							$precio = (($pedido['estado']=='Entregado-Pago')||($pedido['estado']=='Entregado-Debe'))?$value['precio']:0;
 							$fields = '(pedidos_id,modelos_id,cantidad,estado,precio)';
-							$values = "($idPedido, $idModelo, $cantidad, $estado,$precio)";
+							$values = "($idPedido, $idModelo, $cantidad, $estado, $precio)";
 							
 							$sql = "INSERT INTO pedidos_modelos $fields VALUES $values ";	
+
 							
-							if(($cantidad >= 1) && ($estado == 'Terminado'))
+							if(($cantidad >=1) && ($estado == "'Terminado'")){
 								$res = $this->ColaImpresion->set($idModelo,$idPedido);
+							
+								if(!$res['success']) 
+									throw new BadRequestException('No puedo agregarse la etiqueta del producto a la cola de impresión.');
+							}	
+
 						
 						}else{
 							// Edicion de un modelo ya cargado al pedido	

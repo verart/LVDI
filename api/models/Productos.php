@@ -28,7 +28,8 @@ class Productos extends AppModel {
 					FROM movimientos_stock MovS
 					WHERE tipo= 'venta'
 					GROUP BY modelos_id) Venta ON Venta.modelos_id = M.id	
-				$conditions & (M.baja = 0)";
+				$conditions & (M.baja = 0)
+				ORDER BY P.id";
 
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
