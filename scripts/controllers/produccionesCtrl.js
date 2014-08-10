@@ -7,14 +7,20 @@ app.controller('produccionesCtrl',
         
 	    $scope.filterProds ={estado:''};
 	    $scope.order = '-fecha';
-	    
+	    $scope.value = 'Retirado';
+
 	    /*****************************************************************************************************
 	     PRODUCCIONES     
 	    *****************************************************************************************************/
-	    listProducciones = function(data){	    		
-		    $scope.data = data;
-	    }
-	    produccionesService.producciones(listProducciones);
+	    produccionesService.producciones('Retirado').then(
+			//success
+			function(promise){
+			     $scope.data = promise.data.DATA;                   
+			},
+			//Error al actualizar
+			function(error){ AlertService.add('danger', error.data.MSG);}
+		);
+	   
 	    
 	    
 	    
@@ -195,6 +201,32 @@ app.controller('produccionesCtrl',
 	 	$scope.nuevo = function (userRole) {
             $scope.openProduccion('',userRole);
         };
+	   
+	   
+	           
+                
+        
+	     		
+		/* FILTER  *******************/
+	 	$scope.filtrarProducciones = function(value) {
+	 			
+	 		
+		   	produccionesService.producciones(value).then(
+				//success
+				function(promise){
+				     $scope.data = promise.data.DATA;                   
+				},
+				//Error al actualizar
+				function(error){ AlertService.add('danger', error.data.MSG);}
+		);		
+
+
+        };
+        
+        
+	   
+	   
+	   
 	   
 	   
 	    /************************************************************

@@ -9,13 +9,18 @@ class ProduccionesController extends AppController {
 
 
 	function index() {
-		
+	
 		try {
-			
+
 			if (!$this->PermisosComponent->puedeAcceder('producciones', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
-			$producciones = $this->Producciones->getProducciones(); 
+			if (isset($_POST['estado'])&($_POST['estado'] != '' ))
+				$opciones = array('conditions'=>array('P.estado'=>  $_POST['estado']));
+			else
+				$opciones = array(); 
+
+			$producciones = $this->Producciones->getProducciones($opciones); 
 			echo $this->json('Producciones', $producciones);
 
 		} catch (Exception $e) {	

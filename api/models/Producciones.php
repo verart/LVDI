@@ -19,13 +19,13 @@ class Producciones extends AppModel {
 		$sql = "SELECT P.*, R.nombre as responsable, Pr.nombre as producto, Pr.precio,
 				M.id as modelos_id, M.nombre as modelo,PM.estado as estadoProducto, 
 				PM.id as idProdMod 
-				FROM producciones P
+				FROM producciones P 
 				INNER JOIN responsables R ON R.id = P.responsables_id
 				INNER JOIN producciones_modelos PM ON PM.producciones_id = P.id
 				INNER JOIN modelos M ON PM.modelos_id = M.id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
 				$conditions
-				 ORDER BY P.fecha DESC, P.id DESC "; 
+				ORDER BY P.fecha DESC, P.id DESC ";
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	

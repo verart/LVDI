@@ -11,7 +11,7 @@ app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 	     Recupera en data los clientesPM
 	    **********************************************************************/
 	    listusuarios = function(data){	    		
-		    $scope.data = data;console.log($scope.data);
+		    $scope.data = data;
 	    }	    	    
 	    usuariosService.usuarios(listusuarios);
 	  

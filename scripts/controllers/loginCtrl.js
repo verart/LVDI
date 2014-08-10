@@ -1,10 +1,13 @@
 
 app.controller('ApplicationController', ['$scope','USER_ROLES', 'AuthService', 'Session', '$location',
 	
-	function ($scope, USER_ROLES, AuthService,Session,$location) {
-  
+	function ($scope, USER_ROLES, AuthService, Session, $location) {
+
 		$scope.usuario = Session;
 		
+		if($scope.usuario == undefined)
+			Session.destroy();
+	
 		$scope.logout = function() {
 			Session.destroy();
 	    	$location.path('/index');	
