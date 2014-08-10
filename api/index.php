@@ -2,9 +2,6 @@
 session_start();
 
 
-
-
-
 include_once('lib/Common.php');
 
 
@@ -66,7 +63,7 @@ $route->add('/responsables/delete','DELETE','Responsables','delete');
 $route->add('/responsables/update','PUT','Responsables','update');
 $route->add('/responsables/create','POST','Responsables','create');
 
-$route->add('/producciones/index','GET','Producciones','index');
+$route->add('/producciones/index','POST','Producciones','index');
 $route->add('/producciones/show','GET','Producciones','show');
 $route->add('/producciones/delete','DELETE','Producciones','delete');
 $route->add('/producciones/update','PUT','Producciones','update');

@@ -59,18 +59,18 @@
 						
 						<div class="controls opciones">
 							<label class="radio small">
-								<input type="radio" value="Retirado" ng-model="filterProds.estado"
-								name="pedido[estado]"> 
+								<input type="radio" value="Retirado" ng-model="value"
+								name="pedido[estado]" ng-change="filtrarProducciones(value)"> 
 								Sólo los Retirados
 							</label>
 							<label class="radio small">
-								<input type="radio" value="Devuelto" ng-model="filterProds.estado"
-								name="pedido[estado]"> 
+								<input type="radio" value="Devuelto" ng-model="value"
+								name="pedido[estado]" ng-change="filtrarProducciones(value)"> 
 								Sólo los Devueltos
 							</label>						
 							<label class="radio small">
-								<input type="radio" value="" ng-model="filterProds.estado" 
-								name="pedido[estado]"> 
+								<input type="radio" value="" ng-model="value" 
+								name="pedido[estado]" ng-change="filtrarProducciones(value)"> 
 								Todos
 							</label>
 							

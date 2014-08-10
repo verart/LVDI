@@ -19,7 +19,7 @@
 		</alert>
 	</div>
 	
-	<div id="infoIndexSession" class="sessionInfo" ng-if="usuario.getUserName()!= ''" >
+	<div id="infoIndexSession" class="sessionInfo" ng-if="(usuario.getUserName()!= '')" >
 		<p class="userName">
 			Usuario: <i>{{ usuario.getUserName() }} </i>    
 		</p>
@@ -98,8 +98,6 @@
     <link rel="stylesheet" href='css/ventas.css' type="text/css" />
     <link rel="stylesheet" href='css/impresion.css' type="text/css" />
   
-
-
-
+<?php phpinfo();?>
 </body>
 </html>

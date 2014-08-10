@@ -80,13 +80,13 @@ app.service('responsablesService', ['$http', function ($http) {
 
 .service('produccionesService', ['$http', function ($http) {
         return {
-            producciones:function(success) {
-	            $http({
-	            	method: 'GET',
+            producciones:function(e) {
+	           return $http({
+	            	method: 'POST',
 	            	url: dir_api + '/producciones/index',
+	            	data: $.param({estado:e}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-	            .success(function(data) { success(data.DATA);} );
             },
             
             
