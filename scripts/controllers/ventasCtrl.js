@@ -274,6 +274,28 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	     	
         
         
+        /************************************************************************
+	    OPENNOTAS
+	    Abre un modal con un form para crear una nueva notas o editarlas
+	    *************************************************************************/	
+        $scope.openNotas = function () {
+  
+	 			
+	 		angular.element("#nota").focus();
+	 	
+	 		
+	 	    var modalInstance = $modal.open({
+		    	templateUrl: dir_root+'/templates/ventas/notas.html',
+		    	windowClass: 'wndNotas',
+		    	controller: 'ModalNotasInstanceCtrl',
+		    	backdrop: 'static',
+		    	keyboard: true
+		    });
+		
+		}
+
+        
+        
         	
 }]);
 
@@ -458,7 +480,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  	
 		  	$scope.venta.total =  parseInt($scope.venta.total,10) - parseInt($scope.venta.modelos[index].precio,10);
 		  		  		
-		  	/* $scope.venta.total =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) - (parseInt($scope.venta.modelos[index].precio,10) *  parseInt($scope.venta.modelos[index].cantidad,10)); */
+		  	/* $scope.venta.total =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) - 						
+		  	(parseInt($scope.venta.modelos[index].precio,10) *  parseInt($scope.venta.modelos[index].cantidad,10)); */
 		  		  	
 		  	$scope.venta.modelos.splice(index,1);
 		  	
@@ -535,11 +558,95 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 					$scope.form.modelo.nombre = '';
 			  		$scope.form.modelo.precio = '';
 			  		angular.element("#newMod").val('');
-				}
-					
+				}			
 			}
+			
 		  }  
+		  
 }
 
+
+
+
+
+
+/*************************************************************************************************************************
+ ModalNotaInstanceCtrl
+ Controller del modal para agregar/editar Notas  
+**************************************************************************************************************************/
+var ModalNotasInstanceCtrl = function ($scope, $modalInstance, notasService, AlertService) {
+
+	hoy = (new Date()).toISOString().slice(0, 10);
+
+	$scope.nota = {created: hoy, nota:''};
+	
+	notasService.notas(hoy, hoy).then(
+			//success
+			function(promise){
+			     $scope.notas = promise.data.DATA;                   
+			},
+			//Error al actualizar
+			function(error){ AlertService.add('danger', error.data.MSG);}
+		);		
+
+
+	/***************************************************
+	ADDNOTA
+	Agrega una nota
+	****************************************************/	  
+	$scope.addNota= function() {
+		  
+		  	if( $scope.nota.nota  !=  '') {
+		  	
+			  	notasService.addNota($scope.nota).then(
+					//success
+					function(promise){
+						$scope.notas.push(promise.data.DATA);
+					},
+					//Error al actualizar
+					function(error){ AlertService.add('danger', error.data.MSG);}
+				);		
+			  	
+		  		angular.element("#notaNota").focus();
+				angular.element("#notaNota").val('');
+			  }
+	}
+	
+	
+	
+	 
+	/***************************************************
+	REMOVENOTA
+	Quita una nota
+	****************************************************/	  
+	$scope.removeNota= function(index) {		  	
+		  	
+		  	
+		  	notasService.deleteNota($scope.notas[index].id).then(
+					//success
+					function(promise){
+						$scope.notas.splice(index,1);
+					},
+					//Error al actualizar
+					function(error){ AlertService.add('danger', error.data.MSG);}
+				);	  		
+		  		  	
+		  	
+		  	
+		  }	 
+		  
+		  
+	
+	
+	/***************************************************
+	salir
+	Se cierra el modal 
+	****************************************************/ 
+	$scope.salir = function () {
+		$modalInstance.close();
+	};
+		  
+
+}	
 
 

@@ -22,22 +22,6 @@ app.service('ventasService', ['$http', function ($http) {
 	            })
             },
             
-             
-            /******************************
-            EDITPEDIDO
-            ******************************/
-            editPedido: function(pedido){ 
-	            
-	            return $http({
-	            	method: 'PUT',
-	            	url: dir_api + '/pedidos/update',
-	            	data: $.param(pedido),
-	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            });
-	            
-            },
-            
-            
                         
             /******************************
             DELETEVENTA
@@ -55,5 +39,50 @@ app.service('ventasService', ['$http', function ($http) {
            
         }
 }]);
+
+
+
+
+app.service('notasService', ['$http', function ($http) {
+        return {
+            notas:function(d, h) {
+	           return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/notas/index',
+	            	data: $.param({desde:d,hasta:h}),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
+            /******************************
+            ADDNOTA
+            ******************************/
+            addNota:function (nota) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/notas/create',
+	            	data: $.param(nota),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
+                        
+            /******************************
+            DELETENOTA
+            ******************************/
+            deleteNota:function (id) { 
+	                    
+	            return $http({
+	            	method: 'DELETE',
+	            	url: dir_api + '/notas/'+id+'/delete',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            }
+            
+           
+        }
+}]);
+
 
 
