@@ -1,0 +1,100 @@
+        <div class="modal-body">
+		
+			<div class="modal-header"  style="margin-bottom: 18px;">
+			   		<h3>Notas</h3>
+			</div>
+			       
+			
+			<br/>
+        
+			
+			
+			<div class="row">
+			
+				<div class="col-xs-12 col-sm-4">
+				
+					<div class="boxPeak">
+						
+						<div class="pull-right arrow-right"></div>
+										
+						<h5>Agregar Nota</h5>
+						
+									
+						
+						<div  class="form-group">
+								<input type="date" class="form-control small" id="notaCreated"
+										placeholder="Fecha" id="nota.created"  
+										ng-model="nota.created" style="padding-right:0px;"/>
+						</div>
+						
+						<div class="form-group">				
+							<textarea id= "notaNota" class="form-control" rows="4" placeholder="Nota" 
+							ng-model="nota.nota" ng-enter="addNota()"></textarea>
+						</div>
+						
+										
+						<div class="row" style="margin-top:5px;">				
+							<div class="colForm col-xs-6 col-md-6">
+								<button class="btn btn-default" ng-click="addNota()" > Agregar </button>
+							</div>
+							
+						</div>
+						
+					</div>
+					
+					<br/>
+					
+					
+				</div>
+				
+				
+				
+				<!-- DETALLE - NOTAS ANTERIORES  -->
+				<div class=" col-xs-12 col-sm-8">
+				
+					<div class="tableContainer">
+					<table class="table table-condensed table-hover small">
+						<thead>
+							<tr>
+								<th class="col-md-2">Fecha</th>
+							  	<th class="col-md-5">Nota</th>
+							  	<th class="col-md-1 text-center"> </th>
+							  </tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="n in notas">
+								<td class="col-md-2">{{n.created}}</span></td>
+								<td class="col-md-5"> 
+									{{n.nota}}  </td>
+								<td class="col-md-1 text-center">				
+										
+									<span 	class="glyphicon glyphicon-remove accionesLst link"  
+											title="Quitar nota"
+											ng-click="removeNota($index)">
+									</span>
+				 
+								</td>
+							</tr>
+							<tr><td class="avisoSmall" colspan="6" style="text-align=center" ng-if="notas.length == 0">
+								No hay notas</td>
+							</tr>
+						</tbody>
+					</table>										
+					</div>
+				
+					
+	 			</div>	
+				
+			</div>	
+			
+
+
+
+		</div> <!-- / modal-body -->
+						
+						            
+        <div class="modal-footer">
+        	
+	        <button class="btn btn-primary" ng-click="salir()">Salir</button>
+                 
+        </div>

@@ -7,7 +7,7 @@ class PermisosComponent extends AppComponent{
 	
 	var $acceso = array(
 		'productos'=>array(	'index','show','update','create','delete', 'baja', 'venta', 'reponer', 
-							'productosName', 'productosDisponibles', 'upload', 'saveFile', 'removeFile')
+							'productosName', 'productosDisponibles', 'upload', 'saveFile', 'removeFile', 'notas')
 	);
 		
 	var $edicion = array('productos','producciones','ventas');
@@ -32,6 +32,7 @@ class PermisosComponent extends AppComponent{
 					$this->acceso['colaImpresion'] = array('index','delete','create');
 					$this->edicion['pedidos'] = array('update');	
 					$this->acceso['ventas']=array('index','show');	
+					$this->acceso['notas']=array('index','create','delete');
 			        break;
 			    case 'local':
 					$this->acceso['productos']= array('index', 'show', 'update','productoModelo','reponer');
@@ -44,6 +45,7 @@ class PermisosComponent extends AppComponent{
 					$this->edicion['producciones']= array('create','update', 'delete');
 					$this->edicion['responsables']= array('create','update', 'delete');	
 					$this->acceso['ColaImpresion']=array('index','create','delete');
+					$this->acceso['notas']= array('index','create','delete');
 			        break;
 			}
 		

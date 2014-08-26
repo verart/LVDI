@@ -98,6 +98,6 @@
     <link rel="stylesheet" href='css/ventas.css' type="text/css" />
     <link rel="stylesheet" href='css/impresion.css' type="text/css" />
   
-<?php phpinfo();?>
+
 </body>
 </html>

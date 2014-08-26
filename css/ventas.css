@@ -13,3 +13,9 @@
 	font-size: small;
 	margin-left: 155px;
 }
+
+
+.wndNotas > .modal-dialog{
+	width:75%;
+}
+

@@ -42,7 +42,7 @@
 	<div class="row-fluid">
 	
 		<div class="h2 titleh2"> Ventas </div>
-
+ 
 
 		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-3 sidebar">
@@ -73,6 +73,11 @@
 					
 					<button type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nueva Venta </button>
 					
+					<br/>
+					<br/>
+
+					<button type="button" class="btn btn-primary" ng-click="openNotas()"> Nueva Nota </button>
+
 					      
 				</div>
 			</form>
@@ -106,7 +111,7 @@
 		 					<td ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" > 
 		 						{{venta.bonificacion}}%</td>	
 		  				</tr>
-		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="5"> No hay ventas</td></tr>
+		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="3"> No hay ventas</td></tr>
 		   			</tbody>
 		  		</table>
 		  		
