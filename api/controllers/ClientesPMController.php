@@ -15,7 +15,7 @@ class ClientesPMController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'index'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
-			$opciones = array('order'=>'nombre ASC','page'=>$_POST['pag'],'pageSize'=>10);
+			$opciones = array('order'=>'nombre ASC','page'=>$_POST['pag'],'pageSize'=>15);
 			
 			if(isset($_POST['filter'])&& ($_POST['filter']!= ''))
 				$opciones['conditions']= array('LIKE' => array('nombre'=>$_POST['filter'], 'localidad'=>$_POST['filter']));

@@ -26,7 +26,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    
 	    $scope.cargarPedidos = function () {
 	    	
-	    	$scope.page ++;                   
+	    	$scope.page++;                   
 
 	    	pedidosService.pedidos($scope.filterPedidos.estado, $scope.page).then(
 		    	//Success
@@ -55,12 +55,14 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	     CARGAR PEDIDOS segun estado	    
 	    *****************************************************************************************************/
 	    $scope.$watch('filterPedidos.estado', function(newValue, oldValue) {
-		  	
-		  	 $scope.parar = false;
-		  	 $scope.data = [];
-		  	 $scope.page = 0;	
-		  	 if(newValue != oldValue) 
-		  	 	$scope.cargarPedidos();
+	
+		  	 if(newValue != oldValue){ 	 		  	
+			  	 $scope.parar = false;
+			  	 $scope.data = [];
+			  	 $scope.page = 0;
+			  	 $scope.cargarPedidos();
+
+		  	 } 
     
 		}, true);
 
