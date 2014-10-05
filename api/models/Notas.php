@@ -13,19 +13,13 @@ class Notas extends AppModel {
 	function getNotas($opciones = array()) {
 	
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
+				
+		$opciones['order'] = "created DESC, id DESC";
 		
-		
-		$sql = "SELECT N.* 
-				FROM notas N 
-				 $conditions
-				 ORDER BY N.created DESC, N.id DESC"; 
-				 				
-	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
-	   	$query = $query->execute();	
-	   	
-		$results = $query->fetchAll();
+		$results = $this->readAll($opciones);
 		
 		return $results;
+		
 	}
 	
 	
