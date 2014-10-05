@@ -11,19 +11,12 @@ class Notas extends AppModel {
 	 * params (array) $opciones = array([conditions])
 	 */
 	function getNotas($opciones = array()) {
-	
-		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
-				
-		$opciones['order'] = "created DESC, id DESC";
-		
+						
 		$results = $this->readAll($opciones);
 		
 		return $results;
 		
 	}
-	
-	
-	
 	
 	
 	

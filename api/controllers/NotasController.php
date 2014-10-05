@@ -12,17 +12,17 @@ class NotasController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('notas', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 				
+			$opciones = array('order'=> "created DESC, id DESC");
+
 			if(isset($_POST['desde']) && ($_POST['desde'] != '')){
 				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
-					$opciones = array('conditions'=>array('created >'=> $_POST['desde'], 'created<'=>$_POST['hasta']));
+					$opciones['conditions']= array('created >'=> $_POST['desde'], 'created<'=>$_POST['hasta']);
 				else{
-					$opciones = array('conditions'=>array('created >'=> $_POST['desde']));
+					$opciones['conditions']= array('created >'=> $_POST['desde']);
 				}
 			}else
 				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
-					$opciones = array('conditions'=>array('created<'=>$_POST['hasta']));
-				else
-					$opciones = array(); 
+					$opciones['conditions']= array('created<'=>$_POST['hasta']);
 
 	
 			$notas = $this->Notas->getNotas($opciones); 
