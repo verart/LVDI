@@ -10,8 +10,8 @@ class Responsables extends AppModel {
 	 */
 	function getResponsables($opciones = array()) {
 	
-		$opciones = array('order'=>'nombre DESC');
-		$results = $this->readAll($opciones);
+		
+		$results = $this->readPage($opciones);
 	
 		for($i=0; $i < count($results); $i++){
 			$results[$i]['nombre'] = utf8_encode($results[$i]['nombre']);
@@ -21,6 +21,22 @@ class Responsables extends AppModel {
 		return $results;
 	}
 	
+	
+	
+	/**
+	 * Retorna todos los responsables - nombre y descuento
+	 * params (array) $opciones = array([fileds], [order])
+	 */
+	function getResponsablesList($opciones = array()) {
+	
+		
+		$results = $this->readAll($opciones);
+	
+		for($i=0; $i < count($results); $i++){
+			$results[$i]['nombre'] = utf8_encode($results[$i]['nombre']);
+		}
+		return $results;
+	}
 	
 	
 	

@@ -4,21 +4,55 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
        
         
 		$scope.order = '-nombre';
-	    
+	    $scope.query = '';
+	    $scope.filterSubmitted = '';
+
 	    
 	    	    
 	    /**********************************************************************
-	     Recupera en data los clientesPM
+	     Recupera en data los clientes
 	    **********************************************************************/
-	    listClientes = function(data){	    		
-		    $scope.data = data;
-	    }	    	    
-	    clientesService.clientes(listClientes);
-	   
- 
- 
-	 
-	
+ 	    $scope.page = 0;            
+	    $scope.data = [];
+	    $scope.parar = false;
+	    
+	    $scope.cargarClientes = function () {
+	 		$scope.page ++;                   
+	 		clientesService.clientes($scope.page,$scope.filterSubmitted).then(
+				//success
+				function(promise){
+					if(promise.data.DATA.length > 0){
+						for( i=0; i < promise.data.DATA.length; i++)
+							$scope.data.push(promise.data.DATA[i]);
+					}else{
+						if($scope.data.length > 0)
+							$('.finClientes').html('<div class="fin"></div>');
+						$scope.parar = true;
+					}
+				},
+				//Error al actualizar
+				function(error){ AlertService.add('danger', error.data.MSG);}
+			);
+        };
+	    
+	    $scope.cargarClientes();
+	    
+	    
+	    /*****************************************************************************************************
+	     FILTRARCLIENTES 
+	     Filtra los clientes que contienen en su nombre u localidad el texto	    
+	    *****************************************************************************************************/
+	    $scope.filtrarClientes = function () {
+		  		
+		  	 $scope.parar = false;
+		  	 $scope.data = [];
+		  	 $scope.page = 0;
+		  	 $scope.filterSubmitted = $scope.query;
+		  	 $scope.cargarClientes();
+		  	 
+		};
+		
+		
 	    
 	   /************************************************************************
 	    OPENCLIENTE
@@ -64,8 +98,13 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 			    	if($scope.selectedCliente == '') {
 			    		clientesService.addCliente(res).then(
 			    			//Success
-			    			function(promise){
-			    				$scope.data.push(promise.data.DATA);
+			    			function(promise){ 
+			    				lastName = ($scope.data[$scope.data.length-1].nombre).toUpperCase();
+			    				newName = 	(promise.data.DATA.nombre).toUpperCase();
+			    				if(lastName > newName)
+				    				$scope.data.push(promise.data.DATA);
+				    			AlertService.add('success', promise.data.MSG, 5000);	
+
 			    				orderBy($scope.data, '-nombre', false);
 			    			},
 			    			//Error al guardar
@@ -166,6 +205,23 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		}
         
         
+                
+        
+	    	    
+	    /*****************************************************************************************************
+	     INFINITE SCROLL	    
+	    *****************************************************************************************************/
+	    if ($('#infinite-scrolling').size() > 0) {
+	    
+			$(window).on('scroll', function() {
+
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+			  		$scope.cargarClientes();
+		    	}
+		  	});
+		  	return;
+		};
+	    
                
 }]);
 

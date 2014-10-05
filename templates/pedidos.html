@@ -64,22 +64,27 @@
 						<div class="controls opciones">
 							<label class="radio small">
 								<input type="radio" value="Pendiente" ng-model="filterPedidos.estado"
-								name="pedido[estado]"> 
+								name="pedido[estado]" > 
 								Sólo los Pendientes
 							</label>
 							<label class="radio small">
 								<input type="radio" value="Terminado" ng-model="filterPedidos.estado"
-								name="pedido[estado]"> 
+								name="pedido[estado]" > 
 								Sólo los Terminados
 							</label>						
 							<label class="radio small">
+								<input type="radio" value="Entregado-Debe" ng-model="filterPedidos.estado"
+								name="pedido[estado]" > 
+								Sólo los Entregados con deuda
+							</label>					
+							<label class="radio small">
 								<input type="radio" value="Entregado" ng-model="filterPedidos.estado"
-								name="pedido[estado]"> 
+								name="pedido[estado]" > 
 								Sólo los Entregados
 							</label>
 							<label class="radio small">
 								<input type="radio" value="" ng-model="filterPedidos.estado" 
-								name="pedido[estado]"> 
+								name="pedido[estado]" > 
 								Todos
 							</label>
 							
@@ -100,7 +105,7 @@
 		<div class="col-xs-12 col-md-9 ">
 			<div class="tableContainer" >
 			
-				<table class="table table-hover table-condense">
+				<table class="table table-hover table-condense" id="infinite-scrolling">
 			  		<thead>
 			  			<tr>
 			  				<th>Localidad</th>
@@ -112,7 +117,7 @@
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
-			  			<tr ng-repeat="pedido in filteredPedidos = (data | orderBy:order:false | filter:query | filter:filterPedidos)" 
+			  			<tr ng-repeat="pedido in filteredPedidos = (data | orderBy:order:false | filter:query)" 
 			  						class="pedidosList link" ng-click="openPedido(pedido.id, usuario.getUserRole())">
 			  				<td> {{pedido.localidad}}</td>
 			  				<td> {{pedido.fecha | date:'dd/MM/yyyy'}}</td>
@@ -131,6 +136,8 @@
 	
 			</div>
 			
+			<div class="finPedidos"></div>
+
 			
 		</div>
 		

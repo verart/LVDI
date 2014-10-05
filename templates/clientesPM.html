@@ -52,7 +52,7 @@
 					
 					<input 	type="text" class="form-control small filterInput" 
 							ng-model="query" id='inputSearch' 
-							placeholder="Filtro de clientes" >
+							placeholder="Filtro de clientes"  ng-enter="filtrarClientes()" >
 					
 									
 					
@@ -70,7 +70,7 @@
 		<div class="col-xs-12 col-md-9 ">
 			<div class="tableContainer" >
 			
-				<table class="table table-hover table-condense">
+				<table class="table table-hover table-condense" id="infinite-scrolling">
 			  		<thead>
 			  			<tr>
 			  				<th>Cliente</th>
@@ -95,7 +95,7 @@
 	
 			</div>
 			
-			
+			<div class="finClientes"></div>
 		</div>
 		
 	       

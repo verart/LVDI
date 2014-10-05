@@ -14,52 +14,32 @@ class Producciones extends AppModel {
 	 */
 	function getProducciones($opciones = array()) {
 	
+		$set_limit = " LIMIT ".(($opciones['page'] - 1) * $opciones['pageSize']) . ",".$opciones['pageSize'];
+	
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
-		$sql = "SELECT P.*, R.nombre as responsable, Pr.nombre as producto, Pr.precio,
-				M.id as modelos_id, M.nombre as modelo,PM.estado as estadoProducto, 
-				PM.id as idProdMod 
+		$sql = "SELECT P.*, R.nombre as responsable 
 				FROM producciones P 
 				INNER JOIN responsables R ON R.id = P.responsables_id
-				INNER JOIN producciones_modelos PM ON PM.producciones_id = P.id
-				INNER JOIN modelos M ON PM.modelos_id = M.id
-				INNER JOIN productos Pr ON Pr.id = M.productos_id 
 				$conditions
-				ORDER BY P.fecha DESC, P.id DESC ";
+				ORDER BY P.fecha DESC, P.id DESC  
+				$set_limit "; 
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	
 		
 		$results = $query->fetchAll();
-		$iF = 0;
-		$i = 0;
-		$resultsFormat = array();
+
+	   	$iF = 0;
 		//Proceso los pedidos 
-		while($i < count($results)){
-			$resultsFormat[$iF]['id'] = $results[$i]['id'];
-			$resultsFormat[$iF]['fecha'] = $results[$i]['fecha'];
-			$resultsFormat[$iF]['fecha_devolucion'] = $results[$i]['fecha_devolucion'];
-			$resultsFormat[$iF]['responsables_id'] = $results[$i]['responsables_id']; 
-			$resultsFormat[$iF]['responsable'] = utf8_encode($results[$i]['responsable']);
-			$resultsFormat[$iF]['estado'] = $results[$i]['estado']; 
-			$resultsFormat[$iF]['nota'] = $results[$i]['nota']; 
-			$resultsFormat[$iF]['motivo'] = $results[$i]['motivo'];
+		while($iF < count($results)){ 
+			$results[$iF]['responsable'] = utf8_encode($results[$iF]['responsable']);
 			
-			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
-			$resultsFormat[$iF]['modelos'] = array();
-			$m = 0;
-			while(($i < count($results))&&($resultsFormat[$iF]['id'] == $results[$i]['id'])){
-				$resultsFormat[$iF]['modelos'][$m]['id'] = $results[$i]['modelos_id'];
-				$resultsFormat[$iF]['modelos'][$m]['idProdMod'] = $results[$i]['idProdMod'];
-				$resultsFormat[$iF]['modelos'][$m]['precio'] = $results[$i]['precio'];
-				$resultsFormat[$iF]['modelos'][$m]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
-				$resultsFormat[$iF]['modelos'][$m++]['estado'] = $results[$i++]['estadoProducto'];				
-			}
 			$iF++;
-		}
+		}	
 		
-		
-		return $resultsFormat;
+		return $results;
+
 	}
 	
 	
@@ -146,6 +126,42 @@ class Producciones extends AppModel {
 
 
 
+
+
+	/**
+	 * Retorna todos los modelos del pedido
+	 * params (int) 
+	 */
+	function getModelos($idProduccion) {
+	
+				
+		$sql = "SELECT Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo,  
+		 		PM.estado, PM.id as idProdMod 
+				FROM producciones P
+				INNER JOIN responsables R ON R.id = P.responsables_id
+				INNER JOIN producciones_modelos PM ON P.id = PM.producciones_id
+				INNER JOIN modelos M ON M.id = PM.modelos_id
+				INNER JOIN productos Pr ON Pr.id = M.productos_id	
+				WHERE P.id = ?
+				ORDER BY Pr.nombre, M.nombre"; 
+				
+    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+		$query = $query->execute(array($idProduccion));
+		$results = $query->fetchAll();		
+		
+		$i = 0;
+		$resultsFormat = array();
+		while($i < count($results)){
+				$resultsFormat[$i]['precio'] = $results[$i]['precio'];
+				$resultsFormat[$i]['id'] = $results[$i]['modelos_id'];
+				$resultsFormat[$i]['idProdMod'] = $results[$i]['idProdMod'];
+				$resultsFormat[$i]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
+				$resultsFormat[$i]['estado'] = $results[$i]['estado'];		
+				$i++;										
+			}
+		return $resultsFormat;
+	}
+	
 
 	
 	

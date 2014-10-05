@@ -52,7 +52,7 @@
 					
 					<input 	type="text" class="form-control small filterInput" 
 							ng-model="query" id='inputSearch' 
-							placeholder="Filtro de resp. de prod." >
+							placeholder="Filtro de resp. de prod." ng-enter="filtrarResponsables()">
 					
 									
 					
@@ -70,7 +70,7 @@
 		<div class="col-xs-12 col-md-9 ">
 			<div class="tableContainer" >
 			
-				<table class="table table-hover table-condense">
+				<table class="table table-hover table-condense" id="infinite-scrolling">
 			  		<thead>
 			  			<tr>
 			  				<th>Nombre</th>
@@ -94,7 +94,8 @@
 		  		</table>
 	
 			</div>
-			
+						
+			<div class="finResponsables"></div>
 			
 		</div>
 		

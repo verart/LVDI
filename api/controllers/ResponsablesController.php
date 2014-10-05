@@ -12,7 +12,8 @@ class ResponsablesController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('responsables', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$responsables = $this->Responsables->getResponsables();
+			$opciones = array('order'=>'nombre ASC','page'=>$_POST['pag'],'pageSize'=>10);
+			$responsables = $this->Responsables->getResponsables($opciones);
 			echo $this->json('Responsables', $responsables);
 
 		} catch (Exception $e) {	
@@ -62,7 +63,7 @@ class ResponsablesController extends AppController {
 				throw new BadRequestException($res['msg']);
 		
 
-			echo $this->json('responsables', $res['responsables']);
+			echo $this->json('El responsable de producción fue agregado.', $res['responsables']);
 				
 
 		} catch (Exception $e) {	
@@ -100,7 +101,7 @@ class ResponsablesController extends AppController {
 				throw new BadRequestException($res['msg']);
 				
 	
-			echo $this->json('Responsables', $res['responsables']);
+			echo $this->json('El responsable de producción fue modificado.', $res['responsables']);
 
 		} catch (Exception $e) {	
 
@@ -132,6 +133,26 @@ class ResponsablesController extends AppController {
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 				
 		}	
+	}
+	
+	
+	
+	function listAll() {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('responsables', 'index'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			$opciones = array('order'=>'nombre ASC', 'fields'=>array('id','nombre'));
+			$responsables = $this->Responsables->getResponsablesList($opciones);
+			echo $this->json('Responsables', $responsables);
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}
 	}
 	
 }

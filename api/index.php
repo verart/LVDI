@@ -1,4 +1,6 @@
 <?php
+ini_set("session.cookie_lifetime","86400");
+ini_set("session.gc_maxlifetime","86400");
 session_start();
 
 
@@ -12,8 +14,6 @@ if (ENTORNO == 'DESARROLLO'){
 	error_reporting(E_ALL);
 }else
 	error_reporting(E_NONE);
-
-
 
 ini_set('include_path', constant('INCLUDE_PATH'));
 
@@ -44,20 +44,23 @@ $route->add('/productos/baja','DELETE','Productos','baja');
 $route->add('/upload','POST','Productos','upload');
 
 
-$route->add('/pedidos/index','GET','Pedidos','index');
+$route->add('/pedidos/index','POST','Pedidos','index');
 $route->add('/pedidos/show','GET','Pedidos','show');
+$route->add('/pedidos/modelos','GET','Pedidos','modelos');
+$route->add('/pedidos/pagos','GET','Pedidos','pagos');
 $route->add('/pedidos/delete','DELETE','Pedidos','delete');
 $route->add('/pedidos/update','PUT','Pedidos','update');
 $route->add('/pedidos/create','POST','Pedidos','create');
 
-$route->add('/clientesPM/index','GET','ClientesPM','index');
+$route->add('/clientesPM/index','POST','ClientesPM','index');
 $route->add('/clientesPM/clientesName','GET','ClientesPM','clientesName');
 $route->add('/clientesPM/show','GET','ClientesPM','show');
 $route->add('/clientesPM/delete','DELETE','ClientesPM','delete');
 $route->add('/clientesPM/update','PUT','ClientesPM','update');
 $route->add('/clientesPM/create','POST','ClientesPM','create');
 
-$route->add('/responsables/index','GET','Responsables','index');
+$route->add('/responsables/index','POST','Responsables','index');
+$route->add('/responsables/listAll','GET','Responsables','listAll');
 $route->add('/responsables/show','GET','Responsables','show');
 $route->add('/responsables/delete','DELETE','Responsables','delete');
 $route->add('/responsables/update','PUT','Responsables','update');
@@ -65,12 +68,13 @@ $route->add('/responsables/create','POST','Responsables','create');
 
 $route->add('/producciones/index','POST','Producciones','index');
 $route->add('/producciones/show','GET','Producciones','show');
+$route->add('/producciones/modelos','GET','Producciones','modelos');
 $route->add('/producciones/delete','DELETE','Producciones','delete');
 $route->add('/producciones/update','PUT','Producciones','update');
 $route->add('/producciones/create','POST','Producciones','create');
 
 
-$route->add('/clientes/index','GET','Clientes','index');
+$route->add('/clientes/index','POST','Clientes','index');
 $route->add('/clientes/show','GET','Clientes','show');
 $route->add('/clientes/delete','DELETE','Clientes','delete');
 $route->add('/clientes/update','PUT','Clientes','update');
@@ -79,8 +83,11 @@ $route->add('/clientes/create','POST','Clientes','create');
 
 $route->add('/ventas/index','POST','Ventas','index');
 $route->add('/ventas/show','GET','Ventas','show');
+$route->add('/ventas/pagos','GET','Ventas','pagos');
 $route->add('/ventas/delete','DELETE','Ventas','delete');
 $route->add('/ventas/create','POST','Ventas','create');
+$route->add('/ventas/addPago','POST','Ventas','addPago');
+$route->add('/ventas/deletePago','DELETE','Ventas','deletePago');
 
 
 $route->add('/notas/index','POST','Notas','index');
@@ -100,6 +107,13 @@ $route->add('/usuarios/show','GET','Usuarios','show');
 $route->add('/usuarios/delete','DELETE','Usuarios','delete');
 $route->add('/usuarios/update','PUT','Usuarios','update');
 $route->add('/usuarios/create','POST','Usuarios','create');
+
+
+$route->add('/resumen/index','POST','Resumen','index');
+
+$route->add('/gastos/index','POST','Gastos','index');
+$route->add('/gastos/delete','DELETE','Gastos','delete');
+$route->add('/gastos/create','POST','Gastos','create');
 
 $route->submit();
 ?>

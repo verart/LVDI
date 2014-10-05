@@ -1,15 +1,15 @@
 <?php
-class NotasController extends AppController {
+class GastosController extends AppController {
 
-	var $name = "Notas";
-	var $uses = array('Notas');
+	var $name = "Gastos";
+	var $uses = array('Gastos');
 	
 
 	function index() {
 		
 		try {
 			
-			if (!$this->PermisosComponent->puedeAcceder('notas', 'index'))
+			if (!$this->PermisosComponent->puedeAcceder('gastos', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 				
 			if(isset($_POST['desde']) && ($_POST['desde'] != '')){
@@ -25,9 +25,9 @@ class NotasController extends AppController {
 					$opciones = array(); 
 
 	
-			$notas = $this->Notas->getNotas($opciones); 
+			$gastos = $this->Gastos->getGastos($opciones); 
 			
-			echo $this->json('Notas', $notas);
+			echo $this->json('Gastos', $gastos);
 
 		} catch (Exception $e) {	
 
@@ -43,38 +43,40 @@ class NotasController extends AppController {
 	
 	/**
 	* CREATE
-	* Crea una nota.
-	* Params (POST): array(fecha, nota)
+	* Crea un gasto.
+	* Params (POST): array(created, descripcion, monto)
 	*/
 	function create() {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeEditar('notas', 'create'))
-				throw new ForbiddenException('No tiene permiso para crear una nota.'); 
+			if (!$this->PermisosComponent->puedeEditar('gastos', 'create'))
+				throw new ForbiddenException('No tiene permiso para crear un gasto.'); 
 
 
 			$params = (isset($_POST))? $_POST : array();
 	
 			// Campos obligatorios
-			if (!$this->parametrosRequeridosEn(array('created', 'nota'), $params))
-				throw new BadRequestException('Los datos de la nota están incompletos'); 
+			if (!$this->parametrosRequeridosEn(array('created', 'descripcion', 'monto', 'FP'), $params))
+				throw new BadRequestException('Los datos del gasto están incompletos'); 
 				
 					
-			$nota = array(
+			$gasto = array(
 				'created'=>$params['created'],
-				'nota'=>$params['nota']);
+				'descripcion'=>$params['descripcion'],
+				'FP'=>$params['FP'],
+				'monto'=>$params['monto']);
 			
 			
-			$res = $this->Notas->setNota($nota);
+			$res =  $this->Gastos->setGasto($gasto);
+	
 			if(!($res['success'])){
 				throw new BadRequestException($res['msg']);
 			}
 			
 			// Retorna la info de la venta creada
-			$nota['id'] = $res['nota']['id'];
-			
-			echo $this->json('Nota', $nota);
+			$gasto['id'] = $res['gasto']['id'];
+			echo $this->json('Gasto', $gasto);
 			
 
 		} catch (Exception $e) {	
@@ -91,17 +93,17 @@ class NotasController extends AppController {
 	
 	/*******
 	* DELETE
-	* Elimina una nota.
-	* Params (DELETE): $idNota
+	* Elimina un gasto.
+	* Params (DELETE): $idGasto
 	*/
-	function delete($idNota) {
+	function delete($idGasto) {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeEditar('nota', 'delete'))
-				throw new ForbiddenException('No tiene permiso para eliminar una nota'); 
+			if (!$this->PermisosComponent->puedeEditar('gastos', 'delete'))
+				throw new ForbiddenException('No tiene permiso para eliminar un gasto.'); 
 			
-			$this->Notas->delNota($idNota);
+			$this->Gastos->delGasto($idGasto);
 
 		} catch (Exception $e) {	
 

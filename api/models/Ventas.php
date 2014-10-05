@@ -13,32 +13,38 @@ class Ventas extends AppModel {
 	 * Retorna todos las ventas
 	 * params (array) $opciones = array([conditions])
 	 */
-	function getVentas($opciones = array()) {
+	function getVentas($opciones = array(), $requested_page = 1) {
+	
+	
+	 	$set_limit = (($requested_page - 1) * 15) . ",15";
+	
 	
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
-		
-		$sql = "SELECT V.*, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, 
-		 		VM.id as idVenMod
-				FROM ventas V
-				 INNER JOIN ventas_modelos VM ON VM.ventas_id = V.id
-				 INNER JOIN modelos M ON VM.modelos_id = M.id
-				 INNER JOIN productos Pr ON Pr.id = M.productos_id 
-				 $conditions
-				 ORDER BY V.fecha DESC, V.id DESC"; 
-				
+		//traigo la pagina correspondiente de ventas
+		$sql = "SELECT V.*, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, VM.id as idVenMod 
+				FROM ventas V 
+				INNER JOIN ventas_modelos VM ON VM.ventas_id = V.id 
+				INNER JOIN modelos M ON VM.modelos_id = M.id 
+				INNER JOIN productos Pr ON Pr.id = M.productos_id  
+				$conditions 
+				ORDER BY V.created DESC, V.id DESC  
+				LIMIT $set_limit "; 
+			
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	
 	   	
 		$results = $query->fetchAll();
+				 
 		$iF = 0;
 		$i = 0;
-		$resultsFormat = array();
+		$resultsFormat = array(); 
 		//Proceso las ventas 
 		while($i < count($results)){
 			$resultsFormat[$iF]['id'] = $results[$i]['id'];
-			$resultsFormat[$iF]['fecha'] = $results[$i]['fecha'];
+			$resultsFormat[$iF]['created'] = $results[$i]['created'];
 			$resultsFormat[$iF]['total'] = $results[$i]['total'];
+			$resultsFormat[$iF]['deuda'] = $results[$i]['deuda'];
 			$resultsFormat[$iF]['montoFavor'] = $results[$i]['montoFavor'];
 			$resultsFormat[$iF]['bonificacion'] = $results[$i]['bonificacion'];
 			$resultsFormat[$iF]['FP'] = $results[$i]['FP']; 
@@ -55,13 +61,31 @@ class Ventas extends AppModel {
 			}
 			$iF++;
 		}
-		
-		
 		return $resultsFormat;
+
 	}
 	
 	
 	
+	
+	/**
+	 * Retorna todos los pagos de la venta
+	 * params (int) 
+	 */
+	function getPagos($idVenta) {
+	
+				
+		$sql = "SELECT *
+				FROM ventas_pagos VP 
+				WHERE VP.ventas_id = ? 
+				ORDER BY VP.created DESC"; 
+				
+    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+		$query = $query->execute(array($idVenta));
+		$results = $query->fetchAll();		
+		
+		return $results;
+	}
 	
 	
 	
@@ -73,7 +97,7 @@ class Ventas extends AppModel {
 	function getVentaPorId($idVenta) {
 		
 				
-		$sql = "SELECT V.*, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, 
+		$sql = "SELECT V.*, Pr.nombre as producto, VM.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, 
 		 		VM.id as idVenMod
 				FROM ventas V
 				INNER JOIN ventas_modelos VM ON VM.ventas_id = V.id
@@ -89,10 +113,11 @@ class Ventas extends AppModel {
 		$resultsFormat = array();
 		
 		$resultsFormat['id'] = $results[$i]['id'];
-		$resultsFormat['fecha'] = $results[$i]['fecha'];
+		$resultsFormat['created'] = $results[$i]['created'];
 		$resultsFormat['total'] = $results[$i]['total'];
 		$resultsFormat['montoFavor'] = $results[$i]['montoFavor'];
 		$resultsFormat['bonificacion'] = $results[$i]['bonificacion'];
+		$resultsFormat['deuda'] = $results[$i]['deuda'];
 		$resultsFormat['FP'] = $results[$i]['FP'];
 			
 		$resultsFormat['modelos'] = array();
@@ -117,11 +142,13 @@ class Ventas extends AppModel {
 	
 	/**
 	* SETVENTA
-	* $venta = array( ['id'], 'bonificacion', 'fecha',['FP'], total )
+	* $venta = array( ['id'], 'bonificacion', 'created',['FP'], total )
 	* $modelos  = array( 	
 	* 					array('id', precio ) )
+	* $pagos  = array( 	
+	* 					array(monto, bonificacion, FP ) )	
 	*/
-	function setVenta($venta, $modelos){
+	function setVenta($venta, $modelos, $pagos){
 		
 		try{
 			$this->beginTransaction();
@@ -156,12 +183,47 @@ class Ventas extends AppModel {
 			
 					}
 					
+					
+					
+					//Pagos realizado 
+					foreach($pagos as $field => $value) {
+					
+						$monto = $value['monto'];
+						$created = isset($value['created'])?$value['created']: date('dd/mm/yyyy');
+						$FP = $value['FP'];
+						$bonif = $value['bonificacion'];
+						
+						$sql = "INSERT INTO ventas_pagos (ventas_id,monto,FP,created, bonificacion) VALUES ($idVenta,$monto,'$FP','$created',$bonif) "; 
+						$query = $this->con->query($sql);
+						
+						if(@PEAR::isError($query))
+							throw new BadRequestException('Hubo un error al agregar los pagos de la venta.');
+			
+					}
+					
 				}else
 					throw new BadRequestException('Hubo un error al crear la venta');
 					
 							
-			}
+			}else{
 
+				//Pagos realizado 
+				$idVenta = $venta['id'];
+				foreach($pagos as $field => $value) {
+					
+					$monto = $value['monto'];
+					$created = isset($value['created'])?$value['created']: date('dd/mm/yyyy');
+					$FP = $value['FP'];
+					$bonif = $value['bonificacion'];
+						
+					$sql = "INSERT INTO ventas_pagos (ventas_id,monto,FP,created, bonificacion) VALUES ($idVenta,$monto,'$FP','$created',$bonif) ";
+					$query = $this->con->query($sql);
+						
+					if(@PEAR::isError($query))
+						throw new BadRequestException('Hubo un error al agregar los pagos de la venta.');
+			
+				}
+			}
 			$this->commitTransaction();
 			
 			return array('success'=>true, 'ventas_id'=>$idVenta);
@@ -227,6 +289,108 @@ class Ventas extends AppModel {
 
 		}
 	
+	}
+	
+	
+	
+	
+	
+	function addPago($pago, $idVenta){					
+					
+		try{			
+			$monto = $pago['monto'];
+			$created = isset($pago['created'])?$pago['created']: date('dd/mm/yyyy');
+			$FP = $pago['FP'];
+			$bonif = isset($pago['bonificacion'])?$pago['bonificacion']:0;
+						
+			$sql = "INSERT INTO ventas_pagos (ventas_id,monto,FP,created, bonificacion) VALUES ($idVenta,$monto,'$FP','$created',$bonif) "; 
+			$query = $this->con->query($sql);
+			
+			
+			if(@PEAR::isError($query))
+					throw new BadRequestException('Hubo un error al agregar el pago a la venta.');
+			else{
+				$idPago = $this->getLastId(); 
+				$pago['id'] = $idPago;
+			}
+			
+			$venta = $this->getVentaPorId($idVenta);	
+			$nuevaDeuda = $venta['deuda'] - ($pago['monto'] + ($pago['monto']*$pago['bonificacion']/100));
+			 
+			if(!$this->update(array('deuda'=>$nuevaDeuda), array('id'=> $idVenta)))
+				throw new BadRequestException('Hubo un error al agregar el pago a la venta.');
+			else{
+				$idPago = $this->getLastId(); 
+				$pago['id'] = $idPago;
+			}
+			
+			
+			return array('success'=>true, 'pago'=>$pago);
+			
+		
+		}catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}	
+		
+	}
+	
+	
+	
+	
+		
+	
+	function deletePago($idPago){
+	
+		try{
+		
+		    $pago = $this->getPagoPorId($idPago);
+		    
+
+		    $sql = "DELETE FROM ventas_pagos WHERE id = $idPago";
+
+			$result = $this->con->query($sql);
+		
+			if(@PEAR::isError($result)) {
+		    	throw new BadRequestException('Ocurrió un error al eliminar el pago.');				
+		    }
+		    
+			$venta = $this->getVentaPorId($pago['ventas_id']);	
+			$nuevaDeuda = $venta['deuda'] + ($pago['monto'] + ($pago['monto']*$pago['bonificacion']/100));
+			 
+			if(!$this->update(array('deuda'=>$nuevaDeuda), array('id'=> $idVenta)))
+				throw new BadRequestException('Hubo un error al agregar el pago a la venta.');
+
+			
+			return array('success'=>true, 'msg'=>'');
+		
+		}catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}
+	
+	}
+	
+	
+	/**
+	 * GETPAGOPORID
+	 * Retorna el pago que coincide con el id
+	 * @param $idPago
+	 */
+	function getPagoPorId($idPago) {
+	
+		$sql = "SELECT VP.* 
+				FROM ventas_pagos VP 
+				WHERE VP.id = ?";
+				
+		$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+		$query = $query->execute(array($idPago));
+		$results = $query->fetchRow();
+		return $results;
 	}
 	
 	

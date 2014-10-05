@@ -7,12 +7,127 @@ class Pedidos extends AppModel {
 	
 	public $hasMany = array('ColaImpresion'); 
 	
+
+
+
+	/**
+	 * Retorna todos los pedidos
+	 * params (array) $opciones = array([conditions])
+	 */
+	function getPedidos($opciones = array(), $requested_page = 1) {
+	
+		
+	 	$set_limit = " LIMIT ".(($requested_page - 1) * 7) . ",7";
+
+		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
+		
+		
+		$sql = "SELECT P.id, P.total, P.bonificacion, P.nota as nota, C.nombre as cliente, C.localidad as localidad, C.id as clientesPM_id, 					P.estado, P.fecha,P.fecha_entrega,  modelosPedidos.totalActual 
+				FROM pedidos P 
+				INNER JOIN clientespm C ON C.id = P.clientesPM_id 
+				INNER JOIN (
+					SELECT  PM.pedidos_id, SUM(Pr.precio*PM.cantidad) as totalActual 
+					FROM pedidos_modelos PM
+					INNER JOIN modelos M ON PM.`modelos_id` = M.id
+					INNER JOIN productos Pr ON Pr.id = M.productos_id 
+					GROUP BY PM.pedidos_id	
+				) as modelosPedidos ON modelosPedidos.pedidos_id = P.id  
+				$conditions
+				ORDER BY P.id   
+				$set_limit "; 
+				
+	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
+	   	$query = $query->execute();	
+	   	$results = $query->fetchAll();
+
+
+	   	$iF = 0;
+		//Proceso los pedidos 
+		while($iF < count($results)){ 
+			$results[$iF]['cliente'] = utf8_encode($results[$iF]['cliente']);
+			
+			$iF++;
+		}	
+
+
+		return $results;
+	}
+	
+
+
+
+
+
+	/**
+	 * Retorna todos los modelos del pedido
+	 * params (int) 
+	 */
+	function getModelos($idPedido) {
+	
+				
+		$sql = "SELECT Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, PM.cantidad, 
+		 		PM.estado as estadoProducto, PM.id as idPedMod, PM.precio as PedProdPrecio, P.estado 
+				FROM pedidos P
+				INNER JOIN pedidos_modelos PM ON P.id = PM.pedidos_id
+				INNER JOIN modelos M ON M.id = PM.modelos_id
+				INNER JOIN productos Pr ON Pr.id = M.productos_id	
+				WHERE P.id = ?
+				ORDER BY Pr.nombre, M.nombre"; 
+				
+    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+		$query = $query->execute(array($idPedido));
+		$results = $query->fetchAll();		
+		
+		$i = 0;
+		$resultsFormat = array();
+		while($i < count($results)){
+				$resultsFormat[$i]['id'] = $results[$i]['modelos_id'];
+				$resultsFormat[$i]['idPedMod'] = $results[$i]['idPedMod'];
+				$resultsFormat[$i]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
+				$resultsFormat[$i]['estado'] = $results[$i]['estadoProducto'];
+				$resultsFormat[$i]['cantidad'] = $results[$i]['cantidad'];
+				$resultsFormat[$i]['precio'] = (($results[$i]['estado'] == 'Entregado-Pago')||($results[$i]['estado'] == 'Entregado-Debe'))?$results[$i]['PedProdPrecio'] : $results[$i]['precio'];	
+				$i++;										
+			}
+		return $resultsFormat;
+	}
+	
+
+
+
+	/**
+	 * Retorna todos los pagos del pedido
+	 * params (int) 
+	 */
+	function getPagos($idPedido) {
+	
+				
+		$sql = "SELECT *
+				FROM pedidos_pagos PP 
+				WHERE PP.pedidos_id = ? 
+				ORDER BY PP.created DESC"; 
+				
+    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+		$query = $query->execute(array($idPedido));
+		$results = $query->fetchAll();		
+		
+		return $results;
+	}
+	
+	
+	
+
+
+
+
 	
 	
 	/**
 	 * Retorna todos los pedidos
 	 * params (array) $opciones = array([conditions])
 	 */
+/*
+
 	function getPedidos($opciones = array()) {
 	
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
@@ -76,6 +191,7 @@ class Pedidos extends AppModel {
 		return $resultsFormat;
 	}
 	
+*/
 	
 	
 	
@@ -115,10 +231,8 @@ class Pedidos extends AppModel {
 			$resultsFormat['cliente'] = utf8_encode($results[$i]['cliente']);
 			$resultsFormat['localidad'] = utf8_encode($results[$i]['localidad']);
 			$resultsFormat['estado'] = $results[$i]['estado']; 
-			$resultsFormat['FP'] = $results[$i]['FP']; 
 			$resultsFormat['nota'] = $results[$i]['nota'];
 			
-			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
 			$resultsFormat['modelos'] = array();
 			$m = 0;
 			$total = 0;
@@ -146,8 +260,10 @@ class Pedidos extends AppModel {
 	* $pedido = array( ['id'=>''], 'clientesPM_id', 'bonificacion', 'fecha',['FP'], nota, total )
 	* $modelos  = array( 	
 	* 					array('id', 'cantidad', 'estado', 'idPedMod' ) )
+	* $pagos  = array( 	
+	* 					array('id', 'monto', 'created', 'FP' ) )
 	*/
-	function setPedido($pedido, $modelos){
+	function setPedido($pedido, $modelos, $pagos = array()){
 		
 		try{
 			$this->beginTransaction();
@@ -163,6 +279,7 @@ class Pedidos extends AppModel {
 					//Agrego los modelos
 					$idPedido = $this->con->lastInsertID('pedidos', 'id');
 					
+					//Modelos del pedido
 					foreach($modelos as $field => $value) {
 					
 						$idModelo = $value['id'];
@@ -182,6 +299,22 @@ class Pedidos extends AppModel {
 			
 					}
 					
+					//Pagos realizado 
+					foreach($pagos as $field => $value) {
+					
+						$monto = $value['monto'];
+						$created = isset($value['created'])?$value['created']: date('dd/mm/yyyy');
+						$FP = $value['FP'];
+						
+						$sql = "INSERT INTO pedidos_pagos (pedidos_id,monto,FP,created) VALUES ($idPedido,$monto,'$FP','$created') "; 
+						$query = $this->con->query($sql);
+						
+						if(@PEAR::isError($query))
+							throw new BadRequestException('Hubo un error al agregar los pagos del pedido.');
+			
+					}
+					
+					
 				}else
 					throw new BadRequestException('Hubo un error');
 					
@@ -197,6 +330,8 @@ class Pedidos extends AppModel {
 				
 					$idPedido =  $pedido['id'];
 				
+				
+					// MODELOS del pedido
 					foreach($modelos as $field => $value) {
 					
 						$cantidad = $value['cantidad'];
@@ -213,7 +348,6 @@ class Pedidos extends AppModel {
 							$values = "($idPedido, $idModelo, $cantidad, $estado, $precio)";
 							
 							$sql = "INSERT INTO pedidos_modelos $fields VALUES $values ";	
-
 							
 							if(($cantidad >=1) && ($estado == "'Terminado'")){
 								$res = $this->ColaImpresion->set($idModelo,$idPedido);
@@ -257,7 +391,36 @@ class Pedidos extends AppModel {
 						if(@PEAR::isError($query))
 							throw new BadRequestException('Hubo un error en la modificación del pedido.');
 			
+					}//while modelos
+					
+					
+					// PAGOS realizado 
+					foreach($pagos as $field => $value) {
+					
+					
+						if(!isset($value['id'])){
+						
+							// Nuevo pago para el Pedido
+							$monto = $value['monto'];
+							$created = isset($value['created'])?$value['created']: date('dd/mm/yyyy');
+							$FP = $value['FP'];
+							
+							$sql = "INSERT INTO pedidos_pagos (pedidos_id,monto,FP,created) VALUES ($idPedido,$monto,'$FP','$created') "; 
+							$query = $this->con->query($sql);
+							
+							if(@PEAR::isError($query))
+								throw new BadRequestException('Hubo un error al agregar los pagos del pedido.');
+								
+								
+						}
+					
+						
+			
 					}
+					
+					
+					
+					
 				}else
 					throw new BadRequestException('Hubo un error al actualizar el pedido.');				
 			}
@@ -311,7 +474,37 @@ class Pedidos extends AppModel {
 	}
 	
 	
-	
+	/**
+	 * REMOVEPAGO 
+	 * Quita un pago del pedido
+	 * @param $idPagoPedido
+	 */
+	function removePago($idPagoPedido){
+		
+		try{
+			
+			$this->beginTransaction();
+			
+			$sql = "DELETE FROM pedidos_pagos WHERE id = $idPagoPedido";
+
+			$result = $this->con->query($sql);
+		
+			if(@PEAR::isError($result)) {
+		    	throw new BadRequestException('Ocurrió un error al eliminar el pago del pedido.');				
+		    }
+		    
+			$this->commitTransaction();
+			
+			return array('success'=>true, 'msg'=>'');
+			
+		} catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}
+		
+	}
 	
 	
 }

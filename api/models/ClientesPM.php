@@ -13,8 +13,7 @@ class ClientesPM extends AppModel {
 	 */
 	function getClientes($opciones = array()) {
 	
-		$opciones = array('order'=>'nombre DESC');
-		$results = $this->readAll($opciones);
+		$results = $this->readPage($opciones);
 	
 		for($i=0; $i < count($results); $i++){
 			$results[$i]['nombre'] = utf8_encode($results[$i]['nombre']);
@@ -31,20 +30,13 @@ class ClientesPM extends AppModel {
 	/**
 	 * Retorna los nombres de los clientes
 	 */
-	function getClientesNames() {
+	function getClientesNames($opciones = array()) {
 		
-		$sql = "SELECT C.nombre, C.id, C.bonificacion
-				FROM clientespm C
-				ORDER BY nombre ASC";
-				
-	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
-	   	$query = $query->execute();	
-		$results = $query->fetchAll();
-		for($i=0; $i < count($results); $i++){
+		$results = $this->readAll($opciones);
+			
+	   	for($i=0; $i < count($results)-1; $i++)
 			$results[$i]['nombre']= utf8_encode($results[$i]['nombre']);
-			$results[$i]['id']= $results[$i]['id'];
-			$results[$i]['bonificacion']= $results[$i]['bonificacion'];
-		}	
+					
 		return $results;
 	}
 	

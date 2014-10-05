@@ -15,7 +15,13 @@ class ClientesController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('clientes', 'index'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
-			$clientes = $this->Clientes->getClientes();
+			$opciones = array('order'=>'nombre ASC','page'=>$_POST['pag'],'pageSize'=>10);
+			
+			if(isset($_POST['filter'])&& ($_POST['filter']!= ''))
+				$opciones['conditions']= array('LIKE' => array('nombre'=>$_POST['filter']));
+			
+			$clientes = $this->Clientes->getClientes($opciones);
+			
 			echo $this->json('Clientes', $clientes);
 
 		} catch (Exception $e) {	
@@ -67,7 +73,7 @@ class ClientesController extends AppController {
 				throw new BadRequestException($res['msg']);
 				
 	
-			echo $this->json('cliente', $res['clientes']);
+			echo $this->json('El cliente ha sido agregado.', $res['clientes']);
 				
 
 		} catch (Exception $e) {	

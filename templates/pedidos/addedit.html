@@ -12,22 +12,26 @@
 			<div class="form-group row">
 						
 						<div class="colForm col-xs-6 col-sm-3">
+							<label>Fecha</label>
 							<input type="date" class="form-control small" 
 									placeholder="Fecha" id="fechaPedido" focus-me="{{true}}" 
 									ng-model="pedido.fecha" style="padding-right:0px;" required/>
 						</div>
 						<div class="colForm col-xs-6 col-sm-3">
+							<label>Fecha de entrega</label>
 							<input type="date" class="form-control small" 
 									placeholder="Fecha de entrega" id="fechaEntregaPedido"
 									ng-model="pedido.fecha_entrega" style="padding-right:0px;" required/>
 						</div>	
 						<div class="colForm col-xs-6 col-sm-4">
+							<label>Cliente</label>						
 							<input type="text" autocomplete="off" ng-model="form.cliente"  class="form-control small" 
 									placeholder="Nombre de cliente" 
 									typeahead="cl_option as cl_option.nombre for cl_option in p.cl_options | filter:$viewValue" required/>
 						</div>
 							
-						<div class="colForm col-xs-6 col-sm-2">					
+						<div class="colForm col-xs-6 col-sm-2">	
+							<label>Estado</label>										
 							<select class="form-control small filterInput selectpicker" ng-model="pedido.estado" 
 								ng-options="estado for estado in estados">
 							</select> 
@@ -143,35 +147,102 @@
 				
 					<br/>
 			
-					<div ng-if="userRole == 'admin'" class="resumenPedido form-horizontal pull-right" role="form">
+					<div class="row"> 
+						<div ng-if="userRole == 'admin'" class="resumenPedido form-horizontal pull-right" role="form">
+													
+							<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
+							
+							<div class="form-group">
+							    <label for="bonif" class="col-sm-8 control-label small">Bonificación:</label>
+							    
+							    <div class="col-sm-2"  style="padding:0px">
+							    	<input class="form-control" id="bonif" ng-model="pedido.bonificacion">
+							    </div>
+							    
+							    <label for="bonif" class="col-sm-2 control-label small" style="text-align:left;padding-left:6px;">%</label>
+					
+							</div>
+	
+							<hr/>
+							
+							<label style="margin-right:15px;"> Total a pagar:  {{ pedido.totalFinal | currency }} </label>
+							
+							<br>
+							
+						</div> <!--ng-if  user role -->
+					</div>
 						
-						<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
-						
-						<div class="form-group">
-		
-						    <label for="bonif" class="col-sm-9 control-label small">Bonificación:</label>
-						    
-						    <div class="col-sm-2"  style="padding:0px">
-						    	<input class="form-control" id="bonif" ng-model="pedido.bonificacion">
-						    </div>
-						    
-						    <label for="bonif" class="col-sm-1 control-label small" style="text-align:left;padding-left:6px;">%</label>
-				
-						</div>
+					<!-- PAGOS  -->
+										<br/>
+					<hr/>
 
-						<hr/>
+					<div ng-if="userRole == 'admin'" class="pagos"> <!-- El usuario taller no ve esta informacion -->
+					
+							<h4>Pagos</h4>
+	
+							<div class="tableContainer" ng-if="pedido.pagos.length > 0" >
+								<table class="table table-condensed table-hover small">
+								  	<thead>
+								  		<tr>
+								  			<th class="col-md-2">Fecha</th>
+								  			<th class="col-md-2">Monto</th>
+								  			<th class="col-md-1">FP</th>
+								  			<th class="col-md-2"> </th>
+								  		</tr>
+									</thead>
+									<tbody>
+										<tr ng-repeat="p in pedido.pagos">
+											<td class="col-md-5"> {{p.created}} </span></td>
+											<td class="col-md-2"> {{p.monto |currency}}</td>
+											<td class="col-md-2"> {{p.FP}}</td>					
+											<td class="col-md-2">														
+												<!-- ELIMINAR PAGO -->
+											 	<span 	class="glyphicon glyphicon-remove accionesLst link"  
+											 			title="Eliminar pago"
+											 			ng-click="removePago($index)">
+												 </span>
+												 
+											</td>
+										</tr>
+									</tbody>
+								</table>					
+							</div>
+							
+							<div class="tableContainer" ng-if="pedido.pagos.length == 0" >
+									<p class="avisoSmall" >No se han realizado pagos.</p>
+							</div>
+								
+					</div> <!-- Pagos -->
+		
+					<br/>
+							
+					<div class="littleForm row">
+								<div class="colForm col-xs-12 col-sm-3">
+									<input type="date" class="form-control small" 
+											placeholder="Fecha" id="fechaPago" focus-me="{{true}}" 
+											ng-model="form.pago.created" style="padding-right:0px;" required/>
+								</div>
+								<div class="colForm col-xs-12 col-md-3">
+									<input type="number" step="any" id="montoPago" class="form-control small inputForm" 
+											ng-model="form.pago.monto" placeholder="Monto" ng-enter="add(nuevoMonto)">
+								</div>
+		 						<div class="colForm col-xs-12 col-md-3">					
+									<select class="form-control small filterInput selectpicker" id="fpPago"
+										ng-model="form.pago.FP" 
+										ng-options="fp.value as fp.label for (k,fp) in fps"
+										ng-init="Efectivo">
+									</select> 
+								</div>
+								<div class="colForm col-xs-6 col-md-3">
+									<button type="button" class="btn btn-default" ng-click="addPago()">Agregar pago</button>
+								</div>
+					</div> <!--littleForm -->
+							
+							
+					<label class="pull-right" style="margin-right:15px; margin-top:25px;"> Resta pagar:  {{ pedido.totalFinal -  pedido.totalPagos| currency }} </label>
+	
 						
-						<label style="margin-right:15px;"> Total a pagar:  {{ pedido.totalFinal | currency }} </label>
-						
-						<br>
-						
-						<div class="colForm pull-right autocompleteFP">
-							<input type="text" autocomplete="off" ng-model="pedido.FP"  class="form-control small" 
-									placeholder="Forma de pago"
-									typeahead="fp for fp in fps | filter:$viewValue" />
-						</div>
-	 				
-	 				</div> <!--ng-if  user role -->
+					
 	 			</div> <!-- col- -->	
 				
 			</div> <!-- row -->	

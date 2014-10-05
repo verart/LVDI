@@ -9,12 +9,11 @@ class Clientes extends AppModel {
 	/**
 	 * GETCLIENTES
 	 * Retorna todos los clientes 
-	 * params (array) $opciones = array([conditions], [order])
+	 * params (array) $opciones = array([conditions], [order], [page], [pageSize]])
 	 */
 	function getClientes($opciones = array()) {
 	
-		$opciones = array('order'=>'nombre DESC');
-		$results = $this->readAll($opciones);
+		$results = $this->readPage($opciones);
 	
 		for($i=0; $i < count($results); $i++){
 			$results[$i]['nombre'] = utf8_encode($results[$i]['nombre']);

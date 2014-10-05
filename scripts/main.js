@@ -18,7 +18,8 @@ app.constant('USER_ROLES', {
   all: '*',
   admin: 'admin',
   taller: 'taller',
-  local: 'local'
+  local: 'local',
+  cuentas: 'cuentas'
 });
 
 

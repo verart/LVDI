@@ -15,10 +15,18 @@ class ProduccionesController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('producciones', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
-			if (isset($_POST['estado'])&($_POST['estado'] != '' ))
-				$opciones = array('conditions'=>array('P.estado'=>  $_POST['estado']));
+			
+			$opciones = array('page'=>$_POST['pag'],'pageSize'=>15);
+			
+			if(isset($_POST['filter']) && ($_POST['filter']!= ''))
+				$opciones['conditions'] = array('LIKE' => array('nombre'=>$_POST['filter']));
 			else
-				$opciones = array(); 
+				$opciones['conditions'] = array();
+				
+
+			if (isset($_POST['estado']) && ($_POST['estado'] != '' ))
+				$opciones['conditions']['P.estado'] = $_POST['estado'];
+
 
 			$producciones = $this->Producciones->getProducciones($opciones); 
 			echo $this->json('Producciones', $producciones);
@@ -169,9 +177,6 @@ class ProduccionesController extends AppController {
 		
 		try {
 			
-			
-			
-		
 			if (!$this->PermisosComponent->puedeAcceder('producciones', 'delete'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
@@ -187,6 +192,30 @@ class ProduccionesController extends AppController {
 		}	
 	}
 	
+	
+	
+		
+	
+	/**
+	* MODELOS
+	* Muestra los modelos de la produccion con id idProduccion
+	*/
+	function modelos($idProduccion) {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			$prod = $this->Producciones->getModelos($idProduccion); 
+			echo $this->json('', $prod); 
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
 	
 }
 ?>

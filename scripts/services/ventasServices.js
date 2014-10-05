@@ -1,11 +1,11 @@
 
 app.service('ventasService', ['$http', function ($http) {
         return {
-            ventas:function(d, h) {
+            ventas:function(d, h, cd, p) {
 	           return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/ventas/index',
-	            	data: $.param({desde:d,hasta:h}),
+	            	data: $.param({desde:d,hasta:h,conDeuda:cd,pag:p}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
@@ -34,7 +34,48 @@ app.service('ventasService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	            
-            }
+            }, 
+            
+            
+            /******************************
+            PAGOS DE LA VENTA
+            ******************************/
+            pagosVenta:function (id) { 
+	                    
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/ventas/'+id+'/pagos',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
+            
+            
+            /******************************
+            ADDPAGO
+            ******************************/
+            addPago:function (pago, idVenta) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/ventas/addPago',
+	            	data: $.param({pago:pago, idVenta:idVenta}),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
+            
+            /******************************
+            DELETEPAGO
+            ******************************/
+            deletePago:function (idPago) {
+	            return $http({
+	            	method: 'DELETE',
+	            	url: dir_api + '/ventas/'+idPago+'/deletePago',
+	            	data: $.param(idPago),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
             
            
         }

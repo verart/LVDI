@@ -4,16 +4,56 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
        
         
 		$scope.order = '-nombre';
+	    $scope.query = '';
+	    $scope.filterSubmitted = '';
+
 	    
 	    	    
 	    /**********************************************************************
-	     Recupera en data los clientesPM
+	     Recupera en data los responsables
 	    **********************************************************************/
-	    listRes = function(data){	    		
-		    $scope.data = data;
-	    }	    	    
-	    responsablesService.responsables(listRes);
-	   
+ 	    $scope.page = 1;            
+	    $scope.data = [];
+	    $scope.parar = false;
+	    
+	    $scope.cargarResponsables = function () {
+	 		
+	 		responsablesService.responsables($scope.page,$scope.filterSubmitted).then(
+				//success
+				function(promise){
+					if(promise.data.DATA.length > 0){
+						for( i=0; i < promise.data.DATA.length; i++)
+							$scope.data.push(promise.data.DATA[i]);
+						$scope.page ++;                   
+					}else{
+						if($scope.data.length > 0)
+							$('.finResponsables').html('<div class="fin"></div>');
+						$scope.parar = true;
+					}
+				},
+				//Error al actualizar
+				function(error){ AlertService.add('danger', error.data.MSG);}
+			);
+        };
+	    
+	    $scope.cargarResponsables();
+	    
+	    
+	    /*****************************************************************************************************
+	     FILTRARRESPONSABLES
+	     Filtra los resonsables que contienen en su nombre    
+	    *****************************************************************************************************/
+	    $scope.filtrarResponsables = function () {
+		  		
+		  	 $scope.parar = false;
+		  	 $scope.data = [];
+		  	 $scope.page = 1;
+		  	 $scope.filterSubmitted = $scope.query;
+		  	 $scope.cargarResponsables();
+		  	 
+		};
+	    	    
+
 
 	    
 	   /************************************************************************
@@ -61,7 +101,11 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 			    		responsablesService.addRes(res).then(
 			    			//Success
 			    			function(promise){ console.log(promise.data.DATA);
-			    				$scope.data.push(promise.data.DATA);
+			    				lastName = ($scope.data[$scope.data.length-1].nombre).toUpperCase();
+			    				newName = 	(promise.data.DATA.nombre).toUpperCase();
+			    				if(lastName > newName)
+				    				$scope.data.push(promise.data.DATA);
+				    			AlertService.add('success', promise.data.MSG, 5000);	
 			    			},
 			    			//Error al guardar
 			    			function(error){
@@ -142,7 +186,21 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 	 	$scope.nuevo = function () {
             $scope.openRes('');
         };			
-        
+                
+	    	    
+	    /*****************************************************************************************************
+	     INFINITE SCROLL	    
+	    *****************************************************************************************************/
+	    if ($('#infinite-scrolling').size() > 0) {
+	    
+			$(window).on('scroll', function() {
+
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+			  		$scope.cargarResponsables();
+		    	}
+		  	});
+		  	return;
+		};
                
 }]);
 

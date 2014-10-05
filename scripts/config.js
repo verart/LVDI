@@ -40,7 +40,7 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         templateUrl :  dir_root + "/templates/ventas.html",
         auth: {
         	needAuth: true,
-	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local, , USER_ROLES.taller]
+	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local, USER_ROLES.cuentas, USER_ROLES.taller]
         }
     }) 
     .when("/clientesPM", {
@@ -90,7 +90,23 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         	needAuth: true,
 	        authorizedRoles:  [USER_ROLES.admin]
         }
-    })  
+    })
+    .when("/resumen", {
+        controller : "resumenCtrl",
+        templateUrl :  dir_root + "/templates/resumen.html",
+        auth: {
+        	needAuth: true,
+	        authorizedRoles:  [USER_ROLES.cuentas]
+        }
+    }) 
+    .when("/gastos", {
+        controller : "gastosCtrl",
+        templateUrl :  dir_root + "/templates/gastos.html",
+        auth: {
+        	needAuth: true,
+	        authorizedRoles:  [USER_ROLES.cuentas]
+        }
+    }) 
     .otherwise({
        redirectTo: '/index'
     });

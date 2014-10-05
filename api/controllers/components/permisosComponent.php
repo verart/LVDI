@@ -7,10 +7,10 @@ class PermisosComponent extends AppComponent{
 	
 	var $acceso = array(
 		'productos'=>array(	'index','show','update','create','delete', 'baja', 'venta', 'reponer', 
-							'productosName', 'productosDisponibles', 'upload', 'saveFile', 'removeFile', 'notas')
+							'productosName', 'productosDisponibles', 'upload', 'saveFile', 'removeFile')
 	);
 		
-	var $edicion = array('productos','producciones','ventas');
+	var $edicion = array('productos','producciones','ventas','notas');
 	var $perfil = '';
 
 	
@@ -37,16 +37,24 @@ class PermisosComponent extends AppComponent{
 			    case 'local':
 					$this->acceso['productos']= array('index', 'show', 'update','productoModelo','reponer');
 					$this->acceso['producciones']= array('index', 'show', 'update', 'delete','create');
-					$this->acceso['ventas']=array('index','show');
+					$this->acceso['ventas']=array('index','show', 'addPago','deletePago');
 					$this->acceso['clientes']=array('index','create','show','update','delete');
-					$this->acceso['responsables']= array('index', 'show', 'update');
-					$this->edicion['ventas']=array('create','delete');					
+					$this->acceso['responsables']= array('index', 'show', 'update', 'create','delete');
+					$this->edicion['ventas']=array('create','delete', 'addPago','deletePago');					
 					$this->edicion['clientes']=array('create','update', 'delete');
 					$this->edicion['producciones']= array('create','update', 'delete');
 					$this->edicion['responsables']= array('create','update', 'delete');	
 					$this->acceso['ColaImpresion']=array('index','create','delete');
 					$this->acceso['notas']= array('index','create','delete');
 			        break;
+			    case 'cuentas' :
+			    	$this->acceso['resumen']= array('index');
+			    	$this->acceso['ventas']=array('index','show');	
+					$this->acceso['notas']= array('index','create','delete');
+					$this->acceso['gastos']= array('index','create','delete');
+					$this->edicion['gastos']= array('index','create','delete');
+					$this->edicion['notas']= array('index','create','delete');
+			    break;
 			}
 		
 		}

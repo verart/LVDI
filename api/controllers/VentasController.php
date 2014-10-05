@@ -14,21 +14,26 @@ class VentasController extends AppController {
 				
 			if(isset($_POST['desde']) && ($_POST['desde'] != '')){
 				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
-					$opciones = array('conditions'=>array('fecha >'=> $_POST['desde'], 'fecha<'=>$_POST['hasta']));
+					$opciones = array('conditions'=>array('V.created >'=> $_POST['desde'], 'V.created<'=>$_POST['hasta']));
 				else{
-					$opciones = array('conditions'=>array('fecha >'=> $_POST['desde']));
+					$opciones = array('conditions'=>array('V.created >'=> $_POST['desde']));
 				}
-			}else
+			}else{
 				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
-					$opciones = array('conditions'=>array('fecha<'=>$_POST['hasta']));
+					$opciones = array('conditions'=>array('V.created<'=>$_POST['hasta']));
 				else
-					$opciones = array(); 
-
+					if($_POST['conDeuda'] != 0)
+						$opciones = array('conditions'=>array('V.deuda >'=> 1));
+					else
+						$opciones = array(); 
+			}			
 	
-			$pedidos = $this->Ventas->getVentas($opciones); 
+				
+	
+			$ventas = $this->Ventas->getVentas($opciones, $_POST['pag']); 
 			
-			echo $this->json('Ventas', $pedidos);
-
+			echo $this->json('Ventas', $ventas);
+			
 		} catch (Exception $e) {	
 
 			if ($e instanceof RequestException) 
@@ -65,12 +70,10 @@ class VentasController extends AppController {
 	
 	
 	
-	
-	
 	/**
 	* CREATE
 	* Crea una venta.
-	* Params (POST): array([FP], [bonificacion], [montoFavor], fecha, total, modelos=array(cantidad,id)
+	* Params (POST): array([FP], [bonificacion], [montoFavor], created, total, modelos=array(cantidad,id)
 	*/
 	function create() {
 		
@@ -79,19 +82,19 @@ class VentasController extends AppController {
 			if (!$this->PermisosComponent->puedeEditar('ventas', 'create'))
 				throw new ForbiddenException('No tiene permiso para crear una venta.'); 
 
-
 			$params = (isset($_POST['venta']))? $_POST['venta'] : array();
 	
 			// Campos obligatorios
-			if (!$this->parametrosRequeridosEn(array('fecha', 'total'), $params))
+			if (!$this->parametrosRequeridosEn(array('created', 'total'), $params))
 				throw new BadRequestException('Los datos de la venta están incompletos'); 
 				
 					
 			$params = $_POST['venta'];
 
 			$venta = array(
-				'fecha'=>$params['fecha'],
-				'total'=>$params['total']);
+				'created'=>$params['created'],
+				'total'=>$params['total'],
+				'deuda'=>$params['deuda']);
 			
 			if (isset($params['FP'])) $venta['FP'] = $params['FP'];
 			if (isset($params['montoFavor'])) $venta['montoFavor'] = $params['montoFavor'];
@@ -99,8 +102,9 @@ class VentasController extends AppController {
 			$venta['bonificacion'] = (isset($params['bonificacion']))?$params['bonificacion']:0;				
 			
 			$mod = isset($params['modelos'])?$params['modelos']:array();
-			
-			$res =  $this->Ventas->setVenta($venta,$mod);
+			$pagos = isset($params['pagos'])?$params['pagos']:array();
+
+			$res =  $this->Ventas->setVenta($venta,$mod, $pagos);
 	
 			if(!($res['success'])){
 				throw new BadRequestException($res['msg']);
@@ -109,6 +113,7 @@ class VentasController extends AppController {
 			// Retorna la info de la venta creada
 			$venta['id'] = $res['ventas_id'];
 			$venta['modelos'] = $mod; 
+
 			echo $this->json('Venta', $venta);
 			
 
@@ -133,7 +138,7 @@ class VentasController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeEditar('venta', 'delete'))
+			if (!$this->PermisosComponent->puedeEditar('ventas', 'delete'))
 				throw new ForbiddenException('No tiene permiso para eliminar una venta'); 
 			
 			$this->Ventas->eliminarVenta($idVenta);
@@ -145,6 +150,87 @@ class VentasController extends AppController {
 		}	
 	}
 	
+	
+	
+	
+
+	/************************************* PAGOS **********************************/
+	
+	
+	/**
+	* PAGOS
+	* Muestra los pagos del pedido con id idVenta
+	*/
+	function pagos($idVenta) {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('ventas', 'show'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			$venta = $this->Ventas->getPagos($idVenta); 
+			echo $this->json('', $venta); 
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
+	
+	
+	/**
+	* PAGOS
+	* Guarda el pago $pago recibido 
+	*/
+	function addPago($pago) {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('ventas', 'addPago'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			if(isset($_POST['pago']) && isset($_POST['idVenta'])){
+				
+				$pago = $this->Ventas->addPago($_POST['pago'], $_POST['idVenta']); 
+			
+				echo $this->json('', $pago); 
+				
+			}else
+				throw new BadRequestException('Los datos del pago están incompletos.');
+			
+			
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
+	
+	
+	
+		
+	/*******
+	* DELETE
+	* Elimina un pago de la venta.
+	* Params (DELETE): $idPago
+	*/
+	function deletePago($idPago) {
+		
+		try {
+		
+			if (!$this->PermisosComponent->puedeEditar('ventas', 'deletePago'))
+				throw new ForbiddenException('No tiene permiso para eliminar un pago de la venta'); 
+			
+			$this->Ventas->deletePago($idPago);
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
 
 	
 	

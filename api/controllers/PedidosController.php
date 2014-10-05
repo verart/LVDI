@@ -9,10 +9,19 @@ class PedidosController extends AppController {
 		
 		try {
 			
+			
 			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
-			$pedidos = $this->Pedidos->getPedidos(); 
+			if(isset($_POST['filter']) && ($_POST['filter']!= ''))
+				if($_POST['filter'] == 'Entregado')
+					$opciones = array('conditions'=>array('estado'=>array('Entregado-Pago','Entregado-Debe')));
+				else
+					$opciones = array('conditions'=>array('estado'=>$_POST['filter']));
+			else
+					$opciones = array(); 
+					
+			$pedidos = $this->Pedidos->getPedidos($opciones, $_POST['pag']); 
 			
 			echo $this->json('Pedidos', $pedidos);
 
@@ -49,6 +58,51 @@ class PedidosController extends AppController {
 		}	
 	}
 	
+	
+	/**
+	* MODELOS
+	* Muestra los modelos del pedido con id idPedido
+	*/
+	function modelos($idPedido) {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			$pedido = $this->Pedidos->getModelos($idPedido); 
+			echo $this->json('', $pedido); 
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
+	
+	
+	
+	
+	/**
+	* PAGOS
+	* Muestra los pagos del pedido con id idPedido
+	*/
+	function pagos($idPedido) {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			$pedido = $this->Pedidos->getPagos($idPedido); 
+			echo $this->json('', $pedido); 
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
 	
 	
 	
@@ -121,7 +175,7 @@ class PedidosController extends AppController {
 		try {
 		
 			if (!$this->PermisosComponent->puedeAcceder('pedidos','update'))
-				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+				throw new ForbiddenException('No tiene permiso para actualizar pedidos'); 
 			
 			$params = getPutParameters();
 			
@@ -131,7 +185,7 @@ class PedidosController extends AppController {
 			if (!$this->parametrosRequeridosEn(array('clientesPM_id', 'estado', 'fecha', 'total', 'id'), $params))
 				throw new BadRequestException('Los datos del pedido están incompletos');
 			
-			//Datos del producto
+			//Datos del pedido
 			$ped = array(	'id'=>$params['id'],
 							'clientesPM_id'=>$params['clientesPM_id'], 
 							'total'=>$params['total'],  
@@ -145,7 +199,7 @@ class PedidosController extends AppController {
 			
 			
 			// UPDATE de pedido
-			$res = $this->Pedidos->setPedido($ped,$params['modelos']);
+			$res = $this->Pedidos->setPedido($ped,$params['modelos'], $params['pagos']);
 				
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
@@ -155,6 +209,16 @@ class PedidosController extends AppController {
 			if(!empty($params['mod2delete']))
 				foreach($params['mod2delete'] as $field => $value){
 					$result = $this->Pedidos->removeModelo($value['id']);
+					
+					if(!$result['success'])
+						throw new BadRequestException($result['msg']);									
+			}
+			
+			
+			// DELETE de pagos del pedido
+			if(!empty($params['pagos2delete']))
+				foreach($params['pagos2delete'] as $field => $value){
+					$result = $this->Pedidos->removePago($value['id']);
 					
 					if(!$result['success'])
 						throw new BadRequestException($result['msg']);									
