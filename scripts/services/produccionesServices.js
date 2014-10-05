@@ -5,17 +5,15 @@ app.service('responsablesService', ['$http', function ($http) {
         	/******************************
 			RESPONSABLES
 			******************************/        
-            responsables:function(success) {
+            responsables:function(p,f){
 	            return $http({
-	            	method: 'GET',
+	            	method: 'POST',
 	            	url: dir_api + '/responsables/index',
+	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-	            .success(function(data) { success(data.DATA);} );
             },
-            
-            
-            
+
             
             /******************************
             ADDRES
@@ -65,7 +63,7 @@ app.service('responsablesService', ['$http', function ($http) {
             nombresResponsables:function() {
 	            return $http({
 	            	method: 'GET',
-	            	url: dir_api + '/responsables/index',
+	            	url: dir_api + '/responsables/listAll',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             }
@@ -80,11 +78,11 @@ app.service('responsablesService', ['$http', function ($http) {
 
 .service('produccionesService', ['$http', function ($http) {
         return {
-            producciones:function(e) {
+            producciones:function(e,p,f) {
 	           return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/producciones/index',
-	            	data: $.param({estado:e}),
+	            	data: $.param({estado:e, pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
@@ -127,6 +125,19 @@ app.service('responsablesService', ['$http', function ($http) {
 	            return $http({
 	            	method: 'DELETE',
 	            	url: dir_api + '/producciones/'+id+'/delete',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
+            
+            /******************************
+            MODELOS DEL PRODUCCION
+            ******************************/
+            modelosProduccion:function (id) { 
+	                    
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/producciones/'+id+'/modelos',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	            

@@ -1,0 +1,154 @@
+	<!-- barra -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+	  
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      <ul class="nav navbar-nav">	        
+	        <li>
+	        	<img src="img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px; margin-bottom:5px;" />
+	        </li>	      
+	        <li ng-if="(usuario.getUserRole()=='cuentas')"  class="middle active">
+	        	<a href="#!/resumen">Resumen</a></li>
+	        <li ng-if="(usuario.getUserRole()=='cuentas')" class="middle">
+	        	<a href="#!/ventas">Ventas</a></li> 
+	        <li ng-if="(usuario.getUserRole()=='cuentas')" class="middle">
+	        	<a href="#!/gastos">Gastos</a></li>
+
+	      </ul>
+	      
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+
+<div class="container-fluid" ng-controller="resumenCtrl" >
+
+	<div class="row-fluid">
+	
+		<div class="h2 titleh2"> Resumen </div>
+
+
+
+		<!-- SIDEBAR-->			
+		<div class=" col-xs-12 col-md-3 sidebar">
+			<form class="navbar-form navbar-left" role="search">
+			
+				<div class="form-group">
+					
+					
+					<div class="formElement">
+					
+						
+
+							<label class="control-label">Desde</label>
+						
+							<br/>	
+							
+							<div  class="form-group">
+								<input type="date" class="form-control small" id="desde"
+										placeholder="Fecha" 
+										ng-model="desde" style="padding-right:0px;"/>
+
+							</div>
+
+							<br/>	
+							<br/>	
+
+							<label class="control-label">hasta</label>
+								
+							<br/>	
+
+	
+							<div  class="form-group">
+								<input type="date" class="form-control small" id="hasta"
+										placeholder="Fecha" 
+										ng-model="hasta" style="padding-right:0px;"/>
+							</div>
+							
+						</div>	
+				
+					
+					<hr/>
+					
+					<button type="button" class="btn btn-primary" ng-click="cargar()"> Mostrar </button>
+					
+					      
+				</div>
+			</form>
+		</div>
+
+
+
+		<!-- BODY-->
+		<div class="col-xs-12 col-md-9 ">
+
+
+			<div class="tableContainer" style="display:flex" >
+			
+
+				<div class="col-xs-12 col-md-7 colDetalle">
+					
+					<p class="h3"> Ingresos</p>
+
+					<div class="col-xs-12 col-md-6">
+	
+						<p class="title2Resumen"> Ventas </p>
+						
+						<div class="detalle">
+							<p> Efectivo: {{resumenVentas.efectivo  | currency}}</p>
+							<p> Tarjeta: {{resumenVentas.tarjeta  | currency}}</p>
+							<p> Cheque: {{resumenVentas.cheque  | currency}}</p>
+							<p> Débito: {{resumenVentas.debito  | currency}}</p>
+							<div class="linea"></div>
+							<p> Total: {{resumenVentas.tarjeta + resumenVentas.efectivo + resumenVentas.cheque + resumenVentas.debito  | currency}}</p>
+						</div>
+						
+					</div>
+					
+					<div class="col-xs-12 col-md-6">
+	
+						<p class="title2Resumen"> Por Mayor </p>
+						
+						<div class="detalle">
+							<p> Efectivo: {{resumenPorMayor.efectivo | currency}}</p>
+							<p> Tarjeta: {{resumenPorMayor.tarjeta | currency }}</p>
+							<p> Cheque: {{resumenPorMayor.cheque | currency }}</p>
+							<p> Débito: {{resumenPorMayor.debito | currency }}</p>
+							<div class="linea"></div>
+							<p> Total: {{(resumenPorMayor.tarjeta + resumenPorMayor.efectivo + resumenPorMayor.cheque + resumenPorMayor.debito) | currency}}</p>
+						</div>
+						
+					</div>
+						
+				</div>
+	
+				<div class="col-xs-12 col-md-5">
+					<p class="h3"> Gastos </p>
+	
+						<div class="detalle">
+							<p> Efectivo: {{resumenGastos.efectivo | currency }}</p>
+							<p> Tarjeta: {{resumenGastos.tarjeta  | currency}}</p>
+							<p> Cheque: {{resumenGastos.cheque  | currency}}</p>
+							<p> Débito: {{resumenGastos.debito  | currency }}</p>			
+							<p> Transferencia: {{resumenGastos.transferencia  | currency }}</p>
+							<div class="linea"></div>
+							<p> Total: {{(resumenGastos.cheque + resumenGastos.tarjeta + resumenGastos.efectivo + resumenGastos.debito + resumenGastos.transferencia) | currency }}</p>
+						</div>
+				</div>
+				
+				
+
+
+			<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
+
+
+		</div>
+		
+		<!-- SIDEBAR-->			
+
+       
+       			
+	</div>
+</div>

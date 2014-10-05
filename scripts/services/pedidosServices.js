@@ -5,13 +5,13 @@ app.service('clientesPMService', ['$http', function ($http) {
         	/******************************
             CLIENTES POR MAYOR
             ******************************/        
-            clientes:function(success) {
+            clientes:function(p,f) {
 	            return $http({
-	            	method: 'GET',
+	            	method: 'POST',
 	            	url: dir_api + '/clientesPM/index',
+	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-	            .success(function(data) { success(data.DATA);} );
             },
             
             
@@ -89,13 +89,13 @@ app.service('clientesPMService', ['$http', function ($http) {
 
 .service('pedidosService', ['$http', function ($http) {
         return {
-            pedidos:function(success) {
-	            $http({
-	            	method: 'GET',
+            pedidos:function(f,p) {
+	            return $http({
+	            	method: 'POST',
 	            	url: dir_api + '/pedidos/index',
+	            	data:  $.param({filter:f,pag:p}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-	            .success(function(data) { success(data.DATA);} );
             },
             
             /******************************
@@ -138,7 +138,37 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	            
+            }, 
+            
+            
+                        
+            /******************************
+            MODELOS DEL PEDIDO
+            ******************************/
+            modelosPedido:function (id) { 
+	                    
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/pedidos/'+id+'/modelos',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
+            
+            
+            /******************************
+            PAGOS DEL PEDIDO
+            ******************************/
+            pagosPedido:function (id) { 
+	                    
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/pedidos/'+id+'/pagos',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
             }
+            
             
            
         }

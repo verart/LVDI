@@ -4,23 +4,78 @@ app.controller('produccionesCtrl',
 
 	function ($scope, $modal, $filter, produccionesService, productosService, responsablesService, AlertService) {
        
+       	/**********************************************************************
+	    ALERTS
+	    Mensajes a mostrar
+	    **********************************************************************/
+	    $scope.alerts = [ ];
+	    
         
-	    $scope.filterProds ={estado:''};
+	    $scope.filterProds ={ estado:'Retirado'};
 	    $scope.order = '-fecha';
-	    $scope.value = 'Retirado';
+	    $scope.query = '';
+	    $scope.filterSubmitted = '';
 
 	    /*****************************************************************************************************
 	     PRODUCCIONES     
 	    *****************************************************************************************************/
-	    produccionesService.producciones('Retirado').then(
-			//success
-			function(promise){
-			     $scope.data = promise.data.DATA;                   
-			},
-			//Error al actualizar
-			function(error){ AlertService.add('danger', error.data.MSG);}
-		);
+	    $scope.page = 0;            
+	    $scope.data = [];
+	    $scope.parar = false;
+	    
+	    $scope.cargarProducciones = function () {
+		    $scope.page ++;                   
+
+	    	produccionesService.producciones($scope.filterProds.estado, $scope.page, $scope.filterSubmitted).then(
+				//success
+				function(promise){
+				     if(promise.data.DATA.length > 0){
+						for( i=0; i < promise.data.DATA.length; i++)
+							$scope.data.push(promise.data.DATA[i]);
+					}else{
+						if($scope.data.length > 0)
+							$('.finProducciones').html('<div class="fin"></div>');
+						$scope.parar = true;
+					}                   
+				},
+				//Error al actualizar
+				function(error){ AlertService.add('danger', error.data.MSG);}
+			);
+	    }  
+	    
+	    $scope.cargarProducciones();
+	    
+	    
+	    	   
 	   
+	   
+	    /*****************************************************************************************************
+	     FILTRARPRODUCCIONES 
+	     Filtra las producciones de contengan el texto en nombre de responsable o en motivo	    
+	    *****************************************************************************************************/
+	    $scope.filtrarProducciones = function () {
+		  		
+		  	 $scope.parar = false;
+		  	 $scope.data = [];
+		  	 $scope.page = 0;
+		  	 $scope.filterSubmitted = $scope.query;
+		  	 $scope.cargarProducciones();
+		  	 
+		};
+	    
+		    
+	    /*****************************************************************************************************
+	     CARGAR PRODUCCIONES segun estado	    
+	    *****************************************************************************************************/
+	    $scope.$watch('filterProds.estado', function(newValue, oldValue) {
+		  	
+		  	 if(newValue != oldValue) 
+		  	 	$scope.filtrarProducciones();
+    
+		}, true);
+	    
+	    
+	    
 	    
 	    
 	    
@@ -196,37 +251,14 @@ app.controller('produccionesCtrl',
 			);	
 		}
 	     
+	     
 	     		
 		/* NUEVO *******************/
 	 	$scope.nuevo = function (userRole) {
             $scope.openProduccion('',userRole);
         };
 	   
-	   
-	           
-                
-        
-	     		
-		/* FILTER  *******************/
-	 	$scope.filtrarProducciones = function(value) {
-	 			
-	 		
-		   	produccionesService.producciones(value).then(
-				//success
-				function(promise){
-				     $scope.data = promise.data.DATA;                   
-				},
-				//Error al actualizar
-				function(error){ AlertService.add('danger', error.data.MSG);}
-		);		
 
-
-        };
-        
-        
-	   
-	   
-	   
 	   
 	   
 	    /************************************************************
@@ -246,6 +278,24 @@ app.controller('produccionesCtrl',
 		}
 		
 		
+			    	    
+	    /*****************************************************************************************************
+	     INFINITE SCROLL	    
+	    *****************************************************************************************************/
+	    if ($('#infinite-scrolling').size() > 0) {
+	    
+			$(window).on('scroll', function() {
+
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+			  		$scope.cargarProducciones();
+		    	}
+		  	});
+		  	return;
+		};
+	    
+	    	    
+		
+		
     
 }]);
 
@@ -258,7 +308,7 @@ app.controller('produccionesCtrl',
  ModalProduccionInstanceCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
+var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, produccionesService, info) {
 		  
 		  
 		  $scope.estados = ['Retirado','Devuelto'];
@@ -290,6 +340,19 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, inf
 		  	var original = angular.copy(info.produccion);
 		  	$scope.produccion = info.produccion;
 		  	$scope.form.responsable = {nombre:$scope.produccion.responsable, id:$scope.produccion.responsables_id};
+		  	
+		  			  	
+		  	//Modelos del pedido
+		  	produccionesService.modelosProduccion(info.produccion.id).then(
+					    			//Success
+					    			function(promise){
+					    				$scope.produccion.modelos = promise.data.DATA;
+					    			},
+					    			//Error al eliminar
+					    			function(error){
+						    			AlertService.add('danger', error.data.MSG);
+					    			}
+					    		);
 		  	
 		  	$scope.produccion.fecha= (new Date($scope.produccion.fecha)).toISOString().slice(0, 10);
 		  	$scope.produccion.fecha_devolucion = (new Date($scope.produccion.fecha_devolucion)).toISOString().slice(0, 10);

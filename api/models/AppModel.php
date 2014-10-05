@@ -19,19 +19,38 @@ class AppModel {
 		
 	}
 	
+	
 	/***************** CRUD *************************/
 	function _escapeField($field) {
 		return "`$field`";
 	}
 	
+	
+	
 	/**
 	 * Crea un string para meter en un sql a partir de un array de campo => valor
 	 */
 	function _buildConditions($conditions = array()) {
-		$result = " WHERE ";
+		$result = " WHERE "; 
 		foreach($conditions as $field => $value)
-			$result .= " $field= '$value' AND ";
-		$result .= " (1 = 1) ";
+		
+			if($field == 'LIKE'){
+				$result .= "(";
+				foreach($value as $field2 => $value2)
+					$result .= " ( $field2 LIKE '%$value2%' ) OR ";	
+				$result .= " (1 <> 1) ) AND " ;	
+			}	
+			else{		
+				if(is_array($value)){ 			
+					$result .= "(";
+					foreach($value as $field2 => $value2)
+						$result .= " ( $field= '$value2' ) OR ";
+					$result .= " (1 <> 1) ) AND " ;
+				}else		
+					$result .= " $field= '$value' AND ";
+			}		
+			
+			$result .= " (1 = 1) ";
 		
 		return $result;		
 	}
@@ -98,6 +117,7 @@ class AppModel {
 		return $result;
 	}
 	
+	
 	/**
 	 * Hace un select en la tabla.
 	 * @params options 
@@ -107,12 +127,12 @@ class AppModel {
 	 */
 	function readAll($options = array()) {
 	
-		$fields = (empty($options['fields']))?'*':explode($options['fields'],',');
+		$fields = (empty($options['fields']))?'*':implode(',',$options['fields']);
 		$conditions = (empty($options['conditions']))?'':$this->_buildConditions($options['conditions']);
 		$order = (empty($options['order']))?'': 'ORDER BY '.$this->table.'.'.$options['order'];
-	
-		$sql = "SELECT $fields FROM ".$this->table." $conditions $order";
 
+		$sql = "SELECT $fields FROM ".$this->table." $conditions $order";
+		
 		$sth = $this->con->prepare($sql);
 		$sth = $sth->execute();
 		
@@ -120,6 +140,34 @@ class AppModel {
 		
 		return $result;
 	}
+	
+	/**
+	 * Hace un select en la tabla y devuelve las pagin.
+	 * @params options 
+	 * 		{array} fields: campos que se ponen en el select.
+	 * 		{array} conditions: condiciones para el select.
+	 * 		{string} order: campo que ordena el reultado.
+	 * 		{int} page: pagina
+	 * 		{int} pageSize: tamaño pagina
+	 */
+	function readPage($options = array()) { 
+		$fields = (empty($options['fields']))?'*':explode($options['fields'],',');
+		$conditions = (empty($options['conditions']))?'':$this->_buildConditions($options['conditions']);
+		$order = (empty($options['order']))?'': ' ORDER BY '.$this->table.'.'.$options['order'];		
+		$limit =(empty($options['page']))?'':' LIMIT '.(($options['page']-1)*$options['pageSize']).', '.$options['pageSize'];
+
+
+	
+		$sql = "SELECT $fields FROM ".$this->table." $conditions $order $limit"; 
+		$sth = $this->con->prepare($sql);
+		$sth = $sth->execute();
+		
+		$result = $sth->fetchAll(PDO::FETCH_ASSOC);
+		
+		return $result;
+	}
+	
+	
 	
 	/**
 	 * Lee un registro de la tabla

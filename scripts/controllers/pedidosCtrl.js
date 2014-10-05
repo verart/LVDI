@@ -6,25 +6,66 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
        
        	$scope.userRole =''; 
 	    $scope.order = '-fecha';
-	    $scope.filterPedidos = {estado:''};
+	    $scope.filterPedidos = {estado:'Pendiente'};
 	    
 	    
 	    
+	    /**********************************************************************
+	    ALERTS
+	    Mensajes a mostrar
+	    **********************************************************************/
+	    $scope.alerts = [ ];
 	    
 	    
-	    /*****************************************************************************************************
+	   /*****************************************************************************************************
 	     PEDIDOS     
 	    *****************************************************************************************************/
-	    listPedidos = function(data){	    		
-		    $scope.data = data;
-	    }	    	    
-	    pedidosService.pedidos(listPedidos);
+	    $scope.page = 0;            
+	    $scope.data = [];
+	    $scope.parar = false;
+	    
+	    $scope.cargarPedidos = function () {
+	    	
+	    	$scope.page ++;                   
+
+	    	pedidosService.pedidos($scope.filterPedidos.estado, $scope.page).then(
+		    	//Success
+				function(promise){
+					if(promise.data.DATA.length > 0){
+						for( i=0; i < promise.data.DATA.length; i++)
+							$scope.data.push(promise.data.DATA[i]);
+					}else{
+						if($scope.data.length > 0)
+							$('.finPedidos').html('<div class="fin"></div>');
+						$scope.parar = true;
+					}					
+				},
+				//Error al actualizar
+				function(error){AlertService.add('danger', error.data.MSG);}
+			); 
+		}	
+
+
+	    $scope.cargarPedidos();
 	    
 	    
 	    
-	    
-	    
-	    
+		    
+	    /*****************************************************************************************************
+	     CARGAR PEDIDOS segun estado	    
+	    *****************************************************************************************************/
+	    $scope.$watch('filterPedidos.estado', function(newValue, oldValue) {
+		  	
+		  	 $scope.parar = false;
+		  	 $scope.data = [];
+		  	 $scope.page = 0;	
+		  	 if(newValue != oldValue) 
+		  	 	$scope.cargarPedidos();
+    
+		}, true);
+
+
+
 	    
 	    /*****************************************************************************************************
 	     PRODUCTOS / CLIENTES PARA PEDIDOS 
@@ -68,6 +109,9 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    param: idPed -> id de pedido. Si viene en blanco es un create 
 	    *************************************************************************/	
         $scope.openPedido = function (idPed, userRole) {
+  
+  
+	        //Traigo los pe
   
   
 	 		$scope.userRole = userRole;
@@ -238,6 +282,23 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 		
 		
         
+	    	    
+	    /*****************************************************************************************************
+	     INFINITE SCROLL	    
+	    *****************************************************************************************************/
+	    if ($('#infinite-scrolling').size() > 0) {
+	    
+			$(window).on('scroll', function() {
+
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+			  		$scope.cargarPedidos();
+		    	}
+		  	});
+		  	return;
+		};
+	    
+	    	    
+
         	
 }]);
 
@@ -247,52 +308,112 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
  ModalPedidoInstanceCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
+var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidosService, info) {
 		  
 		  
-		  $scope.fps = ['Efectivo', 'Tarjeta', 'Cheque'];	 
+		/**********************************************************************
+	    ALERTS
+	    Mensajes a mostrar
+	    **********************************************************************/
+	    $scope.alerts = [ ];
+		  
+		  		  
+		  $scope.fps = [
+		  	{'label':'Efectivo','value':'Efectivo'}, 
+		  	{'label':'Tarjeta','value':'Tarjeta'},
+		  	{'label':'Cheque','value':'Cheque'}, 
+		  	{'label':'Débito','value':'Debito'}];
+		  		 
 		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	 
 		  
-		  
-		      $.mockjax({
+		  //campos editables
+		  $.mockjax({
 			    url: '/estadosProductos',
 			    status: 200,
 			    responseTime: 400,
 			    response: function(settings) {
 			        this.responseText = $scope.estadosProductos;
 			     }        
-			});
+		   });
+		  		 
+		  
+		  
+		  /***************************************************
+		   SUMARPAGOS
+		   Retorna la suma de pagos registrados
+		  ****************************************************/	
+		  $scope.sumarPagos = function(){
+			  if($scope.pedido.pagos != undefined){
+			  		var tot = 0;
+			    	for( i=0; i < $scope.pedido.pagos.length; i++){
+				    	tot = tot + parseFloat($scope.pedido.pagos[i].monto, 10); 
+				    }	
+			    	return tot;	    
+			  }
+		  }	 
 		  
 		  
 		  $scope.userRole = info.userRole;
 		  $scope.form = {};
 		  $scope.p = {};
 		  $scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
+		  $scope.form.pago = {monto:'', FP:'', created:(new Date()).toISOString().slice(0, 10)};
 		  $scope.p.mod_options = info.p.mod_options;		  
 		  $scope.p.cl_options = info.p.cl_options;
 
 		  $scope.actionBeforeSave='';
 
-		  //Inicializo los datos del pedido	
+		  /*** Pedido para editar ***/
 		  if(info.pedido != ''){
 		  
 		  	var original = angular.copy(info.pedido);
 		  	$scope.pedido = info.pedido;
 		  	$scope.pedido.bonificacion = parseInt($scope.pedido.bonificacion,10);
-		  	$scope.form.cliente = {nombre:$scope.pedido.cliente, id:$scope.pedido.clientesPM_id, bonificacion:'0'};
-		  	
 		  	$scope.pedido.fecha= (new Date($scope.pedido.fecha)).toISOString().slice(0, 10);
+		  	$scope.pedido.pagos = [];
 		  	
-		  	 if(($scope.pedido.estado == 'Entregado-Pago') || ($scope.pedido.estado == 'Entregado-Debe'))
+		  	//Estado
+		  	if(($scope.pedido.estado == 'Entregado-Pago') || ($scope.pedido.estado == 'Entregado-Debe'))
 		  	 	$scope.estados = ['Entregado-Pago', 'Entregado-Debe'];
-		  	 else{
+		  	else{
 		  	 	$scope.estados = ['Pendiente', 'Terminado', 'Entregado-Pago', 'Entregado-Debe'];	  		  
-		  	 	
 		  	 	// si el pedido no fue entregado se puede editar (solo si es admin o taller)
 		  	 	$scope.EditEnabled  = ( ($scope.userRole=='admin') || ($scope.userRole=='taller') )
-		  	 }
+		  	}
+		  	
+		  	//Modelos del pedido
+		  	pedidosService.modelosPedido(info.pedido.id).then(
+					    			//Success
+					    			function(promise){
+					    				$scope.pedido.modelos = promise.data.DATA;
+					    			},
+					    			//Error al eliminar
+					    			function(error){
+						    			AlertService.add('danger', error.data.MSG);
+					    			}
+					    		);
+					    		
+			//Pagos del pedido
+		  	pedidosService.pagosPedido(info.pedido.id).then(
+					    			//Success
+					    			function(promise){
+					    				$scope.pedido.pagos = (promise.data.DATA || []);
+					    				$scope.pedido.totalPagos = $scope.sumarPagos();
+
+					    			},
+					    			//Error al eliminar
+					    			function(error){
+						    			AlertService.add('danger', error.data.MSG);
+					    			}
+					    		);		    		
+		  	
+		  	//Cliente del pedido 
+		  	$scope.form.cliente = {nombre:$scope.pedido.cliente, id:$scope.pedido.clientesPM_id, bonificacion:'0'};
+		  	
+		  	 
 		  	
 		  	
+		  /*** Pedido nuevo ***/
 		  }else{
 		  
 			  $scope.pedido = {
@@ -302,25 +423,32 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 			  			total:'0', 
 			  			clientesPM_id: "", 
 			  			cliente: "",
-			  			modelos:[], 
+			  			modelos:[],
+			  			pagos:[], 
 			  			bonificacion:0, 
 			  			totalFinal:0, 
 			  			FP:'',
 			  			nota: ''};
 		  			
 			  var original = $scope.pedido;
+
 			  $scope.form.cliente = {nombre:'', id:'', bonificacion:0};
 			  
 			  $scope.EditEnabled =true;
 			  
-			  
 	    	  $scope.estados = ['Pendiente', 'Terminado', 'Entregado-Pago', 'Entregado-Debe'];	
+	    	  
+	    	  $scope.pedido.totalPagos = 0;
 		  }
 		  
-		  $scope.pedido.mod2delete = [];
-
-
 		  
+		  //Arreglo de modelos para eliminar del pedido. 
+		  $scope.pedido.mod2delete = [];
+		  $scope.pedido.pagos2delete = [];
+
+
+
+		  /****************************************************** FUNCIONES ********************************************************/
 		  
 		  
 		  /***************************************************
@@ -331,8 +459,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  	$modalInstance.close({pedido:$scope.pedido, action:$scope.actionBeforeSave});
 		  };
 		  
-		  
-		   
 		  
 		  /***************************************************
 		   IMPRIMIR
@@ -351,8 +477,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  };
 		  
 		  
-		  
-		  
 		  /***************************************************
 		   CANCEL
 		   Se cierra el modal y retornan los datos del pedido original, sin cambios
@@ -361,8 +485,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  	$scope.back2original();
 		    $modalInstance.dismiss({action:'cancel'});
 		  };
-		  
-		  
 		  
 		  
 		  /***************************************************
@@ -376,8 +498,10 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  };
 		  
 
-		  // back2original
-		  // Copia en pedido los campos originales que se enviaron.  
+		  /***************************************************
+		   BACK2ORIGINAL
+		  Copia en pedido los campos originales que se enviaron.
+		  ****************************************************/  
 		  $scope.back2original = function(){
 			  $scope.pedido.cliente = original.cliente;
 			  $scope.pedido.total = original.total;
@@ -392,18 +516,14 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		  
 		  
-		  
-		  
-		  
+		     
+		  /******************************************************************************************************/
+		  /** MANEJO DE MODELOS **/
+		  /******************************************************************************************************/		   
+		   
+		   
 		  /***************************************************
-		   Manejo de tabla de modelos
-		  ****************************************************/		  
-		  
-		  
-
-		  
-		  /***************************************************
-		   ADD producto
+		   ADD modelo
 		   Agrega un modelo al pedido. Actualiza los totales
 		  ****************************************************/	  
 		  $scope.add= function() {
@@ -434,10 +554,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		  
 		  
-		  
-		  
 		 /***************************************************
-		   REMOVE producto
+		   REMOVE modelo
 		   Quita un modelo del pedido. Actualiza los totales
 		  ****************************************************/	  
 		  $scope.remove= function(index) {		  	
@@ -453,13 +571,10 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		  
 		 
 		 
-		 
-		 
 		 /*************************************************************************
 		 Cuando se modifica una cantidad debe actualizar los totales.
 		 Antes de modificarlo se quita la cantidad anterior y despues se suma el producto con la nueva cantidad
 		 *************************************************************************/		 
-/*
 		 $scope.removeOld= function(index){		 
 			 $scope.pedido.total =  parseInt($scope.pedido.total,10) - (parseInt($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
 		 }
@@ -468,7 +583,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 			 $scope.pedido.total =  parseInt($scope.pedido.total,10) + (parseInt($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
 			 	 
 		 }
-*/
 		 
 		 
 		 
@@ -518,6 +632,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		   WATCH PEDIDO.ESTADO
 		   Si el nuevo estado es 'Terminado' pasa el estado de todos los productos a terminado
 		  ****************************************************/	 
+
 		  $scope.$watch('pedido.estado', function(newValue, oldValue) {
 		  		
 		    	if((newValue == 'Terminado')&(oldValue != 'Terminado')){
@@ -530,17 +645,22 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 		    	}	
 		    		    
 		  });
-		  
-		  
 
+		  /***************************************************
+		   WATCH PEDIDO.MODELOS
+		   Si se modifica el listado de modelos se actualiza el total
+		  ****************************************************/	
 		  $scope.$watch('pedido.modelos', function(newValue, oldValue) {
 		  		
-		  		var tot = 0;
-		    	for( i=0; i < $scope.pedido.modelos.length; i ++){
-			    	tot = tot + $scope.pedido.modelos[i].cantidad * $scope.pedido.modelos[i].precio; 
+		  		if($scope.pedido.modelos != undefined){
+			  		var tot = 0;
+			    	for( i=0; i < $scope.pedido.modelos.length; i ++){
+				    	tot = tot + $scope.pedido.modelos[i].cantidad * $scope.pedido.modelos[i].precio; 
+				    }	
+			    	$scope.pedido.total = tot;	    
 			    }	
-		    	$scope.pedido.total = tot;	    
 		  }, true);
+
 	  
 		  		  
 		  /***************************************************
@@ -566,6 +686,58 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, info) {
 				}
 			}
 		  }  
+		   
+		   
+		   
+		   
+		   
+		  /******************************************************************************************************/
+		  /** MANEJO DE PAGOS **/
+		  /******************************************************************************************************/		   
+		   
+		  /***************************************************
+		   ADDPAGO
+		   Agrega el pago guardado en form.pago.  Actualiza los totales
+		  ****************************************************/	  
+		  $scope.addPago= function() {
+
+		  	if(( $scope.form.pago.monto  !=  '') & ( $scope.form.pago.FP  !=  '')) {
+		  	
+		  		$scope.form.pago.created = ($scope.form.pago.created ||  (new Date()).toISOString().slice(0, 10)) 
+		  					  		
+			  	$scope.pedido.pagos.push($scope.form.pago);
+			  	 
+			  	$scope.pedido.totalPagos =  parseFloat($scope.pedido.totalPagos) + parseFloat($scope.form.pago.monto);		  	
+			  	
+			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10)};
+			  	angular.element("#montoPago").focus();
+			  	angular.element("#montoPago").val('');
+			  	
+			  	if(($scope.pedido.totalFinal - $scope.pedido.totalPagos) == 0){
+				  	$scope.pedido.estado = "Entregado-Pago";
+			  	} 
+			  	
+			  }
+			}
+		  
+		  
+		  	/***************************************************
+		  	REMOVEPAGO
+		  	Quita un pago del pedido. Actualiza los totales
+		  	****************************************************/	  
+		  	$scope.removePago= function(index) {		  	
+		  	
+		  		$scope.pedido.totalPagos =  parseInt($scope.pedido.totalPagos,10) - parseInt($scope.pedido.pagos[index].monto, 10);
+		  	
+			  	//Solo si tiene id (esta guardado en la BD), guardo el id en pago2delete
+			  	if($scope.pedido.pagos[index].id != null)
+			  		$scope.pedido.pagos2delete.push({id:$scope.pedido.pagos[index].id});
+			  	
+			  	$scope.pedido.pagos.splice(index,1);
+			  	
+		  	}	 
+
+		   
 		   
 }
 

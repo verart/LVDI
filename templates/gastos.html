@@ -1,0 +1,174 @@
+	<!-- barra -->
+	<nav class="navbar navbar-default" role="navigation">
+	  <div class="container-fluid">
+	  
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      
+	      	      
+	      <ul class="nav navbar-nav">	        
+	        <li>
+	        	<img src="img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px; margin-bottom:5px;" />
+	        </li>	      
+	        <li ng-if="(usuario.getUserRole()=='cuentas')"  class="middle">
+	        	<a href="#!/resumen">Resumen</a></li>
+	        <li ng-if="(usuario.getUserRole()=='cuentas')" class="middle">
+	        	<a href="#!/ventas">Ventas</a></li>
+	        <li ng-if="(usuario.getUserRole()=='cuentas')" class="middle active">
+	        	<a href="#!/gastos">Gastos</a></li>
+	      </ul>	      
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+
+<div class="container-fluid" ng-controller="gastosCtrl" >
+
+	<div class="row-fluid">
+	
+		<div class="modal-header"  style="margin-bottom: 18px;">
+			
+			
+			<div class="h2 titleh2"> Gastos </div>
+			       
+			
+			<br/>
+        
+			
+			
+			<div class="row">
+			
+				<div class="col-xs-12 col-sm-4">
+				
+				
+					<!-- FILTRO DE GASTOS	 -->
+					
+					<div class="form-group filterGastos">
+							
+						<div class="formElement row ">
+						
+							<div class="col-xs-12 col-sm-5">
+								<label class="control-label">Desde</label>
+								<br/>	
+								<div  class="form-group">
+										<input type="date" class="form-control small filterFechaGastos" id="desde"
+													ng-model="desde" style="padding-right:0px;"/>
+								</div>	
+							</div>		
+							<div class="col-xs-12 col-sm-5">
+								<label class="control-label sinMargin">hasta</label>
+								<br/>	
+								<div  class="form-group">
+									<input type="date" class="form-control small filterFechaGastos sinMargin" id="hasta"
+												ng-model="hasta" style="padding-right:0px;"/>
+								</div>	
+							</div>
+									
+							<div class="col-xs-12 col-sm-2">
+								<button type="button" class="btn btn-primary buttonFilter" ng-click="cargar()"> Mostrar </button>	
+							</div>				
+						</div>	
+						
+						<hr/>
+								      
+					</div>
+
+				
+			
+					<!-- NUEVO GASTO	 -->
+					<div class="boxPeak">
+								
+						<div class="pull-right arrow-right"></div>
+										
+						<h5>Nuevo gasto</h5>
+						
+						<div  class="form-group">
+								<input type="date" class="form-control small" id="created"
+										placeholder="Fecha" ng-model="gasto.created"  
+										ng-model="gasto.created" style="padding-right:0px;"/>
+						</div>
+						
+						<div class="form-group">				
+							<input type="number" id="monto" class="form-control small filterInput" focus-me="{{true}}"
+								ng-model="gasto.monto" placeholder="Monto"/>
+						</div>
+
+						<div class="form-group">				
+							<select class="form-control small filterInput selectpicker" 
+								ng-model="gasto.FP" 
+								ng-options="fp.value as fp.label for (k,fp) in fps"
+								ng-init="gasto.FP = 'Efectivo'">
+							</select> 
+						</div>
+
+						<div class="form-group">				
+							<textarea id= "descripcion" class="form-control" rows="4" placeholder="Descripción" 
+							ng-model="gasto.descripcion" ng-enter="addGasto()"></textarea>
+						</div>
+
+						
+										
+						<div class="row" style="margin-top:5px;">				
+							<div class="colForm col-xs-6 col-md-6">
+								<button class="btn btn-default" ng-click="addGasto()" > Agregar </button>
+							</div>
+							
+						</div>
+						
+					</div>
+					
+					<br/>
+					
+					
+				</div>
+				
+				
+				
+				<!-- DETALLE - GASTOS  -->
+				<div class=" col-xs-12 col-sm-8">
+				
+					<div class="tableContainer">
+					<table class="table table-condensed table-hover">
+						<thead>
+							<tr>
+								<th class="col-md-2">Fecha</th>
+							  	<th class="col-md-5">Descripción</th>
+							  	<th class="col-md-2">Monto</th>
+							  	<th class="col-md-3">F.Pago</th>
+							  	<th class="col-md-1 text-center"> </th>
+							  </tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="g in gastos">
+								<td class="col-md-2">{{g.created}}</span></td>
+								<td class="col-md-6"> {{g.descripcion}}  </td>
+								<td class="col-md-2"> {{g.monto | currency}}  </td>
+								<td class="col-md-3"> {{g.FP}}  </td>
+								<td class="col-md-1 text-center">				
+										
+									<span 	class="glyphicon glyphicon-remove accionesLst link"  
+											title="Quitar gasto"
+											ng-click="removeGasto($index)">
+									</span>
+				 
+								</td>
+							</tr>
+							<tr><td class="aviso" colspan="6" style="text-align=center" ng-if="gastos.length == 0">
+								No hay gastos</td>
+							</tr>
+						</tbody>
+					</table>										
+					</div>
+				
+					
+	 			</div>	
+				
+			</div>	
+			
+
+
+
+	       
+       			
+	</div>
+</div>

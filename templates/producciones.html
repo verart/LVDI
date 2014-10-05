@@ -59,18 +59,18 @@
 						
 						<div class="controls opciones">
 							<label class="radio small">
-								<input type="radio" value="Retirado" ng-model="value"
-								name="pedido[estado]" ng-change="filtrarProducciones(value)"> 
+								<input type="radio" value="Retirado" ng-model="filterProds.estado"
+								name="producciones[estado]"> 
 								Sólo los Retirados
 							</label>
 							<label class="radio small">
-								<input type="radio" value="Devuelto" ng-model="value"
-								name="pedido[estado]" ng-change="filtrarProducciones(value)"> 
+								<input type="radio" value="Devuelto"  ng-model="filterProds.estado"
+								name="producciones[estado]"> 
 								Sólo los Devueltos
 							</label>						
 							<label class="radio small">
-								<input type="radio" value="" ng-model="value" 
-								name="pedido[estado]" ng-change="filtrarProducciones(value)"> 
+								<input type="radio" value=""  ng-model="filterProds.estado" 
+								name="producciones[estado]"> 
 								Todos
 							</label>
 							
@@ -79,7 +79,7 @@
 					
 					<hr/>
 					
-					<button type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nueva produccion </button>
+					<button type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nueva producción </button>
 					
 					      
 				</div>
@@ -92,7 +92,7 @@
 		<div class="col-xs-12 col-md-9 ">
 			<div class="tableContainer" >
 			
-				<table class="table table-hover table-condense">
+				<table class="table table-hover table-condense"  id="infinite-scrolling">
 			  	<thead>
 			  		<tr>
 			  			<th>Responsable</th>
@@ -114,16 +114,13 @@
 					
 		  			<tr ng-show="(filteredProds.length < 1)" class="aviso"> <td colspan="4"> No hay producciones</td></tr>
 				</tbody>
-			</table>
+				</table>
 
-			<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
-
-
-		</div>
+				<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
+			
+			</div>
 		
-		<!-- SIDEBAR-->			
-
-       
-       			
+			<div class="finProducciones"></div>
+							
 	</div>
 </div>

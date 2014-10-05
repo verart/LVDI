@@ -4,28 +4,69 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	function ($scope, $modal, ventasService, productosService, AlertService, $filter) {
        
        
-        
-/* 	    $scope.order = '-fecha'; */
-	    $scope.value = 'hoy';
+
+		/**********************************************************************
+	    ALERTS
+	    Mensajes a mostrar
+	    **********************************************************************/
+	    $scope.alerts = [ ];
+	    
+	    
+
 	    /*****************************************************************************************************
 	     VENTAS     
 	    *****************************************************************************************************/    	    
 	    fechaHoy = (new Date()).toISOString().slice(0, 10);
+	    $scope.filterVentas = {filter:'hoy'};
+	    $scope.totalVentas = 0;
+	    $scope.page = 1;            
+	    $scope.data = [];
+	    $scope.parar = false;
 	    
-	    ventasService.ventas(fechaHoy,'').then(
-			//success
-			function(promise){
-			     $scope.data = promise.data.DATA;                   
-			},
-			//Error al actualizar
-			function(error){ AlertService.add('danger', error.data.MSG);}
-		);		
+	    
+	    $scope.cargarVentas = function () {
+	 		
+	 		
+	 		desde = ($scope.filterVentas.filter == 'hoy')? fechaHoy : '';
+	 		conDeuda = ($scope.filterVentas.filter == 'conDeuda')? 1 : 0;
+	 		
+	 		ventasService.ventas(desde,'',conDeuda,$scope.page).then(
+				//success
+				function(promise){
+					if(promise.data.DATA.length > 0){
+						for( i=0; i < promise.data.DATA.length; i++)
+							$scope.data.push(promise.data.DATA[i]);
+						$scope.page ++;                   
+					}else{
+						if($scope.data.length > 0)
+							$('.finVentas').html('<div class="fin"></div>');
+						$scope.parar = true;
+					}
+				},
+				//Error al actualizar
+				function(error){ AlertService.add('danger', error.data.MSG);}
+			);
+	
 
+
+        };
+	    
+	    $scope.cargarVentas();
 	    
 	    
-	    
-	    
-	    
+	    /*****************************************************************************************************
+	     CARGAR Ventas segun fecha	    
+	    *****************************************************************************************************/
+	    $scope.$watch('filterVentas.filter', function(newValue, oldValue) {
+		  		
+		  	 $scope.parar = false;
+		  	 $scope.data = [];
+		  	 $scope.page = 1;
+		  	 if(newValue != oldValue) 
+		  	 	$scope.cargarVentas();
+		  	 
+		}, true);
+	    		
 	    
 	    
 	    /*****************************************************************************************************
@@ -46,10 +87,6 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 			//Error al actualizar
 			function(error){ AlertService.add('danger', error.data.MSG);}
 		);		
-		
-		
-		
-		
 		
 		
 	   
@@ -172,24 +209,12 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
         
         
 	     		
-		/* FILTER  *******************/
-	 	$scope.filtrarVentas = function (value) {
-	 		
-	 		if (value == 'hoy') desde = fechaHoy;
-	 		else desde = '';	
-	 		
-		    ventasService.ventas(desde,'').then(
-				//success
-				function(promise){
-				     $scope.data = promise.data.DATA;                   
-				},
-				//Error al actualizar
-				function(error){ AlertService.add('danger', error.data.MSG);}
-			);		
 
-
-        };
-        
+	    
+	    
+	    
+	    
+	            
 
         /************************************************************************
 	    SHOWVENTA
@@ -287,7 +312,11 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	 	    var modalInstance = $modal.open({
 		    	templateUrl: dir_root+'/templates/ventas/notas.html',
 		    	windowClass: 'wndNotas',
+<<<<<<< HEAD
 		    	controller: 'ModalNotasInstanceCtrl',
+=======
+		    	controller: 'ModalNotaInstanceCtrl',
+>>>>>>> desarrollo
 		    	backdrop: 'static',
 		    	keyboard: true
 		    });
@@ -296,6 +325,23 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 
         
         
+	    	    
+	    /*****************************************************************************************************
+	     INFINITE SCROLL	    
+	    *****************************************************************************************************/
+	    if ($('#infinite-scrolling').size() > 0) {
+	    
+			$(window).on('scroll', function() {
+
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+			  		$scope.cargarVentas();
+		    	}
+		  	});
+		  	return;
+		};
+	    
+	    
+
         	
 }]);
 
@@ -307,37 +353,81 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
  ModalVentaInstanceCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService, AlertService, $filter, info) {
+var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info) {
 		  
 		  
-		  $scope.fps = ['Efectivo', 'Tarjeta', 'Cheque'];	 
+		  $scope.fps = [
+		  	{'label':'Efectivo','value':'Efectivo'}, 
+		  	{'label':'Tarjeta','value':'Tarjeta'},
+		  	{'label':'Cheque','value':'Cheque'}, 
+		  	{'label':'Débito','value':'Debito'}];	 
 		 
 		  $scope.userRole = info.userRole;
 		  $scope.form = {};
 		  $scope.p = {};
 		  $scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
+ 		  $scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+
 		  $scope.p.mod_options = info.p.mod_options;		  
 		  $scope.p.cl_options = info.p.cl_options;
+		  
+		  
+		  /***************************************************
+		   SUMARPAGOS
+		   Retorna la suma de pagos registrados
+		  ****************************************************/	
+		  $scope.sumarPagos = function(){
+			  if($scope.venta.pagos != undefined){
+			  		var tot = 0;
+			    	for( i=0; i < $scope.venta.pagos.length; i++){
+				    	tot = tot + (parseFloat($scope.venta.pagos[i].monto, 10) + (parseFloat($scope.venta.pagos[i].monto, 10)*(parseInt($scope.venta.pagos[i].bonificacion)/100))); 
+				    }	
+			    	return tot;	    
+			  }
+		  }	 
+		  
 
 		  //Inicializo los datos de la venta	
 		  if(info.venta != ''){
 		  
-		  	var original = angular.copy(info.venta);
 		  	$scope.venta = info.venta;
 		  	
-		  	$scope.venta.fecha= (new Date($scope.venta.fecha)).toISOString().slice(0, 10);
+		  	$scope.venta.created= (new Date($scope.venta.created)).toISOString().slice(0, 10);
+		  	$scope.venta.pagos = [];
+		  	
+					    		
+			//Pagos de la venta
+		  	ventasService.pagosVenta(info.venta.id).then(
+					    			//Success
+					    			function(promise){
+					    				$scope.venta.pagos = (promise.data.DATA || []);
+					    				$scope.venta.totalPagos = $scope.sumarPagos();
+console.log($scope.venta.totalPagos);
+					    			},
+					    			//Error al eliminar
+					    			function(error){
+						    			AlertService.add('danger', error.data.MSG);
+					    			}
+					    		);	
+		  	
+		  	
 		  	
 		  }else{
 		  
 			  $scope.venta = {
-			  			fecha: (new Date()).toISOString().slice(0, 10),
+			  			created: (new Date()).toISOString().slice(0, 10),
 			  			total:'0', 
-			  			modelos:[], 
+			  			modelos:[],
+			  			pagos:[], 
 			  			bonificacion:0, 
-			  			FP:''};
+			  			FP:'Efectivo',
+			  			totalPagos:0,
+			  			deuda:0,
+			  			variosPagos:0
+			  			};
 		  			
-			  var original = $scope.venta;
 			  $scope.form.cliente = {nombre:'', id:'', bonificacion:0};
+
 		  }
 		  
 
@@ -346,12 +436,15 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  $scope.nuevoModeloId = '';
 
 		  
-		  
 		  /***************************************************
 		   OK
 		   Se cierra el modal y retornan los datos de la venta
 		  ****************************************************/ 
 		  $scope.ok = function () {
+		    
+		    //Si varios pagos es 0, cancela la deuda.
+		  	$scope.venta.deuda = $scope.venta.variosPagos * $scope.venta.deuda;
+		  	
 		  	$modalInstance.close({venta:$scope.venta, action:''});
 		  };
 		  
@@ -374,26 +467,11 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		   Se cierra el modal y retorna un indicador de que hay que eliminar la venta
 		  ****************************************************/
 		  $scope.deleteVenta = function () {
-			  $scope.back2original();	
 			  var res = {action:'delete', idVenta:$scope.venta.id};	  		
 			  $modalInstance.dismiss(res);
 		  };
 		  
 
-		  // back2original
-		  // Copia en venta los campos originales que se enviaron.  
-		  $scope.back2original = function(){
-			  $scope.venta.total = original.total;
-			  $scope.venta.fecha = original.fecha;			  
-			  $scope.venta.bonificacion = original.venta;
-			  $scope.venta.modelos = original.modelos;
-			  $scope.venta.FP = original.FP;
-		  };	
-		  
-		  
-		  
-		  
-		  
 		  
 		  
 		  /***************************************************
@@ -489,9 +567,11 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  
 		 
 		  
+		  
+		  
 		  /***************************************************
 		   WATCH VENTA.BONIFICACION
-		   Actualiza  totalFinal
+		   Actualiza  totalFinal, deuda
 		  ****************************************************/	 
 		  $scope.$watch('venta.bonificacion', function(newValue, oldValue) {
 		  		
@@ -499,12 +579,9 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  });
 		  
 		  
-		  
-		  
-		  
 		  /***************************************************
 		   WATCH VENTA.TOTAL
-		   Actualiza  totalFinal
+		   Actualiza  totalFinal, deuda
 		  ****************************************************/	 
 		  $scope.$watch('venta.total', function(newValue, oldValue) {
 		  		
@@ -513,11 +590,9 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  });
 		  
 		  
-		  
-		  
 		  /***************************************************
 		   WATCH VENTA.MONTOFAVOR
-		   Actualiza  totalFinal
+		   Actualiza  totalFinal, deuda
 		  ****************************************************/	 
 		  $scope.$watch('venta.montoFavor', function(newValue, oldValue) {
 		  		
@@ -526,15 +601,36 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  });
 		  
 		  
+		  /***************************************************
+		   WATCH VENTA.totalPagos
+		   Actualiza  totalFinal, deuda
+		  ****************************************************/	 
+		  $scope.$watch('venta.totalPagos', function(newValue, oldValue) {
+		  		
+		    	$scope.refreshTotal() ;
+			   			    
+		  });
+
+		  
+		  /***************************************************
+		   REFRESHTOTAL
+		   Actualiza  totalFinal, deuda
+		  ****************************************************/	 
 		  $scope.refreshTotal = function(){
 		  
-/* 				var desc =  parseFloat(document.getElementById(amtid4).innerHTML).toFixed(2) * (parseInt($scope.venta.bonificacion,10)/100);  */
 				var mon = !(($scope.venta.montoFavor == "" || $scope.venta.montoFavor == null))? parseInt($scope.venta.montoFavor,10):0.0;
 				
 		    	$scope.venta.totalFinal = parseInt($scope.venta.total,10) - mon;
 		    	
 		    	var desc =  parseInt($scope.venta.totalFinal,10) * (parseInt($scope.venta.bonificacion,10)/100);
 		    	$scope.venta.totalFinal = $scope.venta.totalFinal - desc;
+		    	
+		    	//Actualiza la deuda
+			  	$scope.venta.deuda = ($scope.venta.totalFinal - $scope.venta.totalPagos);
+			  	
+			  	if($scope.venta.deuda == 0){
+				  	$scope.venta.estado = "Entregado-Pago";
+			  	}
 
 		  }
 		  		
@@ -563,6 +659,126 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			
 		  }  
 		  
+
+		  
+		  
+		   /******************************************************************************************************/
+		  /** MANEJO DE PAGOS **/
+		  /******************************************************************************************************/		   
+		   
+		  /***************************************************
+		   ADDPAGO
+		   Agrega el pago guardado en form.venta.  Actualiza los totales
+		  ****************************************************/	  
+		  $scope.addPago= function() {
+
+		  	if(( $scope.form.pago.monto  !=  '') & ( $scope.form.pago.FP  !=  '')) {
+		  	
+		  		$scope.form.pago.created = ($scope.form.pago.created ||  (new Date()).toISOString().slice(0, 10)) 
+		  					  		
+			  	$scope.venta.pagos.push($scope.form.pago);
+			  	 
+			  	$scope.venta.totalPagos =  parseFloat($scope.venta.totalPagos) + parseFloat($scope.form.pago.monto) + 		
+			  		(parseFloat($scope.form.pago.monto)*($scope.form.pago.bonificacion/100));		  	
+			  	
+			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10)};
+			  	angular.element("#montoPago").focus();
+			  	
+			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+
+			  	
+			  }
+			}
+		  
+		  
+		  
+		  
+		  
+		  	/***************************************************
+		  	REMOVEPAGO
+		  	Quita un pago de la venta. Actualiza los totales
+		  	****************************************************/	  
+		  	$scope.removePago= function(index) {		  	
+		  	
+		  		$scope.venta.totalPagos =  parseInt($scope.venta.totalPagos,10) - ($scope.venta.pagos[index].monto + 		
+			  		($scope.venta.pagos[index].monto * ($scope.venta.pagos[index].bonificacion/100)));
+		  	
+			  	if($scope.venta.pagos[index].id != null)
+			  		$scope.venta.pagos2delete.push({id:$scope.venta.pagos[index].id});
+			  	
+			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+
+			  	$scope.venta.pagos.splice(index,1);
+			  	
+		  	}	 
+
+		 
+		 
+		 
+		 
+		  /***************************************************
+		   ADDPAGODEFINITIVO
+		   Agrega el pago guardado en form.venta.  Actualiza los totales. Guarda en la BD el pago
+		  ****************************************************/	  
+		  $scope.addPagoDefinitivo= function() {
+
+		  	if(( $scope.form.pago.monto  !=  '') & ( $scope.form.pago.FP  !=  '')) {
+		  		
+			  	ventasService.addPago($scope.form.pago, $scope.venta.id).then(
+			  	
+					//success
+					function(promise){
+						
+						$scope.form.pago.created = ($scope.form.pago.created ||  (new Date()).toISOString().slice(0, 10)) 
+		  					  		
+					  	$scope.venta.pagos.push(promise.data.DATA.pago);
+					  	 
+					  	$scope.venta.totalPagos =  parseFloat($scope.venta.totalPagos) + parseFloat($scope.form.pago.monto) + 		
+						  							  (parseFloat($scope.form.pago.monto)*(parseInt($scope.form.pago.bonificacion)/100));		  	
+					  	
+					  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+					  	angular.element("#montoPago").focus();
+					  	
+					},
+					//Error al actualizar
+					function(error){ AlertService.add('danger', error.data.MSG);}
+				);		
+			  	
+			  }
+			  
+		  }
+		
+		
+		  /***************************************************
+		   REMOVEPAGODEFINITIVO
+		   Agrega el pago guardado en form.venta.  Actualiza los totales. Guarda en la BD el pago
+		  ****************************************************/	  
+		  $scope.removePagoDefinitivo= function(index) {
+
+			  if($scope.venta.pagos[index].id != null){
+			  	
+			  	ventasService.deletePago($scope.venta.pagos[index].id).then(
+			  	
+					//success
+					function(promise){
+						
+						$scope.venta.totalPagos =  parseInt($scope.venta.totalPagos,10) - ($scope.venta.pagos[index].monto + 		
+					  		($scope.venta.pagos[index].monto * ($scope.venta.pagos[index].bonificacion/100)));
+				  	
+					  	
+					  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+		
+					  	$scope.venta.pagos.splice(index,1);					  	
+					},
+					//Error al actualizar
+					function(error){ AlertService.add('danger', error.data.MSG);}
+				);
+			}		
+			  	
+		  }
+
+
+
 }
 
 
@@ -574,7 +790,18 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
  ModalNotaInstanceCtrl
  Controller del modal para agregar/editar Notas  
 **************************************************************************************************************************/
-var ModalNotasInstanceCtrl = function ($scope, $modalInstance, notasService, AlertService) {
+app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'notasService', 'AlertService', 
+
+
+	function ($scope, $modal, $modalInstance, notasService, AlertService) { 
+
+	/**********************************************************************
+	ALERTS
+	Mensajes a mostrar
+	**********************************************************************/
+	$scope.alerts = [ ];
+
+
 
 	hoy = (new Date()).toISOString().slice(0, 10);
 
@@ -621,21 +848,39 @@ var ModalNotasInstanceCtrl = function ($scope, $modalInstance, notasService, Ale
 	****************************************************/	  
 	$scope.removeNota= function(index) {		  	
 		  	
+		  	//Solicita confirmación
+			var txt_confirm = { msj: "¿Está seguro que desea eliminar esta nota?", accept:"Si", cancel:"No"};
+			
+			var confirm = $modal.open({
+				templateUrl: dir_root+'/templates/confirm.html',
+				windowClass: 'wndConfirm',
+				controller: modalConfirmCtrl,
+				resolve: { txt: function(){ return txt_confirm } }
+			});
+
+			// Comportamiento al cerrar el modal		    
+			confirm.result
+			.then( 
+				// Si el modal cierra por ACEPTAR
+				function (r) {
+					
+					notasService.deleteNota($scope.notas[index].id).then(
+						//success
+						function(promise){
+							$scope.notas.splice(index,1);
+						},
+						//Error al actualizar
+						function(error){ AlertService.add('danger', error.data.MSG);}
+					);	  		
+						
+				}, 
+				// Si el modal cierra por CANCELAR
+				function (res){}
+			);	
 		  	
-		  	notasService.deleteNota($scope.notas[index].id).then(
-					//success
-					function(promise){
-						$scope.notas.splice(index,1);
-					},
-					//Error al actualizar
-					function(error){ AlertService.add('danger', error.data.MSG);}
-				);	  		
-		  		  	
-		  	
-		  	
-		  }	 
-		  
-		  
+	}		 
+		 
+
 	
 	
 	/***************************************************
@@ -647,6 +892,8 @@ var ModalNotasInstanceCtrl = function ($scope, $modalInstance, notasService, Ale
 	};
 		  
 
-}	
+
+}]);	
+
 
 

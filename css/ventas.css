@@ -11,7 +11,7 @@
 .inputMontoFavor{
 	width: 116px;
 	font-size: small;
-	margin-left: 155px;
+	margin-left: 112px;
 }
 
 
@@ -19,3 +19,15 @@
 	width:75%;
 }
 
+
+.resaltar{
+	color: #0ba54b;
+}
+
+.radio .FP {
+	margin-top: 0px;
+}
+
+.highlighted{
+	color: #db5555;
+}

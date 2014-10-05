@@ -18,9 +18,9 @@ app.controller('ApplicationController', ['$scope','USER_ROLES', 'AuthService', '
 
 
 
-app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS', 'AuthService',
+app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS', 'AuthService','Session', 
 
-	function ($scope, $rootScope, $location, AUTH_EVENTS, AuthService) {
+	function ($scope, $rootScope, $location, AUTH_EVENTS, AuthService, Session) {
   
 		  
 		  $scope.credentials = {
@@ -34,10 +34,13 @@ app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS',
 		  $scope.login = function (credentials) {
 	    
 		    AuthService.login(credentials).then(
-		    
-		    	function () {
+		    //success
+		    	function() {
 			    	$rootScope.$broadcast(AUTH_EVENTS.loginSuccess);
-			    	$location.path('/productos');
+			    	if(Session.getUserRole() == 'cuentas')
+			    		$location.path('/resumen');
+			    	else
+			    		$location.path('/productos');
 			    	
 			    	
 			    }, 

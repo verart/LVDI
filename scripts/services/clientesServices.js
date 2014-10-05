@@ -5,13 +5,13 @@ app.service('clientesService', ['$http', function ($http) {
         	/******************************
             CLIENTES
             ******************************/        
-            clientes:function(success) {
+            clientes:function(p,f) {
 	            return $http({
-	            	method: 'GET',
+	            	method: 'POST',
 	            	url: dir_api + '/clientes/index',
+	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-	            .success(function(data) { success(data.DATA);} );
+	            });
             },
             
             

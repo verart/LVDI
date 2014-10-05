@@ -15,7 +15,13 @@ class ClientesPMController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'index'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
-			$clientes = $this->ClientesPM->getClientes();
+			$opciones = array('order'=>'nombre ASC','page'=>$_POST['pag'],'pageSize'=>10);
+			
+			if(isset($_POST['filter'])&& ($_POST['filter']!= ''))
+				$opciones['conditions']= array('LIKE' => array('nombre'=>$_POST['filter'], 'localidad'=>$_POST['filter']));
+
+
+			$clientes = $this->ClientesPM->getClientes($opciones);
 			echo $this->json('Clientes', $clientes);
 
 		} catch (Exception $e) {	
@@ -55,7 +61,8 @@ class ClientesPMController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'clientesName'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
-			$clientes = $this->ClientesPM->getClientesNames();
+			$opciones = array('order'=>'nombre ASC', 'fields'=>array('id','nombre','bonificacion'));
+			$clientes = $this->ClientesPM->getClientesNames($opciones);
 		
 			echo $this->json('Clientes por mayor', $clientes);
 
