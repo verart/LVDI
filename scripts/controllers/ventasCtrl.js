@@ -312,11 +312,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	 	    var modalInstance = $modal.open({
 		    	templateUrl: dir_root+'/templates/ventas/notas.html',
 		    	windowClass: 'wndNotas',
-<<<<<<< HEAD
-		    	controller: 'ModalNotasInstanceCtrl',
-=======
 		    	controller: 'ModalNotaInstanceCtrl',
->>>>>>> desarrollo
 		    	backdrop: 'static',
 		    	keyboard: true
 		    });
