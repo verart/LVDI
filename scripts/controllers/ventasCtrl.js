@@ -19,7 +19,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	    fechaHoy = (new Date()).toISOString().slice(0, 10);
 	    $scope.filterVentas = {filter:'hoy'};
 	    $scope.totalVentas = 0;
-	    $scope.page = 1;            
+	    $scope.page = 0;            
 	    $scope.data = [];
 	    $scope.parar = false;
 	    
@@ -29,14 +29,26 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	 		
 	 		desde = ($scope.filterVentas.filter == 'hoy')? fechaHoy : '';
 	 		conDeuda = ($scope.filterVentas.filter == 'conDeuda')? 1 : 0;
+	 		$scope.page ++;                   
 	 		
 	 		ventasService.ventas(desde,'',conDeuda,$scope.page).then(
 				//success
 				function(promise){
 					if(promise.data.DATA.length > 0){
-						for( i=0; i < promise.data.DATA.length; i++)
+						//tomo la última venta agregada
+						lastVenta = ($scope.data.length == 0) ? -1 : $scope.data[$scope.data.length-1].id;
+						firstNewVenta = promise.data.DATA[0].id;
+						//Si es la misma que la primera que me traigo en la nueva pag, le agrego los productos.
+						if(lastVenta == firstNewVenta){
+							for( j=0 ; j < promise.data.DATA[0].modelos.length; j++){
+								lastVenta = $scope.data[$scope.data.length-1].modelos.push(promise.data.DATA[0].modelos[j]);
+							}
+								
+							n = 1;
+						}else 
+							n = 0;
+						for( i = n; i < promise.data.DATA.length; i++)
 							$scope.data.push(promise.data.DATA[i]);
-						$scope.page ++;                   
 					}else{
 						if($scope.data.length > 0)
 							$('.finVentas').html('<div class="fin"></div>');
@@ -61,7 +73,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 		  		
 		  	 $scope.parar = false;
 		  	 $scope.data = [];
-		  	 $scope.page = 1;
+		  	 $scope.page = 0;
 		  	 if(newValue != oldValue) 
 		  	 	$scope.cargarVentas();
 		  	 
