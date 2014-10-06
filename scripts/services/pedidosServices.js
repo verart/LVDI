@@ -89,11 +89,11 @@ app.service('clientesPMService', ['$http', function ($http) {
 
 .service('pedidosService', ['$http', function ($http) {
         return {
-            pedidos:function(f,p) {
+            pedidos:function(e,p,f) {
 	            return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/pedidos/index',
-	            	data:  $.param({filter:f,pag:p}),
+	            	data:  $.param({estado:e,pag:p,filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },

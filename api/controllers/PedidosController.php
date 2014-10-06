@@ -13,14 +13,17 @@ class PedidosController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
-			if(isset($_POST['filter']) && ($_POST['filter']!= ''))
-				if($_POST['filter'] == 'Entregado')
+			if(isset($_POST['estado']) && ($_POST['estado']!= ''))
+				if($_POST['estado'] == 'Entregado')
 					$opciones = array('conditions'=>array('estado'=>array('Entregado-Pago','Entregado-Debe')));
 				else
-					$opciones = array('conditions'=>array('estado'=>$_POST['filter']));
+					$opciones = array('conditions'=>array('estado'=>$_POST['estado']));
 			else
 					$opciones = array(); 
-					
+			
+			if(isset($_POST['filter']) && ($_POST['filter']!= ''))
+				$opciones['conditions']['LIKE'] = array('localidad'=>$_POST['filter']);
+
 			$pedidos = $this->Pedidos->getPedidos($opciones, $_POST['pag']); 
 			
 			echo $this->json('Pedidos', $pedidos);
