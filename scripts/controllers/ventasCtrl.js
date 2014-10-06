@@ -40,10 +40,8 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 						firstNewVenta = promise.data.DATA[0].id;
 						//Si es la misma que la primera que me traigo en la nueva pag, le agrego los productos.
 						if(lastVenta == firstNewVenta){
-							for( j=0 ; j < promise.data.DATA[0].modelos.length; j++){
-								lastVenta = $scope.data[$scope.data.length-1].modelos.push(promise.data.DATA[0].modelos[j]);
-							}
-								
+							for( j=0 ; j < promise.data.DATA[0].modelos.length; j++)
+								lastVenta = $scope.data[$scope.data.length-1].modelos.push(promise.data.DATA[0].modelos[j]);					
 							n = 1;
 						}else 
 							n = 0;
@@ -62,20 +60,19 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 
 
         };
-	    
-	    $scope.cargarVentas();
-	    
+	    	    
 	    
 	    /*****************************************************************************************************
 	     CARGAR Ventas segun fecha	    
 	    *****************************************************************************************************/
 	    $scope.$watch('filterVentas.filter', function(newValue, oldValue) {
 		  		
-		  	 $scope.parar = false;
-		  	 $scope.data = [];
-		  	 $scope.page = 0;
-		  	 if(newValue != oldValue) 
+		  	 if(newValue != oldValue){ 
+		  	   	$scope.parar = false;
+		  	   	$scope.data = [];
+		  	   	$scope.page = 0;
 		  	 	$scope.cargarVentas();
+		  	 }
 		  	 
 		}, true);
 	    		
@@ -349,6 +346,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 		};
 	    
 	    
+
         	
 }]);
 
@@ -666,6 +664,7 @@ console.log($scope.venta.totalPagos);
 			
 		  }  
 		  
+
 		  
 		  
 		   /******************************************************************************************************/
@@ -752,7 +751,7 @@ console.log($scope.venta.totalPagos);
 			  	
 			  }
 			  
-		}
+		  }
 		
 		
 		  /***************************************************
@@ -784,11 +783,7 @@ console.log($scope.venta.totalPagos);
 		  }
 
 
-		  	
 
-
-
-		  
 }
 
 
@@ -812,6 +807,7 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 	$scope.alerts = [ ];
 
 
+
 	hoy = (new Date()).toISOString().slice(0, 10);
 
 	$scope.nota = {created: hoy, nota:''};
@@ -823,7 +819,7 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 			},
 			//Error al actualizar
 			function(error){ AlertService.add('danger', error.data.MSG);}
-		);		
+	);		
 
 
 	/***************************************************
@@ -857,7 +853,6 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 	****************************************************/	  
 	$scope.removeNota= function(index) {		  	
 		  	
-		  	
 		  	//Solicita confirmación
 			var txt_confirm = { msj: "¿Está seguro que desea eliminar esta nota?", accept:"Si", cancel:"No"};
 			
@@ -888,9 +883,8 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 				function (res){}
 			);	
 		  	
-		  }		 
-		  
-		    
+	}		 
+		 
 
 	
 	
@@ -901,8 +895,9 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 	$scope.salir = function () {
 		$modalInstance.close();
 	};
-		  
+		 
 
 }]);	
+
 
 

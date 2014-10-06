@@ -17,11 +17,11 @@ class Pedidos extends AppModel {
 	function getPedidos($opciones = array(), $requested_page = 1) {
 	
 		
-	 	$set_limit = " LIMIT ".(($requested_page - 1) * 15) . ",15";
+	 	$set_limit = " LIMIT ".(($requested_page - 1) * 15) . ",15"; 
 
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
-		
-		
+				
+	
 		$sql = "SELECT P.id, P.total, P.bonificacion, P.nota as nota, C.nombre as cliente, C.localidad as localidad, C.id as clientesPM_id, 					P.estado, P.fecha,P.fecha_entrega,  modelosPedidos.totalActual 
 				FROM pedidos P 
 				INNER JOIN clientespm C ON C.id = P.clientesPM_id 

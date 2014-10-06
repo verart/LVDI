@@ -7,7 +7,7 @@ class PermisosComponent extends AppComponent{
 	
 	var $acceso = array(
 		'productos'=>array(	'index','show','update','create','delete', 'baja', 'venta', 'reponer', 
-							'productosName', 'productosDisponibles', 'upload', 'saveFile', 'removeFile')
+							'productosName', 'productosDisponibles', 'upload', 'saveFile', 'removeFile', 'notas')
 	);
 		
 	var $edicion = array('productos','producciones','ventas','notas');

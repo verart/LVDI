@@ -15,9 +15,7 @@ class Notas extends AppModel {
 		$results = $this->readAll($opciones);
 		
 		return $results;
-		
 	}
-	
 	
 	
 	
@@ -79,5 +77,4 @@ class Notas extends AppModel {
 	
 	
 	
-}
-?>
+}?>

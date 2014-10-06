@@ -7,6 +7,8 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
        	$scope.userRole =''; 
 	    $scope.order = '-fecha';
 	    $scope.filterPedidos = {estado:'Pendiente'};
+	    $scope.query = '';
+	    $scope.filterSubmitted = '';
 	    
 	    
 	    
@@ -28,7 +30,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    	
 	    	$scope.page++;                   
 
-	    	pedidosService.pedidos($scope.filterPedidos.estado, $scope.page).then(
+	    	pedidosService.pedidos($scope.filterPedidos.estado, $scope.page, $scope.filterSubmitted).then(
 		    	//Success
 				function(promise){
 					if(promise.data.DATA.length > 0){
@@ -50,19 +52,31 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    
 	    
 	    
+	    	   
+	    /*****************************************************************************************************
+	     FILTRARPRODUCCIONES 
+	     Filtra las producciones de contengan el texto en nombre de responsable o en motivo	    
+	    *****************************************************************************************************/
+	    $scope.filtrarPedidos = function () {
+		  		
+		  	 $scope.parar = false;
+		  	 $scope.data = [];
+		  	 $scope.page = 0;
+		  	 $scope.filterSubmitted = $scope.query;
+		  	 $scope.cargarPedidos();
+		  	 
+		};
+	    
+	    
 		    
 	    /*****************************************************************************************************
 	     CARGAR PEDIDOS segun estado	    
 	    *****************************************************************************************************/
 	    $scope.$watch('filterPedidos.estado', function(newValue, oldValue) {
 	
-		  	 if(newValue != oldValue){ 	 		  	
-			  	 $scope.parar = false;
-			  	 $scope.data = [];
-			  	 $scope.page = 0;
-			  	 $scope.cargarPedidos();
-
-		  	 } 
+		  	 if(newValue != oldValue)	 		  	
+			  	 $scope.filtrarPedidos();
+		  	 
     
 		}, true);
 
