@@ -24,10 +24,10 @@ class NotasController extends AppController {
 				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
 					$opciones['conditions']= array('created<'=>$_POST['hasta']);
 
-	
+
 			$notas = $this->Notas->getNotas($opciones); 
-			
-			echo $this->json('Notas', $notas);
+
+			echo $this->json('Notas',$notas);
 
 		} catch (Exception $e) {	
 
@@ -111,9 +111,5 @@ class NotasController extends AppController {
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 	}
-	
-
-	
-	
-}
-?>
+		
+}?>

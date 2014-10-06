@@ -95,11 +95,6 @@ $route->add('/notas/delete','DELETE','Notas','delete');
 $route->add('/notas/create','POST','Notas','create');
 
 
-$route->add('/notas/index','POST','Notas','index');
-$route->add('/notas/delete','DELETE','Notas','delete');
-$route->add('/notas/create','POST','Notas','create');
-
-
 $route->add('/colaImpresion/index','GET','colaImpresion','index');
 $route->add('/colaImpresion/delete','DELETE','colaImpresion','delete');
 $route->add('/colaImpresion/deletePedido','DELETE','colaImpresion','deletePedido');

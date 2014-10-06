@@ -822,7 +822,7 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 			},
 			//Error al actualizar
 			function(error){ AlertService.add('danger', error.data.MSG);}
-		);		
+	);		
 
 
 	/***************************************************
@@ -898,8 +898,7 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 	$scope.salir = function () {
 		$modalInstance.close();
 	};
-		  
-
+		 
 
 }]);	
 
