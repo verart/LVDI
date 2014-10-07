@@ -12,19 +12,20 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 	    /**********************************************************************
 	     Recupera en data los responsables
 	    **********************************************************************/
- 	    $scope.page = 1;            
+ 	    $scope.page = 0;            
 	    $scope.data = [];
 	    $scope.parar = false;
 	    
 	    $scope.cargarResponsables = function () {
 	 		
+	 		$scope.page ++;                   
+
 	 		responsablesService.responsables($scope.page,$scope.filterSubmitted).then(
 				//success
 				function(promise){
 					if(promise.data.DATA.length > 0){
 						for( i=0; i < promise.data.DATA.length; i++)
 							$scope.data.push(promise.data.DATA[i]);
-						$scope.page ++;                   
 					}else{
 						if($scope.data.length > 0)
 							$('.finResponsables').html('<div class="fin"></div>');
@@ -47,7 +48,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 		  		
 		  	 $scope.parar = false;
 		  	 $scope.data = [];
-		  	 $scope.page = 1;
+		  	 $scope.page = 0;
 		  	 $scope.filterSubmitted = $scope.query;
 		  	 $scope.cargarResponsables();
 		  	 
