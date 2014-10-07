@@ -165,7 +165,7 @@ var ModalUsuariosInstanceCtrl = function ($scope, $modalInstance, $filter, usuar
 		  	var original = $scope.usuarios;
 		  }
 		  
-		  $scope.perfiles = [{value:"1",text:'Admin'}, {value:"3", text:'Local'}, {value:"2", text:'Taller'}];	  		  
+		  $scope.perfiles = [{value:"1",text:'Admin'}, {value:"3", text:'Local'}, {value:"2", text:'Taller'},{value:"4", text:'Cuentas'}];	  		  
 		  
 		  /***************************************************
 		   OK
@@ -201,7 +201,7 @@ var ModalUsuariosInstanceCtrl = function ($scope, $modalInstance, $filter, usuar
 		  // Copia en producto los campos originales que se enviaron.  
 		  $scope.back2original = function(){
 			  $scope.usuarios.nombre = original.nombre;
-			  $scope.usuarios.clave = original.email;			  
+			  $scope.usuarios.clave = original.clave;			  
 			  $scope.usuarios.perfiles_id = original.perfiles_id;	
 		  };	
 		  	  
