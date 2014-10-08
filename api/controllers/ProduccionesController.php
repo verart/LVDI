@@ -204,7 +204,7 @@ class ProduccionesController extends AppController {
 		
 		try {
 			
-			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
+			if (!$this->PermisosComponent->puedeAcceder('producciones', 'show'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
 			$prod = $this->Producciones->getModelos($idProduccion); 

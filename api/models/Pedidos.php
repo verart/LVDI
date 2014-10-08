@@ -36,6 +36,8 @@ class Pedidos extends AppModel {
 				ORDER BY P.id   
 				$set_limit "; 
 				
+		
+				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	
 	   	$results = $query->fetchAll();
@@ -45,7 +47,7 @@ class Pedidos extends AppModel {
 		//Proceso los pedidos 
 		while($iF < count($results)){ 
 			$results[$iF]['cliente'] = utf8_encode($results[$iF]['cliente']);
-			
+			$results[$iF]['localidad'] = utf8_encode($results[$iF]['localidad']);
 			$iF++;
 		}	
 

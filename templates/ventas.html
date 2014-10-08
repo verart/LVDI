@@ -92,7 +92,7 @@
 					<br/>
 					<br/>
 
-					<button type="button" class="btn btn-primary" ng-click="openNotas()"> Nueva Nota </button>
+					<button type="button" class="btn btn-primary" ng-click="openNotas()"> Notas </button>
 
 					      
 				</div>
@@ -122,7 +122,7 @@
 				  					<li> {{mod.nombre}}</li>			  			
 			  					</ul>	
 			  				</td>
-			  				<td ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" ng-class="{true: 'highlighted'}[venta.deuda>0]"> 
+			  				<td ng-if="((usuario.getUserRole()!='taller'))" ng-class="{true: 'highlighted'}[venta.deuda>0]"> 
 			  					{{(venta.total - venta.montoFavor) - ((venta.bonificacion*(venta.total - venta.montoFavor))/100)| currency}}</td>
 		 					<td ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" > 
 		 						{{venta.bonificacion}}%</td>	

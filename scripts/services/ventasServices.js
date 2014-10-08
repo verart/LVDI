@@ -47,6 +47,30 @@ app.service('ventasService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	            
+            },
+            
+            /******************************
+            ADDPAGO
+            ******************************/
+            addPago:function (pago, idVenta) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/ventas/addPago',
+	            	data: $.param({pago:pago, idVenta:idVenta}),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
+            /******************************
+            ACTUALIZARNOTA
+            ******************************/
+            actualizarNota:function (n, idVenta) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/ventas/addNota',
+	            	data: $.param({nota:n, idVenta:idVenta}),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
             }
             
            
@@ -75,18 +99,6 @@ app.service('notasService', ['$http', function ($http) {
 	            	method: 'POST',
 	            	url: dir_api + '/notas/create',
 	            	data: $.param(nota),
-	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-            },
-            
-            /******************************
-            ADDPAGO
-            ******************************/
-            addPago:function (pago, idVenta) {
-	            return $http({
-	            	method: 'POST',
-	            	url: dir_api + '/ventas/addPago',
-	            	data: $.param({pago:pago, idVenta:idVenta}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },

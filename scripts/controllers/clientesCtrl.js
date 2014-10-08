@@ -194,13 +194,23 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		************************************************************/
 		$scope.exportarMails = function () {
 		  	
+		  	mails = [];
+		  	clientesService.getMails().then(
+			    			//SUCCESS
+			    			function(promise){ 
+			    				var printDoc = $modal.open({
+							    templateUrl: dir_root+'/templates/printDoc.html',
+							    windowClass: 'wndPdf',
+							    controller: modalPdfClientesMailsCtrl,
+							    resolve: { clientes: function(){return promise.data.DATA} }
+							    });
+							    
+			    			},
+			    			//Error al actualizar
+			    			function(error){ AlertService.add('danger', error.data.MSG);}
+			);
 		  	
-		  	var printDoc = $modal.open({
-							    	templateUrl: dir_root+'/templates/printDoc.html',
-							    	windowClass: 'wndPdf',
-							    	controller: modalPdfClientesMailsCtrl,
-							    	resolve: { clientes: function(){return $scope.data;} }
-			});
+
 			
 		}
         

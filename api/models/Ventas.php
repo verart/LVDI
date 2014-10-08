@@ -47,9 +47,10 @@ class Ventas extends AppModel {
 			$resultsFormat[$iF]['deuda'] = $results[$i]['deuda'];
 			$resultsFormat[$iF]['montoFavor'] = $results[$i]['montoFavor'];
 			$resultsFormat[$iF]['bonificacion'] = $results[$i]['bonificacion'];
+			$resultsFormat[$iF]['nota'] = utf8_encode($results[$i]['nota']);
 			$resultsFormat[$iF]['FP'] = $results[$i]['FP']; 
 			
-			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
+			//Modelos de la venta
 			$resultsFormat[$iF]['modelos'] = array();
 			$m = 0;
 			while(($i < count($results))&&($resultsFormat[$iF]['id'] == $results[$i]['id'])){
@@ -142,7 +143,7 @@ class Ventas extends AppModel {
 	
 	/**
 	* SETVENTA
-	* $venta = array( ['id'], 'bonificacion', 'created',['FP'], total )
+	* $venta = array( ['id'], 'bonificacion', 'created',['FP'], total, ['montoFavor'], ['nota'] )
 	* $modelos  = array( 	
 	* 					array('id', precio ) )
 	* $pagos  = array( 	
@@ -392,6 +393,37 @@ class Ventas extends AppModel {
 		$results = $query->fetchRow();
 		return $results;
 	}
+	
+	
+	
+	/**
+	 * ADDNOTA
+	 * guarda la nota $nota en la venta $idVenta
+	 * @param (string) $nota, (int) $idVenta
+	 */
+	function addNota($nota, $idVenta){					
+					
+		try{			
+						
+			$sql = "UPDATE ventas SET nota='$nota' WHERE ventas.id = $idVenta "; 
+			$query = $this->con->query($sql);
+			
+			
+			if(@PEAR::isError($query))
+					throw new BadRequestException('Hubo un error al actualizar la nota.');
+			
+			return array('success'=>true);
+			
+		
+		}catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}	
+		
+	}
+	
 	
 	
 }
