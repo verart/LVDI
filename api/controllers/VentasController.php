@@ -73,7 +73,7 @@ class VentasController extends AppController {
 	/**
 	* CREATE
 	* Crea una venta.
-	* Params (POST): array([FP], [bonificacion], [montoFavor], created, total, modelos=array(cantidad,id)
+	* Params (POST): array([FP], [bonificacion], [montoFavor], created, total, [nota], modelos=array(cantidad,id)
 	*/
 	function create() {
 		
@@ -98,7 +98,8 @@ class VentasController extends AppController {
 			
 			if (isset($params['FP'])) $venta['FP'] = $params['FP'];
 			if (isset($params['montoFavor'])) $venta['montoFavor'] = $params['montoFavor'];
-			
+			if (isset($params['nota'])) $venta['nota'] = $params['nota'];
+				
 			$venta['bonificacion'] = (isset($params['bonificacion']))?$params['bonificacion']:0;				
 			
 			$mod = isset($params['modelos'])?$params['modelos']:array();
@@ -180,10 +181,10 @@ class VentasController extends AppController {
 	
 	
 	/**
-	* PAGOS
+	* ADDPAGO
 	* Guarda el pago $pago recibido 
 	*/
-	function addPago($pago) {
+	function addPago() {
 		
 		try {
 			
@@ -232,6 +233,41 @@ class VentasController extends AppController {
 		}	
 	}
 
+	
+	/**
+	* ADDNOTA
+	* Guarda el pago $nota recibido 
+	*/
+	function addNota() {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('ventas', 'create'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			if(isset($_POST['nota']) && isset($_POST['idVenta'])){
+				
+				$res = $this->Ventas->addNota($_POST['nota'], $_POST['idVenta']); 
+			
+				if(!$res['success'])	
+					throw new BadRequestException($res['msg']);
+			
+	
+				echo $this->json('La nota fue actualizada');
+ 
+				
+			}else
+				throw new BadRequestException('Los datos de la nota están incompletos.');
+			
+			
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
+	
 	
 	
 }

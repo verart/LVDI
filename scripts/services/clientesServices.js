@@ -66,7 +66,19 @@ app.service('clientesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	            
-            }
+            },
+            
+            
+            /******************************
+            GETMAILS
+            ******************************/        
+            getMails:function() {
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/clientes/mails',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
             
         }
 }]);

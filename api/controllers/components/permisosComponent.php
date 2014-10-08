@@ -46,6 +46,7 @@ class PermisosComponent extends AppComponent{
 					$this->edicion['responsables']= array('create','update', 'delete');	
 					$this->acceso['ColaImpresion']=array('index','create','delete');
 					$this->acceso['notas']= array('index','create','delete');
+					$this->edicion['notas']= array('create','delete');
 			        break;
 			    case 'cuentas' :
 			    	$this->acceso['resumen']= array('index');

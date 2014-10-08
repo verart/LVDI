@@ -35,18 +35,22 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 				//success
 				function(promise){
 					if(promise.data.DATA.length > 0){
+						
 						//tomo la última venta agregada
 						lastVenta = ($scope.data.length == 0) ? -1 : $scope.data[$scope.data.length-1].id;
 						firstNewVenta = promise.data.DATA[0].id;
+						
 						//Si es la misma que la primera que me traigo en la nueva pag, le agrego los productos.
 						if(lastVenta == firstNewVenta){
 							for( j=0 ; j < promise.data.DATA[0].modelos.length; j++)
-								lastVenta = $scope.data[$scope.data.length-1].modelos.push(promise.data.DATA[0].modelos[j]);					
+								lastVenta = $scope.data[$scope.data.length-1].modelos.push(promise.data.DATA[0].modelos[j]);				
 							n = 1;
 						}else 
 							n = 0;
-						for( i = n; i < promise.data.DATA.length; i++)
+							
+						for(i = n; i < promise.data.DATA.length; i++)
 							$scope.data.push(promise.data.DATA[i]);
+							
 					}else{
 						if($scope.data.length > 0)
 							$('.finVentas').html('<div class="fin"></div>');
@@ -163,49 +167,8 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 			    /************************************************************
 		    	CANCELAR
 		    	************************************************************/
-			    function (res){
-			    
-			    	/******************************************
-				    DELETE VENTA
-				    ******************************************/
-				    if(res.action == 'delete'){
-				    	
-				    	//Solicita confirmación
-				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar esta venta?", accept:"Si", cancel:"No"};
-				    	
-				    	var idVenta = res.idVenta;
-				    	
-				    	var confirm = $modal.open({
-					    	templateUrl: dir_root+'/templates/confirm.html',
-					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
-					    	resolve: { txt: function(){ return txt_confirm } }
-					     });
-
-					    // Comportamiento al cerrar el modal		    
-					    confirm.result
-					    .then( 
-					    	// Si el modal cierra por ACEPTAR
-					    	function (r) {
-						    	 ventasService.deleteVenta(idVenta).then(
-					    			//Success
-					    			function(promise){
-					    				var index = $filter('getIndexById')($scope.data, idVenta);
-					    				$scope.data.splice(index, 1);
-					    			},
-					    			//Error al eliminar
-					    			function(error){
-						    			AlertService.add('danger', error.data.MSG);
-					    			}
-					    		);
-						    }, 
-						    // Si el modal cierra por CANCELAR
-						    function (res){ }
-
-						);   	
-					}  
-			    
-			    }			
+			    function (res){ }	
+			    		
 			);	
 		}
 	     
@@ -395,55 +358,53 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  //Inicializo los datos de la venta	
 		  if(info.venta != ''){
 		  
-		  	$scope.venta = info.venta;
-		  	
-		  	$scope.venta.created= (new Date($scope.venta.created)).toISOString().slice(0, 10);
-		  	$scope.venta.pagos = [];
-		  	
-					    		
-			//Pagos de la venta
-		  	ventasService.pagosVenta(info.venta.id).then(
-					    			//Success
-					    			function(promise){
-					    				$scope.venta.pagos = (promise.data.DATA || []);
-					    				$scope.venta.totalPagos = $scope.sumarPagos();
-console.log($scope.venta.totalPagos);
-					    			},
-					    			//Error al eliminar
-					    			function(error){
-						    			AlertService.add('danger', error.data.MSG);
-					    			}
-					    		);	
-		  	
-		  	
-		  	
+			  	$scope.venta = info.venta;
+			  	
+			  	$scope.venta.created= (new Date($scope.venta.created)).toISOString().slice(0, 10);
+			  	$scope.venta.pagos = [];
+			  	
+						    		
+				//Pagos de la venta
+			  	ventasService.pagosVenta(info.venta.id).then(
+						
+						//Success
+						function(promise){
+						    	$scope.venta.pagos = (promise.data.DATA || []);
+						    	$scope.venta.totalPagos = $scope.sumarPagos();
+						},
+						//Error al eliminar
+						function(error){
+								AlertService.add('danger', error.data.MSG);
+						}
+						
+				);
+						  	
 		  }else{
 		  
 			  $scope.venta = {
 			  			created: (new Date()).toISOString().slice(0, 10),
-			  			total:'0', 
+			  			total:'0',
+			  			nota:'', 
 			  			modelos:[],
 			  			pagos:[], 
 			  			bonificacion:0, 
 			  			FP:'Efectivo',
 			  			totalPagos:0,
 			  			deuda:0,
-			  			variosPagos:0
-			  			};
+			  			variosPagos:0  //Es el model del radiobutton de uno o varios pagos
+			  };
 		  			
-			  $scope.form.cliente = {nombre:'', id:'', bonificacion:0};
+			  $scope.form.cliente = {nombre:'', id:''};
 
 		  }
 		  
-
-
-		  
 		  $scope.nuevoModeloId = '';
+
 
 		  
 		  /***************************************************
 		   OK
-		   Se cierra el modal y retornan los datos de la venta
+		   Se cierra el modal y retornan los datos de la nueva venta
 		  ****************************************************/ 
 		  $scope.ok = function () {
 		    
@@ -623,7 +584,7 @@ console.log($scope.venta.totalPagos);
 		  ****************************************************/	 
 		  $scope.refreshTotal = function(){
 		  
-				var mon = !(($scope.venta.montoFavor == "" || $scope.venta.montoFavor == null))? parseInt($scope.venta.montoFavor,10):0.0;
+		  		var mon = !(($scope.venta.montoFavor == "" || $scope.venta.montoFavor == null))? parseInt($scope.venta.montoFavor,10):0.0;
 				
 		    	$scope.venta.totalFinal = parseInt($scope.venta.total,10) - mon;
 		    	
@@ -631,7 +592,8 @@ console.log($scope.venta.totalPagos);
 		    	$scope.venta.totalFinal = $scope.venta.totalFinal - desc;
 		    	
 		    	//Actualiza la deuda
-			  	$scope.venta.deuda = ($scope.venta.totalFinal - $scope.venta.totalPagos);
+			  	if(((info.venta.id != '')&&(info.venta.deuda != 0))||((info.venta.id == '')))
+			  		$scope.venta.deuda = ($scope.venta.totalFinal - $scope.venta.totalPagos);
 			  	
 			  	if($scope.venta.deuda == 0){
 				  	$scope.venta.estado = "Entregado-Pago";
@@ -664,6 +626,34 @@ console.log($scope.venta.totalPagos);
 			
 		  }  
 		  
+		  
+		  		  
+		  /******************************************************************************************************/
+		  /** MANEJO DE NOTA **/
+		  /******************************************************************************************************/		   
+		   
+		  /***************************************************
+		  ACTUALIZARNOTA
+		  Actualiza una nota
+		  ****************************************************/	  
+		  	$scope.actualizarNota= function() {
+		  		  	
+			  		ventasService.actualizarNota($scope.venta.nota,$scope.venta.id).then(
+						//success
+						function(promise){ 
+							AlertService.add('success', promise.data.MSG, 5000);	
+						},
+						//Error al actualizar
+						function(error){ AlertService.add('danger', error.data.MSG);}
+					);		
+
+				
+			}
+		  
+
+
+
+
 
 		  
 		  

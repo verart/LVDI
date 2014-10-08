@@ -123,6 +123,19 @@ class Clientes extends AppModel {
 	}
 	
 	
+	/**
+	 * Retorna los mails de los clientes
+	 */
+	function getMails() {
+		
+		$opciones = array('fields'=>array('email'),'order'=>('email ASC'));
+		
+		$results = $this->readAll($opciones);
+					
+		return $results;
+	}
+	
+	
 	
 }
 ?>

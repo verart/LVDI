@@ -76,6 +76,7 @@ $route->add('/producciones/create','POST','Producciones','create');
 
 $route->add('/clientes/index','POST','Clientes','index');
 $route->add('/clientes/show','GET','Clientes','show');
+$route->add('/clientes/mails','GET','Clientes','mails');
 $route->add('/clientes/delete','DELETE','Clientes','delete');
 $route->add('/clientes/update','PUT','Clientes','update');
 $route->add('/clientes/create','POST','Clientes','create');
@@ -87,6 +88,7 @@ $route->add('/ventas/pagos','GET','Ventas','pagos');
 $route->add('/ventas/delete','DELETE','Ventas','delete');
 $route->add('/ventas/create','POST','Ventas','create');
 $route->add('/ventas/addPago','POST','Ventas','addPago');
+$route->add('/ventas/addNota','POST','Ventas','addNota');
 $route->add('/ventas/deletePago','DELETE','Ventas','deletePago');
 
 
