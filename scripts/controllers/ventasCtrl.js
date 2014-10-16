@@ -16,7 +16,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	    /*****************************************************************************************************
 	     VENTAS     
 	    *****************************************************************************************************/    	    
-	    fechaHoy = (new Date()).toISOString().slice(0, 10);
+	    fechaHoy =  (formatLocalDate()); //(new Date()).toISOString().slice(0, 10);
 	    $scope.filterVentas = {filter:'hoy'};
 	    $scope.totalVentas = 0;
 	    $scope.page = 0;            
@@ -334,11 +334,12 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  $scope.form = {};
 		  $scope.p = {};
 		  $scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
- 		  $scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+ 		  $scope.form.pago = {monto:'', FP:'Efectivo', created:formatLocalDate(), bonificacion:0};
 
 		  $scope.p.mod_options = info.p.mod_options;		  
 		  $scope.p.cl_options = info.p.cl_options;
 		  
+		  		  
 		  
 		  /***************************************************
 		   SUMARPAGOS
@@ -360,7 +361,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  
 			  	$scope.venta = info.venta;
 			  	
-			  	$scope.venta.created= (new Date($scope.venta.created)).toISOString().slice(0, 10);
+ 			  	$scope.venta.created= (new Date($scope.venta.created)).toISOString().slice(0, 10); 
 			  	$scope.venta.pagos = [];
 			  	
 						    		
@@ -382,7 +383,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  }else{
 		  
 			  $scope.venta = {
-			  			created: (new Date()).toISOString().slice(0, 10),
+			  			created: (formatLocalDate()),
 			  			total:'0',
 			  			nota:'', 
 			  			modelos:[],
@@ -669,17 +670,17 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 
 		  	if(( $scope.form.pago.monto  !=  '') & ( $scope.form.pago.FP  !=  '')) {
 		  	
-		  		$scope.form.pago.created = ($scope.form.pago.created ||  (new Date()).toISOString().slice(0, 10)) 
+		  		$scope.form.pago.created = ($scope.form.pago.created ||  formatLocalDate());//(new Date()).toISOString().slice(0, 10)) 
 		  					  		
 			  	$scope.venta.pagos.push($scope.form.pago);
 			  	 
 			  	$scope.venta.totalPagos =  parseFloat($scope.venta.totalPagos) + parseFloat($scope.form.pago.monto) + 		
 			  		(parseFloat($scope.form.pago.monto)*($scope.form.pago.bonificacion/100));		  	
 			  	
-			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10)};
+/* 			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10)}; */
 			  	angular.element("#montoPago").focus();
 			  	
-			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:formatLocalDate(), bonificacion:0};
 
 			  	
 			  }
@@ -701,7 +702,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  	if($scope.venta.pagos[index].id != null)
 			  		$scope.venta.pagos2delete.push({id:$scope.venta.pagos[index].id});
 			  	
-			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+			  	$scope.form.pago = {monto:'', FP:'Efectivo', created:formatLocalDate(), bonificacion:0};
 
 			  	$scope.venta.pagos.splice(index,1);
 			  	
@@ -724,14 +725,14 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 					//success
 					function(promise){
 						
-						$scope.form.pago.created = ($scope.form.pago.created ||  (new Date()).toISOString().slice(0, 10)) 
+						$scope.form.pago.created = ($scope.form.pago.created ||  formatLocalDate()) 
 		  					  		
 					  	$scope.venta.pagos.push(promise.data.DATA.pago);
 					  	 
 					  	$scope.venta.totalPagos =  parseFloat($scope.venta.totalPagos) + parseFloat($scope.form.pago.monto) + 		
 						  							  (parseFloat($scope.form.pago.monto)*(parseInt($scope.form.pago.bonificacion)/100));		  	
 					  	
-					  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+					  	$scope.form.pago = {monto:'', FP:'Efectivo', created:formatLocalDate(), bonificacion:0};
 					  	angular.element("#montoPago").focus();
 					  	
 					},
@@ -761,7 +762,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 					  		($scope.venta.pagos[index].monto * ($scope.venta.pagos[index].bonificacion/100)));
 				  	
 					  	
-					  	$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10), bonificacion:0};
+					  	$scope.form.pago = {monto:'', FP:'Efectivo', created:formatLocalDate(), bonificacion:0};
 		
 					  	$scope.venta.pagos.splice(index,1);					  	
 					},
@@ -798,7 +799,7 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 
 
 
-	hoy = (new Date()).toISOString().slice(0, 10);
+	hoy = formatLocalDate();
 
 	$scope.nota = {created: hoy, nota:''};
 	

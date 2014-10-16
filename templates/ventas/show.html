@@ -93,7 +93,7 @@
 					<!-- PAGOS  -->
 					<br/>
 	
-					<div ng-show="venta.deuda > 0" class="pagos col-xs-12 col-sm-12"> 
+					<div ng-show="(venta.deuda > 0) || (venta.pagos.length > 0)" class="pagos col-xs-12 col-sm-12"> 
 						
 						<h4>Pagos</h4>
 		

@@ -99,7 +99,7 @@
 			</form>
 		</div>
 
-	
+
 		<!-- BODY-->
 		<div class="col-xs-12 col-md-9 ">
 			<div class="tableContainer" >
@@ -118,6 +118,8 @@
 			  						class="link" ng-click=" !((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local')) || showVenta(venta.id, usuario.getUserRole())">
 			  				<td> {{venta.created | date:'dd/MM/yyyy' }}</td>
 			  				<td>
+			  					<span ng-if="venta.nota!=''" href="#" class="tt1 glyphicon glyphicon-comment notaVenta" popover data-trigger="hover" data-selector="" 
+			  						data-content={{venta.nota}}></span>
 			  					<ul ng-repeat="mod in venta.modelos">  
 				  					<li> {{mod.nombre}}</li>			  			
 			  					</ul>	

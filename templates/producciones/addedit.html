@@ -141,7 +141,7 @@
 					
 					<br>
 					
-					<button ng-if="produccion.modelos.length > 0" class="btn btn-primary btn-sm pull-right" 
+					<button type="button" ng-if="produccion.modelos.length > 0" class="btn btn-primary btn-sm pull-right" 
 							ng-click="todosDevueltos()">Marcar todos los productos devueltos</button>
 				
 			</div>	
@@ -154,7 +154,7 @@
 						            
         <div class="modal-footer">
         	
-	        <button ng-if="produccion.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteProduccion()">Eliminar produccion</button>
+	        <button ng-if="produccion.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteProduccion()">Eliminar producción</button>
 
 	        <button class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
             <button class="btn btn-primary" ng-click="save()">Guardar</button>
