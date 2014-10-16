@@ -47,7 +47,7 @@ class Ventas extends AppModel {
 			$resultsFormat[$iF]['deuda'] = $results[$i]['deuda'];
 			$resultsFormat[$iF]['montoFavor'] = $results[$i]['montoFavor'];
 			$resultsFormat[$iF]['bonificacion'] = $results[$i]['bonificacion'];
-			$resultsFormat[$iF]['nota'] = utf8_encode($results[$i]['nota']);
+			$resultsFormat[$iF]['nota'] = $results[$i]['nota'];
 			$resultsFormat[$iF]['FP'] = $results[$i]['FP']; 
 			
 			//Modelos de la venta

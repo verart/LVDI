@@ -12,6 +12,12 @@ app.directive('ngProducto', function()
 });
 
 
+app.directive('popover', function() {
+   return function(scope, elem) {
+      elem.popover();
+   }
+});
+
 
 /*******************************************************************************************************
 UPLOADES (Element)

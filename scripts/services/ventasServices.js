@@ -61,6 +61,19 @@ app.service('ventasService', ['$http', function ($http) {
 	            })
             },
             
+            
+            /******************************
+            DELETEPAGO
+            ******************************/
+            deletePago:function (idPago) {
+	            return $http({
+	            	method: 'DELETE',
+	            	url: dir_api + '/ventas/'+idPago+'/deletePago',
+	            	data: $.param(idPago),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            
             /******************************
             ACTUALIZARNOTA
             ******************************/
@@ -101,20 +114,9 @@ app.service('notasService', ['$http', function ($http) {
 	            	data: $.param(nota),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-            },
+            }
             
             
-            /******************************
-            DELETEPAGO
-            ******************************/
-            deletePago:function (idPago) {
-	            return $http({
-	            	method: 'DELETE',
-	            	url: dir_api + '/ventas/'+idPago+'/deletePago',
-	            	data: $.param(idPago),
-	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-            },
             
             
            

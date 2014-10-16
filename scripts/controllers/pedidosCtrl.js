@@ -338,7 +338,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 		  	{'label':'Efectivo','value':'Efectivo'}, 
 		  	{'label':'Tarjeta','value':'Tarjeta'},
 		  	{'label':'Cheque','value':'Cheque'}, 
-		  	{'label':'Débito','value':'Debito'}];
+		  	{'label':'Débito','value':'Debito'}, 
+		  	{'label':'Transferencia','value':'Transferencia'}];
 		  		 
 		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	 
 		  
@@ -373,7 +374,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 		  $scope.form = {};
 		  $scope.p = {};
 		  $scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
-		  $scope.form.pago = {monto:'', FP:'', created:(new Date()).toISOString().slice(0, 10)};
+		  $scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10)};
 		  $scope.p.mod_options = info.p.mod_options;		  
 		  $scope.p.cl_options = info.p.cl_options;
 

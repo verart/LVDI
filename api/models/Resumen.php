@@ -34,8 +34,12 @@ class Resumen extends AppModel {
 			
 		// total de ventas 	 - en un solo pago
 		$sql = "SELECT SUM((V.total - V.montoFavor) - ((V.total - V.montoFavor)*V.bonificacion/100)) as resumenVentas, V.FP 
-				FROM ventas V 
-				$conditions AND (deuda = 0)   
+				FROM ventas V 				
+				LEFT JOIN 
+					(select ventas_id
+					FROM ventas_pagos VP
+					GROUP BY ventas_id) as pagos ON pagos.ventas_id = V.id
+				$conditions AND (deuda = 0) AND  ISNULL(pagos.ventas_id)    
 				GROUP BY V.FP ";
 			
 		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	

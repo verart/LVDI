@@ -31,3 +31,9 @@
 .highlighted{
 	color: #db5555;
 }
+
+.notaVenta{
+	float: right;
+	margin-right: 20px;
+	color: #B2ADAD;;
+}

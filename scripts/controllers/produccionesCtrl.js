@@ -24,27 +24,29 @@ app.controller('produccionesCtrl',
 	    $scope.parar = false;
 	    
 	    $scope.cargarProducciones = function () {
-		    $scope.page ++;                   
-
-	    	produccionesService.producciones($scope.filterProds.estado, $scope.page, $scope.filterSubmitted).then(
-				//success
-				function(promise){
-				     if(promise.data.DATA.length > 0){
-						for( i=0; i < promise.data.DATA.length; i++)
-							$scope.data.push(promise.data.DATA[i]);
-					}else{
-						if($scope.data.length > 0)
-							$('.finProducciones').html('<div class="fin"></div>');
-						$scope.parar = true;
-					}                   
-				},
-				//Error al actualizar
-				function(error){ AlertService.add('danger', error.data.MSG);}
-			);
+		    
+		    if(!$scope.parar){
+		    	$scope.parar = true;
+			    $scope.page ++; 
+		    
+		    	produccionesService.producciones($scope.filterProds.estado, $scope.page, $scope.filterSubmitted).then(
+					//success
+					function(promise){
+					     if(promise.data.DATA.length > 0){
+							for( i=0; i < promise.data.DATA.length; i++)
+								$scope.data.push(promise.data.DATA[i]);
+						    $scope.parar = false;
+						}else{
+							if($scope.data.length > 0)
+								$('.finProducciones').html('<div class="fin"></div>');
+							$scope.parar = true;
+						}                   
+					},
+					//Error al actualizar
+					function(error){ AlertService.add('danger', error.data.MSG);}
+				);
+			}	
 	    }  
-	    
-	    $scope.cargarProducciones();
-	    
 	    
 	    	   
 	   
@@ -286,7 +288,7 @@ app.controller('produccionesCtrl',
 	    
 			$(window).on('scroll', function() {
 
-				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60) & !$scope.parar) {		     	
 			  		$scope.cargarProducciones();
 		    	}
 		  	});
