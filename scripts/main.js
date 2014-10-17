@@ -36,12 +36,12 @@ app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthSe
 
   $rootScope.$on('$locationChangeStart', function (event, next) {
   
-    var nextPath = $location.path();
-    var nextRoute = $route.routes[nextPath];
+    var nextPath = $location.path(); 
+    var nextRoute = $route.routes[nextPath]; 
     
     if((typeof(nextRoute) !== "undefined")&&(nextRoute.auth.needAuth)){
 	
-	    var authorizedRoles = nextRoute.auth.authorizedRoles;
+	    var authorizedRoles = nextRoute.auth.authorizedRoles; 
 
 	    if (!AuthService.isAuthorized(authorizedRoles)) {
 	      

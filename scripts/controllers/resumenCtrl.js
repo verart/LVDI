@@ -11,7 +11,7 @@ app.controller('resumenCtrl', ['$scope','$modal',  'resumenService', 'AlertServi
 	    $scope.alerts = [ ];
 	    
        
-        fechaHoy = (new Date()).toISOString().slice(0, 10);
+        fechaHoy = formatLocalDate();
 
 
 	    $scope.value = 'hoy';

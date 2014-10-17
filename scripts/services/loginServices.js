@@ -20,7 +20,7 @@ app.factory('AuthService', function ($http, Session) {
       return !!Session.getUserId();
     },
     
-    isAuthorized: function (authorizedRoles) {
+    isAuthorized: function (authorizedRoles) { 
       if (!angular.isArray(authorizedRoles)) {
         authorizedRoles = [authorizedRoles];
       }
@@ -28,7 +28,7 @@ app.factory('AuthService', function ($http, Session) {
 
       var isAuthe = this.isAuthenticated();
       var isAutho =  (authorizedRoles.indexOf(Session.getUserRole())!= -1);
-      
+      console.log(Session.getUserId());
       return isAuthe && isAutho;
 
     }
@@ -43,34 +43,33 @@ app.factory('AuthService', function ($http, Session) {
 	  this.create = function (userId, userName, userRole) {
 	  
 		  if(typeof(Storage)!=="undefined"){
-		  	sessionStorage.userId = userId;
-		  	sessionStorage.userName=userName;
-		  	sessionStorage.userRole=userRole;
+		  	localStorage.userId = userId;
+		  	localStorage.userName=userName;
+		  	localStorage.userRole=userRole;
 			
-		
 		  }else{
 		  	AlertService.add('danger', "El navegador no soporta sessionStorage", 5000);;
 		  }
 	  };
 	  
 	  this.destroy = function () {
-		  sessionStorage.userId = null;
-		  sessionStorage.userName = null;
-		  sessionStorage.userRole = null;
+		  localStorage.userId = null;
+		  localStorage.userName = null;
+		  localStorage.userRole = null;
 		  
 	  };
 	  
 	   
 	  this.getUserName= function(){
-	  	var name = (sessionStorage.userName != 'null')?sessionStorage.userName:''; 
+	  	var name = (localStorage.userName != 'null')?localStorage.userName:''; 
 		  return name;
 	  };
 	  
 	  this.getUserId= function(){
-		  return sessionStorage.userId;
+		  return localStorage.userId;
 	  };
 	  this.getUserRole= function(){
-		  return sessionStorage.userRole;
+		  return localStorage.userRole;
 	  };
 	  
 	  return this;
