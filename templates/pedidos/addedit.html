@@ -60,13 +60,13 @@
 						<hr/> 
 						
 						<input type="text" id="newMod" autocomplete="off" ng-model="form.modelo" class="form-control small" 
-									placeholder="Nombre de producto"
+									placeholder="Nombre de producto" ng-enter="add()"
 									typeahead="mod_option as mod_option.nombre for mod_option in p.mod_options | filter:$viewValue" />
 				
 						<div class="row" style="margin-top:5px;">
 							<div class="colForm col-xs-6 col-sm-5">
 								<input type="number" class="form-control small" 
-										ng-model="form.modelo.cantidad" placeholder="Cantidad" style="padding-right:0px;"/>
+										ng-model="form.modelo.cantidad" placeholder="Cantidad" style="padding-right:0px;" ng-enter="add()"/>
 							</div>
 										
 							<div class="colForm col-xs-6 col-md-6">
