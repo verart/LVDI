@@ -22,6 +22,21 @@ app.service('ventasService', ['$http', function ($http) {
 	            })
             },
             
+                         
+            /******************************
+            EDITVENTA
+            ******************************/
+            editVenta: function(venta){ 
+	            
+	            return $http({
+	            	method: 'PUT',
+	            	url: dir_api + '/ventas/update',
+	            	data: $.param(venta),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
+            
                         
             /******************************
             DELETEVENTA

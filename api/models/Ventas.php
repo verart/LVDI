@@ -149,7 +149,7 @@ class Ventas extends AppModel {
 	* $pagos  = array( 	
 	* 					array(monto, bonificacion, FP ) )	
 	*/
-	function setVenta($venta, $modelos, $pagos){
+	function setVenta($venta, $modelos, $pagos, $mod2delete=array(), $pagos2delete=array()){
 		
 		try{
 			$this->beginTransaction();
@@ -207,24 +207,74 @@ class Ventas extends AppModel {
 					
 							
 			}else{
-
-				//Pagos realizado 
-				$idVenta = $venta['id'];
-				foreach($pagos as $field => $value) {
+				$idVenta= $venta['id'];
+				
+				if($this->update($venta, array('id'=>$venta['id']))){
+					//modelos
+					foreach($modelos as $field => $value) {
+						
+						if(!isset($value['idVenMod'])){
+						
+							$idModelo = $value['id'];
+							$precio = $value['precio'];
+							
+							//Decremento el stock del modelo agregado a la venta
+							$res = $this->Modelos->baja($idModelo, 1,'','venta');
+							if(!$res['success'])
+								throw new BadRequestException($res['msg']);	
+							
+							$sql = "INSERT INTO ventas_modelos (ventas_id,modelos_id,cantidad,precio) VALUES ($idVenta, $idModelo,1, $precio) ";
+							
+							$query = $this->con->query($sql);
+							
+							if(@PEAR::isError($query))
+								throw new BadRequestException('Hubo un error al agregar los modelos a la venta.');
+						}
+					}
 					
-					$monto = $value['monto'];
-					$created = isset($value['created'])?$value['created']: date('dd/mm/yyyy');
-					$FP = $value['FP'];
-					$bonif = $value['bonificacion'];
-						
-					$sql = "INSERT INTO ventas_pagos (ventas_id,monto,FP,created, bonificacion) VALUES ($idVenta,$monto,'$FP','$created',$bonif) ";
-					$query = $this->con->query($sql);
-						
-					if(@PEAR::isError($query))
-						throw new BadRequestException('Hubo un error al agregar los pagos de la venta.');
-			
+					
+					//Pagos realizado 
+					$idVenta = $venta['id'];
+					foreach($pagos as $field => $value) {
+					
+						if(!isset($value['id'])){
+	
+							$monto = $value['monto'];
+							$created = isset($value['created'])?$value['created']: date('dd/mm/yyyy');
+							$FP = $value['FP'];
+							$bonif = $value['bonificacion'];
+								
+							$sql = "INSERT INTO ventas_pagos (ventas_id,monto,FP,created, bonificacion) VALUES ($idVenta,$monto,'$FP','$created',$bonif) ";
+							$query = $this->con->query($sql);
+								
+							if(@PEAR::isError($query))
+								throw new BadRequestException('Hubo un error al agregar los pagos de la venta.');
+						}
+					}
 				}
+				
 			}
+			
+			
+			// DELETE de modelos de la venta
+			if(!empty($mod2delete))
+				foreach($mod2delete as $field => $value){
+					$result = $this->removeModelo($value['id']);
+					
+					if(!$result['success'])
+						throw new BadRequestException($result['msg']);									
+				}
+			
+			
+			// DELETE de pagos de la venta
+			if(!empty($pagos2delete))
+				foreach($pagos2delete as $field => $value){
+					$result = $this->removePago($value['id']);
+					
+					if(!$result['success'])
+						throw new BadRequestException($result['msg']);									
+				}
+				
 			$this->commitTransaction();
 			
 			return array('success'=>true, 'ventas_id'=>$idVenta);
@@ -265,10 +315,16 @@ class Ventas extends AppModel {
 	
 	
 	
-	function removeModelo($idVenMod, $idModelo){
+	function removeModelo($idVenMod){
 	
 		try{
-		
+			//Recupero el modelo
+			$sql = "SELECT modelos_id FROM ventas_modelos WHERE id = $idVenMod";
+			$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);
+			$query = $query->execute();
+			$result = $query->fetchAll();		
+			$idModelo = $result[0]['modelos_id'];
+			
 			$res = $this->Modelos->reponer($idModelo,1,'');
 		    if(!$res['success'])
 					throw new BadRequestException($res['msg']);	
@@ -278,7 +334,7 @@ class Ventas extends AppModel {
 			$result = $this->con->query($sql);
 		
 			if(@PEAR::isError($result)) {
-		    	throw new BadRequestException('Ocurrió un error al retornar un producto.');				
+		    	throw new BadRequestException('Ocurrió un error al quitar un producto de la venta.');				
 		    }
 		    
 			return array('success'=>true, 'msg'=>'');
@@ -294,61 +350,15 @@ class Ventas extends AppModel {
 	
 	
 	
-	
-	
-	function addPago($pago, $idVenta){					
-					
-		try{			
-			$monto = $pago['monto'];
-			$created = isset($pago['created'])?$pago['created']: date('dd/mm/yyyy');
-			$FP = $pago['FP'];
-			$bonif = isset($pago['bonificacion'])?$pago['bonificacion']:0;
-						
-			$sql = "INSERT INTO ventas_pagos (ventas_id,monto,FP,created, bonificacion) VALUES ($idVenta,$monto,'$FP','$created',$bonif) "; 
-			$query = $this->con->query($sql);
-			
-			
-			if(@PEAR::isError($query))
-					throw new BadRequestException('Hubo un error al agregar el pago a la venta.');
-			else{
-				$idPago = $this->getLastId(); 
-				$pago['id'] = $idPago;
-			}
-			
-			$venta = $this->getVentaPorId($idVenta);	
-			$nuevaDeuda = $venta['deuda'] - ($pago['monto'] + ($pago['monto']*$pago['bonificacion']/100));
-			 
-			if(!$this->update(array('deuda'=>$nuevaDeuda), array('id'=> $idVenta)))
-				throw new BadRequestException('Hubo un error al agregar el pago a la venta.');
-			else{
-				$idPago = $this->getLastId(); 
-				$pago['id'] = $idPago;
-			}
-			
-			
-			return array('success'=>true, 'pago'=>$pago);
-			
-		
-		}catch (Exception $e) {
-			$this->rollbackTransaction();
-			
-			return array('success'=>false, 'msg'=>$e->getMsg());
-
-		}	
-		
-	}
-	
-	
-	
-	
-		
-	
-	function deletePago($idPago){
+	/*
+	* REMOVEPAGO
+	* Solo elimina un pago y NO actualiza la deuda de la venta
+	*/
+	function removePago($idPago){
 	
 		try{
 		
 		    $pago = $this->getPagoPorId($idPago);
-		    
 
 		    $sql = "DELETE FROM ventas_pagos WHERE id = $idPago";
 
@@ -358,13 +368,6 @@ class Ventas extends AppModel {
 		    	throw new BadRequestException('Ocurrió un error al eliminar el pago.');				
 		    }
 		    
-			$venta = $this->getVentaPorId($pago['ventas_id']);	
-			$nuevaDeuda = $venta['deuda'] + ($pago['monto'] + ($pago['monto']*$pago['bonificacion']/100));
-			 
-			if(!$this->update(array('deuda'=>$nuevaDeuda), array('id'=> $idVenta)))
-				throw new BadRequestException('Hubo un error al agregar el pago a la venta.');
-
-			
 			return array('success'=>true, 'msg'=>'');
 		
 		}catch (Exception $e) {
@@ -375,6 +378,8 @@ class Ventas extends AppModel {
 		}
 	
 	}
+	
+
 	
 	
 	/**
@@ -424,6 +429,95 @@ class Ventas extends AppModel {
 		
 	}
 	
+	
+	
+	
+	
+	
+	//***********************************PARA BORRAR *************************************************//
+		
+	function addPago($pago, $idVenta){					
+					
+		try{			
+			$monto = $pago['monto'];
+			$created = isset($pago['created'])?$pago['created']: date('dd/mm/yyyy');
+			$FP = $pago['FP'];
+			$bonif = isset($pago['bonificacion'])?$pago['bonificacion']:0;
+						
+			$sql = "INSERT INTO ventas_pagos (ventas_id,monto,FP,created, bonificacion) VALUES ($idVenta,$monto,'$FP','$created',$bonif) "; 
+			$query = $this->con->query($sql);
+			
+			
+			if(@PEAR::isError($query))
+					throw new BadRequestException('Hubo un error al agregar el pago a la venta.');
+			else{
+				$idPago = $this->getLastId(); 
+				$pago['id'] = $idPago;
+			}
+			
+			$venta = $this->getVentaPorId($idVenta);	
+			$nuevaDeuda = $venta['deuda'] - ($pago['monto'] + ($pago['monto']*$pago['bonificacion']/100));
+			 
+			if(!$this->update(array('deuda'=>$nuevaDeuda), array('id'=> $idVenta)))
+				throw new BadRequestException('Hubo un error al agregar el pago a la venta.');
+			else{
+				$idPago = $this->getLastId(); 
+				$pago['id'] = $idPago;
+			}
+			
+			
+			return array('success'=>true, 'pago'=>$pago);
+			
+		
+		}catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}	
+		
+	}
+	
+	
+	
+	
+		
+	/*
+	* DELETEPAGO
+	* Elimina un pago y actualiza la deuda de la venta
+	*/
+	function deletePago($idPago){
+	
+		try{
+		
+		    $pago = $this->getPagoPorId($idPago);
+		    
+
+		    $sql = "DELETE FROM ventas_pagos WHERE id = $idPago";
+
+			$result = $this->con->query($sql);
+		
+			if(@PEAR::isError($result)) {
+		    	throw new BadRequestException('Ocurrió un error al eliminar el pago.');				
+		    }
+		    
+			$venta = $this->getVentaPorId($pago['ventas_id']);	
+			$nuevaDeuda = $venta['deuda'] + ($pago['monto'] + ($pago['monto']*$pago['bonificacion']/100));
+			 
+			if(!$this->update(array('deuda'=>$nuevaDeuda), array('id'=> $idVenta)))
+				throw new BadRequestException('Hubo un error al quitar el pago a la venta.');
+
+			
+			return array('success'=>true, 'msg'=>'');
+		
+		}catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}
+	
+	}
 	
 	
 }

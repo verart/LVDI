@@ -19,9 +19,8 @@
 .aviso{
 	text-align: center;
 	font-size: 27px;
-	color: rgb(167, 164, 164);
+	color: rgb(221, 221, 221);
 	margin-top: 27px;
-	font-style: italic;
 }
 
 .avisoSmall{
@@ -32,6 +31,10 @@
 	font-style: italic;
 }
 
+.seccionTitle{
+	margin-left: 30px;
+	margin-bottom: 30px;
+}
 
 .link:hover{
 	cursor: pointer;
@@ -146,6 +149,9 @@
 	margin-top: 50px;
 }
 
+.tabContent{
+	padding-top: 40px;
+}
 
 /**********************************************************************************************************************************
 		CUENTAS
