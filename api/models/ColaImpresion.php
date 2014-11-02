@@ -123,8 +123,8 @@ class ColaImpresion extends AppModel {
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
 				INNER JOIN producciones_modelos PM ON (PM.modelos_id = M.id) & (PM.producciones_id = CI.producciones_id)
 				INNER JOIN producciones P ON PM.producciones_id = P.id
-				INNER JOIN responsables R ON P.responsables_id = R.id			
-				GROUP BY CI.producciones_id, M.productos_id	
+				INNER JOIN responsables R ON P.responsables_id = R.id				
+				GROUP BY CI.id 		
 				ORDER BY CI.producciones_id";
 				
 		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -145,8 +145,7 @@ class ColaImpresion extends AppModel {
 				$resultsFormat['producciones'][$iF]['modelos'][$m]['modelos_id'] = $results[$i]['modelos_id'];
 				$resultsFormat['producciones'][$iF]['modelos'][$m]['id'] = $results[$i]['id'];
 				$resultsFormat['producciones'][$iF]['modelos'][$m]['nombre'] =  utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
-			$resultsFormat['producciones'][$iF]['modelos'][$m++]['precio'] = $results[$i++]['precio'];	
-			
+				$resultsFormat['producciones'][$iF]['modelos'][$m++]['precio'] = $results[$i++]['precio'];	
 			}
 			$iF++;
 		}
