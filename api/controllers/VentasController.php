@@ -129,6 +129,68 @@ class VentasController extends AppController {
 	
 	
 	
+	/**
+	* UPDATE
+	* Actualiza una venta.
+	* Params (POST): array(id, [FP], [bonificacion], [montoFavor], created, total, deuda [nota], modelos=array(cantidad,id), pagos =array(created,monto, bonificacion),  mod2delete, pagos2delete
+	*/
+	function update() {
+		
+		try {
+		
+			if (!$this->PermisosComponent->puedeEditar('ventas','update'))
+				throw new ForbiddenException('No tiene permiso para actualizar ventas'); 
+			
+			$params = getPutParameters();
+			
+			$params = (isset($params['venta']))? $params['venta'] : array();
+	
+			// Campos obligatorios
+			if (!$this->parametrosRequeridosEn(array('created', 'total', 'id'), $params))
+				throw new BadRequestException('Los datos de la venta están incompletos');
+			
+			//Datos del pedido
+			$venta = array(	'id'=>$params['id'],
+							'total'=>$params['total'], 
+							'deuda'=>$params['deuda'], 
+							'bonificacion'=>$params['bonificacion'],
+							'montoFavor'=>$params['montoFavor'],
+							'created'=>$params['created']);
+							
+			if(isset($params['FP'])) $ped['FP'] = $params['FP'];
+			if(isset($params['nota'])) $ped['nota'] = $params['nota'];
+			
+			
+			// UPDATE de venta			
+			$mod = isset($params['modelos'])?$params['modelos']:array();
+			$pagos = isset($params['pagos'])?$params['pagos']:array();
+			$pagos2delete = isset($params['pagos2delete'])?$params['pagos2delete']:array();
+			$mod2delete = isset($params['mod2delete'])?$params['mod2delete']:array();
+
+			$res =  $this->Ventas->setVenta($venta,$mod, $pagos, $mod2delete, $pagos2delete );
+				
+			if(!$res['success'])	
+				throw new BadRequestException($res['msg']);
+
+			echo $this->json('La venta fue actualizada.', $this->Ventas->getVentaPorId($venta['id']));
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	/*******
 	* DELETE

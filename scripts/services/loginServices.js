@@ -28,7 +28,6 @@ app.factory('AuthService', function ($http, Session) {
 
       var isAuthe = this.isAuthenticated();
       var isAutho =  (authorizedRoles.indexOf(Session.getUserRole())!= -1);
-      console.log(Session.getUserId());
       return isAuthe && isAutho;
 
     }

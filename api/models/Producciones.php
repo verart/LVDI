@@ -5,7 +5,7 @@ class Producciones extends AppModel {
 	public $primaryKey = 'id';	
 	
 	
-	public $hasMany = array('Modelos', 'MovimientosStock'); 
+	public $hasMany = array('Modelos', 'MovimientosStock','ColaImpresion'); 
 	
 	
 	/**
@@ -292,6 +292,9 @@ class Producciones extends AppModel {
 										$res = $this->Modelos->reponer($idModelo, 1,'AltaProduccion');
 										if(!$res['success'])
 											throw new BadRequestException($res['msg']);
+											
+										//Genero etiqueta en la cola de impresion
+										$res = $this->ColaImpresion->set($idModelo,null,$idProduccion,null);
 									
 										
 								}else{

@@ -35,7 +35,7 @@ app.controller('resumenCtrl', ['$scope','$modal',  'resumenService', 'AlertServi
 				                                          
 				     $scope.resumenPorMayor = {
 				     	tarjeta:parseInt(promise.data.DATA.resumenPorMayor['Tarjeta'],10), 
-				     	debito:parseInt(promise.data.DATA.resumenPorMayor['Debito'],10), 
+				     	transferencia:parseInt(promise.data.DATA.resumenPorMayor['Transferencia'],10), 
 				     	cheque:parseInt(promise.data.DATA.resumenPorMayor['Cheque'],10), 
 				     	efectivo:parseInt(promise.data.DATA.resumenPorMayor['Efectivo'],10)};    
 				     	

@@ -8,7 +8,7 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         controller : "loginCtrl",
         templateUrl : dir_root + "/templates/login.html",
         auth: {
-        	needAuth: false
+        	needAuth: false,
         }
     })
     .when("/productos", {

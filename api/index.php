@@ -87,6 +87,7 @@ $route->add('/ventas/show','GET','Ventas','show');
 $route->add('/ventas/pagos','GET','Ventas','pagos');
 $route->add('/ventas/delete','DELETE','Ventas','delete');
 $route->add('/ventas/create','POST','Ventas','create');
+$route->add('/ventas/update','PUT','Ventas','update');
 $route->add('/ventas/addPago','POST','Ventas','addPago');
 $route->add('/ventas/addNota','POST','Ventas','addNota');
 $route->add('/ventas/deletePago','DELETE','Ventas','deletePago');
@@ -100,6 +101,7 @@ $route->add('/notas/create','POST','Notas','create');
 $route->add('/colaImpresion/index','GET','colaImpresion','index');
 $route->add('/colaImpresion/delete','DELETE','colaImpresion','delete');
 $route->add('/colaImpresion/deletePedido','DELETE','colaImpresion','deletePedido');
+$route->add('/colaImpresion/deleteProduccion','DELETE','colaImpresion','deleteProduccion');
 $route->add('/colaImpresion/create','POST','colaImpresion','create');
 
 

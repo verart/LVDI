@@ -10,7 +10,16 @@ app.controller('produccionesCtrl',
 	    **********************************************************************/
 	    $scope.alerts = [ ];
 	    
-        
+        /**********************************************************************
+	    TABS
+	    Manejo de pesatañas
+	    **********************************************************************/
+	    $('#tabs a').click(function (e) {
+		  e.preventDefault()
+		  $(this).tab('show')
+		});
+		
+		
 	    $scope.filterProds ={ estado:'Retirado'};
 	    $scope.order = '-fecha';
 	    $scope.query = '';
