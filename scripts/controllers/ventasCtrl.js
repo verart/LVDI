@@ -11,7 +11,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	    **********************************************************************/
 	    $scope.alerts = [ ];
 	    
-	    $scope.order = '-fecha';
+	    $scope.order = '-created';
 
 	    
 
