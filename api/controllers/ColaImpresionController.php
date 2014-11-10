@@ -33,14 +33,15 @@ class ColaImpresionController extends AppController {
 		try {
 			$idModelo = $_POST['modelos_id'];
 			$idPedido = (isset($_POST['pedidos_id']))? $_POST['pedidos_id'] : null;
+			$idProduccion = (isset($_POST['producciones_id']))? $_POST['producciones_id'] : null;
 			$belongsTo = (isset($_POST['belongsTo']))? $_POST['belongsTo'] : NULL;
 
 			
 		
 			if (!$this->PermisosComponent->puedeAcceder('ColaImpresion', 'create'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
-			
-			$res = $this->ColaImpresion->set($idModelo, $idPedido, $belongsTo);
+
+			$res = $this->ColaImpresion->set($idModelo, $idPedido, $idProduccion, $belongsTo);
 			
 			if(!$res['success'])
 				throw new BadRequestException($res['msg']);
@@ -91,6 +92,30 @@ class ColaImpresionController extends AppController {
 				throw new ForbiddenException('No tiene permiso para quitar los productos a imprimir.'); 
 			
 			$this->ColaImpresion->deletePedido($idPedido);
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
+	
+	
+	
+	
+	/*******
+	* DELETEPRODUCCION
+	* Elimina los productos a imprimir de una produccion.
+	* Params (DELETE): $idPedido
+	*/
+	function deleteProduccion($idProduccion) {
+		
+		try {
+		
+			if (!$this->PermisosComponent->puedeAcceder('ColaImpresion', 'delete'))
+				throw new ForbiddenException('No tiene permiso para quitar los productos a imprimir.'); 
+			
+			$this->ColaImpresion->deleteProduccion($idProduccion);
 
 		} catch (Exception $e) {	
 

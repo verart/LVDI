@@ -58,6 +58,19 @@ app.service('colaImpresionService', ['$http', function ($http) {
 	            
             },
             
+            /******************************
+            DELETEIMPRESIONPRODUCCION
+            ******************************/
+            deleteModeloImpresionProduccion:function (idProd) { 
+	                    
+	            return $http({
+	            	method: 'DELETE',
+	            	url: dir_api + '/colaImpresion/'+idProd+'/deleteProduccion',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
+            
             getModelos: function(){	            
 	            return modelos;	            
             },

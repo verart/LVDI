@@ -11,7 +11,7 @@ app.controller('gastosCtrl', ['$scope','$modal',  'gastosService', 'AlertService
 	    $scope.alerts = [ ];
 
 
-		hoy = (new Date()).toISOString().slice(0, 10);
+		hoy = formatLocalDate();
 		
 		$scope.fps = [
 		  	{'label':'Efectivo','value':'Efectivo'}, 

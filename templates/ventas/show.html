@@ -61,28 +61,24 @@
 			
 					<div class="resumenPedido form-horizontal pull-right" role="form">
 						
+
 						<label style="margin-right:15px;"> Subtotal:  {{venta.total | currency}} </label>
+							
+						<label class="col-sm-12 small">
+									Monto a favor: {{venta.montoFavor | currency}} 
+						</label>
+							
+						<label class="col-sm-12 small">
+									Bonificación: {{venta.bonificacion}} %
+						</label>
 						
-						<div class="form-group">
-							<label for="montoFavor" class="col-sm-9 control-label small">Monto a favor:</label>
-						    <div class="col-sm-2"  style="padding:0px">
-						    	<input type="text" class="form-control" id="montoFavor" ng-model="venta.montoFavor" disabled>
-						    </div>	
-						</div>
-						<div class="form-group">
-				
-						    <label for="bonif" class="col-sm-8 control-label small">Bonificación:</label>
-						    
-						    <div class="col-sm-2"  style="padding:0px">
-						    	<input type="text" class="form-control" id="bonif" ng-model="venta.bonificacion" disabled>
-						    </div>
-						    
-						    <label for="bonif" class="col-sm-2 control-label small" style="text-align:left;padding-left:6px;">%</label>
-				
-						</div>
-						<hr/>
+						<hr class="col-sm-11 "/>
 						
 						<label style="margin-right:15px;font-size:18px;"> Total:  {{ venta.totalFinal | currency }} </label>
+						
+						<label ng-show="!((venta.deuda > 0)||(venta.pagos.length > 0))" class="col-sm-12"> 
+								F.P: {{venta.FP}} 
+						</label>
 						
 						<br>
 						
@@ -105,7 +101,6 @@
 									  	<th class="col-md-3">Monto</th>
 									  	<th class="col-md-3">FP</th>
 									  	<th class="col-md-2">Bonificacion </th>
-									  	<th class="col-md-1"> </th>
 									</tr>
 								</thead>
 								<tbody>
@@ -114,50 +109,12 @@
 										<td class="col-md-3"> {{p.monto |currency}}</td>
 										<td class="col-md-3"> {{p.FP}}</td>						
 										<td class="col-md-2"> {{p.bonificacion}}</td>					
-										<td class="col-md-1">														
-											<!-- ELIMINAR PAGO -->
-											<span 	class="glyphicon glyphicon-remove accionesLst link"  
-											title="Eliminar pago"
-											ng-click="removePagoDefinitivo($index)">
-											</span>
-										</td>
 									</tr>
 								</tbody>
 							</table>					
 						</div>
-								
-						<div class="tableContainer" ng-if="venta.pagos.length == 0" >
-							<p class="avisoSmall" >No se han realizado pagos.</p>
-						</div>
-						
+
 						<br/>
-													
-						<div class="littleForm row">
-							<div class="colForm col-xs-12 col-sm-3">
-								<input type="date" class="form-control small" 
-									placeholder="Fecha" id="fechaPago" focus-me="{{true}}" 
-									ng-model="form.pago.created" style="padding-right:0px;" required/>
-							</div>
-							<div class="colForm col-xs-12 col-md-3">
-									<input type="number" step="any" id="montoPago" class="form-control small inputForm" 
-									ng-model="form.pago.monto" placeholder="Monto" ng-enter="addPagoDefinitivo()">
-							</div>
-				 			<div class="colForm col-xs-12 col-md-3">					
-									<select class="form-control small filterInput selectpicker" id="fpPago"
-									ng-model="form.pago.FP" 
-									ng-options="fp.value as fp.label for (k,fp) in fps"
-									ng-init="Efectivo">
-									</select> 
-							</div>
-							<div class="colForm col-xs-12 col-md-2">
-									<input type="number" step="any" id="bonifPago" class="form-control small inputForm" 
-									ng-model="form.pago.bonificacion" placeholder="Bonif." ng-enter="addPagoDefinitivo()">
-							</div>
-							<div class="colForm col-xs-6 col-md-2">
-									<button type="button" class="btn btn-default" ng-click="addPagoDefinitivo()">Agregar pago</button>
-							</div>
-						</div> <!--littleForm -->
-									
 									
 						<label class="pull-right" style="margin-right:15px; margin-top:25px;"> 
 								Resta pagar:  {{ venta.deuda| currency }} 

@@ -133,7 +133,7 @@ app.controller('colaImpresionCtrl',
 		
 		/***************************************************
 		 REMOVEFROMPEDIDOS producto
-		 Elimina un modelo de la cola. 
+		 Elimina un modelo de la cola de pedidos
 		 ****************************************************/
 		 $scope.removeFromPedidos= function(id, index,index2) {
 		  
@@ -156,11 +156,37 @@ app.controller('colaImpresionCtrl',
 		  }
 		
 		
+		/***************************************************
+		 REMOVEFROMPRODUCCIONES producto
+		 Elimina un modelo de la cola de producciones. 
+		 ****************************************************/
+		 $scope.removeFromProducciones= function(id, index,index2) {
+		  
+		  	colaImpresionService.deleteModeloImpresion(id).then(
+				//Success
+				function(promise){
+					
+					if($scope.data.producciones[index].productos.length == 1)
+						$scope.data.producciones.splice(index,1);
+					else	
+						$scope.data.producciones[index].productos.splice(index2,1);
+					
+				},
+				//Error al eliminar
+				function(promise){
+					AlertService.add('danger', promise.data.MSG);
+				}
+			);
+		
+		  }
+		  
+		  
+		
 		/*******************************************************************
 		 VACIARCOLA
 			 vacia la cola 'from' (resposicion / sueltos / indexDePedido). 
 		 ********************************************************************/
-		 $scope.vaciarCola = function(from) {
+		 $scope.vaciarCola = function(from,index) {
 		  
 		  	//Solicita confirmación
 		  	var txt_confirm;
@@ -175,9 +201,14 @@ app.controller('colaImpresionCtrl',
 					txt_confirm = { msj: "Se eliminarán todos los productos de su cola de impresión. ¿Desea continuar?", 
 									accept:"Si", cancel:"No"};
 					break;
-					
+				
+				case 'producciones': 
+					txt_confirm = { msj: "Se eliminará la cola de impresión de la producción de "+$scope.data.producciones[index].responsable+". ¿Desea continuar?", 
+									accept:"Si", cancel:"No"};
+					break;
+						
 				default:
-					txt_confirm = { msj: "Se eliminará la cola de impresión del pedido de "+$scope.data.pedidos[from].clientePM+". ¿Desea continuar?", 
+					txt_confirm = { msj: "Se eliminará la cola de impresión del pedido de "+$scope.data.pedidos[index].clientePM+". ¿Desea continuar?", 
 									accept:"Si", cancel:"No"};	
 				
 			}		
@@ -224,24 +255,40 @@ app.controller('colaImpresionCtrl',
 							break;			
 						
 						
-						
-						default:  // Productos de pedidos
+						case 'producciones':  // Productos de producciones
 						
 							var stop = false;
-							var prods = $scope.data.pedidos[from].productos
+							var prods = $scope.data.producciones[index].modelos;
 							
 							prods.every(function (imp) {
 						  	  		
-						        colaImpresionService.deleteModeloImpresionPedido($scope.data.pedidos[from].pedidos_id).then(
+						        colaImpresionService.deleteModeloImpresionProduccion($scope.data.producciones[index].producciones_id).then(
 									function(promise){},
 									function(promise){ 	AlertService.add('danger', promise.data.MSG);
 														stop = true;
 									}
 								);
-		
 								return (stop === false);
 							});
-							$scope.data.pedidos.splice(from, 1);
+							$scope.data.producciones.splice(index, 1);
+						
+						
+						default:  // Productos de pedidos
+						
+							var stop = false;
+							var prods = $scope.data.pedidos[index].productos
+							
+							prods.every(function (imp) {
+						  	  		
+						        colaImpresionService.deleteModeloImpresionPedido($scope.data.pedidos[index].pedidos_id).then(
+									function(promise){},
+									function(promise){ 	AlertService.add('danger', promise.data.MSG);
+														stop = true;
+									}
+								);	
+								return (stop === false);
+							});
+							$scope.data.pedidos.splice(index, 1);
 
 							
 							
@@ -262,32 +309,31 @@ app.controller('colaImpresionCtrl',
 		 IMPRIMIR
 		 imprimir la cola from. (reposicion / sueltos / pedidoIndex) 
 		 ****************************************************/ 
-		 $scope.imprimir= function(from){
+		 $scope.imprimir= function(from,index){
 			
-			if((from == 'reposicion') || (from == 'sueltos'))
-				$scope.imprimirReposicionesSueltos(from);
-			else
-				$scope.imprimirPedido(from);
+			if((from == 'reposicion') || (from == 'sueltos')){
+				productosAImprimir = (from == 'reposicion')? $scope.data.reposicion.modelos : $scope.data.sueltos.modelos;
+				$scope.imprimirEtiquetasBarcode(productosAImprimir);
+			}else
+				if(from == 'producciones'){ 
+					productosAImprimir = $scope.data.producciones[index].modelos;    
+					$scope.imprimirEtiquetasBarcode(productosAImprimir);
+				}else
+					$scope.imprimirPedido(index);
 			
 		 }; 
 		
 		
-		
-				
-		
 		/***************************************************************************************
-		 IMPRIMIRREPOSICONESSUELTOS 
-		 imprime la cola de from con el formato de etiqueta de producto con código de barras. 
+		 IMPRIMIRETIQUETASBARCODE
+		 imprime la lista productosAImprimir con el formato de etiqueta de producto con código de barras. 
 		 ****************************************************************************************/
-		 $scope.imprimirReposicionesSueltos= function(from) {
+		 $scope.imprimirEtiquetasBarcode= function(productosAImprimir) {
 		    	
 		    var index = 0;	
-		    var d;
-		    	
+		    var d; 	
 		    
 		    $('#codes').empty();
-		    
-		    productosAImprimir = (from == 'reposicion')? $scope.data.reposicion.modelos : $scope.data.sueltos.modelos;
 		    
 		    if(productosAImprimir.length >0){
 		    		
@@ -343,6 +389,7 @@ app.controller('colaImpresionCtrl',
 			}	
 		}
 		
+		  
 		  
 		 
 		 

@@ -1,28 +1,3 @@
-	<!-- barra -->
-	<nav class="navbar navbar-default" role="navigation">
-	  <div class="container-fluid">
-	  
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      
-	      <ul class="nav navbar-nav">	        
-	        <li>
-	        	<img src="img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px; margin-bottom:5px;" />
-	        </li>	      
-	        <li ng-if="(usuario.getUserRole()=='cuentas')"  class="middle active">
-	        	<a href="#!/resumen">Resumen</a></li>
-	        <li ng-if="(usuario.getUserRole()=='cuentas')" class="middle">
-	        	<a href="#!/ventas">Ventas</a></li> 
-	        <li ng-if="(usuario.getUserRole()=='cuentas')" class="middle">
-	        	<a href="#!/gastos">Gastos</a></li>
-
-	      </ul>
-	      
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
-
-
 <div class="container-fluid" ng-controller="resumenCtrl" >
 
 	<div class="row-fluid">
@@ -115,9 +90,9 @@
 							<p> Efectivo: {{resumenPorMayor.efectivo | currency}}</p>
 							<p> Tarjeta: {{resumenPorMayor.tarjeta | currency }}</p>
 							<p> Cheque: {{resumenPorMayor.cheque | currency }}</p>
-							<p> Débito: {{resumenPorMayor.debito | currency }}</p>
+							<p> Transferencia: {{resumenPorMayor.transferencia | currency }}</p>
 							<div class="linea"></div>
-							<p> Total: {{(resumenPorMayor.tarjeta + resumenPorMayor.efectivo + resumenPorMayor.cheque + resumenPorMayor.debito) | currency}}</p>
+							<p> Total: {{(resumenPorMayor.tarjeta + resumenPorMayor.efectivo + resumenPorMayor.cheque + resumenPorMayor.transferencia) | currency}}</p>
 						</div>
 						
 					</div>

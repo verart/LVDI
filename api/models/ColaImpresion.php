@@ -100,7 +100,7 @@ class ColaImpresion extends AppModel {
 		while($i < count($results)){
 			$resultsFormat['pedidos'][$iF]['pedidos_id'] = $results[$i]['pedidos_id'];
 			$resultsFormat['pedidos'][$iF]['clientePM']= utf8_encode($results[$i]['clientePM']).' - '.utf8_encode($results[$i]['localidad']);
-			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
+			//los modelos
 			$resultsFormat['pedidos'][$iF]['modelos'] = array();
 			$m = 0;
 			while(($i < count($results))&&($resultsFormat['pedidos'][$iF]['pedidos_id'] == $results[$i]['pedidos_id'])){
@@ -113,6 +113,44 @@ class ColaImpresion extends AppModel {
 		}
 		
 		
+		/************************************************
+		PRODUCTOS DE PRODUCCIONES DEVUELTAS
+		************************************************/
+		
+		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo, R.nombre as responsable 
+				FROM colaimpresion CI
+				INNER JOIN modelos M ON CI.modelos_id = M.id
+				INNER JOIN productos Pr ON Pr.id = M.productos_id 
+				INNER JOIN producciones_modelos PM ON (PM.modelos_id = M.id) & (PM.producciones_id = CI.producciones_id)
+				INNER JOIN producciones P ON PM.producciones_id = P.id
+				INNER JOIN responsables R ON P.responsables_id = R.id			
+				GROUP BY CI.producciones_id, M.productos_id	
+				ORDER BY CI.producciones_id";
+				
+		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
+	   	$query = $query->execute();	
+	   	
+		$results = $query->fetchAll();
+		$i=0;
+		$m = 0;
+		$iF = 0;
+		//Proceso las producciones 
+		while($i < count($results)){
+			$resultsFormat['producciones'][$iF]['producciones_id'] = $results[$i]['producciones_id'];
+			$resultsFormat['producciones'][$iF]['responsable']= utf8_encode($results[$i]['responsable']);
+			//los modelos
+			$resultsFormat['producciones'][$iF]['modelos'] = array();
+			$m = 0;
+			while(($i < count($results))&&($resultsFormat['producciones'][$iF]['producciones_id'] == $results[$i]['producciones_id'])){
+				$resultsFormat['producciones'][$iF]['modelos'][$m]['modelos_id'] = $results[$i]['modelos_id'];
+				$resultsFormat['producciones'][$iF]['modelos'][$m]['id'] = $results[$i]['id'];
+				$resultsFormat['producciones'][$iF]['modelos'][$m]['nombre'] =  utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
+			$resultsFormat['producciones'][$iF]['modelos'][$m++]['precio'] = $results[$i++]['precio'];	
+			
+			}
+			$iF++;
+		}
+		
 		return $resultsFormat;
 	}
 	
@@ -124,18 +162,19 @@ class ColaImpresion extends AppModel {
 	
 	/**
 	* SET
-	* $productoAImprimir = array( $idModelo, $idPedido, $belongsTo )
+	* $productoAImprimir = array( $idModelo, $idPedido, $idProduccion, $belongsTo )
 	*/
-	function set($idModelo, $idPedido=NULL, $belongsTo=NULL){
+	function set($idModelo, $idPedido=NULL, $idProduccion=NULL, $belongsTo=NULL){
 		
 		try{
 			$prod = array('modelos_id'=>$idModelo);
 			if($idPedido != NULL)$prod['pedidos_id']= $idPedido;
+			if($idProduccion != NULL)$prod['producciones_id']= $idProduccion;
 			if($belongsTo != NULL)$prod['belongsTo']= $belongsTo;
 			
 			if(!$this->create($prod))
 				throw new BadRequestException('Hubo un error al agregar el producto a la cola de impresión.');
-			
+
 			//Agrego los modelos
 			$idImp = $this->con->lastInsertID('colaimpresion', 'id');
 			$prod['id']=$idImp;
@@ -175,6 +214,28 @@ class ColaImpresion extends AppModel {
 	}	
 
 	
+	/**
+	* DELETEPRODUCCION
+	* $produccionAImprimir (int)
+	*/
+	function deleteProduccion($produccionAImprimir){
+		
+		try{
+			
+			$sql = 'DELETE FROM colaimpresion WHERE producciones_id = '.$produccionAImprimir; 
+			
+			$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);	
+			$query = $query->execute();	
+				
+			return array('success'=>true, 'cant'=>$query);
+			
+		} catch (Exception $e) {
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+		}
+		
+		
+	}	
 	
 }
 ?>

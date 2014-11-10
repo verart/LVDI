@@ -68,7 +68,7 @@ app.service('clientesPMService', ['$http', function ($http) {
              
                    
             /******************************
-            DELETEPEDIDO
+            DELETECLIENTE
             ******************************/
             deleteCliente:function (id) { 
 	                    
