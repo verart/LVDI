@@ -17,7 +17,7 @@ class Resumen extends AppModel {
 
 
 		// total de ventas en pagos
-		$sql = "SELECT SUM(VP.monto - (VP.monto*VP.bonificacion/100)) as resumenVentas, VP.FP
+		$sql = "SELECT SUM(VP.monto) as resumenVentas, VP.FP
 				FROM ventas_pagos VP 
 				$conditions 
 				GROUP BY VP.FP ";
@@ -39,7 +39,7 @@ class Resumen extends AppModel {
 					(select ventas_id
 					FROM ventas_pagos VP
 					GROUP BY ventas_id) as pagos ON pagos.ventas_id = V.id
-				$conditions AND (deuda = 0) AND  ISNULL(pagos.ventas_id)    
+				$conditions AND (deuda <= 0) AND  ISNULL(pagos.ventas_id)    
 				GROUP BY V.FP ";
 			
 		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -62,7 +62,7 @@ class Resumen extends AppModel {
 	   	$query = $query->execute();		   	
 		$results = $query->fetchAll();
 		
-		$finalResults['resumenPorMayor'] = array('Efectivo'=>0,'Tarjeta'=>0,'Debito'=>0,'Cheque'=>0);
+		$finalResults['resumenPorMayor'] = array('Efectivo'=>0,'Tarjeta'=>0,'Transferencia'=>0,'Cheque'=>0);
 		$i=0;
 		while($i < count($results))
 			$finalResults['resumenPorMayor'][utf8_encode($results[$i]['FP'])]=$results[$i++]['resumenPorMayor'];	

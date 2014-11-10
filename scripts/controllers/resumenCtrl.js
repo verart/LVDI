@@ -28,23 +28,23 @@ app.controller('resumenCtrl', ['$scope','$modal',  'resumenService', 'AlertServi
 				//success
 				function(promise){
 				     $scope.resumenVentas = {
-				     	tarjeta:parseInt(promise.data.DATA.resumenVentas['Tarjeta'],10), 
-				     	debito:parseInt(promise.data.DATA.resumenVentas['Debito'],10), 
-				     	cheque:parseInt(promise.data.DATA.resumenVentas['Cheque'],10), 
-				     	efectivo:parseInt(promise.data.DATA.resumenVentas['Efectivo'],10)}; 
+				     	tarjeta:parseFloat(promise.data.DATA.resumenVentas['Tarjeta'],10), 
+				     	debito:parseFloat(promise.data.DATA.resumenVentas['Debito'],10), 
+				     	cheque:parseFloat(promise.data.DATA.resumenVentas['Cheque'],10), 
+				     	efectivo:parseFloat(promise.data.DATA.resumenVentas['Efectivo'],10)}; 
 				                                          
 				     $scope.resumenPorMayor = {
-				     	tarjeta:parseInt(promise.data.DATA.resumenPorMayor['Tarjeta'],10), 
-				     	debito:parseInt(promise.data.DATA.resumenPorMayor['Debito'],10), 
-				     	cheque:parseInt(promise.data.DATA.resumenPorMayor['Cheque'],10), 
-				     	efectivo:parseInt(promise.data.DATA.resumenPorMayor['Efectivo'],10)};    
+				     	tarjeta:parseFloat(promise.data.DATA.resumenPorMayor['Tarjeta'],10), 
+				     	transferencia:parseFloat(promise.data.DATA.resumenPorMayor['Transferencia'],10), 
+				     	cheque:parseFloat(promise.data.DATA.resumenPorMayor['Cheque'],10), 
+				     	efectivo:parseFloat(promise.data.DATA.resumenPorMayor['Efectivo'],10)};    
 				     	
 				     $scope.resumenGastos = {
-				     	tarjeta:parseInt(promise.data.DATA.resumenGastos['Tarjeta'],10), 
-				     	debito:parseInt(promise.data.DATA.resumenGastos['Debito'],10), 
-				     	cheque:parseInt(promise.data.DATA.resumenGastos['Cheque'],10), 
-				     	efectivo:parseInt(promise.data.DATA.resumenGastos['Efectivo'],10),
-				     	transferencia:parseInt(promise.data.DATA.resumenGastos['Transferencia'],10)}; 	             
+				     	tarjeta:parseFloat(promise.data.DATA.resumenGastos['Tarjeta'],10), 
+				     	debito:parseFloat(promise.data.DATA.resumenGastos['Debito'],10), 
+				     	cheque:parseFloat(promise.data.DATA.resumenGastos['Cheque'],10), 
+				     	efectivo:parseFloat(promise.data.DATA.resumenGastos['Efectivo'],10),
+				     	transferencia:parseFloat(promise.data.DATA.resumenGastos['Transferencia'],10)}; 	             
 	               
 				},
 				//Error al actualizar

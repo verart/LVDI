@@ -11,12 +11,22 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    $scope.filterSubmitted = '';
 	    
 	    
-	    
 	    /**********************************************************************
 	    ALERTS
 	    Mensajes a mostrar
 	    **********************************************************************/
 	    $scope.alerts = [ ];
+	    
+	    
+	    
+	    /**********************************************************************
+	    TABS
+	    Manejo de pesatañas
+	    **********************************************************************/
+	    $('#tabs a').click(function (e) {
+		  e.preventDefault()
+		  $(this).tab('show')
+		});
 	    
 	    
 	   /*****************************************************************************************************
@@ -338,7 +348,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 		  	{'label':'Efectivo','value':'Efectivo'}, 
 		  	{'label':'Tarjeta','value':'Tarjeta'},
 		  	{'label':'Cheque','value':'Cheque'}, 
-		  	{'label':'Débito','value':'Debito'}, 
 		  	{'label':'Transferencia','value':'Transferencia'}];
 		  		 
 		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	 
@@ -447,7 +456,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 			  			FP:'',
 			  			nota: ''};
 		  			
-			  var original = $scope.pedido;
 
 			  $scope.form.cliente = {nombre:'', id:'', bonificacion:0};
 			  
@@ -499,7 +507,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 		   Se cierra el modal y retornan los datos del pedido original, sin cambios
 		  ****************************************************/
 		  $scope.cancel = function () {
-		  	$scope.back2original();
+		  	if($scope.pedido.id != undefined)
+		  		$scope.back2original();
 		    $modalInstance.dismiss({action:'cancel'});
 		  };
 		  

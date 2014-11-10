@@ -1,55 +1,8 @@
-	<!-- barra -->
-	<nav class="navbar navbar-default" role="navigation">
-	  <div class="container-fluid">
-	  
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      
-	      <ul class="nav navbar-nav">
-	        
-	        <li>
-	        	<img src="img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px;margin-bottom:5px;" />
-	        </li>
-	        
-	        <li ng-if="(usuario.getUserRole()=='cuentas')"  class="middle">
-	        	<a href="#!/resumen">Resumen</a></li>
-
-	        <li ng-if="((usuario.getUserRole() =='admin')||(usuario.getUserRole() == 'taller')||(usuario.getUserRole()=='local'))" class="middle">
-	        	<a href="#!/productos">Productos</a></li>
-	        <li ng-if="((usuario.getUserRole() =='admin')||(usuario.getUserRole() == 'taller'))" class="middle">
-	        	<a href="#!/pedidos">Pedidos</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
-	        	<a href="#!/producciones">Producciones</a></li>
-	        <li class="active middle">
-	        	<a href="#">Ventas</a></li>
-<li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" class="middle">
-	        	<a href="#!/clientes">Clientes</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" class="middle">
-	        	<a href="#!/responsables">Resp. de prod</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" class="middle">
-	        	<a href="#!/colaImpresion">Cola de Impresión</a></li>
-	       <!--
- <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/reportes">Reportes</a></li>	 
--->
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/usuarios">Cuentas</a></li>   
-	        <li ng-if="(usuario.getUserRole()=='cuentas')" class="middle">
-	        	<a href="#!/gastos">Gastos</a></li>  
-	      </ul>
-	      
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
-
-
 <div class="container-fluid" ng-controller="ventasCtrl" data-ng-init="cargarVentas()">
 
 	<div class="row-fluid">
 	
-		<div class="h2 titleh2"> Ventas </div>
+		<div class="h4 seccionTitle"> Ventas </div>
  
 
 		<!-- SIDEBAR-->			
@@ -57,8 +10,6 @@
 			<form class="navbar-form navbar-left" role="search">
 
 				<div class="form-group filterInput">
-					
-					<div class="formElement">
 					
 						<label class="control-label">Mostrar</label>
 						
@@ -82,7 +33,6 @@
 								Con deuda
 							</label>
 							
-						</div>	
 					</div>
 					
 					<hr/>
@@ -114,8 +64,9 @@
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
-			  			<tr ng-repeat="venta in filteredVentas = (data | orderBy:order:false)" 
-			  						class="link" ng-click=" !((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local')) || showVenta(venta.id, usuario.getUserRole())">
+			  			<tr ng-repeat="venta in filteredVentas = (data | orderBy:order:true)" 
+			  						class="link" 
+			  						ng-click = "!((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local')) || viewVenta(venta.id,venta.deuda,usuario.getUserRole())">
 			  				<td> {{venta.created | date:'dd/MM/yyyy' }}</td>
 			  				<td>
 			  					<span ng-if="venta.nota!=''" href="#" class="tt1 glyphicon glyphicon-comment notaVenta" popover data-trigger="hover" data-selector="" 
@@ -129,7 +80,7 @@
 		 					<td ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" > 
 		 						{{venta.bonificacion}}%</td>	
 		  				</tr>
-		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="3"> No hay ventas</td></tr>
+		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="4"> No hay ventas</td></tr>
 		   			</tbody>
 		  		</table>
 		  		

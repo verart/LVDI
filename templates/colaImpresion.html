@@ -1,51 +1,8 @@
-	<!-- barra -->
-	<nav class="navbar navbar-default" role="navigation">
-	  <div class="container-fluid">
-	  
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      
-	      <ul class="nav navbar-nav">
-	        
-	        <li>
-	        	<img src="img/LVDI.png" data-alt="Los Vados del Isen" style="max-width:105px;max-height:105px;width:auto;height:auto; margin-right:10px;margin-bottom:5px;" />
-	        </li>
-	        
-	        <li class="middle"><a href="#!/productos">Productos</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='taller'))" class="middle">
-	        	<a href="#!/pedidos">Pedidos</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
-	        	<a href="#!/producciones">Producciones</a> </li>
-	        <li class="middle">
-	        	<a href="#!/ventas">Ventas</a></li>
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/clientesPM">Clientes Por mayor</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
-	        	<a href="#!/clientes">Clientes</a></li>
-	        <li ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local'))" class="middle">
-	        	<a href="#!/responsables">Resp. de prod</a></li>
-	        <li class="active middle">
-	        	<a href="#!/reportes">Cola de Impresión</a></li>
-<!--
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/reportes">Reportes</a></li>
--->
-	        <li ng-if="(usuario.getUserRole()=='admin')" class="middle">
-	        	<a href="#!/usuarios">Cuentas</a></li>	        
-	      </ul>
-
-	      
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
-
-
-
-<div class="container-fluid" ng-controller="colaImpresionCtrl"  ng-init="init('Meli','1')">
+	<div class="container-fluid" ng-controller="colaImpresionCtrl"  ng-init="init('Meli','1')">
 
 	<div class="row-fluid">
 	
-		<div class="h2 titleh2"> Cola de impresión </div>
+		<div class="h4 seccionTitle"> Cola de impresión </div>
 
 
 		<!-- SIDEBAR-->			
@@ -80,11 +37,6 @@
 			<div class="tableContainer" >
 
 				<table class="table table-hover table-condense tableCola">
-<!--
-			  		<thead>
-			  			<tr> <th>Producto</th><th></th> </tr>
-			  		</thead>
--->	
 			  		<tbody>
 			  			<tr ng-repeat="imp in data.sueltos.modelos" class="pedidosList">
 			  				<td> {{imp.nombre}}</td>
@@ -100,9 +52,9 @@
 		  		</table>
 		  		<div class="btnCola">
 			  		<button  ng-disabled="data.sueltos.modelos.length == 0"
-			  				class="btn btn-danger btn-sm" ng-click="vaciarCola('sueltos')">Vaciar cola</button>
+			  				class="btn btn-danger btn-sm" ng-click="vaciarCola('sueltos',1)">Vaciar cola</button>
 			  		<button  ng-disabled="(data.sueltos.modelos.length == 0)" 
-			  				class="btn btn-primary btn-sm" ng-click="imprimir('sueltos')" target="_blank">Imprimir</button>
+			  				class="btn btn-primary btn-sm" ng-click="imprimir('sueltos',1)" target="_blank">Imprimir</button>
 		  		</div>
 		  			
 			</div>
@@ -115,11 +67,6 @@
 			<div class="tableContainer" >
 
 				<table class="table table-hover table-condense tableCola">
-<!--
-			  		<thead>
-			  			<tr> <th>Producto</th><th></th> </tr>
-			  		</thead>
--->	
 			  		<tbody>
 			  			<tr ng-repeat="imp in data.reposicion.modelos" class="pedidosList">
 			  				<td> {{imp.nombre}}</td>
@@ -135,20 +82,19 @@
 		  		</table>
 		  		<div class="btnCola">
 			  		<button  ng-disabled="data.reposicion.modelos.length == 0" 
-			  				class="btn btn-danger btn-sm" ng-click="vaciarCola('reposicion')">Vaciar cola</button>
+			  				class="btn btn-danger btn-sm" ng-click="vaciarCola('reposicion',1)">Vaciar cola</button>
 			  		<button  ng-disabled="data.reposicion.modelos.length == 0" 
-			  				class="btn btn-primary btn-sm" ng-click="imprimir('reposicion')" target="_blank">Imprimir</button>
-		  		</div>	
+			  				class="btn btn-primary btn-sm" ng-click="imprimir('reposicion',1)" target="_blank">Imprimir</button>
+		  		</div>
 			</div>
 			
 			
 			<h3>Productos por pedidos</h3>
 			
-			<div ng-repeat="($indexP, productosPedidos) in data.pedidos" >
-				
-				
+			<div ng-show="(data.pedidos == undefined )" class=" tableContainer aviso"> No hay productos para imprimir</div>	
+			<div ng-repeat="($indexP, productosPedidos) in data.pedidos" >				
 				<div class="tableContainer">
-					<table class="table table-hover table-condense">
+		  			<table class="table table-hover table-condense">
 				  		<thead>
 				  			<tr> <th> Cliente: {{productosPedidos.clientePM}}</th><th></th></tr>
 				  		</thead>	
@@ -167,20 +113,51 @@
 			  		</table>
 			  		<div class="btnCola">
 				  		<button ng-disabled="productosPedidos.productos.length == 0"
-				  				 class="btn btn-danger btn-sm" ng-click="vaciarCola($index)">Eliminar cola</button>
+				  				 class="btn btn-danger btn-sm" ng-click="vaciarCola('pedidos',$index)">Eliminar cola</button>
 			  			<button  ng-disabled="productosPedidos.productos.length == 0"
-			  					class="btn btn-primary btn-sm" ng-click="imprimir($index)" target="_blank" >Imprimir</button>
+			  					class="btn btn-primary btn-sm" ng-click="imprimir('pedidos',$index)" target="_blank" >Imprimir</button>
 		  			</div>
 				</div>
 				<br/>
 			</div>
 			
+			<h3>Productos por devolución de Producción</h3>
+			
+			<div ng-show="(data.producciones == undefined )" class="tableContainer aviso"> No hay productos para imprimir</div>	
+			<div ng-repeat="($indexP, productosProducciones) in data.producciones" >
+				
+				<div class="tableContainer">					
+					<table class="table table-hover table-condense">
+				  		<thead>
+				  			<tr> <th> Responsable: {{productosProducciones.responsable}}</th><th></th></tr>
+				  		</thead>	
+				  		<tbody>
+				  			<tr ng-repeat="($index2P, imp) in productosProducciones.modelos" class="pedidosList">
+				  				<td> {{imp.nombre}}</td>
+								<td class="col-md-2 text-center">							
+									<span 	class="glyphicon glyphicon-remove accionesLst link"  
+											title="Quitar producto de la cola"
+											ng-click="removeFromProducciones(imp.id, $indexP, $index2P)">
+									</span>									
+								</td>				
+			  				</tr>
+			  				<tr ng-show="(data.length < 1)" class="aviso"> <td colspan="5"> No hay productos para imprimir</td></tr>
+			   			</tbody>
+			  		</table>
+			  		<div class="btnCola">
+				  		<button ng-disabled="productosProducciones.modelos.length == 0"
+				  				 class="btn btn-danger btn-sm" ng-click="vaciarCola('producciones',$index)">Eliminar cola</button>
+			  			<button  ng-disabled="productosProducciones.modelos.length == 0"
+			  					class="btn btn-primary btn-sm" ng-click="imprimir('producciones', $index)" target="_blank" >Imprimir</button>
+		  			</div>
+				</div>
+				<br/>
+			</div>
 			
 		</div>
 		
-	       
+	 </div>      
        			
-	</div>
 </div>
 
 <div class="toPrint" id="codes"></div>

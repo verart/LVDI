@@ -18,14 +18,74 @@
 			{{ alert.msg }}			
 		</alert>
 	</div>
+
+
+	<nav class="navbar navbar-default" role="navigation" ng-if="(usuario.getUserName() != '')&&(activeTab != 'index')">
+	  <div class="container-fluid">
 	
-	<div id="infoIndexSession" class="sessionInfo" ng-if="(usuario.getUserName()!= '')" >
-		<p class="userName">
-			Usuario: <i>{{ usuario.getUserName() }} </i>    
-		</p>
-		
-		<p class="salir" ><a href="#!/" ng-click="logout()">Salir</a> </p>
-	</div>
+	    <div class="navbar-header">
+	      <img src="img/LVDI.png" data-alt="Los Vados del Isen" style="width:32px; margin-right: 14px;" />
+	    </div>
+	    
+	    
+	    <!-- Collect the nav links, forms, and other content for toggling -->
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul id="menu" class="nav navbar-nav">
+	        <li id="productos" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='taller')||(usuario.getUserRole()=='local')" 
+	        	ng-class="{true:'active'}[(activeTab == 'productos')]">
+	        	<a href="#!/productos" ng-click="refreshActiveTab('productos')">Productos</a></li>
+	        <li class="dropdown" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='taller')" 
+	        	ng-class="{true:'active'}[(activeTab == 'pedidos')||(activeTab == 'clientesPM')]">
+	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Pedidos <span class="caret"></span></a>
+          		<ul class="dropdown-menu" role="menu">
+	            <li><a href="#!/pedidos" ng-click="refreshActiveTab('pedidos')">Pedidos</a></li>
+	            <li><a href="#!/clientesPM" ng-click="refreshActiveTab('clientesPM')">Clientes por mayor</a></li>
+	          </ul>
+	        </li>
+	        <li class="dropdown" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')"  
+	        	ng-class="{true:'active'}[(activeTab == 'producciones')||(activeTab == 'responsables')]">
+	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Producciones <span class="caret"></span></a>
+          		<ul class="dropdown-menu" role="menu">
+	            <li><a href="#!/producciones" ng-click="refreshActiveTab('producciones')">Producciones</a></li>
+	            <li><a href="#!/responsables" ng-click="refreshActiveTab('responsables')">Responsables</a></li>
+	          </ul>
+	        </li>
+	        <li id="ventas" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local') || (usuario.getUserRole()=='taller')" 
+	        	ng-class="{true:'active'}[(activeTab == 'ventas')]">
+	        	<a href="#!/ventas" ng-click="refreshActiveTab('ventas')">Ventas</a></li>
+	        <li id="clientes" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" 
+	        	ng-class="{true:'active'}[(activeTab == 'clientes')]">
+	        	<a href="#!/clientes" ng-click="refreshActiveTab('clientes')">Clientes</a></li>
+	        <li id="colaImpresion" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" 
+	        	ng-class="{true:'active'}[(activeTab == 'colaImpresion')]">
+	        	<a href="#!/colaImpresion" ng-click="refreshActiveTab('colaImpresion')">Cola de impresión</a></li>
+	        <li id="usuarios" ng-if="(usuario.getUserRole()=='admin')" 
+	        	ng-class="{true:'active'}[(activeTab == 'usuarios')]">
+	        	<a href="#!/usuarios" ng-click="refreshActiveTab('usuarios')">Usuarios</a></li>
+	        <li id="resumen" ng-if="(usuario.getUserRole()=='cuentas')"
+	        	ng-class="{true:'active'}[(activeTab == 'resumen')]">
+	        	<a href="#!/resumen" ng-click="refreshActiveTab('resumen')">Resumen</a></li>
+	        <li id="ventas"ng-if="(usuario.getUserRole()=='cuentas')"
+		        ng-class="{true:'active'}[(activeTab == 'ventas')]">
+	        	<a href="#!/ventas" ng-click="refreshActiveTab('ventas')">Ventas</a></li> 
+	        <li id="gastos"ng-if="(usuario.getUserRole()=='cuentas')"
+	        	ng-class="{true:'active'}[(activeTab == 'gastos')]">
+	        	<a href="#!/gastos" ng-click="refreshActiveTab('gastos')">Gastos</a></li> 
+	      </ul>
+	      <ul class="nav navbar-nav navbar-right">        
+	        <li class="dropdown">
+	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ usuario.getUserName()}} <span class="caret"></span></a>
+          		<ul class="dropdown-menu" role="menu">
+	            <li><a class="salir" href="#!/index" ng-click="logout()">Salir</a></li>
+	          </ul>
+	        </li>
+	      </ul>
+	    </div><!-- /.navbar-collapse -->
+	  </div><!-- /.container-fluid -->
+	</nav>
+
+	
+
 
 	      
 	<div ng-view > </div>
