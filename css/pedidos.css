@@ -52,8 +52,6 @@
 	padding-top:0px;
 }
 
-
-
 .littleForm > div> input{
 	font-size: 12px;
 	height: 30px;
@@ -69,4 +67,27 @@
 
 .littleForm .colForm{
 	margin-right: -25px;
+}
+
+/* ************** pedidos especiales **************** */
+.wndPedidoespecial .modal-dialog{
+	width: 900px;
+}
+
+.totalPedidoEspecial{
+	padding-top: 30px;
+	margin-bottom: 30px;
+	margin-left: 500px;
+}
+.totalPedidoEspecial >div {
+	text-align: right;
+}
+
+.totalPedidoEspecial > div > label {
+	margin-top: 7px;
+	margin-right: -23px;
+}
+.pagosPedidosespeciales{
+	margin-left: 0px;
+	width: 100%
 }

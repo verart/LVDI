@@ -39,7 +39,7 @@ class Resumen extends AppModel {
 					(select ventas_id
 					FROM ventas_pagos VP
 					GROUP BY ventas_id) as pagos ON pagos.ventas_id = V.id
-				$conditions AND (deuda <= 0) AND  ISNULL(pagos.ventas_id)    
+				$conditions AND (deuda <= 0) AND (montoFavor <= total) AND  ISNULL(pagos.ventas_id)    
 				GROUP BY V.FP ";
 			
 		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -50,7 +50,21 @@ class Resumen extends AppModel {
 		while($i < count($results))
 			$finalResults['resumenVentas'][utf8_encode($results[$i]['FP'])] = $finalResults['resumenVentas'][utf8_encode($results[$i]['FP'])] + $results[$i++]['resumenVentas'];
 			
+		//total pedidos especiales
+		$finalResults['resumenPedidosespeciales'] = array('Efectivo'=>0,'Tarjeta'=>0,'Cheque'=>0,'Transferencia'=>0);
+		$sql = "SELECT SUM(PP.monto) as resumenPedidosespeciales, PP.FP 
+				FROM pedidosespeciales_pagos PP 				
+				$conditions     
+				GROUP BY PP.FP "; 
 			
+		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
+	   	$query = $query->execute();		   	
+		$results = $query->fetchAll();
+		
+		$i=0;
+		while($i < count($results))
+			$finalResults['resumenPedidosespeciales'][utf8_encode($results[$i]['FP'])]=$results[$i++]['resumenPedidosespeciales'];
+
 		
 		//total por mayor
 		$sql = "SELECT SUM((PP.monto) ) as resumenPorMayor, PP.FP

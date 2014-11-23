@@ -80,5 +80,20 @@ app.service('clientesService', ['$http', function ($http) {
 	            })
             },
             
+            
+            /******************************
+            LIST
+            ******************************/        
+            list: function(term) {
+	        var request  = dir_api + '/clientes/'+term+'/list';;
+	        return $http.get(request).then(function(response) {
+	            var _list = [];
+	            for(var key in response.data.DATA) {
+	              _list.push(response.data.DATA[key]);
+	            }
+	            return _list;
+	          });
+	      	}
+            
         }
 }]);

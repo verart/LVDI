@@ -63,15 +63,15 @@
 			<div class="tableContainer" style="display:flex" >
 			
 
-				<div class="col-xs-12 col-md-7 colDetalle">
+				<div class="col-xs-12 col-md-8 colDetalle">
 					
 					<p class="h3"> Ingresos</p>
 
-					<div class="col-xs-12 col-md-6">
+					<div class="col-xs-12 col-md-4">
 	
 						<p class="title2Resumen"> Ventas </p>
 						
-						<div class="detalle">
+						<div>
 							<p> Efectivo: {{resumenVentas.efectivo  | currency}}</p>
 							<p> Tarjeta: {{resumenVentas.tarjeta  | currency}}</p>
 							<p> Cheque: {{resumenVentas.cheque  | currency}}</p>
@@ -82,32 +82,47 @@
 						
 					</div>
 					
-					<div class="col-xs-12 col-md-6">
+					<div class="col-xs-12 col-md-4">
 	
 						<p class="title2Resumen"> Por Mayor </p>
 						
-						<div class="detalle">
+						<div>
 							<p> Efectivo: {{resumenPorMayor.efectivo | currency}}</p>
 							<p> Tarjeta: {{resumenPorMayor.tarjeta | currency }}</p>
 							<p> Cheque: {{resumenPorMayor.cheque | currency }}</p>
-							<p> Transferencia: {{resumenPorMayor.transferencia | currency }}</p>
+							<p> Transf.: {{resumenPorMayor.transferencia | currency }}</p>
 							<div class="linea"></div>
 							<p> Total: {{(resumenPorMayor.tarjeta + resumenPorMayor.efectivo + resumenPorMayor.cheque + resumenPorMayor.transferencia) | currency}}</p>
 						</div>
 						
 					</div>
 						
+					<div class="col-xs-12 col-md-4">
+	
+						<p class="title2Resumen"> Pedido Esp. </p>
+						
+						<div>
+							<p> Efectivo: {{resumenPedEsp.efectivo | currency}}</p>
+							<p> Tarjeta: {{resumenPedEsp.tarjeta | currency }}</p>
+							<p> Cheque: {{resumenPedEsp.cheque | currency }}</p>
+							<p> Transf.: {{resumenPedEsp.transferencia | currency }}</p>
+							<div class="linea"></div>
+							<p> Total: {{(resumenPedEsp.tarjeta + resumenPedEsp.efectivo + resumenPedEsp.cheque + resumenPedEsp.transferencia) | currency}}</p>
+						</div>
+						
+					</div>
+
 				</div>
 	
-				<div class="col-xs-12 col-md-5">
+				<div class="col-xs-12 col-md-4">
 					<p class="h3"> Gastos </p>
 	
-						<div class="detalle">
+						<div>
 							<p> Efectivo: {{resumenGastos.efectivo | currency }}</p>
 							<p> Tarjeta: {{resumenGastos.tarjeta  | currency}}</p>
 							<p> Cheque: {{resumenGastos.cheque  | currency}}</p>
 							<p> Débito: {{resumenGastos.debito  | currency }}</p>			
-							<p> Transferencia: {{resumenGastos.transferencia  | currency }}</p>
+							<p> Transf.: {{resumenGastos.transferencia  | currency }}</p>
 							<div class="linea"></div>
 							<p> Total: {{(resumenGastos.cheque + resumenGastos.tarjeta + resumenGastos.efectivo + resumenGastos.debito + resumenGastos.transferencia) | currency }}</p>
 						</div>

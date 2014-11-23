@@ -42,7 +42,15 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
         	needAuth: true,
 	        authorizedRoles:  [USER_ROLES.admin, USER_ROLES.local, USER_ROLES.cuentas, USER_ROLES.taller]
         }
-    }) 
+    })     
+    .when("/pedidosespeciales", {
+        controller : "pedidosespecialesCtrl",
+        templateUrl :  dir_root + "/templates/pedidosespeciales.html",
+        auth: {
+            needAuth: true,
+            authorizedRoles: [USER_ROLES.admin, USER_ROLES.local]
+        }
+    })
     .when("/clientesPM", {
         controller : "clientesPMCtrl",
         templateUrl :  dir_root + "/templates/clientesPM.html",

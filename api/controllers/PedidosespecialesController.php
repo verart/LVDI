@@ -1,8 +1,8 @@
 <?php
-class PedidosController extends AppController {
+class PedidosespecialesController extends AppController {
 
-	var $name = "Pedidos";
-	var $uses = array('Pedidos');
+	var $name = "Pedidosespeciales";
+	var $uses = array('Pedidosespeciales');
 	
 
 	function index() {
@@ -10,7 +10,7 @@ class PedidosController extends AppController {
 		try {
 			
 			
-			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'index'))
+			if (!$this->PermisosComponent->puedeAcceder('Pedidosespeciales', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
 			if(isset($_POST['estado']) && ($_POST['estado']!= ''))
@@ -22,11 +22,11 @@ class PedidosController extends AppController {
 					$opciones = array(); 
 			
 			if(isset($_POST['filter']) && ($_POST['filter']!= ''))
-				$opciones['conditions']['LIKE'] = array('localidad'=>$_POST['filter']);
+				$opciones['conditions']['LIKE'] = array('clientes_id'=>$_POST['filter']);
 
-			$pedidos = $this->Pedidos->getPedidos($opciones, $_POST['pag']); 
+			$pedidos = $this->Pedidosespeciales->getPedidos($opciones, $_POST['pag']); 
 			
-			echo $this->json('Pedidos', $pedidos);
+			echo $this->json('Pedidos especiales', $pedidos);
 
 		} catch (Exception $e) {	
 
@@ -42,17 +42,17 @@ class PedidosController extends AppController {
 	
 	/**
 	* SHOW
-	* Muestra el detalle del pedido con id idPedido
+	* Muestra el detalle del pedido especial con id idPedido
 	*/
 	function show($idPedido) {
 		
 		try {
 			
-			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
+			if (!$this->PermisosComponent->puedeAcceder('pedidosespeciales', 'show'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$pedido = $this->Pedidos->getPedidoPorId($idPedido); 
-			echo $this->json('', $pedido); 
+			$pedido = $this->Pedidosespeciales->getPedidoPorId($idPedido); 
+			echo $this->json('Pedido especial', $pedido); 
 
 		} catch (Exception $e) {	
 
@@ -60,29 +60,6 @@ class PedidosController extends AppController {
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 	}
-	
-	
-	/**
-	* MODELOS
-	* Muestra los modelos del pedido con id idPedido
-	*/
-	function modelos($idPedido) {
-		
-		try {
-			
-			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
-				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
-			
-			$pedido = $this->Pedidos->getModelos($idPedido); 
-			echo $this->json('', $pedido); 
-
-		} catch (Exception $e) {	
-
-			if ($e instanceof RequestException) 
-				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
-		}	
-	}
-	
 	
 	
 	
@@ -94,11 +71,11 @@ class PedidosController extends AppController {
 		
 		try {
 			
-			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
+			if (!$this->PermisosComponent->puedeAcceder('pedidosespeciales', 'show'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$pedido = $this->Pedidos->getPagos($idPedido); 
-			echo $this->json('', $pedido); 
+			$pagos = $this->Pedidosespeciales->getPagos($idPedido); 
+			echo $this->json('', $pagos); 
 
 		} catch (Exception $e) {	
 
@@ -114,7 +91,7 @@ class PedidosController extends AppController {
 	/**
 	* CREATE
 	* Crea un pedido.
-	* Params (POST): pedidos = array([FP], [bonificacion], clientesPM_id, [estado], fecha, total, modelos=array(cantidad,estado,id)
+	* Params (POST): pedidos = array([bonificacion], clientes_id, [estado], created, total, descripcion,[pagos=array(monto,bonificacion,[id],created)]
 	*/
 	function create() {
 		
@@ -127,32 +104,28 @@ class PedidosController extends AppController {
 			$params = (isset($_POST['pedido']))? $_POST['pedido'] : array();
 	
 			// Campos obligatorios
-			if (!$this->parametrosRequeridosEn(array('clientesPM_id', 'estado', 'fecha', 'total'), $params))
+			if (!$this->parametrosRequeridosEn(array('clientes_id', 'estado', 'created', 'total','descripcion'), $params))
 				throw new BadRequestException('Los datos del pedido están incompletos'); 
-				
 
 			$pedido = array(
-				'clientesPM_id'=>$params['clientesPM_id'],
+				'clientes_id'=>$params['clientes_id'],
+				'descripcion'=>$params['descripcion'],
 				'estado'=>$params['estado'],
-				'fecha'=>$params['fecha'],
+				'created'=>$params['created'],
 				'total'=>$params['total']);
-			
-			if (isset($params['FP'])) $pedido['FP'] = $params['FP'];
-			
+						
 			$pedido['bonificacion'] = (isset($params['bonificacion']))?$params['bonificacion']:0;				
 			if(isset($params['fecha_entrega'])) $pedido['fecha_entrega'] = $params['fecha_entrega'];
+			$params['pagos']= (isset($params['pagos']))?$params['pagos']:array();
 			
-			$mod = isset($params['modelos'])?$params['modelos']:array();
-			$pagos = isset($params['pagos'])?$params['pagos']:array();
-
-			$res =  $this->Pedidos->setPedido($pedido,$mod,$pagos);
+			$res =  $this->Pedidosespeciales->setPedido($pedido, $params['pagos']);
 	
 			if(!($res['success'])){
 				throw new BadRequestException($res['msg']);
 			}
 			
 			// Retorna la info del pedido actualizado	
-			echo $this->json('Pedido', $this->Pedidos->getPedidoPorId($res['pedidos_id']));
+			echo $this->json('El pedido fue creado', $this->Pedidosespeciales->getPedidoPorId($res['id']));
 
 		} catch (Exception $e) {	
 
@@ -176,7 +149,7 @@ class PedidosController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('pedidos','update'))
+			if (!$this->PermisosComponent->puedeAcceder('pedidosespeciales','update'))
 				throw new ForbiddenException('No tiene permiso para actualizar pedidos'); 
 			
 			$params = getPutParameters();
@@ -184,49 +157,37 @@ class PedidosController extends AppController {
 			$params = (isset($params['pedido']))? $params['pedido'] : array();
 	
 			// Campos obligatorios
-			if (!$this->parametrosRequeridosEn(array('clientesPM_id', 'estado', 'fecha', 'total', 'id'), $params))
+			if (!$this->parametrosRequeridosEn(array('clientes_id', 'estado', 'created', 'total', 'id','descripcion'), $params))
 				throw new BadRequestException('Los datos del pedido están incompletos');
 			
 			//Datos del pedido
 			$ped = array(	'id'=>$params['id'],
-							'clientesPM_id'=>$params['clientesPM_id'], 
+							'clientes_id'=>$params['clientes_id'], 
 							'total'=>$params['total'],  
 							'estado'=>$params['estado'], 
 							'bonificacion'=>$params['bonificacion'],
-							'fecha'=>$params['fecha']);
+							'descripcion'=>$params['descripcion'],
+							'created'=>$params['created']);
 							
-			if(isset($params['FP'])) $ped['FP'] = $params['FP'];
 			if(isset($params['fecha_entrega'])) $ped['fecha_entrega'] = $params['fecha_entrega'];
-			if(isset($params['nota'])) $ped['nota'] = $params['nota'];
-			
-			
+						
 			// UPDATE de pedido
-			$res = $this->Pedidos->setPedido($ped,$params['modelos'], $params['pagos']);
+			$res = $this->Pedidosespeciales->setPedido($ped, $params['pagos']);
 				
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
 			
 			
-			// DELETE de modelos del pedido
-			if(!empty($params['mod2delete']))
-				foreach($params['mod2delete'] as $field => $value){
-					$result = $this->Pedidos->removeModelo($value['id']);
-					
-					if(!$result['success'])
-						throw new BadRequestException($result['msg']);									
-			}
-			
-			
 			// DELETE de pagos del pedido
 			if(!empty($params['pagos2delete']))
 				foreach($params['pagos2delete'] as $field => $value){
-					$result = $this->Pedidos->removePago($value['id']);
+					$result = $this->Pedidosespeciales->removePago($value['id']);
 					
 					if(!$result['success'])
 						throw new BadRequestException($result['msg']);									
 			}
 
-			echo $this->json('Pedido', $this->Pedidos->getPedidoPorId($res['pedidos_id']));
+			echo $this->json('Pedido especial', $this->Pedidosespeciales->getPedidoPorId($res['id']));
 
 		} catch (Exception $e) {	
 
@@ -246,10 +207,10 @@ class PedidosController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'delete'))
+			if (!$this->PermisosComponent->puedeAcceder('pedidosespeciales', 'delete'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$this->Pedidos->delete($idPedido);
+			$this->Pedidosespeciales->delete($idPedido);
 
 		} catch (Exception $e) {	
 

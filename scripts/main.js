@@ -79,7 +79,4 @@ function formatLocalDate() {
 			    return now.getFullYear() 
 			        + '-' + pad(now.getMonth()+1)
 			        + '-' + pad(now.getDate());
-
-
-}
-		  
+};
