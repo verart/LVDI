@@ -112,8 +112,7 @@ class VentasController extends AppController {
 			}
 			
 			// Retorna la info de la venta creada
-			$venta['id'] = $res['ventas_id'];
-			$venta['modelos'] = $mod; 
+			$venta = $res['venta'];
 
 			echo $this->json('Venta', $venta);
 			

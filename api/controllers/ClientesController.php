@@ -31,9 +31,6 @@ class ClientesController extends AppController {
 	}
 	
 	
-	
-	
-	
 	function show($idCliente) {
 		
 		try {
@@ -50,7 +47,30 @@ class ClientesController extends AppController {
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 	}
+
 	
+	function nameList($filter='') {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('clientes', 'index'))
+				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
+			
+			$opciones = array('order'=>'nombre ASC', 'fields'=>array('id','nombre'));
+			
+			if($filter != '')
+				$opciones['conditions']= array('LIKE' => array('nombre'=>$filter));
+
+			$clientes = $this->Clientes->getClientesList($opciones); 
+
+			echo $this->json('Clientes', $clientes);
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}
+	}
 	
 	
 	function create() {

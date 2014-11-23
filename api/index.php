@@ -80,7 +80,14 @@ $route->add('/clientes/mails','GET','Clientes','mails');
 $route->add('/clientes/delete','DELETE','Clientes','delete');
 $route->add('/clientes/update','PUT','Clientes','update');
 $route->add('/clientes/create','POST','Clientes','create');
+$route->add('/clientes/list','GET','Clientes','nameList');
 
+$route->add('/pedidosespeciales/index','POST','Pedidosespeciales','index');
+$route->add('/pedidosespeciales/show','GET','Pedidosespeciales','show');
+$route->add('/pedidosespeciales/pagos','GET','Pedidosespeciales','pagos');
+$route->add('/pedidosespeciales/delete','DELETE','Pedidosespeciales','delete');
+$route->add('/pedidosespeciales/update','PUT','Pedidosespeciales','update');
+$route->add('/pedidosespeciales/create','POST','Pedidosespeciales','create');
 
 $route->add('/ventas/index','POST','Ventas','index');
 $route->add('/ventas/show','GET','Ventas','show');

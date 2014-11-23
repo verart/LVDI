@@ -168,6 +168,8 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 				    	ventasService.editVenta(res).then(
 				    			//Success
 				    			function(promise){ 
+				    				var index = $filter('getIndexById')($scope.data, res.venta.id);
+					    			$scope.data[index] = res.venta;
 				    				AlertService.add('success', promise.data.MSG, 5000);
 				    			},
 				    			//Error al guardar
@@ -403,7 +405,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  $scope.form = {};
 		  $scope.p = {};
 		  $scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
- 		  $scope.form.pago = {monto:'', FP:'Efectivo', created:formatLocalDate(), bonificacion:0};
+ 		  $scope.form.pago = {monto:'', FP:'', created:formatLocalDate(), bonificacion:0};
 
 		  $scope.p.mod_options = info.p.mod_options;		  
 		  $scope.p.cl_options = info.p.cl_options;
@@ -459,7 +461,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  			modelos:[],
 			  			pagos:[], 
 			  			bonificacion:0, 
-			  			FP:'Efectivo',
+			  			FP:null,
 			  			totalPagos:0,
 			  			deuda:0,
 			  			montoFavor:0,
@@ -579,7 +581,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		   Agrega un modelo a la venta. Actualiza los totales
 		  ****************************************************/	  
 		  $scope.add= function() { 
-		  	if( ($scope.form.modelo.nombre  !=  undefined) &&($scope.form.modelo.id  !=  undefined) )  { 
+		  	if( ($scope.form.modelo.nombre  !=  undefined) &&($scope.form.modelo.id  !=  undefined)&&($scope.form.modelo.nombre  !=  "") &&($scope.form.modelo.id  !=  "") )  { 
 		  	
 		  		$scope.form.modelo.cantidad = ($scope.form.modelo.cantidad || 1) 
 		  		
@@ -648,10 +650,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		   WATCH VENTA.MONTOFAVOR
 		   Actualiza  totalFinal, deuda
 		  ****************************************************/	 
-		  $scope.$watch('venta.montoFavor', function(newValue, oldValue) {
-		  		
-		    	$scope.refreshTotal() ;
-			   			    
+		  $scope.$watch('venta.montoFavor', function(newValue, oldValue) {		  		
+		    	$scope.refreshTotal() ;			   			    
 		  });
 		  
 		  
@@ -659,13 +659,11 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		   WATCH VENTA.totalPagos
 		   Actualiza  totalFinal, deuda
 		  ****************************************************/	 
-		  $scope.$watch('venta.totalPagos', function(newValue, oldValue) {
-		  		
-		    	$scope.refreshTotal() ;
-			   			    
+		  $scope.$watch('venta.totalPagos', function(newValue, oldValue) {		  		
+		    	$scope.refreshTotal() ;			   			    
 		  });
 
-		  
+
 		  /***************************************************
 		   REFRESHTOTAL
 		   Actualiza  totalFinal, deuda

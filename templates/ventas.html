@@ -64,7 +64,7 @@
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
-			  			<tr ng-repeat="venta in filteredVentas = (data | orderBy:order:false)" 
+			  			<tr ng-repeat="venta in filteredVentas = (data | orderBy:order:true)" 
 			  						class="link" 
 			  						ng-click = "!((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local')) || viewVenta(venta.id,venta.deuda,usuario.getUserRole())">
 			  				<td> {{venta.created | date:'dd/MM/yyyy' }}</td>

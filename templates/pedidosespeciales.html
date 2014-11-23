@@ -1,0 +1,102 @@
+<div class="container-fluid">
+
+	<div class="h4 seccionTitle"> Pedidos especiales</div>
+		  		<input type='hidden'name='input' id='clientesList' style="width:300px;"/>
+
+	
+	<!-- PEDIDOS	 -->
+	<div ng-controller="pedidosespecialesCtrl" class="row-fluid">
+
+				<!-- SIDEBAR-->			
+				<div class=" col-xs-12 col-md-3 sidebar">
+					<form class="navbar-form navbar-left" role="search">
+		
+						<div class="form-group filterInput">
+							<input 	type="text" class="form-control small filterInput" 
+									ng-model="query" id='inputSearch' 
+									placeholder="Filtro por cliente" ng-enter="filtrarPedidos()">
+							
+							
+							<div class="formElement">
+								<label class="control-label">Mostrar</label>
+								<div class="controls opciones">
+									<label class="radio small">
+										<input type="radio" value="Pendiente" ng-model="filterPedidos.estado"
+										name="pedido[estado]" > 
+										Sólo los Pendientes
+									</label>
+									<label class="radio small">
+										<input type="radio" value="Terminado" ng-model="filterPedidos.estado"
+										name="pedido[estado]" > 
+										Sólo los Terminados
+									</label>						
+									<label class="radio small">
+										<input type="radio" value="Entregado-Debe" ng-model="filterPedidos.estado"
+										name="pedido[estado]" > 
+										Sólo los Entregados con deuda
+									</label>					
+									<label class="radio small">
+										<input type="radio" value="Entregado" ng-model="filterPedidos.estado"
+										name="pedido[estado]" > 
+										Sólo los Entregados
+									</label>
+									<label class="radio small">
+										<input type="radio" value="" ng-model="filterPedidos.estado" 
+										name="pedido[estado]" > 
+										Todos
+									</label>
+								</div>	
+							</div>
+					
+							<hr/>
+							
+							<button type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nuevo Pedido </button>
+							
+							      
+						</div>
+					</form>
+				</div>
+		
+			
+				<!-- BODY-->
+				<div class="col-xs-12 col-md-9 ">
+					<div class="tableContainer" >
+					
+						<table class="table table-hover table-condense" id="infinite-scrolling">
+					  		<thead>
+					  			<tr>
+					  				<th>Cliente</th>
+					  				<th>Fecha</th>
+					  				<th>Entrega</th>
+					  				<th ng-if="(usuario.getUserRole()=='admin')">Total</th>
+					  				<th ng-if="(usuario.getUserRole()=='admin')">Bon.</th>
+					  				<th>Estado</th>
+					  			</tr>
+					  		</thead>	
+					  		<tbody>
+					  			<tr ng-repeat="pedido in filteredPedidos = (data | orderBy:order:false | filter:query)" 
+					  						class="pedidosList link" ng-click="openPedido(pedido.id, usuario.getUserRole())">
+					  				<td> {{pedido.cliente}}</td>
+					  				<td> {{pedido.created | date:'dd/MM/yyyy'}}</td>
+					  				<td> {{(pedido.fecha_entrega | date:'dd/MM/yyyy') || 'Sin datos'}}</td>
+					  				<td ng-if="(usuario.getUserRole()=='admin')"> 
+					  					{{(pedido.total - ((pedido.total*pedido.bonificacion)/100)) | currency}}
+					  				</td>
+				 					<td ng-if="(usuario.getUserRole()=='admin')" > {{pedido.bonificacion}}%</td>						
+				 					<td> {{pedido.estado}}</td>
+				  				</tr>
+				  				<tr ng-show="(filteredPedidos.length < 1)" class="aviso"> <td colspan="5"> No hay pedidos</td></tr>
+				   			</tbody>
+				  		</table>
+				  		
+				  		<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
+			
+					</div>
+					
+					<div class="finPedidos"></div>
+					
+				</div> <!-- body -->
+				
+			</div> <!-- row-fluid -->
+	  
+</div>

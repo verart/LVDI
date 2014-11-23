@@ -25,7 +25,20 @@ class Clientes extends AppModel {
 	}
 	
 	
+	/**
+	 * GETCLIENTESLIST
+	 * Retorna todos los nombres de clientes y sus id
+	 * params (array) $opciones = array([conditions], [order], [page], [pageSize]])
+	 */
+	function getClientesList($opciones = array()) {
 	
+		$results = $this->readPage($opciones);
+	
+		for($i=0; $i < count($results); $i++)
+			$results[$i]['nombre'] = utf8_encode($results[$i]['nombre']);
+	
+		return $results;
+	}
 	
 	
 	

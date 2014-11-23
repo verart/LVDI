@@ -120,6 +120,7 @@ class Ventas extends AppModel {
 		$resultsFormat['bonificacion'] = $results[$i]['bonificacion'];
 		$resultsFormat['deuda'] = $results[$i]['deuda'];
 		$resultsFormat['FP'] = $results[$i]['FP'];
+		$resultsFormat['nota'] = $results[$i]['nota'];
 			
 		$resultsFormat['modelos'] = array();
 		$m = 0;
@@ -277,7 +278,9 @@ class Ventas extends AppModel {
 				
 			$this->commitTransaction();
 			
-			return array('success'=>true, 'ventas_id'=>$idVenta);
+			$venta = $this->getVentaPorId($idVenta);
+
+			return array('success'=>true, 'venta'=>$venta);
 			
 		} catch (Exception $e) {
 			

@@ -222,7 +222,4 @@ app.directive('xeditable', function($timeout) {
             }, 10);
         }
     };
-});    
-
-
-
+}); 

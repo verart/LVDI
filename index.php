@@ -50,12 +50,17 @@
 	            <li><a href="#!/responsables" ng-click="refreshActiveTab('responsables')">Responsables</a></li>
 	          </ul>
 	        </li>
+	        <li class="dropdown" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')"  
+	        	ng-class="{true:'active'}[(activeTab == 'clientes')||(activeTab == 'pedidosespeciales')]">
+	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Pedidos especiales <span class="caret"></span></a>
+          		<ul class="dropdown-menu" role="menu">
+	            <li><a href="#!/pedidosespeciales" ng-click="refreshActiveTab('pedidosespeciales')">Pedidos especiales</a></li>
+	            <li><a href="#!/clientes" ng-click="refreshActiveTab('clientes')">Clientes</a></li>
+	          </ul>
+	        </li>
 	        <li id="ventas" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local') || (usuario.getUserRole()=='taller')" 
 	        	ng-class="{true:'active'}[(activeTab == 'ventas')]">
 	        	<a href="#!/ventas" ng-click="refreshActiveTab('ventas')">Ventas</a></li>
-	        <li id="clientes" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" 
-	        	ng-class="{true:'active'}[(activeTab == 'clientes')]">
-	        	<a href="#!/clientes" ng-click="refreshActiveTab('clientes')">Clientes</a></li>
 	        <li id="colaImpresion" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" 
 	        	ng-class="{true:'active'}[(activeTab == 'colaImpresion')]">
 	        	<a href="#!/colaImpresion" ng-click="refreshActiveTab('colaImpresion')">Cola de impresión</a></li>
@@ -119,6 +124,7 @@
 	<script type="text/javascript" src="scripts/services/loginServices.js"></script>	
 	<script type="text/javascript" src="scripts/services/productosServices.js"></script>
 	<script type="text/javascript" src="scripts/services/pedidosServices.js"></script>
+	<script type="text/javascript" src="scripts/services/pedidosespecialesServices.js"></script>
 	<script type="text/javascript" src="scripts/services/produccionesServices.js"></script>
 	<script type="text/javascript" src="scripts/services/clientesServices.js"></script>
 	<script type="text/javascript" src="scripts/services/commonServices.js"></script>	
@@ -137,6 +143,7 @@
 	<script type="text/javascript" src="scripts/controllers/modalPdfClientesMailsCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/productosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/pedidosespecialesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/produccionesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/clientesPMCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/responsablesCtrl.js"></script>
@@ -161,8 +168,8 @@
     <link rel="stylesheet" href='css/producciones.css' type="text/css" />
     <link rel="stylesheet" href='css/ventas.css' type="text/css" />
     <link rel="stylesheet" href='css/impresion.css' type="text/css" />
-  
 
+  
 
 </body>
 </html>

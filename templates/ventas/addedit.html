@@ -135,10 +135,11 @@
 								Un pago
 							</label>
 							<!-- Un pago-->
-							<div class ="col-sm-3" ng-show="venta.variosPagos == 0" >										
+							<div class ="col-sm-4" ng-show="venta.variosPagos == 0" >										
 								<select class="form-control small filterInput selectpicker" id="fpPago"
 											ng-model="venta.FP" 
 											ng-options="fp.value as fp.label for (k,fp) in fps">
+											<option value=''>Seleccione FP</option>
 								</select>
 							</div> 
 						
@@ -229,9 +230,9 @@
 						
         <div class="modal-footer">
         	
-	        <button class="btn btn-primary"  
-	        		ng-class="{true: 'disabled'}[(venta.modelos.length == 0)]"
-	        		ng-click="((venta.modelos.length == 0) || ok())">Guardar</button>
+	        <button class="btn btn-primary" id="btnGuardar" 
+	        		ng-class="{true: 'disabled'}[(venta.modelos.length == 0)||((venta.FP == null)&&(venta.variosPagos==0))]"
+	        		ng-click="(((venta.modelos.length == 0) ||((venta.FP == null)&&(venta.variosPagos==0)))|| ok())">Guardar</button>
 	        		
             <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
             

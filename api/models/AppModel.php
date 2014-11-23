@@ -151,13 +151,12 @@ class AppModel {
 	 * 		{int} pageSize: tamaño pagina
 	 */
 	function readPage($options = array()) { 
-		$fields = (empty($options['fields']))?'*':explode($options['fields'],',');
+		$fields = (empty($options['fields']))?'*':implode(',',$options['fields']); 
 		$conditions = (empty($options['conditions']))?'':$this->_buildConditions($options['conditions']);
 		$order = (empty($options['order']))?'': ' ORDER BY '.$this->table.'.'.$options['order'];		
 		$limit =(empty($options['page']))?'':' LIMIT '.(($options['page']-1)*$options['pageSize']).', '.$options['pageSize'];
 
 
-	
 		$sql = "SELECT $fields FROM ".$this->table." $conditions $order $limit"; 
 		$sth = $this->con->prepare($sql);
 		$sth = $sth->execute();
