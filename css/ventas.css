@@ -11,9 +11,12 @@
 .inputMontoFavor{
 	width: 116px;
 	font-size: small;
-	margin-left: 112px;
 }
 
+#labMontoFavor{ 
+	margin-right: -18px;
+	margin-left: 18px;
+}
 
 .wndNotas > .modal-dialog{
 	width:75%;
@@ -36,4 +39,8 @@
 	float: right;
 	margin-right: 20px;
 	color: #B2ADAD;;
+}
+
+.littleForm .colForm{
+	margin-right: -25px;
 }

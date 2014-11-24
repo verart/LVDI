@@ -148,7 +148,7 @@
 					<br/>
 			
 					<div class="row"> 
-						<div ng-if="userRole == 'admin'" class="resumenPedido form-horizontal pull-right" role="form">
+						<div ng-if="userRole == 'admin'" class="resumen form-horizontal pull-right" role="form">
 													
 							<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
 							
@@ -217,12 +217,12 @@
 					<br/>
 							
 					<div class="littleForm row">
-								<div class="colForm col-xs-12 col-sm-3">
+								<div class="colForm col-xs-12 col-sm-4">
 									<input type="date" class="form-control small" 
 											placeholder="Fecha" id="fechaPago" focus-me="{{true}}" 
-											ng-model="form.pago.created" style="padding-right:0px;" required/>
+											ng-model="form.pago.created" style="margin-left:11px;padding-right:0px;" required/>
 								</div>
-								<div class="colForm col-xs-12 col-md-3">
+								<div class="colForm col-xs-12 col-md-2">
 									<input type="number" step="any" id="montoPago" class="form-control small inputForm" 
 											ng-model="form.pago.monto" placeholder="Monto" ng-enter="add(nuevoMonto)">
 								</div>
