@@ -271,7 +271,7 @@ app.controller('colaImpresionCtrl',
 								return (stop === false);
 							});
 							$scope.data.producciones.splice(index, 1);
-						
+							break;
 						
 						default:  // Productos de pedidos
 						

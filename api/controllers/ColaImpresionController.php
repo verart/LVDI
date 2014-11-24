@@ -33,7 +33,11 @@ class ColaImpresionController extends AppController {
 		try {
 			$idModelo = $_POST['modelos_id'];
 			$idPedido = (isset($_POST['pedidos_id']))? $_POST['pedidos_id'] : null;
+<<<<<<< HEAD
 			$idProduccion = (isset($_POST['producciones_id']))? $_POST['producciones_id'] : null;
+=======
+			$idPedido = (isset($_POST['producciones_id']))? $_POST['producciones_id'] : null;
+>>>>>>> 92055ee801551f45292038075305408066c112e9
 			$belongsTo = (isset($_POST['belongsTo']))? $_POST['belongsTo'] : NULL;
 
 			

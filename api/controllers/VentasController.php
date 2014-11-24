@@ -151,7 +151,10 @@ class VentasController extends AppController {
 			//Datos del pedido
 			$venta = array(	'id'=>$params['id'],
 							'total'=>$params['total'], 
+<<<<<<< HEAD
 							'nota'=>$params['nota'],
+=======
+>>>>>>> 92055ee801551f45292038075305408066c112e9
 							'deuda'=>$params['deuda'], 
 							'bonificacion'=>$params['bonificacion'],
 							'montoFavor'=>$params['montoFavor'],

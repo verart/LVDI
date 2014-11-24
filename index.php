@@ -50,6 +50,7 @@
 	            <li><a href="#!/responsables" ng-click="refreshActiveTab('responsables')">Responsables</a></li>
 	          </ul>
 	        </li>
+<<<<<<< HEAD
 	        <li class="dropdown" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')"  
 	        	ng-class="{true:'active'}[(activeTab == 'clientes')||(activeTab == 'pedidosespeciales')]">
 	        	<a href="#" class="dropdown-toggle" data-toggle="dropdown">Pedidos especiales <span class="caret"></span></a>
@@ -61,6 +62,14 @@
 	        <li id="ventas" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local') || (usuario.getUserRole()=='taller')" 
 	        	ng-class="{true:'active'}[(activeTab == 'ventas')]">
 	        	<a href="#!/ventas" ng-click="refreshActiveTab('ventas')">Ventas</a></li>
+=======
+	        <li id="ventas" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local') || (usuario.getUserRole()=='taller')" 
+	        	ng-class="{true:'active'}[(activeTab == 'ventas')]">
+	        	<a href="#!/ventas" ng-click="refreshActiveTab('ventas')">Ventas</a></li>
+	        <li id="clientes" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" 
+	        	ng-class="{true:'active'}[(activeTab == 'clientes')]">
+	        	<a href="#!/clientes" ng-click="refreshActiveTab('clientes')">Clientes</a></li>
+>>>>>>> 92055ee801551f45292038075305408066c112e9
 	        <li id="colaImpresion" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" 
 	        	ng-class="{true:'active'}[(activeTab == 'colaImpresion')]">
 	        	<a href="#!/colaImpresion" ng-click="refreshActiveTab('colaImpresion')">Cola de impresión</a></li>

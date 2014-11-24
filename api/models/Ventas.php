@@ -391,7 +391,6 @@ class Ventas extends AppModel {
 	 * @param $idPago
 	 */
 	function getPagoPorId($idPago) {
-	
 		$sql = "SELECT VP.* 
 				FROM ventas_pagos VP 
 				WHERE VP.id = ?";
@@ -402,8 +401,7 @@ class Ventas extends AppModel {
 		return $results;
 	}
 	
-	
-	
+
 	/**
 	 * ADDNOTA
 	 * guarda la nota $nota en la venta $idVenta
@@ -434,9 +432,7 @@ class Ventas extends AppModel {
 	
 	
 	
-	
-	
-	
+
 	//***********************************PARA BORRAR *************************************************//
 		
 	function addPago($pago, $idVenta){					
