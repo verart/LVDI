@@ -441,7 +441,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 						function(promise){
 						    	$scope.venta.pagos = (promise.data.DATA || []);
 						    	$scope.venta.totalPagos = $scope.sumarPagos();
-						    	$scope.venta.variosPagos = ($scope.venta.pagos.length > 0)?1:0;
 						},
 						//Error al eliminar
 						function(error){
@@ -473,7 +472,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  $scope.nuevoModeloId = '';
 		  $scope.venta.mod2delete = [];
 		  $scope.venta.pagos2delete = [];
-		  
+		  $scope.venta.variosPagos = (($scope.venta.pagos.length > 0)||($scope.venta.deuda > 0))?1:0;
+						    	
 
 		  /***************************************************
 		   BACK2ORIGINAL

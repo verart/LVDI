@@ -88,18 +88,19 @@
 				
 					<br/>
 			
-					<div class="resumenPedido form-horizontal pull-right" role="form">
+					<div class="resumen form-horizontal pull-right" role="form">
 						
 					
 						<label style="margin-right:15px;"> Subtotal:  {{venta.total | currency}} </label>
 						
 						
-						<div class="colForm inputMontoFavor">
-							<input type="text" ng-model="venta.montoFavor" class="form-control small" placeholder="Monto a favor" />
+						<div class="form-group">
+							<label id="labMontoFavor" for="mf" class="col-sm-6 control-label small">Monto a favor:  $</label>
+							<div class="col-sm-6 colForm inputMontoFavor">
+								<input id="mf" type="text" ng-model="venta.montoFavor" class="form-control small" placeholder="Monto a favor" />
+							</div>
 						</div>
 						
-						<br/> 
-
 						<div class="form-group">
 							    <label for="bonif" class="col-sm-8 control-label small">Bonificación:</label>
 							    
@@ -144,7 +145,6 @@
 							</div> 
 						
 					</div>
-
 	
 					<div class=" col-xs-12 col-sm-12">
 		
