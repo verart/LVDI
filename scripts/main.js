@@ -52,8 +52,8 @@ app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthSe
 	      }else { 
 	        // user is not logged in
 	        $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
-	        event.preventDefault();
-	        
+	        //event.preventDefault();
+	        $location.path('/index');
 	      }
 	    }
 	     
@@ -61,6 +61,23 @@ app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthSe
   });
 
   
+});
+
+
+app.run(function(){
+    /*
+     * this swallows backspace keys on any non-input element.
+     * stops backspace -> back
+     */
+    var rx = /INPUT|SELECT|TEXTAREA/i;
+
+    $(document).bind("keydown keypress", function(e){
+        if( e.which == 8 ){ // 8 == backspace
+            if(!rx.test(e.target.tagName) || e.target.disabled || e.target.readOnly ){
+                e.preventDefault();
+            }
+        }
+    });
 });
 
 
