@@ -114,7 +114,7 @@ class VentasController extends AppController {
 			// Retorna la info de la venta creada
 			$venta = $res['venta'];
 
-			echo $this->json('Venta', $venta);
+			echo $this->json('La venta fue guardada', $venta);
 			
 
 		} catch (Exception $e) {	

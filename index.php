@@ -61,6 +61,8 @@
 	        <li id="ventas" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local') || (usuario.getUserRole()=='taller')" 
 	        	ng-class="{true:'active'}[(activeTab == 'ventas')]">
 	        	<a href="#!/ventas" ng-click="refreshActiveTab('ventas')">Ventas</a></li>
+	        <li id="ventas" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local') || (usuario.getUserRole()=='taller')" 
+	        	ng-class="{true:'active'}[(activeTab == 'ventas')]">
 	        <li id="colaImpresion" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')" 
 	        	ng-class="{true:'active'}[(activeTab == 'colaImpresion')]">
 	        	<a href="#!/colaImpresion" ng-click="refreshActiveTab('colaImpresion')">Cola de impresión</a></li>

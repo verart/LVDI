@@ -60,13 +60,13 @@
 						<hr/> 
 						
 						<input type="text" id="newMod" autocomplete="off" ng-model="form.modelo" class="form-control small" 
-									placeholder="Nombre de producto"
+									placeholder="Nombre de producto" ng-enter="add()"
 									typeahead="mod_option as mod_option.nombre for mod_option in p.mod_options | filter:$viewValue" />
 				
 						<div class="row" style="margin-top:5px;">
 							<div class="colForm col-xs-6 col-sm-5">
 								<input type="number" class="form-control small" 
-										ng-model="form.modelo.cantidad" placeholder="Cantidad" style="padding-right:0px;"/>
+										ng-model="form.modelo.cantidad" placeholder="Cantidad" style="padding-right:0px;" ng-enter="add()"/>
 							</div>
 										
 							<div class="colForm col-xs-6 col-md-6">
@@ -173,7 +173,7 @@
 					</div>
 						
 					<!-- PAGOS  -->
-										<br/>
+					<br/>
 					<hr/>
 
 					<div ng-if="userRole == 'admin'" class="pagos"> <!-- El usuario taller no ve esta informacion -->
@@ -217,12 +217,12 @@
 					<br/>
 							
 					<div class="littleForm row">
-								<div class="colForm col-xs-12 col-sm-4">
+								<div class="col-xs-12 col-sm-4">
 									<input type="date" class="form-control small" 
 											placeholder="Fecha" id="fechaPago" focus-me="{{true}}" 
 											ng-model="form.pago.created" style="margin-left:11px;padding-right:0px;" required/>
 								</div>
-								<div class="colForm col-xs-12 col-md-2">
+								<div class="col-xs-12 col-md-2">
 									<input type="number" step="any" id="montoPago" class="form-control small inputForm" 
 											ng-model="form.pago.monto" placeholder="Monto" ng-enter="add(nuevoMonto)">
 								</div>

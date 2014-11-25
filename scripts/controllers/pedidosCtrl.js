@@ -554,7 +554,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 		  ****************************************************/	  
 		  $scope.add= function() {
 		  
-		  	if( $scope.form.modelo.nombre  !=  '') {
+		  	if( ($scope.form.modelo.nombre  !=  '') && ( $scope.form.modelo.nombre  !=  undefined)){
 		  	
 		  		$scope.form.modelo.cantidad = ($scope.form.modelo.cantidad || 1) 
 		  		

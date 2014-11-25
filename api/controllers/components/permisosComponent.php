@@ -28,11 +28,13 @@ class PermisosComponent extends AppComponent{
 			    case 'taller':
 					$this->acceso['productos'] = array('index', 'show', 'update','productoModelo','reponer');
 					$this->acceso['pedidos'] = array('index', 'show', 'update'); 
-					$this->acceso['clientesPM'] = array('clientesName','show');			
+					$this->acceso['clientesPM'] = array('index', 'clientesName','show');			
 					$this->acceso['colaImpresion'] = array('index','delete','create');
 					$this->edicion['pedidos'] = array('update');	
 					$this->acceso['ventas']=array('index','show');	
 					$this->acceso['notas']=array('index','create','delete');
+					$this->acceso['pedidosespeciales'] = array('index', 'show', 'update'); 
+					$this->edicion['clientesPM']=array('create','update', 'delete');
 			        break;
 			    case 'local':
 					$this->acceso['productos']= array('index', 'show', 'update','productoModelo','reponer');
@@ -47,6 +49,7 @@ class PermisosComponent extends AppComponent{
 					$this->acceso['ColaImpresion']=array('index','create','delete');
 					$this->acceso['notas']= array('index','create','delete');
 					$this->edicion['notas']= array('create','delete');
+					$this->acceso['pedidosespeciales'] = array('index', 'show', 'update'); 
 			        break;
 			    case 'cuentas' :
 			    	$this->acceso['resumen']= array('index');

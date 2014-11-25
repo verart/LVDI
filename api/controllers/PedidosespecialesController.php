@@ -10,7 +10,7 @@ class PedidosespecialesController extends AppController {
 		try {
 			
 			
-			if (!$this->PermisosComponent->puedeAcceder('Pedidosespeciales', 'index'))
+			if (!$this->PermisosComponent->puedeAcceder('pedidosespeciales', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
 			if(isset($_POST['estado']) && ($_POST['estado']!= ''))
@@ -170,6 +170,7 @@ class PedidosespecialesController extends AppController {
 							'created'=>$params['created']);
 							
 			if(isset($params['fecha_entrega'])) $ped['fecha_entrega'] = $params['fecha_entrega'];
+			$pagos = (isset($params['pagos']))?$params['pagos']:array();
 						
 			// UPDATE de pedido
 			$res = $this->Pedidosespeciales->setPedido($ped, $params['pagos']);
