@@ -441,7 +441,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 						function(promise){
 						    	$scope.venta.pagos = (promise.data.DATA || []);
 						    	$scope.venta.totalPagos = $scope.sumarPagos();
-						    	$scope.venta.variosPagos = ($scope.venta.pagos.length > 0)?1:0;
 						},
 						//Error al eliminar
 						function(error){

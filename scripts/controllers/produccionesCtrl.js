@@ -495,7 +495,7 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, pro
 		  ****************************************************/	  
 		  $scope.add= function() {
 		  
-		  	if( $scope.form.modelo.nombre  !=  '') {
+		  	if( ($scope.form.modelo.nombre  !=  '') && ( $scope.form.modelo.nombre  !=  undefined)){
 		  	
 			  	$mod = {id: $scope.form.modelo.id, 
 			  			nombre: $scope.form.modelo.nombre, 
