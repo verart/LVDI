@@ -1,7 +1,7 @@
 <?php
-class PedidosEspeciales extends AppModel {
+class Pedidosespeciales extends AppModel {
 	
-	public $name = "PedidosEspeciales";
+	public $name = "Pedidosespeciales";
 	public $primaryKey = 'id';	
 	
 	

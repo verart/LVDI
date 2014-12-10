@@ -97,7 +97,7 @@ class PedidosespecialesController extends AppController {
 		
 		try {
 		
-			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'create'))
+			if (!$this->PermisosComponent->puedeAcceder('pedidosespeciales', 'create'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
 

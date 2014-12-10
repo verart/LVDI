@@ -11,7 +11,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	    **********************************************************************/
 	    $scope.alerts = [ ];
 	    
-	    $scope.order = '-created';
+	    $scope.order = ['-created','-id'];//'-created';
 
 	    
 
@@ -24,6 +24,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	    $scope.page = 0;            
 	    $scope.data = [];
 	    $scope.parar = false;
+	    $scope.pending = false;
 	    
 	    
 	    $scope.cargarVentas = function () {
@@ -33,6 +34,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	 		conDeuda = ($scope.filterVentas.filter == 'conDeuda')? 1 : 0;
 	 		$scope.page ++;                   
 	 		
+	    	$scope.pending = true;
 	 		ventasService.ventas(desde,'',conDeuda,$scope.page).then(
 				//success
 				function(promise){
@@ -58,9 +60,13 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 							$('.finVentas').html('<div class="fin"></div>');
 						$scope.parar = true;
 					}
+					$scope.pending = false;
 				},
 				//Error al actualizar
-				function(error){ AlertService.add('danger', error.data.MSG);}
+				function(error){ 
+					$scope.pending = false;
+					AlertService.add('danger', error.data.MSG);
+				}
 			);
 	
 
@@ -169,7 +175,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 				    			//Success
 				    			function(promise){ 
 				    				var index = $filter('getIndexById')($scope.data, res.venta.id);
-					    			$scope.data[index] = res.venta;
+					    			$scope.data[index] = promise.data.DATA;
 				    				AlertService.add('success', promise.data.MSG, 5000);
 				    			},
 				    			//Error al guardar
@@ -372,7 +378,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	    
 			$(window).on('scroll', function() {
 
-				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar & !$scope.pending) {		     	
 			  		$scope.cargarVentas();
 		    	}
 		  	});
@@ -500,6 +506,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  $scope.ok = function () {
 		    
 		    //Si varios pagos es 0, cancela la deuda.
+		    if($scope.venta.variosPagos == 1) $scope.venta.FP = null;
 		  	$scope.venta.deuda = $scope.venta.variosPagos * $scope.venta.deuda;
 		  	
 		  	$modalInstance.close({venta:$scope.venta, action:''});
@@ -593,9 +600,9 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  		
 			  	$scope.venta.modelos.push($mod);
 			  	
-			  	$scope.venta.total =  parseInt($scope.venta.total,10) + (parseInt($scope.form.modelo.precio,10) *  parseInt($scope.form.modelo.cantidad,10));
+			  	$scope.venta.total =  parseFloat($scope.venta.total,10) + (parseFloat($scope.form.modelo.precio,10) *  parseInt($scope.form.modelo.cantidad,10));
 			  
-			  	$scope.venta.totalFinal =  parseInt($scope.venta.total,10) - (parseInt($scope.venta.total,10) *  parseInt($scope.venta.bonificacion,10)/100);
+			  	$scope.venta.totalFinal =  parseFloat($scope.venta.total,10) - (parseFloat($scope.venta.total,10) *  parseInt($scope.venta.bonificacion,10)/100);
 			  	
 			  	$scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
 			  	angular.element("#newModId").focus();
@@ -616,7 +623,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  	if($scope.venta.modelos[index].idVenMod != null)
 		  		$scope.venta.mod2delete.push({id:$scope.venta.modelos[index].idVenMod});	
 		  		
-		  	$scope.venta.total =  parseInt($scope.venta.total,10) - parseInt($scope.venta.modelos[index].precio,10);		  		  	
+		  	$scope.venta.total =  parseFloat($scope.venta.total,10) - parseFloat($scope.venta.modelos[index].precio,10);		  		  	
 		  	$scope.venta.modelos.splice(index,1);
 		  	
 		  }	 
@@ -629,8 +636,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		   WATCH VENTA.BONIFICACION
 		   Actualiza  totalFinal, deuda
 		  ****************************************************/	 
-		  $scope.$watch('venta.bonificacion', function(newValue, oldValue) {
-		  		
+		  $scope.$watch('venta.bonificacion', function(newValue, oldValue) {		  		
 		    		$scope.refreshTotal() ;		  			    
 		  });
 		  
@@ -639,10 +645,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		   WATCH VENTA.TOTAL
 		   Actualiza  totalFinal, deuda
 		  ****************************************************/	 
-		  $scope.$watch('venta.total', function(newValue, oldValue) {
-		  		
-		    	$scope.refreshTotal() ;
-			   			    
+		  $scope.$watch('venta.total', function(newValue, oldValue) {		  		
+		    	$scope.refreshTotal() ;			   			    
 		  });
 		  
 		  
@@ -670,20 +674,29 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  ****************************************************/	 
 		  $scope.refreshTotal = function(){
 		  
-		  		var mon = !(($scope.venta.montoFavor == "" || $scope.venta.montoFavor == null))? parseInt($scope.venta.montoFavor,10):0.0;
+		  		var mon = !(($scope.venta.montoFavor == "" || $scope.venta.montoFavor == null))? parseFloat($scope.venta.montoFavor,10):0.0;
 				
-		    	$scope.venta.totalFinal = parseInt($scope.venta.total,10) - mon;
+		    	$scope.venta.totalFinal = parseFloat($scope.venta.total,10) - mon;
 		    	
-		    	var desc =  parseInt($scope.venta.totalFinal,10) * (parseInt($scope.venta.bonificacion,10)/100);
+		    	var desc =  parseFloat($scope.venta.totalFinal,10) * (parseFloat($scope.venta.bonificacion,10)/100);
 		    	$scope.venta.totalFinal = $scope.venta.totalFinal - desc;
 		    	
 		    	//Actualiza la deuda
-			  	if(((info.venta.id != '')&&(info.venta.deuda != 0))||((info.venta.id == '')))
-			  		$scope.venta.deuda = ($scope.venta.totalFinal - $scope.venta.totalPagos);
-			  	
-			  	if($scope.venta.deuda == 0){
-				  	$scope.venta.estado = "Entregado-Pago";
-			  	}
+		    	//Se pueden dar dos situaciones
+		    	// 1- Venta creada con deuda
+		    	// 			- la deuda se puede ser 0 si se quitan productos
+		    	//			- Existe original con los datos de la venta
+		    	// 2- Venta nueva que se esta creando
+		    	//			- la deuda puede ser 0 porque recien se crea
+		    	//			- original es undefined
+		    	// 3- Venta creada sin deuda (en un pago con deuda 0), con lo cual no se 
+		    	// 	  debería calcular la deuda
+		    	// Solo actualiza la deuda en los dos primero casos
+		    	if((original != undefined)&&(original.deuda != 0))
+			    	$scope.venta.deuda = ($scope.venta.totalFinal - $scope.venta.totalPagos);
+			    else 
+			    	if(original == undefined)
+			    		$scope.venta.deuda = ($scope.venta.totalFinal - $scope.venta.totalPagos);
 
 		  }
 		  		

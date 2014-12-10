@@ -16,17 +16,22 @@ class Ventas extends AppModel {
 	function getVentas($opciones = array(), $requested_page = 1) {
 	
 	
-	 	$set_limit = (($requested_page - 1) * 15) . ",15";
+	 	$set_limit = (($requested_page - 1) * 30) . ",30";
 	
 	
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
 		//traigo la pagina correspondiente de ventas
-		$sql = "SELECT V.*, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, VM.id as idVenMod 
+		$sql = "SELECT V.*, FPV.FP as FP2, Pr.nombre as producto, Pr.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, VM.id as idVenMod 
 				FROM ventas V 
 				INNER JOIN ventas_modelos VM ON VM.ventas_id = V.id 
 				INNER JOIN modelos M ON VM.modelos_id = M.id 
 				INNER JOIN productos Pr ON Pr.id = M.productos_id  
+				LEFT JOIN (
+							SELECT ventas_id,GROUP_CONCAT(DISTINCT SUBSTRING(FP,1,2) SEPARATOR '/') as FP
+							from ventas_pagos VP
+							GROUP BY ventas_id 
+				) as FPV ON FPV.ventas_id = V.id 
 				$conditions 
 				ORDER BY V.created DESC, V.id DESC  
 				LIMIT $set_limit "; 
@@ -35,7 +40,8 @@ class Ventas extends AppModel {
 	   	$query = $query->execute();	
 	   	
 		$results = $query->fetchAll();
-				 
+
+
 		$iF = 0;
 		$i = 0;
 		$resultsFormat = array(); 
@@ -48,7 +54,7 @@ class Ventas extends AppModel {
 			$resultsFormat[$iF]['montoFavor'] = $results[$i]['montoFavor'];
 			$resultsFormat[$iF]['bonificacion'] = $results[$i]['bonificacion'];
 			$resultsFormat[$iF]['nota'] = $results[$i]['nota'];
-			$resultsFormat[$iF]['FP'] = $results[$i]['FP']; 
+			$resultsFormat[$iF]['FP'] = ($results[$i]['FP'] != '')? $results[$i]['FP'] :$results[$i]['FP2']; 
 			
 			//Modelos de la venta
 			$resultsFormat[$iF]['modelos'] = array();
@@ -62,6 +68,8 @@ class Ventas extends AppModel {
 			}
 			$iF++;
 		}
+
+
 		return $resultsFormat;
 
 	}
@@ -98,12 +106,17 @@ class Ventas extends AppModel {
 	function getVentaPorId($idVenta) {
 		
 				
-		$sql = "SELECT V.*, Pr.nombre as producto, VM.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, 
+		$sql = "SELECT V.*, FPV.FP as FP2, Pr.nombre as producto, VM.precio, M.id as modelos_id, M.nombre as modelo, VM.cantidad, 
 		 		VM.id as idVenMod
 				FROM ventas V
 				INNER JOIN ventas_modelos VM ON VM.ventas_id = V.id
 				INNER JOIN modelos M ON VM.modelos_id = M.id
-				INNER JOIN productos Pr ON Pr.id = M.productos_id 
+				INNER JOIN productos Pr ON Pr.id = M.productos_id 				
+				LEFT JOIN (
+							SELECT ventas_id,GROUP_CONCAT(DISTINCT SUBSTRING(FP,1,2) SEPARATOR '/') as FP
+							from ventas_pagos VP
+							GROUP BY ventas_id 
+				) as FPV ON FPV.ventas_id = V.id 
 				WHERE V.id = ?";
 				
     	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
@@ -119,7 +132,7 @@ class Ventas extends AppModel {
 		$resultsFormat['montoFavor'] = $results[$i]['montoFavor'];
 		$resultsFormat['bonificacion'] = $results[$i]['bonificacion'];
 		$resultsFormat['deuda'] = $results[$i]['deuda'];
-		$resultsFormat['FP'] = $results[$i]['FP'];
+		$resultsFormat['FP'] = ($results[$i]['FP'] != null)? $results[$i]['FP'] :$results[$i]['FP2']; 
 		$resultsFormat['nota'] = $results[$i]['nota'];
 			
 		$resultsFormat['modelos'] = array();
@@ -328,6 +341,8 @@ class Ventas extends AppModel {
 			$result = $query->fetchAll();		
 			$idModelo = $result[0]['modelos_id'];
 			
+			
+			//Repone stock	
 			$res = $this->Modelos->reponer($idModelo,1,'');
 		    if(!$res['success'])
 					throw new BadRequestException($res['msg']);	
@@ -340,7 +355,7 @@ class Ventas extends AppModel {
 		    	throw new BadRequestException('Ocurrió un error al quitar un producto de la venta.');				
 		    }
 		    
-			return array('success'=>true, 'msg'=>'');
+			return array('success'=>true, 'msg'=>'El modelo fue quitado de la venta.');
 		
 		}catch (Exception $e) {
 			$this->rollbackTransaction();
@@ -371,7 +386,7 @@ class Ventas extends AppModel {
 		    	throw new BadRequestException('Ocurrió un error al eliminar el pago.');				
 		    }
 		    
-			return array('success'=>true, 'msg'=>'');
+			return array('success'=>true, 'msg'=>'El pago fue quitado de la venta');
 		
 		}catch (Exception $e) {
 			$this->rollbackTransaction();
