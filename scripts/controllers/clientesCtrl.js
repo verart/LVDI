@@ -15,9 +15,11 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
  	    $scope.page = 0;            
 	    $scope.data = [];
 	    $scope.parar = false;
+	    $scope.pending = false;
 	    
 	    $scope.cargarClientes = function () {
-	 		$scope.page ++;                   
+	 		$scope.page ++;  
+	    	$scope.pending = true;                 
 	 		clientesService.clientes($scope.page,$scope.filterSubmitted).then(
 				//success
 				function(promise){
@@ -29,9 +31,13 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 							$('.finClientes').html('<div class="fin"></div>');
 						$scope.parar = true;
 					}
+	    			$scope.pending = false;
 				},
 				//Error al actualizar
-				function(error){ AlertService.add('danger', error.data.MSG);}
+				function(error){ 
+	    			$scope.pending = false;
+					AlertService.add('danger', error.data.MSG);
+				}
 			);
         };
 	    
@@ -225,7 +231,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 	    
 			$(window).on('scroll', function() {
 
-				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar & !$scope.pending ) {		     	
 			  		$scope.cargarClientes();
 		    	}
 		  	});

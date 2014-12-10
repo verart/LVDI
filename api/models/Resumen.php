@@ -46,7 +46,7 @@ class Resumen extends AppModel {
 	   	$query = $query->execute();		   	
 		$results = $query->fetchAll();
 		
-		$i=0;
+		$i=0; 
 		while($i < count($results))
 			$finalResults['resumenVentas'][utf8_encode($results[$i]['FP'])] = $finalResults['resumenVentas'][utf8_encode($results[$i]['FP'])] + $results[$i++]['resumenVentas'];
 			

@@ -155,6 +155,7 @@ class VentasController extends AppController {
 							'deuda'=>$params['deuda'], 
 							'bonificacion'=>$params['bonificacion'],
 							'montoFavor'=>$params['montoFavor'],
+							'FP'=>$params['FP'],
 							'created'=>$params['created']);
 							
 			if(isset($params['FP'])) $ped['FP'] = $params['FP'];
@@ -167,12 +168,12 @@ class VentasController extends AppController {
 			$pagos2delete = isset($params['pagos2delete'])?$params['pagos2delete']:array();
 			$mod2delete = isset($params['mod2delete'])?$params['mod2delete']:array();
 
-			$res =  $this->Ventas->setVenta($venta,$mod, $pagos, $mod2delete, $pagos2delete );
+			$res =  $this->Ventas->setVenta($venta, $mod, $pagos, $mod2delete, $pagos2delete );
 				
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
 
-			echo $this->json('La venta fue actualizada.', $this->Ventas->getVentaPorId($venta['id']));
+			echo $this->json('La venta fue actualizada.', $res['venta']);
 
 		} catch (Exception $e) {	
 
@@ -180,12 +181,6 @@ class VentasController extends AppController {
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 	}
-	
-	
-	
-	
-	
-	
 	
 	
 	

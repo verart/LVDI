@@ -15,10 +15,12 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
  	    $scope.page = 0;            
 	    $scope.data = [];
 	    $scope.parar = false;
+	    $scope.pending = false;
 	    
 	    $scope.cargarResponsables = function () {
 	 		
-	 		$scope.page ++;                   
+	 		$scope.page ++;  
+	    	$scope.pending = true;                 
 
 	 		responsablesService.responsables($scope.page,$scope.filterSubmitted).then(
 				//success
@@ -31,9 +33,13 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 							$('.finResponsables').html('<div class="fin"></div>');
 						$scope.parar = true;
 					}
+	    			$scope.pending = false;
 				},
 				//Error al actualizar
-				function(error){ AlertService.add('danger', error.data.MSG);}
+				function(error){ 
+	    			$scope.pending = false;
+	    			AlertService.add('danger', error.data.MSG);
+	    		}
 			);
         };
 	    
@@ -196,7 +202,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 	    
 			$(window).on('scroll', function() {
 
-				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar) {		     	
+				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar & !$scope.pending ) {		     	
 			  		$scope.cargarResponsables();
 		    	}
 		  	});

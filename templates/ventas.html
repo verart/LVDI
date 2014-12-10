@@ -60,7 +60,8 @@
 			  				<th>Fecha</th>
 			  				<th>Detalle</th>
 			  				<th ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" >Total</th>
-			  				<th ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" >Bon.</th>
+			  				<th ng-if="((usuario.getUserRole()!='taller'))" >Bon.</th>
+			  				<th ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" >FP</th>
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
@@ -77,8 +78,10 @@
 			  				</td>
 			  				<td ng-if="((usuario.getUserRole()!='taller'))" ng-class="{true: 'highlighted'}[venta.deuda>0]"> 
 			  					{{(venta.total - venta.montoFavor) - ((venta.bonificacion*(venta.total - venta.montoFavor))/100)| currency}}</td>
-		 					<td ng-if="((usuario.getUserRole()=='admin')||(usuario.getUserRole() == 'local'))" > 
+		 					<td ng-if="((usuario.getUserRole()!='taller'))"> 
 		 						{{venta.bonificacion}}%</td>	
+		 					<td ng-if="((usuario.getUserRole()!='taller'))"> 
+		 						{{venta.FP}}</td>	
 		  				</tr>
 		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="4"> No hay ventas</td></tr>
 		   			</tbody>
