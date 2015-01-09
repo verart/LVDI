@@ -124,7 +124,7 @@ class ColaImpresion extends AppModel {
 				INNER JOIN producciones_modelos PM ON (PM.modelos_id = M.id) & (PM.producciones_id = CI.producciones_id)
 				INNER JOIN producciones P ON PM.producciones_id = P.id
 				INNER JOIN responsables R ON P.responsables_id = R.id			
-				GROUP BY CI.producciones_id, M.productos_id				
+				GROUP BY CI.producciones_id, PM.id				
 				ORDER BY CI.producciones_id";
 				
 		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
