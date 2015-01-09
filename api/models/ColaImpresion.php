@@ -56,7 +56,7 @@ class ColaImpresion extends AppModel {
 				LEFT JOIN pedidos Ped ON Ped.id = CI.pedidos_id
 				LEFT JOIN clientespm CL ON CL.id = Ped.clientesPM_id 
 				WHERE CI.belongsTo = $userId
-				 ORDER BY Pr.nombre"; 
+				ORDER BY Pr.nombre"; 
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	

@@ -182,8 +182,8 @@ class Producciones extends AppModel {
 		try{
 			$this->beginTransaction(); 
 		
-			if(isset($producto['motivo'])) $producto['motivo'] = utf8_decode($producto['motivo']);
-			if(isset($producto['nota'])) $producto['nota'] = utf8_decode($producto['nota']);
+			if(isset($produccion['motivo'])) $produccion['motivo'] = utf8_decode($produccion['motivo']);
+			if(isset($produccion['nota'])) $produccion['nota'] = utf8_decode($produccion['nota']);
 			
 					
 			if(!isset($produccion['id'])){ 
@@ -212,10 +212,7 @@ class Producciones extends AppModel {
 						
 						if(@PEAR::isError($query))
 							throw new BadRequestException('Hubo un error al agregar los modelos a la produccion');
-							
-							
-							
-			
+						
 					}
 					
 				}else
@@ -239,33 +236,24 @@ class Producciones extends AppModel {
 						
 						if(!isset($value['idProdMod'])){
 							
-							//Agrego producto
-							
+							//Agrego producto	
 							if($estado == 'Retirado'){
 								//Decremento el stock del modelo agregado a la produccion
 								$res = $this->Modelos->baja($idModelo, 1,'','BajaProduccion');
 								if(!$res['success'])
 									throw new BadRequestException($res['msg']);
 							}	
-							
 							// Nuevo modelo para la produccion
 							$sql = "INSERT INTO producciones_modelos (producciones_id,modelos_id,estado) 
-									VALUES ($idProduccion, $idModelo, '$estado') ";	
-						
-							
+									VALUES ($idProduccion, $idModelo, '$estado') ";
 							$query = $this->con->query($sql);
-								
 							if(@PEAR::isError($query))
 								throw new BadRequestException('Hubo un error al agregar modelos a la producción.');
-									
-									
-							
+											
 						}else{
 							
 							// Edicion de un modelo ya cargado a la produccion
-								
 							$idProdMod = $value['idProdMod'];
-							
 							//Busco el prducto a actualizar	
 							$found = false;  
 							foreach($produccionBefore['modelos'] as $index => $value) {
@@ -274,10 +262,7 @@ class Producciones extends AppModel {
 					        		break;
 					        	}
 					        }
-
-
 					        if (!$found){
-					        
 						        throw new BadRequestException('Hubo un error al actualizar los productos de la producción.');
 					        
 					        }else{
@@ -292,10 +277,11 @@ class Producciones extends AppModel {
 										$res = $this->Modelos->reponer($idModelo, 1,'AltaProduccion');
 										if(!$res['success'])
 											throw new BadRequestException($res['msg']);
-											
+
 										//Genero etiqueta en la cola de impresion
-										$res = $this->ColaImpresion->set($idModelo,null,$idProduccion,null);
-									
+										$res = $this->ColaImpresion->set($idModelo,null,$produccion['id'],null);
+										if(!$res['success'])
+											throw new BadRequestException($res['msg']);
 										
 								}else{
 									

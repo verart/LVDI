@@ -63,6 +63,19 @@ app.service('ventasService', ['$http', function ($http) {
 	            });
 	            
             },
+
+			/******************************
+            DEVOLUCIONES DE LA VENTA
+            ******************************/
+            devolucionesVenta:function (id) { 
+	                    
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/ventas/'+id+'/devoluciones',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+	            
+            },
             
             /******************************
             ADDPAGO

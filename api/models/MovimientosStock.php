@@ -66,12 +66,11 @@ class MovimientosStock extends AppModel {
 	function delMovimiento($idMovimiento){
 		
 		try{
-
+			$this->beginTransaction();
 			if (!$this->delete($idMovimiento))				
 					throw new BadRequestException('Hubo un error. No se pudo eliminar el movimiento.');			
 			
 			$this->commitTransaction();
-			
 		} catch (Exception $e) {
 			echo $e->getMsg();
 			$this->rollbackTransaction();

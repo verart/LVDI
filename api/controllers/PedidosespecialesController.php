@@ -173,7 +173,7 @@ class PedidosespecialesController extends AppController {
 			$pagos = (isset($params['pagos']))?$params['pagos']:array();
 						
 			// UPDATE de pedido
-			$res = $this->Pedidosespeciales->setPedido($ped, $params['pagos']);
+			$res = $this->Pedidosespeciales->setPedido($ped, $pagos);
 				
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);

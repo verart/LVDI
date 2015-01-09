@@ -77,7 +77,7 @@
 			  					</ul>	
 			  				</td>
 			  				<td ng-if="((usuario.getUserRole()!='taller'))" ng-class="{true: 'highlighted'}[venta.deuda>0]"> 
-			  					{{(venta.total - venta.montoFavor) - ((venta.bonificacion*(venta.total - venta.montoFavor))/100)| currency}}</td>
+			  					{{(venta.total - venta.montoFavor-venta.totalDevoluciones) - ((venta.bonificacion*(venta.total - venta.montoFavor-totalDevoluciones))/100)| currency}}</td>
 		 					<td ng-if="((usuario.getUserRole()!='taller'))"> 
 		 						{{venta.bonificacion}}%</td>	
 		 					<td ng-if="((usuario.getUserRole()!='taller'))"> 

@@ -159,6 +159,45 @@ class Productos extends AppModel {
 	}
 	
 	
+		/**
+	 * Retorna el producto-modelo que coincide con $nombre
+	 * @param $nombre
+	 */
+	function getProductoModeloPorNombre($nombre) {
+
+		$nombre = str_replace("%20", " ", $nombre);
+		$text = '%'.str_replace(" ", "%", $nombre).'%';
+
+		$sql = "SELECT  M.id, P.nombre as nomProducto, M.nombre as nomModelo, P.precio  
+				FROM productos P
+				INNER JOIN modelos M on P.id = M.productos_id
+				WHERE concat(P.nombre,'-',M.nombre) like '".$text."'" ; 
+	
+		try{
+				
+	    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+			$query = $query->execute(); 
+			
+			//Se formatea el resultado para que queden los datos del producto con su arreglo de modelos.
+			$results = $query->fetchAll();
+			$resultsFormat = array(); 
+
+			if(!empty($results)){ 
+				for ($i=0 ; $i<count($results) ; $i++) {
+					$resultsFormat[$i]['nombre'] = utf8_encode($results[$i]['nomProducto'].'-'.$results[$i]['nomModelo']);
+					$resultsFormat[$i]['precio'] = $results[$i]['precio'];
+					$resultsFormat[$i]['id'] =  $results[$i]['id'];
+				} 
+				return array('success'=>true, 'producto'=>$resultsFormat); 
+			}else
+				throw new BadRequestException('No existe producto que coincida con '.$nombre.'.');
+
+		}catch(Exception $e){
+			return array('success'=>false,'msg'=>$e->getMsg());
+		}	
+		
+	}	
+
 	
 	
 	
@@ -167,7 +206,7 @@ class Productos extends AppModel {
 	 * @param $idModelo
 	 */
 	function getProductoModeloPorId($idModelo) {
-		
+	
 		$sql = "SELECT P.precio,P.nombre as nomProducto, M.nombre as nomModelo, M.stock as stock 
 				FROM modelos M
 				INNER JOIN productos P ON (P.id = M.productos_id) 
@@ -201,7 +240,6 @@ class Productos extends AppModel {
 		}	
 		
 	}
-	
 	
 	
 	
@@ -420,7 +458,6 @@ class Productos extends AppModel {
 	*/
 	function baja($idMod, $nota=''){
 		
-		
 			$this->beginTransaction();
 			
 			$res = $this->Modelos->baja($idMod,$nota);
@@ -428,11 +465,7 @@ class Productos extends AppModel {
 			if($res['success'])
 				$this->commitTransaction();
 			else
-				$this->rollbackTransaction();
-		
+				$this->rollbackTransaction();	
 	}
-	
-
-	
 }
 ?>

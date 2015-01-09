@@ -10,7 +10,6 @@ class Responsables extends AppModel {
 	 */
 	function getResponsables($opciones = array()) {
 	
-		
 		$results = $this->readPage($opciones);
 	
 		for($i=0; $i < count($results); $i++){

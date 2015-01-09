@@ -33,13 +33,18 @@ class Resumen extends AppModel {
 			
 			
 		// total de ventas 	 - en un solo pago
-		$sql = "SELECT SUM((V.total - V.montoFavor) - ((V.total - V.montoFavor)*V.bonificacion/100)) as resumenVentas, V.FP 
-				FROM ventas V 				
+		$sql = "SELECT SUM((V.total - V.montoFavor-totalDevoluciones) - ((V.total - V.montoFavor-totalDevoluciones)*V.bonificacion/100)) as resumenVentas, V.FP 
+				FROM ventas V 	
+				LEFT JOIN (
+					SELECT ventas_id, SUM(precio) as totalDevoluciones
+					FROM ventas_devoluciones VD 
+					GROUP BY ventas_id 
+				) as VDV ON VDV.ventas_id = V.id 			
 				LEFT JOIN 
 					(select ventas_id
 					FROM ventas_pagos VP
 					GROUP BY ventas_id) as pagos ON pagos.ventas_id = V.id
-				$conditions AND (deuda <= 0) AND (montoFavor <= total) AND  ISNULL(pagos.ventas_id)    
+				$conditions AND (deuda <= 0) AND ((montoFavor+totalDevoluciones) <= total) AND  ISNULL(pagos.ventas_id)    
 				GROUP BY V.FP ";
 			
 		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -51,7 +56,7 @@ class Resumen extends AppModel {
 			$finalResults['resumenVentas'][utf8_encode($results[$i]['FP'])] = $finalResults['resumenVentas'][utf8_encode($results[$i]['FP'])] + $results[$i++]['resumenVentas'];
 			
 		//total pedidos especiales
-		$finalResults['resumenPedidosespeciales'] = array('Efectivo'=>0,'Tarjeta'=>0,'Cheque'=>0,'Transferencia'=>0);
+		//$finalResults['resumenPedidosespeciales'] = array('Efectivo'=>0,'Tarjeta'=>0,'Cheque'=>0,'Transferencia'=>0);
 		$sql = "SELECT SUM(PP.monto) as resumenPedidosespeciales, PP.FP 
 				FROM pedidosespeciales_pagos PP 				
 				$conditions     
@@ -63,7 +68,7 @@ class Resumen extends AppModel {
 		
 		$i=0;
 		while($i < count($results))
-			$finalResults['resumenPedidosespeciales'][utf8_encode($results[$i]['FP'])]=$results[$i++]['resumenPedidosespeciales'];
+			$finalResults['resumenVentas'][utf8_encode($results[$i]['FP'])]=$finalResults['resumenVentas'][utf8_encode($results[$i]['FP'])] + $results[$i++]['resumenPedidosespeciales'];
 
 		
 		//total por mayor

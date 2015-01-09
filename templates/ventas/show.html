@@ -6,21 +6,15 @@
 			   		<h3>Datos de la venta</h3>
 			</div>
 			       
-		
-		
 			<div class="form-group row">
-						
-						<div class="colForm col-xs-6 col-sm-4">
-							<input type="date" class="form-control small" placeholder="Fecha" id="fechaVenta"  
-									ng-model="venta.created" style="padding-right:0px;"/>
-						</div>
-
+				<div class="colForm col-xs-6 col-sm-4">
+					<input type="date" class="form-control small" placeholder="Fecha" id="fechaVenta"  
+						ng-model="venta.created" style="padding-right:0px;"/>
+				</div>
 			</div>
-        
 			
 			<br/>
         	
-			
 			<div class="row">
 			
 				<div class="col-xs-12 col-sm-4">
@@ -31,7 +25,28 @@
 							<button type="button" class="btn btn-primary btn-sm" ng-click="actualizarNota()">Actualizar Nota</button>
 					</div>
 				</div>
+
+				<!-- DEVOLUCIONES  -->
+				<div ng-if="venta.devoluciones.length > 0" class="col-xs-12 col-sm-8">	
+					<div class="tableContainer devolucionesTable">
+						<table class="table table-condensed table-hover small">
+							<thead>
+								<tr>
+									<th class="col-md-6">Productos devueltos</th>
+								  	<th>Precio</th>
+								  </tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="mod in venta.devoluciones">
+									<td class="col-md-5">{{mod.nombre}}</span></td>
+									<td class="col-md-1 text-center"> {{mod.precio | currency}}  </td>
+								</tr>
+							</tbody>
+						</table>										
+					</div> <!-- tableContainer -->
+				</div>
 				
+
 				<!-- DETALLE  -->
 				<div class="col-xs-12 col-sm-8">
 				
@@ -41,14 +56,12 @@
 								<tr>
 									<th class="col-md-6">Productos</th>
 								  	<th>Precio</th>
-								  	<th ng-if="venta.id == null"  class="col-md-1 text-center"> </th>
 								  </tr>
 							</thead>
 							<tbody>
 								<tr ng-repeat="mod in venta.modelos">
 									<td class="col-md-5">{{mod.nombre}}</span></td>
-									<td class="col-md-1 text-center"> 
-										{{mod.precio | currency}}  </td>
+									<td class="col-md-1 text-center"> {{mod.precio | currency}}  </td>
 								</tr>
 								<tr><td class="avisoSmall" colspan="6" style="text-align=center" ng-if="venta.modelos.length == 0">
 									No hay productos en la venta</td>
@@ -60,21 +73,15 @@
 					<br/>
 			
 					<div class="resumen form-horizontal pull-right" role="form">
-						
-
-						<label style="margin-right:15px;"> Subtotal:  {{venta.total | currency}} </label>
-							
-						<label class="col-sm-12 small">
-									Monto a favor: {{venta.montoFavor | currency}} 
-						</label>
-							
-						<label class="col-sm-12 small">
-									Bonificación: {{venta.bonificacion}} %
-						</label>
+		
+						<label style="margin-right:15px;"> Subtotal:  {{venta.total | currency}} </label>	
+						<label ng-if="venta.devoluciones.length > 0" class="col-sm-12 small"> Monto por dev: {{venta.totalDevoluciones | currency}}</label>
+						<label class="col-sm-12 small"> Monto a favor: {{venta.montoFavor | currency}}</label>
+						<label class="col-sm-12 small"> Bonificación: {{venta.bonificacion}} % 	</label>
 						
 						<hr class="col-sm-11 "/>
 						
-						<label style="margin-right:15px;font-size:18px;"> Total:  {{ venta.totalFinal | currency }} </label>
+						<label style="margin-right:15px;font-size:18px;">Total:{{ venta.totalFinal | currency }} </label>
 						
 						<label ng-show="!((venta.deuda > 0)||(venta.pagos.length > 0))" class="col-sm-12"> 
 								F.P: {{venta.FP}} 
