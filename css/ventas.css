@@ -22,7 +22,6 @@
 	width:75%;
 }
 
-
 .resaltar{
 	color: #0ba54b;
 }
@@ -43,4 +42,18 @@
 
 .littleForm .colForm{
 	margin-right: -25px;
+}
+
+#wndOpenVenta .devolucionesPanel{
+	font-size: 14px;
+}
+#wndOpenVenta .devolucionesPanel a, h4, input, button,label {
+	font-size: 14px;
+}
+#wndOpenVenta .devolucionesPanel .panel-body {
+	background-color: whitesmoke;
+}
+.devolucionesTable{
+	background-color: whitesmoke;
+	margin-bottom: 20px;
 }

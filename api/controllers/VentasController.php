@@ -104,8 +104,9 @@ class VentasController extends AppController {
 			
 			$mod = isset($params['modelos'])?$params['modelos']:array();
 			$pagos = isset($params['pagos'])?$params['pagos']:array();
+			$dev = isset($params['devoluciones'])?$params['devoluciones']:array();
 
-			$res =  $this->Ventas->setVenta($venta,$mod, $pagos);
+			$res =  $this->Ventas->setVenta($venta, $mod, $pagos, $dev);
 	
 			if(!($res['success'])){
 				throw new BadRequestException($res['msg']);
@@ -148,7 +149,7 @@ class VentasController extends AppController {
 			if (!$this->parametrosRequeridosEn(array('created', 'total', 'id'), $params))
 				throw new BadRequestException('Los datos de la venta están incompletos');
 			
-			//Datos del pedido
+			//Datos de la venta
 			$venta = array(	'id'=>$params['id'],
 							'total'=>$params['total'], 
 							'nota'=>$params['nota'],
@@ -165,10 +166,12 @@ class VentasController extends AppController {
 			// UPDATE de venta			
 			$mod = isset($params['modelos'])?$params['modelos']:array();
 			$pagos = isset($params['pagos'])?$params['pagos']:array();
+			$dev = isset($params['devoluciones'])?$params['devoluciones']:array();
 			$pagos2delete = isset($params['pagos2delete'])?$params['pagos2delete']:array();
 			$mod2delete = isset($params['mod2delete'])?$params['mod2delete']:array();
+			$dev2delete = isset($params['dev2delete'])?$params['dev2delete']:array();
 
-			$res =  $this->Ventas->setVenta($venta, $mod, $pagos, $mod2delete, $pagos2delete );
+			$res =  $this->Ventas->setVenta($venta, $mod, $pagos, $dev, $mod2delete, $pagos2delete, $dev2delete);
 				
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
@@ -209,7 +212,26 @@ class VentasController extends AppController {
 	}
 	
 	
-	
+	/**
+	* DEVOLUCIONES
+	* Muestra las devoluciones de la venta con id idVenta
+	*/
+	function devoluciones($idVenta) {
+		
+		try {
+			
+			if (!$this->PermisosComponent->puedeAcceder('ventas', 'show'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			$venta = $this->Ventas->getDevoluciones($idVenta); 
+			echo $this->json('', $venta); 
+
+		} catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
 	
 
 	/************************************* PAGOS **********************************/
@@ -217,7 +239,7 @@ class VentasController extends AppController {
 	
 	/**
 	* PAGOS
-	* Muestra los pagos del pedido con id idVenta
+	* Muestra los pagos de la venta con id idVenta
 	*/
 	function pagos($idVenta) {
 		

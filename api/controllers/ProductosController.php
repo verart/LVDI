@@ -54,14 +54,13 @@ class ProductosController extends AppController {
 	
 	
 	
-	
+		
 	
 	/*******************************************************************************************
-	PRODUCTOMODELO
+	PRODUCTOMODELOBYID
 	Muestra monProducto-NomModelo con el precio
-	
 	*******************************************************************************************/
-	function productoModelo($idModelo) {
+	function productoModeloById($idModelo) {
 		
 		try {
 			
@@ -75,13 +74,33 @@ class ProductosController extends AppController {
 				throw new BadRequestException($res['msg']); 
 
 		} catch (Exception $e) {	
-
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 	}
+
 	
-	
-	
+	/*******************************************************************************************
+	PRODUCTOMODELOBYNAME
+	Muestra monProducto-NomModelo con el precio - chequea con la concatenacion del nombre del 
+	producto y del modelo
+	*******************************************************************************************/
+	function productoModeloByName($nombre) {
+		try {
+			if (!$this->PermisosComponent->puedeAcceder('productos', 'productoModelo'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+
+			$res = $this->Productos->getProductoModeloPorNombre($nombre); 
+			if($res['success']) 
+				echo $this->json('', $res['producto']);
+			else 
+				throw new BadRequestException($res['msg']); 
+		} catch (Exception $e) {	
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}	
+
+
+
 	
 	
 	

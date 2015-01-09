@@ -9,47 +9,25 @@
 		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-3 sidebar">
 			<form class="navbar-form navbar-left" role="search">
-			
 				<div class="form-group">
-					
-					
 					<div class="formElement">
-					
-						
-
 							<label class="control-label">Desde</label>
-						
 							<br/>	
-							
 							<div  class="form-group">
-								<input type="date" class="form-control small" id="desde"
-										placeholder="Fecha" 
-										ng-model="desde" style="padding-right:0px;"/>
-
+								<input type="date" class="form-control small" id="desde" placeholder="Fecha" 
+								ng-model="desde" style="padding-right:0px;"/>
 							</div>
-
 							<br/>	
 							<br/>	
-
 							<label class="control-label">hasta</label>
-								
 							<br/>	
-
-	
 							<div  class="form-group">
-								<input type="date" class="form-control small" id="hasta"
-										placeholder="Fecha" 
-										ng-model="hasta" style="padding-right:0px;"/>
+								<input type="date" class="form-control small" id="hasta" placeholder="Fecha" 
+								ng-model="hasta" style="padding-right:0px;"/>
 							</div>
-							
 						</div>	
-				
-					
 					<hr/>
-					
 					<button type="button" class="btn btn-primary" ng-click="cargar()"> Mostrar </button>
-					
-					      
 				</div>
 			</form>
 		</div>
@@ -58,19 +36,11 @@
 
 		<!-- BODY-->
 		<div class="col-xs-12 col-md-9 ">
-
-
 			<div class="tableContainer" style="display:flex" >
-			
-
 				<div class="col-xs-12 col-md-8 colDetalle">
-					
 					<p class="h3"> Ingresos</p>
-
-					<div class="col-xs-12 col-md-4">
-	
+					<div class="col-xs-12 col-md-6">
 						<p class="title2Resumen"> Ventas </p>
-						
 						<div>
 							<p> Efectivo: {{resumenVentas.efectivo  | currency}}</p>
 							<p> Tarjeta: {{resumenVentas.tarjeta  | currency}}</p>
@@ -81,11 +51,8 @@
 						</div>
 						
 					</div>
-					
-					<div class="col-xs-12 col-md-4">
-	
+					<div class="col-xs-12 col-md-6">
 						<p class="title2Resumen"> Por Mayor </p>
-						
 						<div>
 							<p> Efectivo: {{resumenPorMayor.efectivo | currency}}</p>
 							<p> Tarjeta: {{resumenPorMayor.tarjeta | currency }}</p>
@@ -96,24 +63,7 @@
 						</div>
 						
 					</div>
-						
-					<div class="col-xs-12 col-md-4">
-	
-						<p class="title2Resumen"> Pedido Esp. </p>
-						
-						<div>
-							<p> Efectivo: {{resumenPedEsp.efectivo | currency}}</p>
-							<p> Tarjeta: {{resumenPedEsp.tarjeta | currency }}</p>
-							<p> Cheque: {{resumenPedEsp.cheque | currency }}</p>
-							<p> Transf.: {{resumenPedEsp.transferencia | currency }}</p>
-							<div class="linea"></div>
-							<p> Total: {{(resumenPedEsp.tarjeta + resumenPedEsp.efectivo + resumenPedEsp.cheque + resumenPedEsp.transferencia) | currency}}</p>
-						</div>
-						
-					</div>
-
 				</div>
-	
 				<div class="col-xs-12 col-md-4">
 					<p class="h3"> Gastos </p>
 	
