@@ -33,7 +33,7 @@ class Resumen extends AppModel {
 			
 			
 		// total de ventas 	 - en un solo pago
-		$sql = "SELECT SUM((V.total - V.montoFavor-totalDevoluciones) - ((V.total - V.montoFavor-totalDevoluciones)*V.bonificacion/100)) as resumenVentas, V.FP 
+		$sql = "SELECT SUM((V.total - V.montoFavor-IFNULL(totalDevoluciones,0)) - ((V.total - V.montoFavor-IFNULL(totalDevoluciones,0))*V.bonificacion/100)) as resumenVentas, V.FP 
 				FROM ventas V 	
 				LEFT JOIN (
 					SELECT ventas_id, SUM(precio) as totalDevoluciones
@@ -44,7 +44,7 @@ class Resumen extends AppModel {
 					(select ventas_id
 					FROM ventas_pagos VP
 					GROUP BY ventas_id) as pagos ON pagos.ventas_id = V.id
-				$conditions AND (deuda <= 0) AND ((montoFavor+totalDevoluciones) <= total) AND  ISNULL(pagos.ventas_id)    
+				$conditions AND (deuda <= 0) AND ((montoFavor+IFNULL(totalDevoluciones,0)) <= total) AND  ISNULL(pagos.ventas_id)    
 				GROUP BY V.FP ";
 			
 		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	

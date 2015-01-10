@@ -602,7 +602,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  		
 			  	$scope.venta.modelos.push($mod);	  	
 			  	$scope.venta.total =  parseFloat($scope.venta.total,10) + (parseFloat($scope.form.modelo.precio,10) *  parseInt($scope.form.modelo.cantidad,10));
-			  	$scope.venta.totalFinal =  parseFloat($scope.venta.total,10) - (parseFloat($scope.venta.total,10) *  parseInt($scope.venta.bonificacion,10)/100);
 			  	$scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
 			  	angular.element("#newModId").focus();
 				angular.element("#newMod").val('');

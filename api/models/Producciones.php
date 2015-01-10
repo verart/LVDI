@@ -279,7 +279,7 @@ class Producciones extends AppModel {
 											throw new BadRequestException($res['msg']);
 
 										//Genero etiqueta en la cola de impresion
-										$res = $this->ColaImpresion->set($idModelo,null,$produccion['id'],null);
+										$res = $this->ColaImpresion->set($idModelo,null,$idProduccion,null);
 										if(!$res['success'])
 											throw new BadRequestException($res['msg']);
 										
