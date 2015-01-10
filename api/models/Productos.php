@@ -171,7 +171,8 @@ class Productos extends AppModel {
 		$sql = "SELECT  M.id, P.nombre as nomProducto, M.nombre as nomModelo, P.precio  
 				FROM productos P
 				INNER JOIN modelos M on P.id = M.productos_id
-				WHERE concat(P.nombre,'-',M.nombre) like '".$text."'" ; 
+				WHERE concat(P.nombre,'-',M.nombre) like '".$text."'
+				LIMIT 0,8" ; 
 	
 		try{
 				

@@ -5,7 +5,7 @@ class Ventas extends AppModel {
 	public $primaryKey = 'id';	
 	
 	
-	public $hasMany = array('Modelos', 'MovimientosStock'); 
+	public $hasMany = array('Modelos', 'MovimientosStock', 'ColaImpresion'); 
 	
 	
 	
@@ -254,9 +254,12 @@ class Ventas extends AppModel {
 
 						$sql = "INSERT INTO ventas_devoluciones (ventas_id,modelos_id,created,precio) VALUES ($idVenta,$idModelo,'$created',$precio) "; 
 						$query = $this->con->query($sql);
-						
 						if(@PEAR::isError($query))
 							throw new BadRequestException('Hubo un error al agregar las devoluciones de la venta.');
+
+						$res = $this->ColaImpresion->set($idModelo,null, null, null);
+							if(!$res['success'])
+								throw new BadRequestException($res['msg']);
 					}
 				}else
 					throw new BadRequestException('Hubo un error al crear la venta');
@@ -323,9 +326,12 @@ class Ventas extends AppModel {
 
 							$sql = "INSERT INTO ventas_devoluciones (ventas_id,modelos_id,created,precio) VALUES ($idVenta,$idModelo,'$created',$precio) "; 
 							$query = $this->con->query($sql);
-							
 							if(@PEAR::isError($query))
 								throw new BadRequestException('Hubo un error al agregar las devoluciones de la venta.');
+
+							$res = $this->ColaImpresion->set($idModelo,null, null, null);
+							if(!$res['success'])
+								throw new BadRequestException($res['msg']);
 						}
 					}
 				}		
@@ -400,8 +406,12 @@ class Ventas extends AppModel {
 					throw new BadRequestException($result['msg']);	
 			}
 		
+			$result = $this->removePagosVenta($idVenta);
+			if(!$result['success'])
+				throw new BadRequestException($result['msg']);	
+
 			$this->delete($idVenta);
-			
+
 			$this->commitTransaction();
 			
 		}catch (Exception $e) {
@@ -446,6 +456,27 @@ class Ventas extends AppModel {
 	}
 	
 	
+	/*
+	* REMOVEPAGOSVENTA
+	* Solo elimina los pagos de una venta y NO actualiza la deuda de la venta
+	*/
+	function removePagosVenta($idVenta){
+	
+		try{
+		
+		    $sql = "DELETE FROM ventas_pagos WHERE ventas_id = $idVenta";
+			$result = $this->con->query($sql);
+			if(@PEAR::isError($result)) 
+		    	throw new BadRequestException('Ocurrió un error al eliminar los pagos de la venta.');				
+		    
+			return array('success'=>true, 'msg'=>'Los pagos fueron eliminados');
+		
+		}catch (Exception $e) {			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+		}
+	}
+
+
 	
 	/*
 	* REMOVEPAGO

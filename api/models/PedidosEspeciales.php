@@ -127,8 +127,7 @@ class Pedidosespeciales extends AppModel {
 					//id del pedido creado
 					$pedido['id'] = $this->con->lastInsertID('pedidos', 'id');
 				else
-					throw new BadRequestException('Hubo un error al crear el pedido.');
-					
+					throw new BadRequestException('Hubo un error al crear el pedido.');		
 							
 			}else{
 				
@@ -151,25 +150,81 @@ class Pedidosespeciales extends AppModel {
 					
 					if(@PEAR::isError($query))
 						throw new BadRequestException('Hubo un error al agregar los pagos del pedido.');
-						
 				}
 			}	
 
 			$this->commitTransaction();
-			
 			return array('success'=>true, 'id'=>$idPedido);
 			
 		} catch (Exception $e) {
 			
 			$this->rollbackTransaction();
-			
 			return array('success'=>false, 'msg'=>$e->getMsg());
 		}
 		
 		
 	}
 	
+		
 	
+	/**
+	 * ELIMINARPEDIDO
+	 * Elimina un pedido y todos sus pagos
+	 * @param $idPedido
+	 */
+	function eliminarPedido($idPedido){
+	
+		try{
+			
+			$this->beginTransaction();
+
+			$result = $this->removePagosPedido($idPedido);
+			if(!$result['success'])
+				throw new BadRequestException($result['msg']);	
+
+			$this->delete($idPedido);
+			
+			$this->commitTransaction();
+			return array('success'=>true, 'msg'=>'El pedido fue eliminado.');
+
+		}catch (Exception $e) {
+			$this->rollbackTransaction();
+			return array('success'=>false, 'msg'=>$e->getMsg());
+		}
+	
+	}
+
+
+	/**
+	 * REMOVEPAGOPEDIDO
+	 * Quita un pago del pedido especial idPedido
+	 * @param $idPedido
+	 */
+	function removePagosPedido($idPedido){
+		
+		try{
+			
+			$this->beginTransaction();
+			
+			$sql = "DELETE FROM pedidosespeciales_pagos WHERE pedidosespeciales_id = $idPedido";
+
+			$result = $this->con->query($sql);
+			if(@PEAR::isError($result))
+		    	throw new BadRequestException('Ocurrió un error al eliminar los pagos del pedido.');				
+		    
+			$this->commitTransaction();
+			
+			return array('success'=>true, 'msg'=>'');
+			
+		} catch (Exception $e) {
+			$this->rollbackTransaction();
+			
+			return array('success'=>false, 'msg'=>$e->getMsg());
+
+		}
+		
+	}
+
 	
 	/**
 	 * REMOVEPAGO 

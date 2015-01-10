@@ -119,8 +119,7 @@ class Modelos extends AppModel {
 				throw new BadRequestException('Hubo un error al reponer el modelo '.$idModelo);
 				
 			$movimiento = array(
-				'modelos_id'=> $idModelo, 'created'=> date('Y/m/d h:i:s', time()), 'tipo'=> $tipo, 'cantidad'=> $cantidad);
-					
+				'modelos_id'=> $idModelo, 'created'=> date('Y/m/d h:i:s', time()), 'tipo'=> $tipo, 'cantidad'=> $cantidad);	
 			if(!$this->MovimientosStock->setMovimiento($movimiento))
 				throw new BadRequestException('Hubo un error al crear el movimiento para el modelo '.$idModelo);
 							

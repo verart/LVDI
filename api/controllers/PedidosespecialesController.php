@@ -211,7 +211,7 @@ class PedidosespecialesController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('pedidosespeciales', 'delete'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$this->Pedidosespeciales->delete($idPedido);
+			$this->Pedidosespeciales->eliminarPedido($idPedido);
 
 		} catch (Exception $e) {	
 
