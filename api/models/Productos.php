@@ -89,7 +89,7 @@ class Productos extends AppModel {
 		$results = $query->fetchAll();
 		
 		for($i=0; $i < count($results); $i++){
-			$results[$i]['nombre']= utf8_encode($results[$i]['nombre_prod']).' - '.utf8_encode($results[$i]['nombre_mod']);
+			$results[$i]['nombre']= utf8_encode($results[$i]['nombre_prod']).'-'.utf8_encode($results[$i]['nombre_mod']);
 			unset($results[$i]['nombre_prod']); unset($results[$i]['nombre_mod']);
 			$results[$i]['id']= $results[$i]['id'];
 		}	
@@ -165,14 +165,15 @@ class Productos extends AppModel {
 	 */
 	function getProductoModeloPorNombre($nombre) {
 
+		$nombre = strtolower ($nombre);
 		$nombre = str_replace("%20", " ", $nombre);
-		$text = '%'.str_replace(" ", "%", $nombre).'%';
+		$text = '%'.$nombre.'%';
 
 		$sql = "SELECT  M.id, P.nombre as nomProducto, M.nombre as nomModelo, P.precio  
 				FROM productos P
 				INNER JOIN modelos M on P.id = M.productos_id
 				WHERE concat(P.nombre,'-',M.nombre) like '".$text."'
-				LIMIT 0,8" ; 
+				LIMIT 0,10" ; 
 	
 		try{
 				

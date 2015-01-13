@@ -36,7 +36,7 @@
 									<input type="text" id="newDevId" class="form-control small filterInput" 
 									ng-model="form.modeloDev.id" placeholder="Id de producto" ng-change="searchDev()"ng-enter="addDev()"/>
 									<br/>									
-									<input type="text" id="newDev" autocomplete="off" ng-model="form.modeloDev.nombre" class="form-control small" placeholder="Nombre de producto" ng-enter="addDev()" typeahead="dev_option as dev_option.nombre for dev_option in p.dev_options | filter:$viewValue" typeahead-on-select="setModelDev($item)"  />
+									<input type="text" id="newDev" autocomplete="off" ng-model="form.modeloDev.nombre" class="form-control small" placeholder="Nombre de producto" ng-enter="addDev()" typeahead="dev_option as dev_option.nombre for dev_option in p.dev_options" typeahead-on-select="setModelDev($item)"  typeahead-wait-ms="300"  />
 							
 									<div class="row" style="margin-top:5px;">		
 										<div class="colForm col-xs-6 col-md-6">
@@ -96,8 +96,8 @@
 						<hr/> 
 						
 						<input type="text" id="newMod" autocomplete="off" ng-model="form.modelo.nombre" 
-							class="form-control small" placeholder="Nombre de producto" ng-enter="add()" typeahead="mod_option as mod_option.nombre for mod_option in p.mod_options | filter:$viewValue"
-							typeahead-on-select="setModel($item)"  />
+							class="form-control small" placeholder="Nombre de producto" ng-enter="add()" typeahead="mod_option as mod_option.nombre for mod_option in p.mod_options"
+							typeahead-on-select="setModel($item)" typeahead-wait-ms="300" ng-keyup="searchByName()" />
 
 						<div class="row" style="margin-top:5px;">	
 							<div class="colForm col-xs-6 col-md-6">
