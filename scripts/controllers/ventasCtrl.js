@@ -415,6 +415,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  $scope.userRole = info.userRole;
 		  $scope.form = {};
 		  $scope.p = {};
+		  $scope.p.mod_options = [];
+		  $scope.p.dev_options = [];
 		  $scope.form.modelo = {nombre:'', id:'', precio:''};
 		  $scope.form.modeloDev = {nombre:'', id:'', precio:''};
  		  $scope.form.pago = {monto:'', FP:'', created:formatLocalDate(), bonificacion:0};
@@ -563,12 +565,16 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		// SEARCHBYNAME producto *** Busca un producto disponible
 		$scope.searchByName= function() {		  
 			if($scope.form.modelo.nombre != ''){
-			  	$mod = [];
+			  	$scope.p.mod_options = [];
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
 			  	productosService.getProductoModeloByName($scope.form.modelo.nombre).then(
 					//success
 					function(promise){
-					    $scope.p.mod_options = promise.data.DATA;
+						$scope.p.mod_options = promise.data.DATA;
+					},					
+					//no existe
+					function(error){
+						$scope.p.mod_options = [];
 					}
 				);		
 			}		  
@@ -578,14 +584,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		$scope.setModel= function(item) {		  
 			$scope.form.modelo = item;	
 		}
-  		
-
-  		// WATCH form.modelo.name *** muestra los productos que coinciden
-		$scope.$watch('form.modelo.nombre', function(newValue, oldValue) {		  		
-		    	if(newValue != undefined) 
-		    		$scope.searchByName();		   			    
-		});
-
 
 		  
 		  // ADD producto *** Agrega un modelo a la venta. Actualiza los totales
@@ -680,7 +678,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		// SEARCH producto *** Busca un producto disponible
 		$scope.searchDev= function() {		  
 			if($scope.form.modeloDev.id != ''){
-			  	$mod = [];
+			  	$scope.form.modeloDev = [];
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
 			  	productosService.getProductoModelo($scope.form.modeloDev.id ).then(
 					//success
@@ -688,7 +686,9 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 						$scope.form.modeloDev = promise.data.DATA; 
 					},
 					//No existe
-					function(error){ $scope.form.modeloDev.nombre ='';}
+					function(error){ 
+						$scope.form.modeloDev.nombre ='';
+					}
 				);		
 			}		  
 		}	
@@ -702,6 +702,10 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 					//success
 					function(promise){
 					    $scope.p.dev_options = promise.data.DATA;
+					},
+					//No existe
+					function(error){ 
+						 $scope.p.dev_options = [];
 					}
 				);		
 			}		  
