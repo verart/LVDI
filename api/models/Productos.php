@@ -173,6 +173,7 @@ class Productos extends AppModel {
 				FROM productos P
 				INNER JOIN modelos M on P.id = M.productos_id
 				WHERE concat(P.nombre,'-',M.nombre) like '".$text."'
+				ORDER BY P.nombre,M.nombre 
 				LIMIT 0,10" ; 
 	
 		try{

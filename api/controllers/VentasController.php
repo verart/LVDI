@@ -28,14 +28,11 @@ class VentasController extends AppController {
 						$opciones = array(); 
 			}			
 	
-				
-	
 			$ventas = $this->Ventas->getVentas($opciones, $_POST['pag']); 
 			
 			echo $this->json('Ventas', $ventas);
 			
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}

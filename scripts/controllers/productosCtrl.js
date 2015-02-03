@@ -24,8 +24,10 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 			function(promise){
 				$scope.data = promise.data.DATA;
 			},
-			//Error al guardar
-			function(error){}
+			//Error al acceder
+			function(error){
+				$location.path('/index');
+			}
 		);
 
  

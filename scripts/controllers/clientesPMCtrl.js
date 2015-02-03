@@ -35,6 +35,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 				function(error){ 
 	    			$scope.pending = false;
 	    			AlertService.add('danger', error.data.MSG);
+					$location.path('/index');
 	    		}
 			);
         };

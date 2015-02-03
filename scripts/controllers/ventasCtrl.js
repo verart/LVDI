@@ -1,7 +1,7 @@
-app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosService', 'AlertService', '$filter', 
+app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosService', 'AlertService', '$filter', '$location', 
 
 
-	function ($scope, $modal, ventasService, productosService, AlertService, $filter) {
+	function ($scope, $modal, ventasService, productosService, AlertService, $filter, $location) {
        
        
 
@@ -62,7 +62,9 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 				//Error al actualizar
 				function(error){ 
 					$scope.pending = false;
-					AlertService.add('danger', error.data.MSG);
+					$location.path('/index');
+					AlertService.add('danger', error.data.MSG,3000);
+
 				}
 			);
 	
@@ -549,7 +551,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		// SEARCH producto *** Busca un producto disponible
 		$scope.search= function() {		  
 			if($scope.form.modelo.id != ''){
-			  	$mod = [];
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
 			  	productosService.getProductoModelo($scope.form.modelo.id ).then(
 					//success
@@ -565,7 +566,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		// SEARCHBYNAME producto *** Busca un producto disponible
 		$scope.searchByName= function() {		  
 			if($scope.form.modelo.nombre != ''){
-			  	$scope.p.mod_options = [];
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
 			  	productosService.getProductoModeloByName($scope.form.modelo.nombre).then(
 					//success
@@ -678,7 +678,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		// SEARCH producto *** Busca un producto disponible
 		$scope.searchDev= function() {		  
 			if($scope.form.modeloDev.id != ''){
-			  	$scope.form.modeloDev = [];
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
 			  	productosService.getProductoModelo($scope.form.modeloDev.id ).then(
 					//success
@@ -696,7 +695,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		// SEARCHBYNAME producto *** Busca un producto disponible
 		$scope.searchByNameDev= function() {		  
 			if($scope.form.modeloDev.nombre != ''){
-			  	$mod = [];
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
 			  	productosService.getProductoModeloByName($scope.form.modeloDev.nombre).then(
 					//success

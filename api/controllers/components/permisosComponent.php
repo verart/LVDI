@@ -58,7 +58,7 @@ class PermisosComponent extends AppComponent{
 					$this->acceso['gastos']= array('index','create','delete');
 					$this->edicion['gastos']= array('index','create','delete');
 					$this->edicion['notas']= array('index','create','delete');
-			    break;
+			    	break;
 			}
 		
 		}
@@ -69,7 +69,9 @@ class PermisosComponent extends AppComponent{
 		if($this->perfil== 'admin')
 			return true;
 		else
-			return in_array($accion, $this->acceso[$controller]);
+			if($this->perfil != '')
+				return in_array($accion, $this->acceso[$controller]);
+			else return false;
 		
 	}
 	
@@ -79,7 +81,9 @@ class PermisosComponent extends AppComponent{
 		if($this->perfil== 'admin')
 			return true;
 		else
-			return in_array($accion, $this->edicion[$controller]);
+			if($this->perfil != '')
+				return in_array($accion, $this->edicion[$controller]);
+			else return false;
 		
 	}
 

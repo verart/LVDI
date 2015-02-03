@@ -37,7 +37,9 @@ app.controller('gastosCtrl', ['$scope','$modal',  'gastosService', 'AlertService
 				     $scope.gastos = promise.data.DATA;                   
 				},
 				//Error al actualizar
-				function(error){ AlertService.add('danger', error.data.MSG);}
+				function(error){ 
+					$location.path('/index');
+				}
 			);		
 		}
 			

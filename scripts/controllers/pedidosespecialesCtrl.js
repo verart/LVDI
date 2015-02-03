@@ -49,6 +49,7 @@ app.controller('pedidosespecialesCtrl', ['$scope','$modal', 'pedidosespecialesSe
 				function(error){
 	    			$scope.pending = false;
 	    			AlertService.add('danger', error.data.MSG);
+	    			$location.path('/index');
 	    		}
 			); 
 		}	
