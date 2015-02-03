@@ -64,27 +64,21 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 					$scope.pending = false;
 					$location.path('/index');
 					AlertService.add('danger', error.data.MSG,3000);
-
 				}
 			);
-	
-
-
         };
 	    	    
 	    
 	    /*****************************************************************************************************
 	     CARGAR Ventas segun fecha	    
 	    *****************************************************************************************************/
-	    $scope.$watch('filterVentas.filter', function(newValue, oldValue) {
-		  		
+	    $scope.$watch('filterVentas.filter', function(newValue, oldValue) {	
 		  	 if(newValue != oldValue){ 
 		  	   	$scope.parar = false;
 		  	   	$scope.data = [];
 		  	   	$scope.page = 0;
 		  	 	$scope.cargarVentas();
-		  	 }
-		  	 
+		  	 }	  	 
 		}, true);
 	    		
 	    
@@ -94,31 +88,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	     Información facilitada para crear/modificar una venta --> listado de productos	    
 	    *****************************************************************************************************/
 	    $scope.infoModal = {}
-	 //    $scope.infoModal.p = {mod_options:[], dev_options:[]};
-	    
-	    
-	 //    //PRODUCTOSDISPONIBLES - Recupera todos los modelos de cada producto disponible. Retorna como nombre NomProd-NomMod
-	 //    productosService.nombresProductosDisponibles().then(
-		// 	//success
-		// 	function(promise){
-		// 	     promise.data.DATA.forEach(function (prod) {
-		//              $scope.infoModal.p.mod_options.push({'nombre':prod.nombre, 'id':prod.id, 'precio':prod.precio});  });                   
-		// 	},
-		// 	//Error al actualizar
-		// 	function(error){ AlertService.add('danger', error.data.MSG);}
-		// );		
-		
-		
-		// //PRODUCTOS - Recupera todos los modelos de cada producto en produccion. Retorna como nombre NomProd-NomMod
-	 //    productosService.nombresProductos(1).then(
-		// 	//success
-		// 	function(promise){
-		// 	     promise.data.DATA.forEach(function (prod) {
-		//              $scope.infoModal.p.dev_options.push({'nombre':prod.nombre, 'id':prod.id, 'precio':prod.precio});  });                   
-		// 	},
-		// 	//Error al actualizar
-		// 	function(error){ AlertService.add('danger', error.data.MSG);}
-		// );
+
 	   
 	    	    	    
 	    /************************************************************************
@@ -156,8 +126,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 		    	/************************************************************
 		    	GUARDAR
 		    	************************************************************/
-		    	function (res) {
-			    		
+		    	function (res) {		    		
 			    	
 			    	/******************************************
 		    		 NUEVA VENTA
@@ -239,10 +208,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 
 						);   	
 					}  
-
-
 			    }	
-			    		
 			);	
 		}
 	     
@@ -250,17 +216,8 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 		/* NUEVO *******************/
 	 	$scope.nuevo = function (userRole) {
             $scope.openVenta('', userRole);
-        };
-        
-        
-        
-	     		
-
-	    
-	    
-	    
-	    
-	            
+        };  
+	  
 
         /************************************************************************
 	    SHOWVENTA
@@ -384,20 +341,13 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 	    if ($('#infinite-scrolling').size() > 0) {
 	    
 			$(window).on('scroll', function() {
-
 				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar & !$scope.pending) {		     	
 			  		$scope.cargarVentas();
 		    	}
 		  	});
 		  	return;
-		};
-	    
-	    
-
-        	
+		};        	
 }]);
-
-
 
 
 
@@ -405,8 +355,7 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
  ModalVentaInstanceCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info) {
-		  
+var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info,$location) {
 		  
 		  $scope.fps = [
 		  	{'label':'Efectivo','value':'Efectivo'}, 
@@ -461,7 +410,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 						},
 						//Error al cargar
 						function(error){
-								AlertService.add('danger', error.data.MSG,5000);
+							AlertService.add('danger', error.data.MSG,5000);
 						}		
 				);	
 				//Devoluciones de la venta
@@ -474,7 +423,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 						},
 						//Error al cargar
 						function(error){
-								AlertService.add('danger', error.data.MSG,5000);
+							AlertService.add('danger', error.data.MSG,5000);
 						}		
 				);			  	
 		  }else{
@@ -525,7 +474,6 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		    //Si varios pagos es 0, cancela la deuda.
 		    if($scope.venta.variosPagos == 1) $scope.venta.FP = null;
 		  	$scope.venta.deuda = $scope.venta.variosPagos * $scope.venta.deuda;
-		  	
 		  	$modalInstance.close({venta:$scope.venta, action:''});
 		};
 		  
@@ -558,7 +506,12 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 						$scope.form.modelo = promise.data.DATA; 
 					},
 					//No existe
-					function(error){ $scope.form.modelo.nombre ='';}
+					function(error){ 
+						if((error.status == 403) || (error.status == 401)){
+						    $modalInstance.dismiss({action:'cancel'});
+							$location.path('/index');
+						}
+						$scope.form.modelo.nombre ='';}
 				);		
 			}		  
 		}	
@@ -574,6 +527,10 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 					},					
 					//no existe
 					function(error){
+						if((error.status == 403) || (error.status == 401)){
+						    $modalInstance.dismiss({action:'cancel'});
+							$location.path('/index');
+						}
 						$scope.p.mod_options = [];
 					}
 				);		
@@ -624,18 +581,15 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		    		$scope.refreshTotal() ;		  			    
 		  });
 		  
-		  
 		  // WATCH VENTA.TOTAL *** Actualiza  totalFinal, deuda
 		  $scope.$watch('venta.total', function(newValue, oldValue) {		  		
 		    	$scope.refreshTotal() ;			   			    
 		  });
 		  
-		  
 		  // WATCH VENTA.MONTOFAVOR *** Actualiza  totalFinal, deuda
 		  $scope.$watch('venta.montoFavor', function(newValue, oldValue) {		  		
 		    	$scope.refreshTotal() ;			   			    
 		  });
-		  
 		  
 		  // WATCH VENTA.totalPagos *** Actualiza  totalFinal, deuda
 		  $scope.$watch('venta.totalPagos', function(newValue, oldValue) {		  		
@@ -676,16 +630,20 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		****************************************************/		  
 
 		// SEARCH producto *** Busca un producto disponible
-		$scope.searchDev= function() {		  
+		$scope.searchDev= function() {		
 			if($scope.form.modeloDev.id != ''){
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
 			  	productosService.getProductoModelo($scope.form.modeloDev.id ).then(
 					//success
 					function(promise){
-						$scope.form.modeloDev = promise.data.DATA; 
+						$scope.form.modeloDev = promise.data.DATA;  
 					},
 					//No existe
 					function(error){ 
+						if((error.status == 403) || (error.status == 401)){
+						    $modalInstance.dismiss({action:'cancel'});
+							$location.path('/index');
+						}
 						$scope.form.modeloDev.nombre ='';
 					}
 				);		
@@ -703,7 +661,10 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 					},
 					//No existe
 					function(error){ 
-						 $scope.p.dev_options = [];
+						 if((error.status == 403) || (error.status == 401)){
+						    $modalInstance.dismiss({action:'cancel'});
+							$location.path('/index');
+						}$scope.p.dev_options = [];
 					}
 				);		
 			}		  
@@ -715,10 +676,10 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		}
   		
 
-  		// WATCH form.modelo.name *** muestra los productos que coinciden
-		$scope.$watch('form.modeloDev.nombre', function(newValue, oldValue) {		  		
-		    	if(newValue != undefined)  $scope.searchByNameDev();		   			    
-		});
+  // 		// WATCH form.modelo.name *** muestra los productos que coinciden
+		// $scope.$watch('form.modeloDev.nombre', function(newValue, oldValue) {		  		
+		//     	if(newValue != undefined)  $scope.searchByNameDev();		   			    
+		// });
 
 
 		// ADDDEV producto *** Agrega un modelo como devolucion. Actualiza los totales
