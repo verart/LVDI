@@ -57,7 +57,9 @@ app.controller('produccionesCtrl',
 					//Error al actualizar
 					function(error){ 
 	    				$scope.pending = false;
-						AlertService.add('danger', error.data.MSG);}
+						AlertService.add('danger', error.data.MSG);
+						$location.path('/index');
+					}
 				);
 			}	
 	    }  

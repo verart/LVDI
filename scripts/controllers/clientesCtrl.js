@@ -35,8 +35,10 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				},
 				//Error al actualizar
 				function(error){ 
-	    			$scope.pending = false;
-					AlertService.add('danger', error.data.MSG);
+	    			$scope.pending = false;	    			
+	    			AlertService.add('danger', error.data.MSG);
+					$location.path('/index');
+
 				}
 			);
         };

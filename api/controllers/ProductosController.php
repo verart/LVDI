@@ -27,7 +27,6 @@ class ProductosController extends AppController {
 			echo $this->json('Productos', $prods);
 
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}

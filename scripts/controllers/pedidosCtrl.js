@@ -58,7 +58,8 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 				//Error al actualizar
 				function(error){
 	    			$scope.pending = false;	
-	    			AlertService.add('danger', error.data.MSG);
+					AlertService.add('danger', error.data.MSG);
+					$location.path('/index');
 	    		}
 			); 
 		}	
@@ -115,7 +116,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 		             $scope.infoModal.p.mod_options.push({'nombre':prod.nombre, 'id':prod.id, 'precio':prod.precio});  });                   
 			},
 			//Error al actualizar
-			function(error){ AlertService.add('danger', error.data.MSG);}
+			function(error){ AlertService.add('danger', error.data.MSG, 3000);}
 		);		
 		
 		//CLIENTES
@@ -126,7 +127,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 		             $scope.infoModal.p.cl_options.push({'nombre':cl.nombre, 'id':cl.id, 'bonificacion':cl.bonificacion});    });                   
 			},
 			//Error al actualizar
-			function(error){ AlertService.add('danger', error.data.MSG);}
+			function(error){ AlertService.add('danger', error.data.MSG,3000);}
 		);
 		
 		

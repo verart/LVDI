@@ -41,7 +41,7 @@ app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthSe
     
     if((typeof(nextRoute) !== "undefined")&&(nextRoute.auth.needAuth)){
 	
-	    var authorizedRoles = nextRoute.auth.authorizedRoles; 
+	    var authorizedRoles = nextRoute.auth.authorizedRoles;
 
 	    if (!AuthService.isAuthorized(authorizedRoles)) {
 	       
@@ -56,11 +56,8 @@ app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthSe
 	        $location.path('/index');
 	      }
 	    }
-	     
-	}
+    }
   });
-
-  
 });
 
 

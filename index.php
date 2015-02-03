@@ -19,8 +19,7 @@
 		</alert>
 	</div>
 
-
-	<nav class="navbar navbar-default" role="navigation" ng-if="(usuario.getUserName() != '')&&(activeTab != 'index')">
+	<nav class="navbar navbar-default" role="navigation" ng-if="(activeTab != 'index')&&(usuario.getUserName() != '')&&(usuario.getUserName() != undefined)">
 	  <div class="container-fluid">
 	
 	    <div class="navbar-header">
