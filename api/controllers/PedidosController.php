@@ -2,7 +2,7 @@
 class PedidosController extends AppController {
 
 	var $name = "Pedidos";
-	var $uses = array('Pedidos');
+	var $uses = array('Pedidos', 'ClientesPMAcceso');
 	
 
 	function index() {
@@ -45,9 +45,7 @@ class PedidosController extends AppController {
 	* Muestra el detalle del pedido con id idPedido
 	*/
 	function show($idPedido) {
-		
 		try {
-			
 			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
@@ -67,9 +65,7 @@ class PedidosController extends AppController {
 	* Muestra los modelos del pedido con id idPedido
 	*/
 	function modelos($idPedido) {
-		
-		try {
-			
+		try {	
 			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
@@ -91,9 +87,7 @@ class PedidosController extends AppController {
 	* Muestra los pagos del pedido con id idPedido
 	*/
 	function pagos($idPedido) {
-		
 		try {
-			
 			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'show'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
@@ -117,12 +111,9 @@ class PedidosController extends AppController {
 	* Params (POST): pedidos = array([FP], [bonificacion], clientesPM_id, [estado], fecha, total, modelos=array(cantidad,estado,id)
 	*/
 	function create() {
-		
 		try {
-		
 			if (!$this->PermisosComponent->puedeAcceder('pedidos', 'create'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
-
 
 			$params = (isset($_POST['pedido']))? $_POST['pedido'] : array();
 	
@@ -130,7 +121,6 @@ class PedidosController extends AppController {
 			if (!$this->parametrosRequeridosEn(array('clientesPM_id', 'estado', 'fecha', 'total'), $params))
 				throw new BadRequestException('Los datos del pedido están incompletos'); 
 				
-
 			$pedido = array(
 				'clientesPM_id'=>$params['clientesPM_id'],
 				'estado'=>$params['estado'],
@@ -162,8 +152,48 @@ class PedidosController extends AppController {
 	}
 
 	
-	
-	
+	/**
+	* CONFIRMPEDIDO
+	* Crea el pedido, elimina el acceso del usuario
+	* Params (POST): pedidos = array([FP], [bonificacion], clientesPM_id, [estado], fecha, total, modelos=array(cantidad,estado,id)
+	*/
+	function confirmarPedido(){
+		try{
+
+			$token = (isset($_POST['token']))? $_POST['token'] :'';
+			$infoToken = $this->ClientesPMAcceso->getToken($token);
+			if($infoToken['success'] != 1)
+				throw new ForbiddenException('No tiene permiso para realizar esta acción.');
+
+			$params = (isset($_POST['pedido']))? $_POST['pedido'] : array();
+
+			// Campos obligatorios
+			if (!$this->parametrosRequeridosEn(array('clientesPM_id','fecha','total'), $params))
+				throw new BadRequestException('Los datos del pedido están incompletos'); 
+				
+			$pedido = array(
+				'clientesPM_id'=>$params['clientesPM_id'],
+				'estado'=>'Pendiente',
+				'fecha'=>$params['fecha'],
+				'total'=>$params['total']
+			);
+			
+			if(isset($params['nota'])) $pedido['nota'] = '(Pedido realizado por el cliente) - '.$params['nota'];
+
+			$mod = isset($params['modelos'])?$params['modelos']:array();
+			$res =  $this->Pedidos->setPedido($pedido,$mod, array());		
+
+			if(!$res['success'])
+				throw new BadRequestException('Hubo un error al crear el pedido.');
+
+			$this->ClientesPMAcceso->deleteToken($token);
+			echo $this->json('Pedido', $this->Pedidos->getPedidoPorId($res['pedidos_id']));
+
+		} catch (Exception $e) {	
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}
+	}
 	
 	
 	
@@ -180,7 +210,6 @@ class PedidosController extends AppController {
 				throw new ForbiddenException('No tiene permiso para actualizar pedidos'); 
 			
 			$params = getPutParameters();
-			
 			$params = (isset($params['pedido']))? $params['pedido'] : array();
 	
 			// Campos obligatorios
@@ -199,9 +228,11 @@ class PedidosController extends AppController {
 			if(isset($params['fecha_entrega'])) $ped['fecha_entrega'] = $params['fecha_entrega'];
 			if(isset($params['nota'])) $ped['nota'] = $params['nota'];
 			
+			$pagos = isset($params['pagos'])?$params['pagos']:array();
+
 			
 			// UPDATE de pedido
-			$res = $this->Pedidos->setPedido($ped,$params['modelos'], $params['pagos']);
+			$res = $this->Pedidos->setPedido($ped,$params['modelos'], $pagos);
 				
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);

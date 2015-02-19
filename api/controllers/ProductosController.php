@@ -2,15 +2,14 @@
 class ProductosController extends AppController {
 
 	var $name = "Productos";
-	var $uses = array('Productos', 'Modelos');
+	var $uses = array('Productos', 'Modelos', 'ClientesPMAcceso');
 	
 
 
 
 	function index() {
 		
-		try {
-			
+		try {			
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
@@ -20,10 +19,8 @@ class ProductosController extends AppController {
 				$opciones['conditions']= array('enProduccion'=>1);
 			else	
 				$opciones['conditions']= array(); 
-			
 				
-			$prods = $this->Productos->getProductos($opciones);
-			 
+			$prods = $this->Productos->getProductos($opciones);	 
 			echo $this->json('Productos', $prods);
 
 		} catch (Exception $e) {	
@@ -97,24 +94,13 @@ class ProductosController extends AppController {
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 	}	
-
-
-
 	
 	
-	
-	
-	
-	
-	
-	
-	/**
+	/*******************************************************************************************
 	* UPDATE
 	* Actualiza un producto.
 	* Params (PUT): array(nombre, [id], precio, modelos=array([id],nombre), mod2delete=array(id) )
-	*
-	*/
-	
+	*******************************************************************************************/
 	function update() {
 		
 		try {
@@ -129,8 +115,7 @@ class ProductosController extends AppController {
 							'precio'=>$params['precio'], 
 							'id'=>$params['id'], 
 							'enProduccion'=>$params['enProduccion']);
-
-			
+	
 			// UPDATE de producto
 			$res =  $this->Productos->setProducto($prod,$params['modelos']);
 				
@@ -143,8 +128,7 @@ class ProductosController extends AppController {
 			$urlImg='';
 			if(isset($params['fileName'])){
 				$urlImg = $this->saveFile($params['id'], $params['fileName']);
-			}
-			
+			}	
 
 			// BAJA de modelos
 			if(!empty($params['mod2baja']))
@@ -171,9 +155,7 @@ class ProductosController extends AppController {
 					
 					if(!$result['success'])
 						throw new BadRequestException($result['msg']);									
-			}
-			
-						
+			}					
 			
 			echo $this->json('Producto', $this->Productos->getProductoPorId($res['productos_id']));
 			
@@ -184,18 +166,14 @@ class ProductosController extends AppController {
 		}	
 	}
 
-
-
-	
-	/**
+	/*******************************************************************************************
 	* CREATE
 	* Crea un producto.
 	* Params (POST): array(nombre, precio, modelos=array([id],nombre), mod2delete=array(id), [fileName] )
-	*/
+	*******************************************************************************************/
 	function create() {
 		
-		try {
-		
+		try {	
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'create'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
@@ -221,26 +199,19 @@ class ProductosController extends AppController {
 			echo $this->json('Producto', $this->Productos->getProductoPorId($res['productos_id']));
 
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 	}
 	
-	
-	
-	
-	
-	/*******
+	/*******************************************************************************************
 	* DELETE
 	* Elimina un producto.
 	* Params (DELETE): idProducto
-	*/
+	*******************************************************************************************/
 	function delete($idProducto) {
 		
-		
 		try {
-		
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'delete'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
@@ -248,7 +219,6 @@ class ProductosController extends AppController {
 				$this->removeFile($idProducto);
 
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
@@ -261,12 +231,10 @@ class ProductosController extends AppController {
 	function reponer() {
 		
 		try {
-			
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'reponer'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
 			$idModelo = $_POST['idMod']; 
-		
 			$this->Productos->reponer($idModelo);
 
 		} catch (Exception $e) {	
@@ -281,27 +249,21 @@ class ProductosController extends AppController {
 	
 	function baja($idModelo) {
 		
-
-		$params = getPutParameters(); 
-		
+		$params = getPutParameters(); 	
 		$nota = isset($params['nota'])? $params['nota']:'';
 		
-		try {
-		
+		try {		
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'baja'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
 			$this->Productos->baja($idModelo,$nota);
 
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
 
 	}
-	
-	
 	
 	
 		
@@ -310,7 +272,6 @@ class ProductosController extends AppController {
 		$nota = 'Venta';
 		
 		try {
-		
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'venta'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
@@ -324,40 +285,26 @@ class ProductosController extends AppController {
 
 	}
 	
-
-
-
-
-
-
-	
 	
 	
 	function productosDisponibles(){
 		
-		try {
-			
+		try {		
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
 			$options = array('conditions'=>array('enProduccion' => 1,'stock >' => 1));
 				
 			$prods = $this->Productos->getProductosNames($options);
-
 			echo $this->json('Productos', $prods);
 
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}
 		
 		
 	}
-
-
-
-
 
 
 
@@ -367,41 +314,55 @@ class ProductosController extends AppController {
 			
 			if (!$this->PermisosComponent->puedeAcceder('productos', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
-
 		
 			$params = getPutParameters(); 
-
 			$options = array('conditions'=>array());
 
-			if(isset($params['enProduccion']))
-				$options['conditions'] = array('enProduccion' => 1);
+			if(isset($params['enProduccion']))  $options['conditions'] = array('enProduccion' => 1);
 				
 			$prods = $this->Productos->getProductosNames($options);
-
 			echo $this->json('Productos', $prods);
 
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}
 	}
 	
+	/*******************************************************************************************
+	PEDIDOSDECLIENTES
+	retorna los producto disponibles para los pedidos realizados por clientes
+	*******************************************************************************************/
+	function pedidosdeclientes($token){
+
+		try{
+			$infoToken = $this->ClientesPMAcceso->getToken($token);
+
+			if($infoToken['success'] != 1)
+				throw new ForbiddenException('No es posible visualizar esta información');
+			else{ 
+				$params = getPutParameters(); 
+				$opciones['conditions']= array('pedido'=>1);
+						
+				$prods = $this->Productos->getProductosBasico($opciones); 
+				echo $this->json('Productos', $prods);
+			}
+		}catch (Exception $e) {	
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}
+	}
 
 
 
 
-
-
-
-	/** 
+	/******************************************************************************************* 
 	* UPLOAD
 	* Sube la imagen q se emcuentra en tmp al dir de img temporales de LVDI.
 	* Posteriormente, si el usuario acepta los datos cargados la imagen se gurdará definitivamente en img/productos/id_de_img.jpg
 	* Si el usuario cancela la operación, se borra la imagen temporal
-	*/
+	*******************************************************************************************/
 	function upload(){
-	    
 		move_uploaded_file($_FILES["uploader"]["tmp_name"],  COMPLETE_ROOT_DIR."img/tmp/".$_FILES["uploader"]["name"]);
 	}
 	
@@ -431,7 +392,6 @@ class ProductosController extends AppController {
 	function removeFile($id){    
 	
 		if (file_exists(COMPLETE_ROOT_DIR."img/productos/".$id.'.jpg'))
-		
 			unlink(COMPLETE_ROOT_DIR."img/productos/".$id.'.jpg');
 
 	}

@@ -61,15 +61,48 @@ class Productos extends AppModel {
 			}
 			$iF++;
 		}
-		
-			
-		
 		return $resultsFormat;
 	}
 	
 	
-	
-	
+	/**
+	 * Retorna la información basica de productos
+	 */
+	function getProductosBasico($opciones) {
+		
+		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
+		
+		$sql = "SELECT P.precio,P.nombre as nomProducto,P.id as producto_id,M.nombre as nomModelo,M.id as modelo_id
+				FROM productos P
+				INNER JOIN modelos M ON (P.id = M.productos_id)
+				$conditions & (M.baja = 0)
+				ORDER BY P.id";
+
+	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
+	   	$query = $query->execute();	
+		
+		//Se formatea el resultado para que quede un arreglo de productos, cada uno con su arreglo de modelos.
+		$results = $query->fetchAll(); 
+		$i=0;
+		$resultsFormat = array();
+		$iF = 0;
+		$dir = 'img/productos/';
+		while($i < count($results)){
+			$resultsFormat[$iF]['nombre'] = utf8_encode($results[$i]['nomProducto']);
+			$resultsFormat[$iF]['precio'] = $results[$i]['precio'];
+			$resultsFormat[$iF]['id'] = $results[$i]['producto_id'];
+			$resultsFormat[$iF]['img'] = file_exists('../img/productos/'.$results[$i]['producto_id'].'.jpg')?$dir.$results[$i]['producto_id'].'.jpg': $dir.'noimg.jpg';
+			$resultsFormat[$iF]['modelos'] = array();
+			$m = 0;
+			while(($i < count($results))&&($resultsFormat[$iF]['nombre'] == utf8_encode($results[$i]['nomProducto']))){
+				$resultsFormat[$iF]['modelos'][$m]['id'] = $results[$i]['modelo_id'];
+				$resultsFormat[$iF]['modelos'][$m++]['nombre'] = utf8_encode($results[$i++]['nomModelo']);
+			}
+			$iF++;
+		} 
+		return $resultsFormat;
+	}
+
 	/**
 	 * Retorna los nombres de los productos
 	 */

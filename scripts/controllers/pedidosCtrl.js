@@ -10,22 +10,13 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    $scope.query = '';
 	    $scope.filterSubmitted = '';
 	    
-	    
-	    /**********************************************************************
-	    ALERTS
-	    Mensajes a mostrar
-	    **********************************************************************/
+	    //ALERTS **** Mensajes a mostrar
 	    $scope.alerts = [ ];
 	    
-	    
-	    
-	    /**********************************************************************
-	    TABS
-	    Manejo de pesatañas
-	    **********************************************************************/
+	    //TABS *** Manejo de pesatañas
 	    $('#tabs a').click(function (e) {
-		  e.preventDefault()
-		  $(this).tab('show')
+			e.preventDefault()
+			$(this).tab('show')
 		});
 	    
 	    
@@ -75,7 +66,6 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	     Filtra las producciones de contengan el texto en nombre de responsable o en motivo	    
 	    *****************************************************************************************************/
 	    $scope.filtrarPedidos = function () {
-		  		
 		  	 $scope.parar = false;
 		  	 $scope.data = [];
 		  	 $scope.page = 0;
@@ -90,11 +80,8 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	     CARGAR PEDIDOS segun estado	    
 	    *****************************************************************************************************/
 	    $scope.$watch('filterPedidos.estado', function(newValue, oldValue) {
-	
 		  	 if(newValue != oldValue)	 		  	
 			  	 $scope.filtrarPedidos();
-		  	 
-    
 		}, true);
 
 
@@ -132,9 +119,6 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 		
 		
 		
-		
-		
-	   
 	    	    	    
 	    /************************************************************************
 	    OPENPEDIDO
@@ -143,21 +127,11 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    *************************************************************************/	
         $scope.openPedido = function (idPed, userRole) {
   
-  
-	        //Traigo los pe
-  
-  
-	 		$scope.userRole = userRole;
-
-     		if(idPed != ''){
-	 			$scope.infoModal.pedido = $filter('getById')($scope.data, idPed);
-	 		}else
-	 			$scope.infoModal.pedido = '';
-	 		
+  	 		$scope.userRole = userRole;
+     		$scope.infoModal.pedido = (idPed != '') ? $filter('getById')($scope.data, idPed): '';
 	 		$scope.infoModal.userRole = userRole;
 	 			
 	 		angular.element("#fechaPedido").focus();
-	 	
 	 		
 	 	    var modalInstance = $modal.open({
 		    	templateUrl: dir_root+'/templates/pedidos/addedit.html',
@@ -172,13 +146,11 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 		
 		    
 		    // Comportamiento al cerrar el modal		    
-		    modalInstance.result
-		    .then( 
+		    modalInstance.result.then( 
 		    	/************************************************************
 		    	GUARDAR
 		    	************************************************************/
 		    	function (res) {
-			    		
 			    	
 			    	/******************************************
 		    		 NUEVO PEDIDO
@@ -196,10 +168,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    			}
 			    		);
 
-			    		
-			    		
 			    	}else{ 
-				    	
 				    	
 				    	/******************************************
 				    	UPDATE PEDIDO
@@ -217,7 +186,6 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    		);
 			    	}
 			    	
-			    	
 			    	if(res.action == 'print'){
 			    		$scope.print(res.pedido);
 			    	}	
@@ -234,8 +202,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 				    if(res.action == 'delete'){
 				    	
 				    	//Solicita confirmación
-				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar este pedido?", accept:"Si", cancel:"No"};
-				    	
+				    	var txt_confirm = { msj: "¿Está seguro que desea eliminar este pedido?", accept:"Si", cancel:"No"};	
 				    	var idPed = res.idPedido;
 				    	
 				    	var confirm = $modal.open({
@@ -246,8 +213,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 					     });
 
 					    // Comportamiento al cerrar el modal		    
-					    confirm.result
-					    .then( 
+					    confirm.result.then( 
 					    	// Si el modal cierra por ACEPTAR
 					    	function (r) {
 						    	 pedidosService.deletePedido(idPed).then(
@@ -271,7 +237,6 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    }			
 			);	
 		}
-	     
 	     		
 		/* NUEVO *******************/
 	 	$scope.nuevo = function (userRole) {
@@ -280,7 +245,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
         };
         
         
-         /************************************************************
+        /************************************************************
 		IMPRIMIR Pedido
 		************************************************************/
 		$scope.print = function (pedido) {
@@ -301,16 +266,11 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 							    	windowClass: 'wndPdf',
 							    	controller: controllerPrint,
 							    	resolve: { pedido: function(){return pedido;} }
-					});
-
-			
+					});			
 				},
 				//Error al actualizar
 				function(error){ AlertService.add('danger', error.data.MSG);}
-			);
-		
-		  				
-					
+			);					
 		}
 		
 		

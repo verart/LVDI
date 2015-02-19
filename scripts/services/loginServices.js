@@ -1,5 +1,5 @@
 
-app.factory('AuthService', function ($http, Session) {
+app.factory('AuthService', function ($http, Session,AlertService) {
   return {
     
     login: function (credentials) {
@@ -15,22 +15,33 @@ app.factory('AuthService', function ($http, Session) {
 		          }
 		      );
     },
-    
+
+    logout: function () {   
+      return $http({
+	                method: 'GET', 
+	                url: dir_api + '/sesion/logout',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	          }).then(
+		          function (res) {
+		          	Session.destroy(); 
+		          	AlertService.add('success', res.data.MSG, 1000);
+		          }
+		      );
+    },
+
     isAuthenticated: function () {
       return !!Session.getUserId();
     },
     
     isAuthorized: function (authorizedRoles) { 
-      if (!angular.isArray(authorizedRoles)) {
-        authorizedRoles = [authorizedRoles];
-      }
+    	if (!angular.isArray(authorizedRoles))
+        	authorizedRoles = [authorizedRoles];
 
-
-      var isAuthe = this.isAuthenticated();
-      var isAutho =  (authorizedRoles.indexOf(Session.getUserRole())!= -1);
-      return isAuthe && isAutho;
-
+	    var isAuthe = this.isAuthenticated();
+    	var isAutho =  (authorizedRoles.indexOf(Session.getUserRole())!= -1);
+    	return isAuthe && isAutho;
     }
+
   };
 })
 
@@ -39,17 +50,14 @@ app.factory('AuthService', function ($http, Session) {
 
 .service('Session', function (AlertService, $rootScope) {
 	
-	  this.create = function (userId, userName, userRole) {
-	  
-		  if(typeof(Storage)!=="undefined"){
+	this.create = function (userId, userName, userRole) {
+		if(typeof(Storage)!=="undefined"){
 		  	localStorage.userId = userId;
 		  	localStorage.userName=userName;
 		  	localStorage.userRole=userRole;
-			
-		  }else{
-		  	AlertService.add('danger', "El navegador no soporta sessionStorage", 5000);;
-		  }
-	  };
+		}else
+		  	AlertService.add('danger', "El navegador no soporta sessionStorage", 5000);	  
+	};
 	  
 	  this.destroy = function () {
 		  localStorage.userId = null;

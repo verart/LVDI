@@ -223,3 +223,15 @@ app.directive('xeditable', function($timeout) {
         }
     };
 }); 
+
+/*******************************************************************************************************
+NG-CARRITO(Element)
+Un producto de la lista de productos
+*******************************************************************************************************/
+app.directive('ngCarrito', function()
+{
+    return{
+        restrict: 'E',
+        templateUrl: 'templates/pedidosdeclientes/productoPedido.html',
+    }
+});

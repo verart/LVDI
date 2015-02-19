@@ -1,18 +1,4 @@
 <div ng-class="{1: 'enProduccion', 0: 'fueraDeProduccion'}[producto.enProduccion]" class="row thumbnail productoList">
-	
-<!--
-	<div class="col-xs-6 col-md-2 center">
-
-		<img src="{{producto.img | noCache}}" 
-			 data-alt="{{producto.producto}}" 
-			 class="media-object img-thumbnail imgItemList" 
-			 style="max-width:105px;max-height:105px;width:auto;height:auto;" />
-			 
-		<loading></loading>
-			 
-	</div>
--->
-	
 	<div class="col-xs-6 col-md-6 link" ng-click="openProducto(producto.id,usuario.getUserRole())">
 		<h4>{{producto.nombre}}</h4>
 		<p  ng-if="(usuario.getUserRole() == 'admin') || (usuario.getUserRole() == 'local')" class="small"> 

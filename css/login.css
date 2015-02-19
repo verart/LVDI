@@ -36,30 +36,27 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-
 .bienvenido{
 	font-size: x-large: 
 }
-
 .loggedUser{
 	font-size: 12px;
 }
-
-
 .userName{
 	width:96%;
 	font-size: 13px;
 	color: rgba(0, 0, 0, 0.47);
 }
-
 .sessionInfo{
 	text-align: right;
 	padding-right: 30px;
 	margin-bottom: -40px;
 }
-
-
-
 .salir a{
 	color: #6b6b6b;
+}
+
+
+.cantPedido{
+  width:50px;
 }

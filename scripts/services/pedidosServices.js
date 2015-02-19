@@ -1,7 +1,6 @@
 
 app.service('clientesPMService', ['$http', function ($http) {
         return {
-        
         	/******************************
             CLIENTES POR MAYOR
             ******************************/        
@@ -13,8 +12,6 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
             /******************************
             NOMBRES DE CLIENTES POR MAYOR
             ******************************/        
@@ -25,7 +22,6 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
             /******************************
             CLIENTE
             ******************************/        
@@ -36,8 +32,6 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
             /******************************
             ADDCLIENTE
             ******************************/
@@ -49,36 +43,37 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
             /******************************
             EDITCLIENTE
             ******************************/
             editCliente: function(cliente){ 
-	            
 	            return $http({
 	            	method: 'PUT',
 	            	url: dir_api + '/clientesPM/update',
 	            	data: $.param(cliente),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
             },
-             
-             
-                   
             /******************************
             DELETECLIENTE
             ******************************/
             deleteCliente:function (id) { 
-	                    
 	            return $http({
 	            	method: 'DELETE',
 	            	url: dir_api + '/clientesPM/'+id+'/delete',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
-            }
+	        },
+            /******************************
+            tienePermiso
+            ******************************/        
+            tienePermiso:function(token) {
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/clientesPM/'+token+'/tienePermiso',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
             
             
         }
@@ -97,7 +92,6 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
             /******************************
             ADDPEDIDO
             ******************************/
@@ -109,68 +103,58 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-             
             /******************************
             EDITPEDIDO
             ******************************/
             editPedido: function(pedido){ 
-	            
 	            return $http({
 	            	method: 'PUT',
 	            	url: dir_api + '/pedidos/update',
 	            	data: $.param(pedido),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
             },
-            
-            
-                        
             /******************************
             DELETEPEDIDO
             ******************************/
-            deletePedido:function (id) { 
-	                    
+            deletePedido:function (id) {      
 	            return $http({
 	            	method: 'DELETE',
 	            	url: dir_api + '/pedidos/'+id+'/delete',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            });
-	            
+	            });    
             }, 
-            
-            
-                        
             /******************************
             MODELOS DEL PEDIDO
             ******************************/
-            modelosPedido:function (id) { 
-	                    
+            modelosPedido:function (id) {        
 	            return $http({
 	            	method: 'GET',
 	            	url: dir_api + '/pedidos/'+id+'/modelos',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            });
-	            
+	            });    
             },
-            
-            
             /******************************
             PAGOS DEL PEDIDO
             ******************************/
             pagosPedido:function (id) { 
-	                    
 	            return $http({
 	            	method: 'GET',
 	            	url: dir_api + '/pedidos/'+id+'/pagos',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            });
-	            
-            }
-            
-            
-           
+	            });  
+            },             
+            /******************************
+            CONFIRMPEDIDO
+            ******************************/
+            confirmarPedido:function (p, t) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/pedidos/confirm',
+	            	data: $.param({pedido:p, token:t}),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
         }
 }]);
 
