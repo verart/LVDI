@@ -2,7 +2,7 @@
 class ClientesPMController extends AppController {
 
 	var $name = "ClientesPM";
-	var $uses = array('ClientesPM');
+	var $uses = array('ClientesPM', 'ClientesPMAcceso');
 	
 	
 	
@@ -117,7 +117,6 @@ class ClientesPMController extends AppController {
 		
 			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'update'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
-			
 				
 			$params = getPutParameters();	
 			$params = (isset($params['clientesPM']))? $params['clientesPM'] : array();
@@ -131,13 +130,10 @@ class ClientesPMController extends AppController {
 			$res = $this->ClientesPM->setCliente($params);			
 			if(!$res['success'])	
 				throw new BadRequestException($res['msg']);
-				
 	
 			echo $this->json('clientesPM', $res['clientesPM']);
 					
-
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
@@ -146,19 +142,53 @@ class ClientesPMController extends AppController {
 	
 	
 	function delete($idCliente) {
-		
 		try {
-		
 			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'delete'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
-			$this->ClientesPM->delCliente($idCliente);
+			$msg = $this->ClientesPM->delCliente($idCliente);
+			echo $this->json('clientesPM', $msg);
 
 		} catch (Exception $e) {	
-
 			if ($e instanceof RequestException) 
 				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
 		}	
+	}
+
+	/*
+	* Envia un mail al cliente idCliente. Genera un token para dicho cliente
+	*/
+	function sendMail($idCliente, $texto){
+		$token = md5(uniqid(rand(), FALSE));
+		$infoToken = array('clientes_id'=>$idCliente, 'token'=>$token, 'created'=>$date('Y-m-d H:i:s'));
+		$this->ClientesPMAcceso->setToken($infoToken);
+	}
+
+	/*
+	* Chequea que el token esté activo
+	*/
+	function tienePermiso($token){
+		try {
+			$infoToken = $this->ClientesPMAcceso->getToken($token);  
+			if(!$infoToken['success'])
+				throw new BadRequestException($infoToken['msg']); 
+
+			$fechaFin = strtotime ( '+7 day' , strtotime ( $infoToken['token']['created'] ) ) ;
+			$nuevafecha = date ( 'Y-m-d H:i:s' , $fechaFin );
+			if($nuevafecha <= date ('Y-m-d H:i:s')) {
+					$this->ClientesPMAcceso->deleteToken($token);
+					throw new BadRequestException('Su cuenta ha caducado.');
+			}
+	
+			$cliente = $this->ClientesPM->getClientePorId($infoToken['token']['clientes_id']);
+			$cli = array('nombre'=> $cliente[0]['nombre'], 'id'=>$cliente[0]['id']);
+			
+			echo $this->json('clientePM', $cli);
+
+		} catch (Exception $e) {	
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		} 
 	}
 	
 }

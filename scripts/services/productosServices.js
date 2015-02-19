@@ -12,7 +12,6 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
             /******************************
             ADDPRODUCTO
             ******************************/
@@ -23,8 +22,7 @@ app.service('productosService', ['$http', function ($http) {
 	            	data: $.param(producto),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-            },
-            
+            },            
             /******************************
             GETPRODUCTO
             ******************************/
@@ -35,9 +33,6 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
-            
             /******************************
             GETPRODUCTOMODELO
             ******************************/
@@ -48,8 +43,6 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-
             /******************************
             GETPRODUCTOMODELOBYNAME
             ******************************/
@@ -60,14 +53,10 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
-            
             /******************************
             EDITPRODUCTO
             ******************************/
             editProducto: function(producto){ 
-	            
 	            return $http({
 	            	method: 'PUT',
 	            	url: dir_api + '/productos/update',
@@ -76,13 +65,10 @@ app.service('productosService', ['$http', function ($http) {
 	            });
 	            
             },
-            
-            
             /******************************
             DELETEPRODUCTO
             ******************************/
-            deleteProducto:function (id) { 
-	                    
+            deleteProducto:function (id) {        
 	            return $http({
 	            	method: 'DELETE',
 	            	url: dir_api + '/productos/'+id+'/delete',
@@ -90,8 +76,6 @@ app.service('productosService', ['$http', function ($http) {
 	            });
 	            
             },
-           
-           
             /******************************
             REPONERPRODUCTO
             ******************************/
@@ -108,9 +92,7 @@ app.service('productosService', ['$http', function ($http) {
 	            .error(function(data, status) { 
 	            	return false;
 	            })        
-            },
-            
-               
+            }, 
             /******************************
             PRODUCTOS EN PRODUCCION
             ******************************/  
@@ -122,9 +104,6 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-
-            
-             
             /******************************
             PRODUCTOS EN PRODUCCION CON STOCK > 0
             ******************************/
@@ -134,8 +113,17 @@ app.service('productosService', ['$http', function ($http) {
 	            	url: dir_api + '/productos/productosDisponibles',	     
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-            }
-            
+            },
+            /******************************
+            PRODUCTOSPEDIDOS
+            ******************************/
+            prodsPedido:function(token) {
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/pedidosdeclientes/'+token+'/productos',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
                   
         }
 }]);

@@ -1,15 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html ng-app='app' xmlns="http://www.w3.org/1999/xhtml" xml:lang="es" lang="es">
 <head profile="http://gmpg.org/xfn/11">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<head>
-	<meta charset="utf-8" />
-	
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" charset="utf-8" />
 	<base href="/LVDI/">
-	
 	<title>LVDI</title>
-
-   
 </head>
 <body ng-controller="ApplicationController">
 
@@ -23,7 +17,7 @@
 	  <div class="container-fluid">
 	
 	    <div class="navbar-header">
-	      <img src="img/LVDI.png" data-alt="Los Vados del Isen" style="width:32px; margin-right: 14px;" />
+	      <img src="img/LVDI_s.png" data-alt="Los Vados del Isen" style="width:32px; margin-right: 14px;" />
 	    </div>
 	    
 	    
@@ -144,6 +138,7 @@
 	<script type="text/javascript" src="scripts/controllers/modalPdfClientesMailsCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/productosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/pedidosdeclientesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosespecialesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/produccionesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/clientesPMCtrl.js"></script>

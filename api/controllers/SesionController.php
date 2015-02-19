@@ -69,10 +69,8 @@ class SesionController extends AppController {
 	 *		} 
 	 */
 	function logout() {
-		
 		try {
-			if (!$this->estaAutenticado())
-				throw new BadRequestException('Parámetros incompletos'); 
+			session_destroy(); //destroy the session
 			
 			// Devuelvo la respuesta
 			echo $this->json("Se ha cerrado la sesión");

@@ -1,18 +1,29 @@
 
-app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES', 'AuthService', 'Session', '$location',
+app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUTH_EVENTS','AuthService','Session','$location',
 	
-	function ($scope, $rootScope, USER_ROLES, AuthService, Session, $location) {
+	function ($scope, $rootScope, USER_ROLES,AUTH_EVENTS,AuthService,Session,$location) {
 
 		$scope.usuario = Session;
 		
 		//RootScope es para que se vea el valro de activeTab desde diferentes controllers. (se actualiza tb desde el loginCtrl)
 		$rootScope.activeTab = $location.$$path.replace('/','');
+
+		$rootScope.$on(AUTH_EVENTS.notAuthorized, function() {
+		  console.log('No autorizado');
+		  return $location.path('/index');
+		});
+    
+		$rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {
+		  console.log('No autenticado');
+		  return $location.path('/index');
+		});
 		
 		if($scope.usuario == undefined)
 			Session.destroy();
 	
 		$scope.logout = function() {
 			Session.destroy();
+			AuthService.logout();
 	    	$location.path('/index');	
 		}
 		
@@ -47,7 +58,7 @@ app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS',
 			    	if(Session.getUserRole() == 'cuentas'){
 			    		$location.path('/resumen');
 			    		$rootScope.activeTab ='resumen';
-			    	}else{
+			    	}else{ 
 			    		$location.path('/productos');
 			    		$rootScope.activeTab ='productos';
 			    	}

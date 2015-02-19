@@ -115,6 +115,13 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
 	        authorizedRoles:  [USER_ROLES.cuentas]
         }
     }) 
+    .when("/pedidosdeclientes/:token", {
+        controller : "pedidosdeclientesCtrl",
+        templateUrl :  dir_root + "/templates/pedidosdeclientes.html",
+        auth: {
+            needAuth: false,
+        }
+    })
     .otherwise({
        redirectTo: '/index'
     });
@@ -122,7 +129,6 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
 
 
 .config(function ($httpProvider) {  
-
 	$httpProvider.interceptors.push([    
 		'$injector',    
 		function ($injector) {      

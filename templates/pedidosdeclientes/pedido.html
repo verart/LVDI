@@ -1,0 +1,78 @@
+<form id="form" ng-submit="ok()" editable-form >
+
+ <div id= "wndOpenPedido" class="modal-body">
+     		
+			<div class="modal-header"  style="margin-bottom: 18px;">
+			   		<h3>Datos del pedido</h3>
+			</div>
+			<div class="form-group row">						
+				<div class="colForm col-xs-6 col-sm-3">
+					<label>Fecha: {{pedido.fecha}}</label> 
+				</div>
+				<div class="colForm col-xs-6 col-sm-4">
+					<label>Cliente: {{pedido.cliente_name}}</label>							
+				</div>
+			</div>
+
+			<textarea class="form-control" rows="2" placeholder="Nota sobre el pedido" ng-model="pedido.nota">
+			</textarea>
+
+			<br/>
+        	
+			<div class="tableContainer">
+					<table class="table table-condensed table-hover small">
+						<thead>
+							<tr>
+								<th class="col-md-5">Productos</th>
+							  	<th class="col-md-2 text-center">Cant</th>
+							  	<th class="col-md-2 text-center">P.U.</th>
+							  	<th class="col-md-1 text-center">P.Tot</th>
+							  	<th class="col-md-2 text-center"> </th>
+							  </tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="mod in pedido.modelos">
+								<td class="col-md-5">{{mod.nombre}}</span></td>
+								<td class="col-md-2 text-center editableCell">	
+									<a xeditable href="#" data-type="number" data-value="{{mod.cantidad}}" 
+									ng-model="mod.cantidad" class="editable editable-click editable-open">
+									{{mod.cantidad || 0}}</a>
+								</td>
+								<td class="col-md-2 text-center"> {{mod.precio | currency}} </td>
+								<td class="col-md-1 text-center"> {{(mod.precio * mod.cantidad) | currency}}  </td>
+																		
+								<td class="col-md-2 text-center">				
+									<!-- ELIMINAR  - Si es el unico modelo del producto no se permite eliminarlo -->
+									<span 	class="glyphicon glyphicon-remove accionesLst link"  
+											title="Quitar producto del pedido"
+											ng-click="remove($index)">
+									</span>
+								</td>
+							</tr>
+							<tr><td class="avisoSmall" colspan="6" style="text-align=center" ng-if="pedido.modelos.length == 0">
+								No hay productos en el pedido</td>
+							</tr>
+						</tbody>
+					</table>										
+					</div> <!-- tableContainer -->
+				
+					<br/>
+			
+					<div class="row"> 
+						<div class="resumen form-horizontal pull-right" role="form">
+							<label> Total a pagar:  {{ pedido.total | currency }} </label>
+						</div> 
+					</div>
+			</div>
+
+
+		</div> <!-- / modal-body -->
+						
+						            
+        <div class="modal-footer">
+	        <button type="submit" class="btn btn-primary" ng-click="print()">Confirmar e imprimir</button>
+            <button type="submit" class="btn btn-primary" ng-click="confirmarPedido()">Confirmar</button>
+            <button type="button" class="btn btn-warning" ng-click="cancel()">Cerrar</button>
+        </div>
+        
+   </form>	

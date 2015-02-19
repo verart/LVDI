@@ -26,7 +26,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 			},
 			//Error al acceder
 			function(error){
-				$location.path('/index');
+				//$location.path('/index');
 			}
 		);
 

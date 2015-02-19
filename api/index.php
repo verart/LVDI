@@ -31,6 +31,7 @@ include_once('lib/MDB2/MDB2.php');
 // Routes
 $route = new Route();
 $route->add('/sesion','POST','Sesion','login');
+$route->add('/sesion/logout','GET','Sesion','logout');
 $route->add('/productos/index','GET','Productos','index');
 $route->add('/productos/productosName','GET','Productos','productosName');
 $route->add('/productos/productosDisponibles','GET','Productos','productosDisponibles');
@@ -52,6 +53,7 @@ $route->add('/pedidos/pagos','GET','Pedidos','pagos');
 $route->add('/pedidos/delete','DELETE','Pedidos','delete');
 $route->add('/pedidos/update','PUT','Pedidos','update');
 $route->add('/pedidos/create','POST','Pedidos','create');
+$route->add('/pedidos/confirm','POST','Pedidos','confirmarPedido');
 
 $route->add('/clientesPM/index','POST','ClientesPM','index');
 $route->add('/clientesPM/clientesName','GET','ClientesPM','clientesName');
@@ -59,6 +61,7 @@ $route->add('/clientesPM/show','GET','ClientesPM','show');
 $route->add('/clientesPM/delete','DELETE','ClientesPM','delete');
 $route->add('/clientesPM/update','PUT','ClientesPM','update');
 $route->add('/clientesPM/create','POST','ClientesPM','create');
+$route->add('/clientesPM/tienePermiso','GET','ClientesPM','tienePermiso');
 
 $route->add('/responsables/index','POST','Responsables','index');
 $route->add('/responsables/listAll','GET','Responsables','listAll');
@@ -127,6 +130,9 @@ $route->add('/resumen/index','POST','Resumen','index');
 $route->add('/gastos/index','POST','Gastos','index');
 $route->add('/gastos/delete','DELETE','Gastos','delete');
 $route->add('/gastos/create','POST','Gastos','create');
+
+$route->add('/pedidosdeclientes/productos','GET','Productos','pedidosdeclientes');
+
 
 $route->submit();
 ?>

@@ -1,0 +1,37 @@
+<div ng-if="data != ''">
+	<div class="row">
+		<div class="col-md-1 imgCenter"><img src="img/LVDI_s.png" /></div>
+		<div class="col-md-11 h5 saludoHeader"> Hola {{pedido.cliente_name}} </div>
+	</div>
+	
+	<div ng-show="(data.length > 1)" >
+		<div class="h3 seccionTitle"> Armá tu pedido</div>			
+		<div class="container-fluid"  >
+			<a class="VerPedidoBtn pull-right btn btn-primary btn-success btn-md active" role="button" ng-click="viewPedido()"> Ver Pedido </a>
+			<div class="row-fluid">
+				<!-- SIDEBAR-->			
+				<div class=" col-xs-12 col-md-3 sidebar">
+					<form class="navbar-form navbar-left" role="search">
+						<div class="form-group">	
+							<input type="text" class="form-control small filterInput" ng-model="query" id='inputSearch' placeholder="Filtro de productos" >
+						</div>
+					</form>
+				</div>
+	       		<!-- BODY-->
+				<div class="col-xs-12 col-md-9 productosParaPedidoList">
+		       		<div ng-repeat="producto in filtProducts = (data | orderBy:order:true | filter:query | filter:search)" >
+						<ng-carrito producto="producto" > </ng-carrito>
+					</div>
+					<p ng-show="(filtProducts.length < 1)" class="aviso"> No hay productos para mostrar </p>
+
+					<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
+				</div>
+				<div class="finProductos"></div>
+			</div>
+		</div> 
+	</div> 
+</div>
+
+<div ng-if="(data == '')"  class="imgCenter">
+	<img src="img/LVDI.jpg" />
+</div>

@@ -1,8 +1,6 @@
 
 var app = angular.module('app', ['ngRoute','xeditable', 'ui.bootstrap']);
 
-
-
 app.constant('AUTH_EVENTS', {
   loginSuccess: 'auth-login-success',
   loginFailed: 'auth-login-failed',
@@ -11,7 +9,6 @@ app.constant('AUTH_EVENTS', {
   notAuthenticated: 'auth-not-authenticated',
   notAuthorized: 'auth-not-authorized'
 });
-
 
 
 app.constant('USER_ROLES', {
@@ -44,16 +41,13 @@ app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthSe
 	    var authorizedRoles = nextRoute.auth.authorizedRoles;
 
 	    if (!AuthService.isAuthorized(authorizedRoles)) {
-	       
 	      if (!AuthService.isAuthenticated()) { 
 	        // user is not allowed
 	        $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-	        $location.path('/index');
 	      }else { 
 	        // user is not logged in
 	        $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
 	        //event.preventDefault();
-	        $location.path('/index');
 	      }
 	    }
     }

@@ -62,7 +62,8 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
 				//Error al actualizar
 				function(error){ 
 					$scope.pending = false;
-					$location.path('/index');
+					//$location.path('/index');
+					$route.reload();
 					AlertService.add('danger', error.data.MSG,3000);
 				}
 			);
