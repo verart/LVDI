@@ -30,6 +30,27 @@ class ProductosController extends AppController {
 	}
 	
 	
+
+	function productos() {
+		try {			
+			if (!$this->PermisosComponent->puedeAcceder('productos', 'index'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+
+			$opciones['conditions']= array('enProduccion'=>1);
+				
+			if(isset($_POST['filter']) && ($_POST['filter']!= ''))
+				$opciones['conditions']['LIKE'] = array('P.nombre'=>$_POST['filter']);
+
+			$prods = $this->Productos->getProductosBasico($opciones, $_POST['pag']);
+			echo $this->json('Productos', $prods);
+
+		} catch (Exception $e) {	
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}
+	}
+
+
 	
 	function show($idProducto) {
 		
@@ -354,6 +375,35 @@ class ProductosController extends AppController {
 	}
 
 
+	function habilitarModelo() {
+		try {
+			if (!$this->PermisosComponent->puedeAcceder('productos', 'habilitar'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+			
+			$res=$this->Modelos->habilitarPorModelo($_POST['idMod'],$_POST['habilitar']);
+			if(!$res['success'])
+				throw new BadRequestException('No se pudo habilitar el modelo.'); 
+
+		} catch (Exception $e) {	
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
+
+	function habilitarProducto() {
+		try {
+			if (!$this->PermisosComponent->puedeAcceder('productos', 'habilitar'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+
+			$res = $this->Modelos->habilitarPorProducto($_POST['idProd'],$_POST['habilitar']);
+			if(!$res['success'])
+				throw new BadRequestException('No se pudieron habilitar los modelos del producto.'); 
+			
+		} catch (Exception $e) {	
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}
 
 
 	/******************************************************************************************* 

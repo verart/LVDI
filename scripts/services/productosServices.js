@@ -73,8 +73,7 @@ app.service('productosService', ['$http', function ($http) {
 	            	method: 'DELETE',
 	            	url: dir_api + '/productos/'+id+'/delete',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            });
-	            
+	            });    
             },
             /******************************
             REPONERPRODUCTO
@@ -86,12 +85,8 @@ app.service('productosService', ['$http', function ($http) {
 	            	data: $.param({idMod:idMod}),
 	            	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            }) 
-	            .success(function(data) { 
-	            	return true;
-	            })
-	            .error(function(data, status) { 
-	            	return false;
-	            })        
+	            .success(function(data) {return true;} )
+	            .error(function(data, status) {return false;} )        
             }, 
             /******************************
             PRODUCTOS EN PRODUCCION
@@ -124,7 +119,36 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-                  
+            getproductos:function(p,f) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/productos/productos',
+	            	data:  $.param({pag:p,filter:f}),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+            /******************************
+            HABILITARPRODUCTO
+            ******************************/
+            habilitarProducto: function(idP, h){ 
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/productos/habilitarproducto',
+	            	data: $.param({idProd:idP, habilitar:h}),
+	            	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            }); 
+            }, 
+            /******************************
+            HABILITARMODELO
+            ******************************/
+            habilitarModelo: function(idM, h){ 
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/productos/habilitarmodelo',
+	            	data: $.param({idMod:idM, habilitar:h}),
+	            	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });       
+            }     
         }
 }]);
 

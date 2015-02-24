@@ -235,3 +235,15 @@ app.directive('ngCarrito', function()
         templateUrl: 'templates/pedidosdeclientes/productoPedido.html',
     }
 });
+
+/*******************************************************************************************************
+NG-PRODPED (Element)
+Un producto de la lista de productos para pedidos
+*******************************************************************************************************/
+app.directive('ngProdped', function()
+{
+    return{
+        restrict: 'E',
+        templateUrl: 'templates/productos/prodped.html',
+    }
+});

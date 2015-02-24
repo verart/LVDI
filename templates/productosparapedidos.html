@@ -1,0 +1,28 @@
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="h4 seccionTitle"> Productos para pedidos</div>
+		<!-- SIDEBAR-->			
+		<div class=" col-xs-12 col-md-3 sidebar">
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control small filterInput" ng-model="query" id='inputSearch' placeholder="Filtro de productos">
+				</div>
+			</form>
+		</div>
+       	<!-- BODY-->
+		<div class="col-xs-12 col-md-9 productosList" id="infinite-scrolling">
+	       	<div ng-repeat= "producto in filteredProducts = (data |  orderBy:order:true | filter:query )" >
+				<ng-prodped prod="producto"/>
+			</div>
+			<p ng-show="(filteredProducts.length < 1)" class="aviso"> No hay productos </p>
+
+			<div class="loading-spiner-holder" data-loading >
+				<div class="loading-spiner"><img src="img/loading.gif"/></div>
+			</div>
+			<div class="finProductos"></div>
+		</div>
+	</div>
+</div> 
+
+ 
+    

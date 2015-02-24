@@ -33,6 +33,7 @@ $route = new Route();
 $route->add('/sesion','POST','Sesion','login');
 $route->add('/sesion/logout','GET','Sesion','logout');
 $route->add('/productos/index','GET','Productos','index');
+$route->add('/productos/productos','POST','Productos','productos');
 $route->add('/productos/productosName','GET','Productos','productosName');
 $route->add('/productos/productosDisponibles','GET','Productos','productosDisponibles');
 $route->add('/productos/productoModeloById','GET','Productos','productoModeloById');
@@ -44,6 +45,8 @@ $route->add('/productos/create','POST','Productos','create');
 $route->add('/productos/reponer','POST','Productos','reponer');
 $route->add('/productos/baja','DELETE','Productos','baja');
 $route->add('/upload','POST','Productos','upload');
+$route->add('/productos/habilitarproducto','POST','Productos','habilitarProducto');
+$route->add('/productos/habilitarmodelo','POST','Productos','habilitarModelo');
 
 
 $route->add('/pedidos/index','POST','Pedidos','index');

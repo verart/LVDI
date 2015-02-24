@@ -122,6 +122,14 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
             needAuth: false,
         }
     })
+    .when("/productosparapedidos", {
+        controller : "productosparapedidosCtrl",
+        templateUrl :  dir_root + "/templates/productosparapedidos.html",
+        auth: {
+            needAuth: true,
+            authorizedRoles:  [USER_ROLES.admin]
+        }
+    })
     .otherwise({
        redirectTo: '/index'
     });

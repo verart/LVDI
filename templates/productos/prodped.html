@@ -1,0 +1,32 @@
+<div class="row thumbnail productoList">
+	<div class="col-xs-6 col-md-6 link" ng-click="openProducto(producto.id,usuario.getUserRole())">
+		<h4>{{producto.nombre}}</h4>
+		<p  ng-if="(usuario.getUserRole() == 'admin') || (usuario.getUserRole() == 'local')" class="small"> 
+			Precio: {{producto.precio | currency}} 
+		</p>
+	</div>
+
+	<div class="col-xs-12 col-md-6 modelosCol">
+		<h6 class="modeloItemListCol1">Colores</h6>
+		<ul class="list-group modelosList">
+			<li ng-repeat="mod in producto.modelos" class="list-group-item modeloItemList">
+				<ul class="list-inline" ng-class="{1:'pedido', 0:'nopedido'}[mod.pedido]">
+					<li class="small modeloItemListCol1">{{mod.nombre}} </li>
+					<li class="linkElem">
+						<span ng-click="habilitar(producto.id, $index)" class="small">
+							{{textAdd[mod.pedido]}}
+						</span>
+					</li>
+				</ul>
+			</li>
+			<span ng-click="habilitarTodos(producto.id, 1)" class="pull-right small linkBlue" >
+				Agregar todos
+			</span>
+
+			<span ng-click="habilitarTodos(producto.id, 0)" class="pull-right small linkBlue" >
+				Quitar todos
+			</span>
+		</ul>
+	</div>
+					
+</div>
