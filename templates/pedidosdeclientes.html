@@ -19,7 +19,7 @@
 				</div>
 	       		<!-- BODY-->
 				<div class="col-xs-12 col-md-9 productosParaPedidoList">
-		       		<div ng-repeat="producto in filtProducts = (data | orderBy:order:true | filter:query | filter:search)" >
+		       		<div ng-repeat="(prodIndex, producto) in filtProducts = (data | orderBy:order:true | filter:query | filter:search)" >
 						<ng-carrito producto="producto" > </ng-carrito>
 					</div>
 					<p ng-show="(filtProducts.length < 1)" class="aviso"> No hay productos para mostrar </p>

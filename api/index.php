@@ -65,6 +65,7 @@ $route->add('/clientesPM/delete','DELETE','ClientesPM','delete');
 $route->add('/clientesPM/update','PUT','ClientesPM','update');
 $route->add('/clientesPM/create','POST','ClientesPM','create');
 $route->add('/clientesPM/tienePermiso','GET','ClientesPM','tienePermiso');
+$route->add('/clientesPM/enviarmail','PUT','ClientesPM','enviarMail');
 
 $route->add('/responsables/index','POST','Responsables','index');
 $route->add('/responsables/listAll','GET','Responsables','listAll');

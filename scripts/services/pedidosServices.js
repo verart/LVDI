@@ -75,6 +75,17 @@ app.service('clientesPMService', ['$http', function ($http) {
 	            })
             },
             
+            /******************************
+            ENVIARMAIL
+            ******************************/
+            enviarMail: function(mail){ 
+	            return $http({
+	            	method: 'PUT',
+	            	url: dir_api + '/clientesPM/enviarmail',
+	            	data: $.param(mail),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            });
+            },
             
         }
 }])

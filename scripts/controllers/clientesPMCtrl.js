@@ -46,19 +46,14 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 	     FILTRARCLIENTES 
 	     Filtra los clientes que contienen en su nombre u localidad el texto	    
 	    *****************************************************************************************************/
-	    $scope.filtrarClientes = function () {
-		  		
+	    $scope.filtrarClientes = function () {	  		
 		  	 $scope.parar = false;
 		  	 $scope.data = [];
 		  	 $scope.page = 0;
 		  	 $scope.filterSubmitted = $scope.query;
-		  	 $scope.cargarClientes();
-		  	 
+		  	 $scope.cargarClientes();		  	 
 		};
 	    	    
-
-	   
-
 	    
 	   /************************************************************************
 	    OPENCLIENTE
@@ -67,13 +62,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 	    *************************************************************************/	
 		$scope.openCliente = function(idCl) {
 	 	
-	 	
-	 		if(idCl != ''){
-	 			$scope.selectedCliente = $filter('getById')($scope.data, idCl);
-	 		}else{
-	 			$scope.selectedCliente = '';
-	 		}	
-	 		
+	 		$scope.selectedCliente = (idCl != '')? $filter('getById')($scope.data, idCl): $scope.selectedCliente = '';
 	 		
 	 		angular.element("#nombre").focus();
 	 	    
@@ -96,8 +85,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 		    	 GUARDAR
 		    	*************************************************************************************************/
 		    	function (res) {
-		    	
-		    	
+		    	   	
 		    		/******************************************
 		    		 NUEVO CLIENTE
 		    		******************************************/
@@ -113,11 +101,9 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 				    			AlertService.add('danger', res_msg, 5000);
 			    			}
 			    		);
-			    		
 			    			
 			    	}else{ 
-				    	
-				    	
+				    		    	
 				    	/******************************************
 				    	UPDATE CLIENTE
 				    	******************************************/
@@ -182,6 +168,45 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			);	
 		}
 		
+
+		/************************************************************************
+	    ENVIARMAIL
+	    Abre un modal con un form con info del mail para pedido
+	    param: idCl -> id de cliente que recibirá el mail
+	    *************************************************************************/	
+		$scope.enviarmail = function(idCl) {
+	 	
+	 		$scope.selectedCliente = $filter('getById')($scope.data, idCl);
+	 		
+	 		angular.element("#cuerpo").focus();
+	 	    
+	 	    var modalInstance = $modal.open({
+		    	templateUrl: dir_root+'/templates/clientesPM/mail.html',
+		    	windowClass: 'wndMail',
+		    	controller: 'ModalMailCtrl',
+		    	backdrop: 'static',
+		    	keyboard: true,
+		    	resolve: {
+		        	clientePM: function () { return $scope.selectedCliente; }
+		        }
+		    });
+		    
+		    // Comportamiento al cerrar el modal		    
+		    modalInstance.result
+		    .then( 
+		    	//** GUARDAR
+		    	function (res) { 
+		    		clientesPMService.enviarMail(res).then(
+		    			function(r){AlertService.add('success', r.data.MSG, 2000);},
+		    			function(r){AlertService.add('danger', r.data.MSG);}
+		    		);
+		    	}, 
+			    //** CANCELAR
+		    	function (res){}
+			);	
+		}
+
+
 		/* NUEVO *******************/
 	 	$scope.nuevo = function () {
             $scope.openCliente('');
@@ -192,9 +217,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 	     INFINITE SCROLL	    
 	    *****************************************************************************************************/
 	    if ($('#infinite-scrolling').size() > 0) {
-	    
 			$(window).on('scroll', function() {
-
 				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60)& !$scope.parar & !$scope.pending ) {		     	
 			  		$scope.cargarClientes();
 		    	}
@@ -273,3 +296,22 @@ var ModalClientesPMInstanceCtrl = function ($scope, $modalInstance, $filter, cli
 }
 
 
+/*************************************************************************************************************************
+ ModalMailCtrl
+ Controller del modal para enviar mail
+**************************************************************************************************************************/
+var ModalMailCtrl = function ($scope, $modalInstance, AlertService, clientePM, $location) {
+		  
+	$scope.mail= {cliente: clientePM};
+	$scope.mail.saludo = 'Hola '+ $scope.mail.cliente.nombre+ ",";
+	$scope.mail.cuerpo = "Desde Los Vados del Isen te enviamos este link para que puedas realizar tu pedido.\n\nTené en cuenta que solo funcionará durante los próximos 7 días.";
+	$scope.mail.despedida = "Esperamos tu pedido. \n \n Los Vados del Isen";
+	// CANCEL *** Se cierra el modal y retornan los datos de la venta original, sin cambios
+	$scope.cancel = function () {
+		$modalInstance.dismiss();
+	};
+
+	$scope.ok = function () {
+		$modalInstance.close({idCliente:$scope.mail.cliente.id, 'saludo':$scope.mail.saludo,'texto':$scope.mail.cuerpo,'despedida':$scope.mail.despedida});
+	};
+}

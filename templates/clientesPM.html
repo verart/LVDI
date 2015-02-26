@@ -40,16 +40,20 @@
 			  				<th>Tel</th>
 			  				<th>Localidad</th>
 			  				<th>email</th>
+			  				<th></th>
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
 			  			<tr ng-repeat="cl in filteredClientes = (data | filter:query | orderBy:order:true)" 
-			  						class="clienteList link" ng-click="openCliente(cl.id)">
-			  				<td> {{cl.nombre}}</td>
-			  				<td> {{cl.local || 'Sin datos' }}</td>
-			  				<td> {{cl.tel || 'Sin datos'}}</td>
-		 					<td> {{cl.localidad || 'Sin datos'}}</td>						
-		 					<td> {{cl.email || 'Sin datos'}}</td>
+			  						class="clienteList link">
+			  				<td ng-click="openCliente(cl.id)"> {{cl.nombre}}</td>
+			  				<td ng-click="openCliente(cl.id)"> {{cl.local || 'Sin datos' }}</td>
+			  				<td ng-click="openCliente(cl.id)"> {{cl.tel || 'Sin datos'}}</td>
+		 					<td ng-click="openCliente(cl.id)"> {{cl.localidad || 'Sin datos'}}</td>
+		 					<td ng-click="openCliente(cl.id)"> {{cl.email || 'Sin datos'}}</td>
+		 					<td ng-click="enviarmail(cl.id)">
+		 						<span class="glyphicon glyphicon-envelope" title="Enviar mail para pedido"></span> 
+		 					</td>
 		  				</tr>
 		  				<tr ng-show="(filteredClientes.length < 1)" class="aviso"> <td colspan="5"> No hay clientes</td></tr>
 		   			</tbody>
