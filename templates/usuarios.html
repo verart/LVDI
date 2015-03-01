@@ -1,4 +1,4 @@
-<div class="container-fluid" ng-controller="usuariosCtrl" >
+<div class="container-fluid">
 
 	<div class="row-fluid">
 	
@@ -33,7 +33,7 @@
 			  		<tbody>
 			  			<tr ng-repeat="us in data" class="link" ng-click="openUsuario(us.id)">
 			  				<td> {{us.nombre }}</td>
-			  				<td> {{us.perfil }}</td>
+			  				<td> {{nomPerfiles[us.perfiles_id] }}</td>
 		  				</tr>
 		   			</tbody>
 		  		</table>

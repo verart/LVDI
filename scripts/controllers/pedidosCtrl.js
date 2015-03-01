@@ -13,13 +13,6 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 	    //ALERTS **** Mensajes a mostrar
 	    $scope.alerts = [ ];
 	    
-	    //TABS *** Manejo de pesatañas
-	    $('#tabs a').click(function (e) {
-			e.preventDefault()
-			$(this).tab('show')
-		});
-	    
-	    
 	   /*****************************************************************************************************
 	     PEDIDOS     
 	    *****************************************************************************************************/

@@ -12,7 +12,7 @@ class Productos extends AppModel {
 	 * Retorna todos los productos
 	 */
 	function getProductos($opciones) {
-		
+
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
 		$sql = "SELECT P.precio,P.nombre as nomProducto, P.id as producto_id, P.enProduccion as enProduccion, M.nombre as nomModelo, M.stock, M.id as modelo_id, Rep.ultRep as fechaRep, Venta.ultVenta as fechaVenta
@@ -29,9 +29,8 @@ class Productos extends AppModel {
 					WHERE tipo= 'venta'
 					GROUP BY modelos_id) Venta ON Venta.modelos_id = M.id	
 				$conditions & (M.baja = 0)
-				ORDER BY P.id";
+				ORDER BY P.nombre, M.nombre";
 
-				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	
 		
@@ -68,16 +67,19 @@ class Productos extends AppModel {
 	/**
 	 * Retorna la información basica de productos
 	 */
-	function getProductosBasico($opciones) {
+	function getProductosBasico($opciones, $requested_page=null) {
 		
+		$set_limit = ($requested_page != null)? ' LIMIT '.(($requested_page - 1) * 20) . ',20' : ''; 
+
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
-		$sql = "SELECT P.precio,P.nombre as nomProducto,P.id as producto_id,M.nombre as nomModelo,M.id as modelo_id
+		$sql = "SELECT P.precio,P.nombre as nomProducto,P.id as producto_id,M.nombre as nomModelo,M.id as modelo_id, M.pedido
 				FROM productos P
 				INNER JOIN modelos M ON (P.id = M.productos_id)
-				$conditions & (M.baja = 0)
-				ORDER BY P.id";
-
+				$conditions AND (M.baja = 0)
+				ORDER BY P.nombre, M.nombre   
+				$set_limit ";
+				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	
 		
@@ -92,11 +94,13 @@ class Productos extends AppModel {
 			$resultsFormat[$iF]['precio'] = $results[$i]['precio'];
 			$resultsFormat[$iF]['id'] = $results[$i]['producto_id'];
 			$resultsFormat[$iF]['img'] = file_exists('../img/productos/'.$results[$i]['producto_id'].'.jpg')?$dir.$results[$i]['producto_id'].'.jpg': $dir.'noimg.jpg';
+			$resultsFormat[$iF]['img_s'] = $dir.'noimg_s.jpg';
 			$resultsFormat[$iF]['modelos'] = array();
 			$m = 0;
 			while(($i < count($results))&&($resultsFormat[$iF]['nombre'] == utf8_encode($results[$i]['nomProducto']))){
 				$resultsFormat[$iF]['modelos'][$m]['id'] = $results[$i]['modelo_id'];
-				$resultsFormat[$iF]['modelos'][$m++]['nombre'] = utf8_encode($results[$i++]['nomModelo']);
+				$resultsFormat[$iF]['modelos'][$m]['nombre'] = utf8_encode($results[$i]['nomModelo']);
+				$resultsFormat[$iF]['modelos'][$m++]['pedido'] = utf8_encode($results[$i++]['pedido']);
 			}
 			$iF++;
 		} 
@@ -324,23 +328,6 @@ class Productos extends AppModel {
 						
 							if(!$this->Modelos->create($value) )
 								throw new BadRequestException('Hubo un error al crear el modelo.');
-	
-/*
-							//Solo creo el movimiento si hay stock	
-							if($value['stock'] > 0){
-								// Agrego un movimiento
-								// tipo de movimiento:  'Reposicion','produccion','venta','baja'
-								$movimiento = array(
-										'modelos_id'=> $this->Modelos->getLastId(), 
-										'created'=> date('Y/m/d h:i:s', time()), 
-										'tipo'=> 'Reposicion', 
-										'cantidad'=> $value['stock']);
-		
-								if(!$this->MovimientosStock->setMovimiento($movimiento))
-									throw new BadRequestException('Hubo un error al crear el movimiento.');
-								
-							}	
-*/	
 						}
 					
 					}else{
@@ -350,8 +337,7 @@ class Productos extends AppModel {
 							
 						if(!$this->Modelos->create($modUnico) )
 							throw new BadRequestException('Hubo un error al crear el modelo.');
-									
-
+					
 					}
 					
 				}else
@@ -378,22 +364,7 @@ class Productos extends AppModel {
 							unset($value['fechaVenta']); unset($value['fechaRep']);unset($value['$$hashKey']);
 								
 							if(!$this->Modelos->create($value))
-								throw new BadRequestException('Hubo un error al crear el modelo.');
-								
-							/*
-							//Solo creo el movimiento y mando a imprimir si hay stock	
-							if($value['stock'] > 0){
-								
-								$movimiento = array(
-											'modelos_id'=> $this->Modelos->getLastId(), 
-											'created'=> date('Y/m/d h:i:s', time()), 
-											'tipo'=> 'Reposicion', 
-											'cantidad'=> $value['stock']);
-											
-								if(!$this->MovimientosStock->setMovimiento($movimiento))
-										throw new BadRequestException('Hubo un error al crear el movimiento.');	
-							}	
-							*/		
+								throw new BadRequestException('Hubo un error al crear el modelo.');	
 									
 						}else{ 
 						
@@ -467,7 +438,6 @@ class Productos extends AppModel {
 			$this->beginTransaction();
 			
 			$res = $this->Modelos->reponer($idMod); // Incrementa el stcok del modelo y marca el movimiento de stock
-			
 			if($res['success'])
 				$res = $this->ColaImpresion->set($idMod); 
 			else
@@ -493,15 +463,43 @@ class Productos extends AppModel {
 	* Decrementa en 1 el stock del modelo
 	*/
 	function baja($idMod, $nota=''){
-		
-			$this->beginTransaction();
-			
-			$res = $this->Modelos->baja($idMod,$nota);
-			
-			if($res['success'])
-				$this->commitTransaction();
-			else
-				$this->rollbackTransaction();	
+		$this->beginTransaction();
+		$res = $this->Modelos->baja($idMod,$nota);
+		if($res['success'])				
+			$this->commitTransaction();
+		else
+			$this->rollbackTransaction();	
 	}
+
+	/**
+	* HABILITAR
+	* Habilitar el modelo para pedidos
+	*/
+	function habilitar($idMod, $habilitar){
+		try{
+			$res = $this->Modelos->habilitar($idMod, $habilitar); 
+			if(!$res['success'])
+				throw new BadRequestException($res['msg']);
+			return array('success'=>true);	
+		} catch (Exception $e) {
+			return array('success'=>false, 'msg'=>$e->getMsg());
+		}	
+	}
+
+	/**
+	* HABILITARPORPRODUCTO
+	* Habilitar el modelo para pedidos
+	*/
+	function habilitarTodos($idProd, $habilitar){
+		try{
+			$res = $this->Modelos->habilitarPorProducto($idProd, $habilitar); 
+			if(!$res['success'])
+				throw new BadRequestException($res['msg']);
+			return array('success'=>true);	
+		} catch (Exception $e) {
+			return array('success'=>false, 'msg'=>$e->getMsg());
+		}	
+	}
+
 }
 ?>

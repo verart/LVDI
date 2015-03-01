@@ -3,7 +3,7 @@
 	<div class="h4 seccionTitle"> Pedidos </div>
 	
 	<!-- PEDIDOS	 -->
-	<div ng-controller="pedidosCtrl" class="row-fluid">
+	<div class="row-fluid">
 		  	
 				<!-- SIDEBAR-->			
 				<div class=" col-xs-12 col-md-3 sidebar">
@@ -72,8 +72,7 @@
 					  			</tr>
 					  		</thead>	
 					  		<tbody>
-					  			<tr ng-repeat="pedido in filteredPedidos = (data | orderBy:order:false | filter:query)" 
-					  						class="pedidosList link" ng-click="openPedido(pedido.id, usuario.getUserRole())">
+					  			<tr ng-repeat="pedido in filteredPedidos = (data | orderBy:order:false | filter:query)" class="pedidosList link" ng-click="openPedido(pedido.id, usuario.getUserRole())">
 					  				<td> {{pedido.localidad}}</td>
 					  				<td> {{pedido.fecha | date:'dd/MM/yyyy'}}</td>
 					  				<td> {{(pedido.fecha_entrega | date:'dd/MM/yyyy') || 'Sin datos'}}</td>

@@ -84,18 +84,15 @@ class Usuarios extends AppModel {
 				$us['id'] = $this->getLastId();
 							
 			}else{
-				
+		
 				if(!$this->update($usuario, array('id'=>$usuario['id'])))
-					throw new BadRequestException('Hubo un error al actualizar el usuario.');				
-					
+					throw new BadRequestException('Hubo un error al actualizar el usuario.');		
 			}
 		
-			return array('success'=>true, 'usuario'=>$usuario);
+			return array('success'=>true, 'usuario'=>$us);
 
 		} catch (Exception $e) {
-
 			return array('success'=>false, 'msg'=>$e->getMsg());
-
 		}		
 		
 	}

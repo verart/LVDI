@@ -1,0 +1,22 @@
+<form id="form" ng-submit="ok()" editable-form >
+
+ <div id= "wndOpenPedido" class="modal-body">
+		
+     		
+	<div class="modal-header"  style="margin-bottom: 18px;">
+		<h3>Mail</h3>
+	</div>
+	
+	<input class="form-control" placeholder="Saludo" ng-model="mail.saludo" required/>		       
+	<textarea class="form-control" rows="9" placeholder="Cuerpo del mail" ng-model="mail.cuerpo" required>
+	</textarea>
+	<textarea class="form-control" rows="3" placeholder="Despedida" ng-model="mail.despedida" required/>	
+	</textarea>
+	
+		            
+<div class="modal-footer">    	
+	<button type="submit" class="btn btn-primary" ng-click="save()">Enviar</button>
+    <button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+</div>
+
+</form>

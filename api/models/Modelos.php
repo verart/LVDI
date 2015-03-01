@@ -144,7 +144,6 @@ class Modelos extends AppModel {
 		try{
 		
 			$mod = $this->getModeloPorId($idModelo);
-					
 			$modelo = array('id'=>$idModelo,'stock'=>($mod['stock']-$cantidad));
 			
 			if(!$this->update($modelo, array('id'=>$idModelo)))
@@ -156,13 +155,10 @@ class Modelos extends AppModel {
 			if(!$this->MovimientosStock->setMovimiento($movimiento))
 				throw new BadRequestException('Hubo un error al crear el movimiento de baja.');
 							
-
 			return (array('success'=>true, 'msg'=>'El modelo ha sido dado de baja.'));
 			
 		} catch (Exception $e) {
-
-			return (array('success'=>false, 'msg'=>$e->getMsg()));
-			
+			return (array('success'=>false, 'msg'=>$e->getMsg()));	
 		}
 	}
 	
@@ -269,20 +265,50 @@ class Modelos extends AppModel {
 	 */
 	function logicDelete($idMod) {
 		
-		
 		if(!($this->notUnique($idMod)) )
 			return array('success'=>false, 'msg'=>'No se puede eliminar este modelo. Es el único del producto');
-			
 		$sql = "UPDATE modelos SET baja=1 WHERE id = $idMod";	
-			
 		$result = $this->con->query($sql);
 
 		if(@PEAR::isError($result))
-				return array('success'=>false, 'msg'=>'No se puede eliminar este modelo.');
-				
+			return array('success'=>false, 'msg'=>'No se puede eliminar este modelo.');	
 		return array('success'=>true, 'msg'=>'');
-			
+	}
+
+	/**
+	* HABILITARPORMODELO
+	* Marca al modelo como disponible para pedido (campo pedido=1)
+	* param (int) $idModelo Modelo que se va a actualizar
+	* param (int) $hab 1 si es para habilitar, 0 si es para deshabilitar
+	*/
+	function habilitarPorModelo($idModelo, $hab = 1){
 		
+		try{
+			$modelo = array('id'=>$idModelo, 'pedido'=>$hab);
+			if(!$this->update($modelo, array('id'=>$idModelo)))
+				throw new BadRequestException('Hubo un error al habilitar el modelo para pedidos.');
+			return (array('success'=>true, 'msg'=>'El modelo se habilitó para pedidos.'));
+		} catch (Exception $e) {
+			return (array('success'=>false, 'msg'=>$e->getMsg()));	
+		}
+	}
+
+	/**
+	* HABILITARPORPRODUCTO
+	* Marca al modelo como disponible para pedido (campo pedido=1)
+	* param (int) $idModelo Modelo que se va a actualizar
+	* param (int) $hab 1 si es para habilitar, 0 si es para deshabilitar
+	*/
+	function habilitarPorProducto($idProd, $hab = 1){
+		
+		try{
+			$modelo = array('productos_id'=>$idProd, 'pedido'=>$hab);
+			if(!$this->update($modelo, array('productos_id'=>$idProd)))
+				throw new BadRequestException('Hubo un error al habilitar el modelo para pedidos.');
+			return (array('success'=>true, 'msg'=>'Todos los modelos del producto se habilitaron para pedidos.'));
+		} catch (Exception $e) {
+			return (array('success'=>false, 'msg'=>$e->getMsg()));	
+		}
 	}
 	
 }

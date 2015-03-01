@@ -158,10 +158,51 @@ class ClientesPMController extends AppController {
 	/*
 	* Envia un mail al cliente idCliente. Genera un token para dicho cliente
 	*/
-	function sendMail($idCliente, $texto){
-		$token = md5(uniqid(rand(), FALSE));
-		$infoToken = array('clientes_id'=>$idCliente, 'token'=>$token, 'created'=>$date('Y-m-d H:i:s'));
-		$this->ClientesPMAcceso->setToken($infoToken);
+	function enviarMail(){
+		
+		try{			
+			$params = getPutParameters();	
+
+			//Si ya tiene acceso en el sistema y es actual no se vuelve a enviar mail.
+			$res =$this->ClientesPMAcceso->getCliente($params['idCliente']);
+			if($res['success']){
+				$fechaFin = date('Y-m-d H:i:s', strtotime ('+7 day',strtotime($res['token']['created'])) );
+				if($fechaFin >= date ('Y-m-d H:i:s')) 
+					throw new BadRequestException('El cliente ya tiene acceso al sitio.');
+				else{ 
+					if($fechaFin < date ('Y-m-d H:i:s'))
+						$this->ClientesPMAcceso->deleteToken($res['token']['token']);
+				}
+			}
+
+			$token = md5(uniqid(rand(), FALSE));
+			$infoToken = array('clientes_id'=>$params['idCliente'], 'token'=>$token, 'created'=> date('Y-m-d H:i:s'));
+			$res =$this->ClientesPMAcceso->setToken($infoToken);
+			if(!$res['success'])
+				throw new BadRequestException($res['msg']);
+
+			//Mail
+			$link = "<a style='font-weight:900;text-decoration:inherit;font-size:20px;color:cadetblue;margin:80px;background-color:papayawhip;padding:7px;' href='http://localhost:8888/LVDI/#!/pedidosdeclientes/".$token."'> Accedé aquí para armar tu pedido </a>";
+			$mail = '<html><body style="font-family:sans-serif;font-size:15px;color:rgb(56, 56, 56);">';
+			$mail .= "<p style='font-size:16px;'>".$params['saludo']."</p><p>".str_replace("\n"," </p><p> ",$params['texto'])."</p><br/>".$link.'<br/><p>'.str_replace("\n"," </p><p>",$params['despedida']).'</p>'; 
+			$mail .= '</body></html>';
+			//Titulo
+			$titulo = "Los Vados Del Isen - Pedidos";
+			//cabecera
+			$headers = "MIME-Version: 1.0\r\n"; 
+			$headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
+			$headers .= "From: Los Vados Del Isen <no-replay@losvadosdelisen.com>\r\n";
+			$res = mail("veroartola@gmail.com",$titulo,$mail,$headers);
+			if(!$res)
+				throw new BadRequestException('Mensaje no enviado');
+			
+			echo $this->json('El mensaje fue enviado.');
+
+		} catch (Exception $e) {	
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		} 		
+		
 	}
 
 	/*

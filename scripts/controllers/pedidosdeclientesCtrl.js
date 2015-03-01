@@ -3,7 +3,7 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
 
 	function ($scope,$modal,pedidosService,productosService,clientesPMService,AlertService,$filter,$routeParams,$location) {
       
-	    $scope.order = ['-fecha','-id'];
+	    $scope.order = ['-nombre'];
 	    $scope.query = '';
 	    $scope.pedido = {};
 	    $scope.data = '';

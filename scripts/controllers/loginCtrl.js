@@ -9,13 +9,15 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 		$rootScope.activeTab = $location.$$path.replace('/','');
 
 		$rootScope.$on(AUTH_EVENTS.notAuthorized, function() {
-		  console.log('No autorizado');
-		  return $location.path('/index');
+			console.log('No autorizado');
+			$scope.logout();
+			return $location.path('/index');
 		});
-    
+ 		   
 		$rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {
-		  console.log('No autenticado');
-		  return $location.path('/index');
+			console.log('No autenticado');
+			$scope.logout();
+			return $location.path('/index');
 		});
 		
 		if($scope.usuario == undefined)

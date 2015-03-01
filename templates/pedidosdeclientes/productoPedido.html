@@ -3,7 +3,7 @@
 		<h4>{{producto.nombre}}</h4>
 		<p class="small"> Precio: {{producto.precio | currency}} </p>
 		<div>
-	      <img src="{{producto.img}}" class="img-responsive img-rounded smallImg" />
+	      <img src="{{producto.img_s}}" class="img-responsive img-rounded smallImg" />
 	    </div>
 
 	</div>
@@ -20,6 +20,6 @@
 		</ul>
 	</div>
 	<div class="col-xs-12 col-md-2 bottomRight">
-	    <button class="btn btn-primary" id="btnAdd" ng-click="add($index)">Agregar al pedido </button>				
+	    <button class="btn btn-primary" id="btnAdd" ng-click="add(prodIndex)">Agregar al pedido </button>				
 	</div>
 </div>

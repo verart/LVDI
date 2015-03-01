@@ -33,7 +33,8 @@
           		<ul class="dropdown-menu" role="menu">
 	            <li><a href="#!/pedidos" ng-click="refreshActiveTab('pedidos')">Pedidos</a></li>
 	            <li><a href="#!/clientesPM" ng-click="refreshActiveTab('clientesPM')">Clientes por mayor</a></li>
-	          </ul>
+	            <li><a href="#!/productosparapedidos" ng-click="refreshActiveTab('productosparapedidos')">Productos para pedidos</a></li>
+	        	</ul>
 	        </li>
 	        <li class="dropdown" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')"  
 	        	ng-class="{true:'active'}[(activeTab == 'producciones')||(activeTab == 'responsables')]">
@@ -137,6 +138,7 @@
 	<script type="text/javascript" src="scripts/controllers/modalPdfPedidoNotAdminCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/modalPdfClientesMailsCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/productosCtrl.js"></script>
+	<script type="text/javascript" src="scripts/controllers/productosparapedidosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosdeclientesCtrl.js"></script>
 	<script type="text/javascript" src="scripts/controllers/pedidosespecialesCtrl.js"></script>

@@ -5,7 +5,7 @@ app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
         
 		$scope.order = '-nombre';
 	    
-	    
+	    $scope.nomPerfiles = ['', 'Admin','Taller','Local','Cuentas'];	  		  
 	    	    
 	    /**********************************************************************
 	     Recupera en data los clientesPM
@@ -53,8 +53,7 @@ app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		    	 GUARDAR
 		    	*************************************************************************************************/
 		    	function (res) {
-		    	
-		    	
+		    		
 		    		/******************************************
 		    		 NUEVO USUARIO
 		    		******************************************/
@@ -63,6 +62,8 @@ app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 			    			//Success
 			    			function(promise){
 			    				$scope.data.push(promise.data.DATA);
+			    				AlertService.add('success', 'El usuario fue creado', 1000);
+
 			    			},
 			    			//Error al guardar
 			    			function(error){
@@ -80,7 +81,7 @@ app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				    	******************************************/
 			    		usuariosService.editUsuario(res).then(
 			    			//SUCCESS
-			    			function(promise){ },
+			    			function(promise){ AlertService.add('success', 'El usuario fue actualizado', 1000);},
 			    			//Error al actualizar
 			    			function(error){
 				    			AlertService.add('danger', error.data.MSG);
