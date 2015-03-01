@@ -94,6 +94,7 @@ class Productos extends AppModel {
 			$resultsFormat[$iF]['precio'] = $results[$i]['precio'];
 			$resultsFormat[$iF]['id'] = $results[$i]['producto_id'];
 			$resultsFormat[$iF]['img'] = file_exists('../img/productos/'.$results[$i]['producto_id'].'.jpg')?$dir.$results[$i]['producto_id'].'.jpg': $dir.'noimg.jpg';
+			$resultsFormat[$iF]['img_s'] = $dir.'noimg_s.jpg';
 			$resultsFormat[$iF]['modelos'] = array();
 			$m = 0;
 			while(($i < count($results))&&($resultsFormat[$iF]['nombre'] == utf8_encode($results[$i]['nomProducto']))){
