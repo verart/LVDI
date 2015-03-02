@@ -16,12 +16,9 @@ app.controller('colaImpresionCtrl',
 			function(error){}
 		);
 		
-
-
-	    $scope.mod_options = [];
+		$scope.mod_options = [];
 	    $scope.modelo = {nombre:'', id:'', precio:'', cantidad:''};
-	     
-	     
+	      
 	    /************************************************************************
 	    PRODUCTOS - Recupera todos los modelos de cada producto. Retorna como nombre NomProd-NomMod
 	    *************************************************************************/	
@@ -34,8 +31,6 @@ app.controller('colaImpresionCtrl',
 			//Error al actualizar
 			function(error){ AlertService.add('danger', error.data.MSG);}
 		);	
-
-
 
 
 	    
@@ -206,6 +201,11 @@ app.controller('colaImpresionCtrl',
 					txt_confirm = { msj: "Se eliminará la cola de impresión de la producción de "+$scope.data.producciones[index].responsable+". ¿Desea continuar?", 
 									accept:"Si", cancel:"No"};
 					break;
+
+				case 'ventas': 
+					txt_confirm = { msj: "Se eliminará la cola de impresión de las devoluciones en ventas. ¿Desea continuar?", 
+									accept:"Si", cancel:"No"};
+					break;
 						
 				default:
 					txt_confirm = { msj: "Se eliminará la cola de impresión del pedido de "+$scope.data.pedidos[index].clientePM+". ¿Desea continuar?", 
@@ -231,7 +231,6 @@ app.controller('colaImpresionCtrl',
 					switch(from){
 					
 						case 'reposicion': 		
-					
 						  	$scope.data.reposicion.modelos.forEach(function (imp) {						  	
 						        colaImpresionService.deleteModeloImpresion(imp.id).then(
 									function(promise){},
@@ -240,11 +239,8 @@ app.controller('colaImpresionCtrl',
 							});		
 							$scope.data.reposicion.modelos = [];
 							break;	
-					
-						
-						
-						case 'sueltos': 
-					
+											
+						case 'sueltos': 		
 							$scope.data.sueltos.modelos.forEach(function (imp) {					  	
 						        colaImpresionService.deleteModeloImpresion(imp.id).then(
 									function(promise){},
@@ -254,9 +250,17 @@ app.controller('colaImpresionCtrl',
 							$scope.data.sueltos.modelos = [];
 							break;			
 						
+						case 'ventas': 
+							$scope.data.ventas.modelos.forEach(function (imp) {					  	
+						        colaImpresionService.deleteModeloImpresion(imp.id).then(
+									function(promise){},
+									function(promise){ AlertService.add('danger', promise.data.MSG);}
+								)
+							});
+							$scope.data.ventas.modelos = [];
+							break;	
 						
-						case 'producciones':  // Productos de producciones
-						
+						case 'producciones':  // Productos de producciones				
 							var stop = false;
 							var prods = $scope.data.producciones[index].modelos;
 							
@@ -311,8 +315,8 @@ app.controller('colaImpresionCtrl',
 		 ****************************************************/ 
 		 $scope.imprimir= function(from,index){
 			
-			if((from == 'reposicion') || (from == 'sueltos')){
-				productosAImprimir = (from == 'reposicion')? $scope.data.reposicion.modelos : $scope.data.sueltos.modelos;
+			if((from == 'reposicion') || (from == 'sueltos')|| (from == 'ventas')){
+				productosAImprimir = (from == 'reposicion')? $scope.data.reposicion.modelos : (from == 'sueltos')? $scope.data.sueltos.modelos: $scope.data.ventas.modelos;
 				$scope.imprimirEtiquetasBarcode(productosAImprimir);
 			}else
 				if(from == 'producciones'){ 
