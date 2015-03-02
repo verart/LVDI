@@ -257,7 +257,7 @@ class Ventas extends AppModel {
 						if(@PEAR::isError($query))
 							throw new BadRequestException('Hubo un error al agregar las devoluciones de la venta.');
 
-						$res = $this->ColaImpresion->set($idModelo,null, null, null);
+						$res = $this->ColaImpresion->set($idModelo,null, null, null,$idVenta);
 							if(!$res['success'])
 								throw new BadRequestException($res['msg']);
 					}
@@ -329,7 +329,7 @@ class Ventas extends AppModel {
 							if(@PEAR::isError($query))
 								throw new BadRequestException('Hubo un error al agregar las devoluciones de la venta.');
 
-							$res = $this->ColaImpresion->set($idModelo,null, null, null);
+							$res = $this->ColaImpresion->set($idModelo,null, null, null, $idVenta);
 							if(!$res['success'])
 								throw new BadRequestException($res['msg']);
 						}
