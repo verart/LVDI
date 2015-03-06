@@ -29,7 +29,7 @@ class PermisosComponent extends AppComponent{
 					$this->acceso['productos'] = array('index', 'show', 'update','productoModelo','reponer');
 					$this->acceso['pedidos'] = array('index', 'show', 'update'); 
 					$this->acceso['clientesPM'] = array('index', 'clientesName','show');			
-					$this->acceso['colaImpresion'] = array('index','delete','create');
+					$this->acceso['ColaImpresion'] = array('index','delete','create');
 					$this->edicion['pedidos'] = array('update');	
 					$this->acceso['ventas']=array('index','show');	
 					$this->acceso['notas']=array('index','create','delete');
@@ -70,7 +70,9 @@ class PermisosComponent extends AppComponent{
 			return true;
 		else
 			if($this->perfil != '')
-				return in_array($accion, $this->acceso[$controller]);
+				if (array_key_exists($controller, $this->edicion))
+					return in_array($accion, $this->acceso[$controller]);
+				else return false;
 			else return false;
 		
 	}
@@ -82,7 +84,9 @@ class PermisosComponent extends AppComponent{
 			return true;
 		else
 			if($this->perfil != '')
-				return in_array($accion, $this->edicion[$controller]);
+				if (array_key_exists($controller, $this->edicion))
+					return in_array($accion, $this->edicion[$controller]);
+				else return false;
 			else return false;
 		
 	}
