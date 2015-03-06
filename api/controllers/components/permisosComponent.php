@@ -70,7 +70,7 @@ class PermisosComponent extends AppComponent{
 			return true;
 		else
 			if($this->perfil != '')
-				if (array_key_exists($controller, $this->edicion))
+				if (array_key_exists($controller, $this->acceso))
 					return in_array($accion, $this->acceso[$controller]);
 				else return false;
 			else return false;
