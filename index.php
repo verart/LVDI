@@ -33,7 +33,7 @@
           		<ul class="dropdown-menu" role="menu">
 	            <li><a href="#!/pedidos" ng-click="refreshActiveTab('pedidos')">Pedidos</a></li>
 	            <li><a href="#!/clientesPM" ng-click="refreshActiveTab('clientesPM')">Clientes por mayor</a></li>
-	            <li><a href="#!/productosparapedidos" ng-click="refreshActiveTab('productosparapedidos')">Productos para pedidos</a></li>
+	            <li><a ng-if="(usuario.getUserRole()=='admin')" href="#!/productosparapedidos" ng-click="refreshActiveTab('productosparapedidos')">Productos para pedidos</a></li>
 	        	</ul>
 	        </li>
 	        <li class="dropdown" ng-if="(usuario.getUserRole()=='admin')||(usuario.getUserRole()=='local')"  
