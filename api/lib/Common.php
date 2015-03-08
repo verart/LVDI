@@ -9,7 +9,7 @@ if (!defined('ROOT_URL'))
 	define('ROOT_URL','/LVDI/');
 	
 if (!defined('INCLUDE_PATH'))
-	define('INCLUDE_PATH',"./" . PATH_SEPARATOR . "./lib");
+	define('INCLUDE_PATH',"./" . PATH_SEPARATOR . "./lib". PATH_SEPARATOR . "./lib/MDB2");
 		
 if (!defined('COMPLETE_ROOT_DIR'))
 	define('COMPLETE_ROOT_DIR','/Applications/MAMP/htdocs/LVDI/');

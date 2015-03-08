@@ -91,7 +91,6 @@
 	      
 	<div ng-view > </div>
 	
-	
 	 <!-- Agregamos primero jQuery antes que angular es una buena practica -->
 	<script type="text/javascript" src="lib/javascript/jquery.js"></script>
 	<script type="text/javascript" src="lib/javascript/jquery.form.js"></script>
@@ -167,7 +166,6 @@
     <link rel="stylesheet" href='css/ventas.css' type="text/css" />
     <link rel="stylesheet" href='css/impresion.css' type="text/css" />
 
-  
-
+	
 </body>
 </html>
