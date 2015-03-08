@@ -34,7 +34,7 @@
 									<div class="pull-right arrow-right"></div>		
 									
 									<input type="text" id="newDevId" class="form-control small filterInput" 
-									ng-model="form.modeloDev.id" placeholder="Id de producto" ng-change="searchDev()"ng-enter="addDev()"/>
+									ng-model="form.idModeloDev" placeholder="Id de producto" ng-change="searchDev()"ng-enter="addDev()"/>
 									<br/>									
 									<input type="text" id="newDev" autocomplete="off" ng-model="form.modeloDev.nombre" class="form-control small" placeholder="Nombre de producto" ng-enter="addDev()" typeahead="dev_option as dev_option.nombre for dev_option in p.dev_options" typeahead-on-select="setModelDev($item)"  typeahead-wait-ms="300"  ng-keyup="searchByNameDev()"/>
 							
@@ -91,7 +91,7 @@
 						<h5>Agregar producto</h5>
 						
 						<input type="text" id="newModId" class="form-control small filterInput" focus-me="{{true}}"
-						ng-model="form.modelo.id" placeholder="Id de producto" ng-change="search()" ng-enter="add()"/>
+						ng-model="form.idModelo" placeholder="Id de producto" ng-change="search()" ng-enter="add()"/>
 					
 						<hr/> 
 						

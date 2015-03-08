@@ -1,6 +1,6 @@
-app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','clientesPMService', '$timeout', 
+app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','clientesPMService', '$timeout', '$location', 
 
-	function ($scope, $modal, $filter,$log, AlertService, clientesPMService, $timeout) {
+	function ($scope, $modal, $filter,$log, AlertService, clientesPMService, $timeout,$location) {
        
         
 		$scope.order = '-nombre';
@@ -34,8 +34,8 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 				//Error al actualizar
 				function(error){ 
 	    			$scope.pending = false;
+					$scope.parar = true;
 	    			AlertService.add('danger', error.data.MSG);
-					$location.path('/index');
 	    		}
 			);
         };

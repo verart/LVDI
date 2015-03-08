@@ -13,7 +13,7 @@ class ClientesPMController extends AppController {
 		try {
 			
 			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'index'))
-				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
 			$opciones = array('order'=>'nombre ASC','page'=>$_POST['pag'],'pageSize'=>15);
 			
@@ -40,7 +40,7 @@ class ClientesPMController extends AppController {
 		try {
 			
 			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'show'))
-				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
 			$cliente = $this->ClientesPM->getClientePorId($idCliente); 
 			echo $this->json('', $cliente[0]); 
@@ -181,19 +181,35 @@ class ClientesPMController extends AppController {
 			if(!$res['success'])
 				throw new BadRequestException($res['msg']);
 
+			$from = '<veroartola@gmail.com>';
+			$to = '<veroartola@gmail.com>';
+			$subject = "Los Vados Del Isen - Pedidos";
 			//Mail
 			$link = "<a style='font-weight:900;text-decoration:inherit;font-size:20px;color:cadetblue;margin:80px;background-color:papayawhip;padding:7px;' href='http://localhost:8888/LVDI/#!/pedidosdeclientes/".$token."'> Accedé aquí para armar tu pedido </a>";
-			$mail = '<html><body style="font-family:sans-serif;font-size:15px;color:rgb(56, 56, 56);">';
-			$mail .= "<p style='font-size:16px;'>".$params['saludo']."</p><p>".str_replace("\n"," </p><p> ",$params['texto'])."</p><br/>".$link.'<br/><p>'.str_replace("\n"," </p><p>",$params['despedida']).'</p>'; 
-			$mail .= '</body></html>';
-			//Titulo
-			$titulo = "Los Vados Del Isen - Pedidos";
-			//cabecera
-			$headers = "MIME-Version: 1.0\r\n"; 
-			$headers .= "Content-type: text/html; charset=iso-8859-1\r\n"; 
-			$headers .= "From: Los Vados Del Isen <no-replay@losvadosdelisen.com>\r\n";
-			$res = mail("veroartola@gmail.com",$titulo,$mail,$headers);
-			if(!$res)
+			$body = '<html><body style="font-family:sans-serif;font-size:15px;color:rgb(56, 56, 56);">';
+			$body .= "<p style='font-size:16px;'>".$params['saludo']."</p><p>".str_replace("\n"," </p><p> ",$params['texto'])."</p><br/>".$link.'<br/><p>'.str_replace("\n"," </p><p>",$params['despedida']).'</p>'; 
+			$body .= '</body></html>';
+			
+			
+			$headers = array(
+			    'From' => $from,
+			    'To' => $to,
+			    'Subject' => $subject,
+			    'MIME-Version' => 1,
+				'Content-type' => 'text/html;charset=iso-8859-1'
+			);
+
+			$smtp = Mail::factory('smtp', array(
+			        'host' => 'ssl://smtp.gmail.com',
+			        'port' => '465',
+			        'auth' => true,
+			        'username' => 'veroartola@gmail.com',
+			        'password' => 'pamplinas40165'
+			    ));
+
+			$mail = $smtp->send($to, $headers, $body);
+
+			if(!$mail)
 				throw new BadRequestException('Mensaje no enviado');
 			
 			echo $this->json('El mensaje fue enviado.');

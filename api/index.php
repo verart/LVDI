@@ -13,7 +13,7 @@ if (ENTORNO == 'DESARROLLO'){
 	error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	error_reporting(E_ALL);
 }else
-	error_reporting(E_NONE);
+	error_reporting('E_NONE');
 
 ini_set('include_path', constant('INCLUDE_PATH'));
 
@@ -27,6 +27,7 @@ include_once('controllers/components/AppComponent.php');
 include_once('controllers/AppController.php');
 include_once('models/AppModel.php');
 include_once('lib/MDB2/MDB2.php');
+include_once('lib/MDB2/Mail/Mail/Mail.php');
 
 // Routes
 $route = new Route();

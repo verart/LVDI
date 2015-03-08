@@ -499,9 +499,9 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 		  
 		// SEARCH producto *** Busca un producto disponible
 		$scope.search= function() {		  
-			if($scope.form.modelo.id != ''){
+			if($scope.form.idModelo != ''){
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
-			  	productosService.getProductoModelo($scope.form.modelo.id ).then(
+			  	productosService.getProductoModelo($scope.form.idModelo ).then(
 					//success
 					function(promise){
 						$scope.form.modelo = promise.data.DATA; 
@@ -541,6 +541,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
   		// SETMODEL  *** guarda en form.modelo el modelo seleccionado
 		$scope.setModel= function(item) {		  
 			$scope.form.modelo = item;	
+			$scope.form.idModelo = item.id;
 		}
 
 		  
@@ -632,9 +633,9 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 
 		// SEARCH producto *** Busca un producto disponible
 		$scope.searchDev= function() {		
-			if($scope.form.modeloDev.id != ''){
+			if($scope.form.idModeloDev != ''){
 			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
-			  	productosService.getProductoModelo($scope.form.modeloDev.id ).then(
+			  	productosService.getProductoModelo($scope.form.idModeloDev ).then(
 					//success
 					function(promise){
 						$scope.form.modeloDev = promise.data.DATA;  
@@ -674,6 +675,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
   		// SETMODEL  *** guarda en form.modelo el modelo seleccionado
 		$scope.setModelDev= function(item) {		  
 			$scope.form.modeloDev = item;	
+			$scope.form.idModeloDev = item.id;
 		}
   		
 
