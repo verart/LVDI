@@ -34,7 +34,7 @@ class Modelos extends AppModel {
 				ORDER BY M.nombre";
 				
 	   	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);    	
-	   	$query = $query->execute(array($idProduccion));	
+	   	$query = $query->execute(array($idProducto));	
 		return $query->fetchAll();
 		
 	}
@@ -256,7 +256,6 @@ class Modelos extends AppModel {
 		}else
 			return array('success'=>false, 'msg'=>'No se puede eliminar este modelo. Está incluido en un pedido o producción.');
 	}
-	
 	
 	/**
 	 * LOGICDELETE

@@ -131,10 +131,11 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 			    			function(promise){
 				    			var index = $filter('getIndexById')($scope.data, promise.data.DATA.id);
 					    		$scope.data[index] = promise.data.DATA;
+					    		AlertService.add('success', 'Se guardaron las modificaciones', 1000);
 			    			},
 			    			//Error al actualizar
 			    			function(error){
-				    			AlertService.add('danger', error.data.MSG);
+				    			AlertService.add('danger', error.data.MSG,2000);
 			    			}
 			    		);
 			    	}
