@@ -353,7 +353,7 @@ class Productos extends AppModel {
 				
 					foreach($modelos as $field => $value)	{
 	
-						$value['nombre'] = utf8_decode($value['nombre']);
+						$value['nombre'] = isset($value['nombre'])?utf8_decode($value['nombre']):'';
 
 						if(!isset($value['id'])){						
 							// Modelo nuevo para el producto
