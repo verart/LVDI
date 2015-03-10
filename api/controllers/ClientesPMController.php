@@ -174,25 +174,26 @@ class ClientesPMController extends AppController {
 						$this->ClientesPMAcceso->deleteToken($res['token']['token']);
 				}
 			}
-
+			
+			$cliente =$this->ClientesPM->getClientePorId($params['idCliente']);
 			$token = md5(uniqid(rand(), FALSE));
 			$infoToken = array('clientes_id'=>$params['idCliente'], 'token'=>$token, 'created'=> date('Y-m-d H:i:s'));
 			$res =$this->ClientesPMAcceso->setToken($infoToken);
 			if(!$res['success'])
 				throw new BadRequestException($res['msg']);
 
-			$from = '<veroartola@gmail.com>';
-			$to = '<veroartola@gmail.com>';
+			$to = $cliente[0]['email'];
 			$subject = "Los Vados Del Isen - Pedidos";
 			//Mail
 			$link = "<a style='font-weight:900;text-decoration:inherit;font-size:20px;color:cadetblue;margin:80px;background-color:papayawhip;padding:7px;' href='http://localhost:8888/LVDI/#!/pedidosdeclientes/".$token."'> Accedé aquí para armar tu pedido </a>";
 			$body = '<html><body style="font-family:sans-serif;font-size:15px;color:rgb(56, 56, 56);">';
 			$body .= "<p style='font-size:16px;'>".$params['saludo']."</p><p>".str_replace("\n"," </p><p> ",$params['texto'])."</p><br/>".$link.'<br/><p>'.str_replace("\n"," </p><p>",$params['despedida']).'</p>'; 
+			$body .= '<br/><i style="font-size:12px"> - - Este mensaje es generado automáticamente. No debe ser respondido. - - </i><br/>';
 			$body .= '</body></html>';
 			
 			
 			$headers = array(
-			    'From' => $from,
+			    'From' => 'Los Vados del Isen <noreply@lvdi.com>',
 			    'To' => $to,
 			    'Subject' => $subject,
 			    'MIME-Version' => 1,
@@ -203,8 +204,8 @@ class ClientesPMController extends AppController {
 			        'host' => 'ssl://smtp.gmail.com',
 			        'port' => '465',
 			        'auth' => true,
-			        'username' => 'veroartola@gmail.com',
-			        'password' => 'pamplinas40165'
+			        'username' => 'lvdipedidos@gmail.com',
+			        'password' => 'l0sv4d0s'
 			    ));
 
 			$mail = $smtp->send($to, $headers, $body);
@@ -212,7 +213,7 @@ class ClientesPMController extends AppController {
 			if(!$mail)
 				throw new BadRequestException('Mensaje no enviado');
 			
-			echo $this->json('El mensaje fue enviado.');
+			echo $this->json('El mensaje fue enviado a '.$to);
 
 		} catch (Exception $e) {	
 			if ($e instanceof RequestException) 
