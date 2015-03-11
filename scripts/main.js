@@ -1,5 +1,5 @@
 
-var app = angular.module('app', ['ngRoute','xeditable', 'ui.bootstrap']);
+var app = angular.module('app', ['ngRoute','xeditable', 'ui.bootstrap']); 
 
 app.constant('AUTH_EVENTS', {
   loginSuccess: 'auth-login-success',
