@@ -11,13 +11,13 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 		$rootScope.$on(AUTH_EVENTS.notAuthorized, function() {
 			console.log('No autorizado');
 			$scope.logout();
-			return $location.path('/index');
+			return $location.path('/login');
 		});
  		   
 		$rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {
 			console.log('No autenticado');
 			$scope.logout();
-			return $location.path('/index');
+			return $location.path('/login');
 		});
 		
 		if($scope.usuario == undefined)
@@ -26,7 +26,7 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 		$scope.logout = function() {
 			Session.destroy();
 			AuthService.logout();
-	    	$location.path('/index');	
+	    	$location.path('/login');	
 		}
 		
 		$scope.refreshActiveTab = function(id){
@@ -70,7 +70,7 @@ app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS',
 			    function (error) {
 				    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
 				    $scope.aviso = error.data.MSG;
-				    $location.path('/index')
+				    $location.path('/login')
 				});
 		    
 		  };
