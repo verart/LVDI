@@ -37,7 +37,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				function(error){ 
 	    			$scope.pending = false;	    			
 	    			AlertService.add('danger', error.data.MSG);
-					$location.path('/index');
+					$location.path('/login');
 
 				}
 			);

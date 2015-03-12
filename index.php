@@ -8,7 +8,7 @@
 <body ng-controller="ApplicationController">
 
 
-	<div ng-include src="'templates/navbar.html'"></div>
+	<div ng-include ng-if="(activeTab != 'login')" src="'templates/navbar.html'"></div>
 	      
 	<div ng-view > </div>
 	
