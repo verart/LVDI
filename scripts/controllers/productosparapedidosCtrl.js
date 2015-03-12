@@ -38,7 +38,7 @@ app.controller('productosparapedidosCtrl', ['$scope', '$modal', '$filter','produ
 				function(error){
 	    			$scope.pending = false;	
 					AlertService.add('danger', error.data.MSG);
-					$location.path('/index');
+					$location.path('/login');
 	    		}
 			); 
 		}	

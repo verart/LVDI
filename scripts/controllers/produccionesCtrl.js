@@ -58,7 +58,7 @@ app.controller('produccionesCtrl',
 					function(error){ 
 	    				$scope.pending = false;
 						AlertService.add('danger', error.data.MSG);
-						$location.path('/index');
+						$location.path('/login');
 					}
 				);
 			}	
