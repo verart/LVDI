@@ -43,7 +43,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 				function(error){
 	    			$scope.pending = false;	
 					AlertService.add('danger', error.data.MSG);
-					$location.path('/index');
+					$location.path('/login');
 	    		}
 			); 
 		}	

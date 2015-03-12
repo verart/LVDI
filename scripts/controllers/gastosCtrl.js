@@ -38,7 +38,7 @@ app.controller('gastosCtrl', ['$scope','$modal',  'gastosService', 'AlertService
 				},
 				//Error al actualizar
 				function(error){ 
-					$location.path('/index');
+					$location.path('/login');
 				}
 			);		
 		}
