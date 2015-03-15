@@ -182,12 +182,17 @@ class ClientesPMController extends AppController {
 			if(!$res['success'])
 				throw new BadRequestException($res['msg']);
 
+			iconv_set_encoding("internal_encoding", "UTF-8");
+
 			$to = $cliente[0]['email'];
 			$subject = "Los Vados Del Isen - Pedidos";
+			$url = "http://localhost:8888/LVDI/#/pedidosdeclientes/$token";
+			
 			//Mail
-			$link = "<a style='font-weight:900;text-decoration:inherit;font-size:20px;color:cadetblue;margin:80px;background-color:papayawhip;padding:7px;' href='http://localhost:8888/LVDI/#!/pedidosdeclientes/".$token."'> Accedé aquí para armar tu pedido </a>";
+			$link = '<a style="font-weight:900;text-decoration:inherit;font-size:20px;color:cadetblue;margin:80px;background-color:papayawhip;padding:7px;"
+			  		href="'.$url.'" > Accedé aquí para armar tu pedido </a><br/>';
 			$body = '<html><body style="font-family:sans-serif;font-size:15px;color:rgb(56, 56, 56);">';
-			$body .= "<p style='font-size:16px;'>".$params['saludo']."</p><p>".str_replace("\n"," </p><p> ",$params['texto'])."</p><br/>".$link.'<br/><p>'.str_replace("\n"," </p><p>",$params['despedida']).'</p>'; 
+			$body .= "<p style='font-size:16px;'>".$params['saludo']."</p><p>".str_replace('\n','</p><p>',$params['texto'])."</p><br/>".$link.'<br/><p>'.str_replace('\n',' </p><p>' ,$params['despedida']).'</p>'; 
 			$body .= '<br/><i style="font-size:12px"> - - Este mensaje es generado automáticamente. No debe ser respondido. - - </i><br/>';
 			$body .= '</body></html>';
 			
@@ -197,7 +202,7 @@ class ClientesPMController extends AppController {
 			    'To' => $to,
 			    'Subject' => $subject,
 			    'MIME-Version' => 1,
-				'Content-type' => 'text/html;charset=iso-8859-1'
+				'Content-type' => 'text/html; charset=UTF-8\nContent-Transfer-Encoding: 8bit\n' ////charset=iso-8859-1'
 			);
 
 			$smtp = Mail::factory('smtp', array(
@@ -208,7 +213,7 @@ class ClientesPMController extends AppController {
 			        'password' => 'l0sv4d0s'
 			    ));
 
-			$mail = $smtp->send($to, $headers, $body);
+			$mail = $smtp->send($to, $headers, utf8_decode($body));
 
 			if(!$mail)
 				throw new BadRequestException('Mensaje no enviado');

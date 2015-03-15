@@ -1,6 +1,6 @@
 app.config(function($locationProvider, $routeProvider, USER_ROLES){
 
-    $locationProvider.hashPrefix('!');
+    //$locationProvider.hashPrefix('!');
     $routeProvider
     .when("/login", {
         controller : "loginCtrl",
@@ -127,7 +127,7 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
             needAuth: true,
             authorizedRoles:  [USER_ROLES.admin]
         }
-    })
+    })  
     .otherwise({
        redirectTo: '/login'
     });
