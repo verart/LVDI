@@ -10,8 +10,8 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 
 		$rootScope.$on(AUTH_EVENTS.notAuthorized, function() {
 			console.log('No autorizado');
-			$scope.logout();
-			return $location.path('/login');
+			//$scope.logout();
+			//return $location.path('/login');
 		});
  		   
 		$rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {

@@ -1,8 +1,10 @@
-app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'productosService','clientesPMService','AlertService','$filter','$routeParams','$location',
+app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'productosService','clientesPMService','AlertService','$filter','$routeParams','$location', '$rootScope', 
 
 
-	function ($scope,$modal,pedidosService,productosService,clientesPMService,AlertService,$filter,$routeParams,$location) {
+	function ($scope,$modal,pedidosService,productosService,clientesPMService,AlertService,$filter,$routeParams,$location, $rootScope) {
       
+      	$rootScope.activeTab = 'pedidosdeclientes';
+
 	    $scope.order = ['-nombre'];
 	    $scope.query = '';
 	    $scope.pedido = {};
