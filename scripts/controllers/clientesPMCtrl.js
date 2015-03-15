@@ -94,6 +94,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    			//Success
 			    			function(promise){ console.log(promise.data.DATA);
 			    				$scope.data.push(promise.data.DATA);
+			    				AlertService.add('success', 'Se agregó un nuevo cliente por mayor.', 1000); 
 			    			},
 			    			//Error al guardar
 			    			function(error){
@@ -110,7 +111,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    		clientesPMService.editCliente(res).then(
 			    		
 			    			//SUCCESS
-			    			function(promise){},
+			    			function(promise){AlertService.add('success', 'Se actualizó la información del cliente por mayor.', 1000); },
 			    			//Error al actualizar
 			    			function(error){
 				    			AlertService.add('danger', error.data.MSG);

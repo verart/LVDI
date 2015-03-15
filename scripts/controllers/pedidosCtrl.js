@@ -154,6 +154,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    			//Success
 			    			function(promise){ 
 			    				$scope.data.splice(0,0,promise.data.DATA);
+			    				AlertService.add('success', 'Se creó un nuevo pedido.', 1000); 
 			    			},
 			    			//Error al guardar
 			    			function(error){
@@ -171,6 +172,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    			function(promise){
 				    			var index = $filter('getIndexById')($scope.data, res.pedido.id);
 					    		$scope.data[index] = promise.data.DATA;
+					    		AlertService.add('success', 'Se actualizó la información del pedido.', 1000); 
 			    			},
 			    			//Error al actualizar
 			    			function(error){
