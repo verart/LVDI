@@ -132,7 +132,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 			    		responsablesService.editRes(res).then(
 			    		
 			    			//SUCCESS
-			    			function(promise){},
+			    			function(promise){AlertService.add('success', 'Se actualizó la información del responsable de producción.', 1500); },
 			    			//Error al actualizar
 			    			function(error){
 				    			AlertService.add('danger', error.data.MSG);

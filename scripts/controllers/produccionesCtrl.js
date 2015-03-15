@@ -179,7 +179,7 @@ app.controller('produccionesCtrl',
 			    			//Success
 			    			function(promise){ 
 			    				$scope.data.splice(0,0,promise.data.DATA);
-			    				
+			    				AlertService.add('success', 'Se creó una nueva producción.', 1000); 
 			    				//Imprimo el comprobante
 						    	if(res.action == 'print'){
 						    		$scope.print(promise.data.DATA);
@@ -205,7 +205,7 @@ app.controller('produccionesCtrl',
 			    			function(promise){
 				    			var index = $filter('getIndexById')($scope.data, promise.data.DATA.id);
 					    		$scope.data[index] = promise.data.DATA;
-					    		
+					    		AlertService.add('success', 'Se actualizó la información de la producción.', 1000); 
 			    				//Imprimo el comprobante
 						    	if(res.action == 'print'){
 						    		$scope.print(promise.data.DATA);
