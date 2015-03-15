@@ -1,3 +1,4 @@
+<form id="form" ng-submit="ok()" editable-form >
 
         <div id= "wndOpenProduccion" class="modal-body">
 		
@@ -12,7 +13,7 @@
 						
 					<div class="form-group">
 						<input type="text" class="form-control small" placeholder="Apellido y Nombre" 
-							ng-model="clientes.nombre" id="nombre" focus-me="{{true}}" />
+							ng-model="clientes.nombre" id="nombre" focus-me="{{true}}" required/>
 					</div>
 					
 					<div class="form-group colForm">
@@ -34,8 +35,8 @@
 	        	Eliminar cliente
 	        </button>
 
-	        <button class="btn btn-primary" ng-click="ok()">Guardar</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+	        <button type="submit" class="btn btn-primary" >Guardar</button>
+            <button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
             
         </div>
-   
+</form>
