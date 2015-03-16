@@ -21,8 +21,10 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
 			function(promise){ 
 				$scope.pedido.cliente_name = promise.data.DATA.nombre;
 				$scope.pedido.clientesPM_id = promise.data.DATA.id;
+				$scope.pedido.clientesPM_bonif = promise.data.DATA.bonificacion;
 				$scope.pedido.fecha = (formatLocalDate());
 				$scope.pedido.total = 0;
+				$scope.pedido.totalFinal = 0;
 				$scope.pedido.nota = '';
 				$scope.pedido.modelos = [];
 				//Recupera en data los productos
@@ -63,8 +65,12 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
 		    				estado: 'Pendiente'
 		    			});
 			   		$scope.pedido.total= $scope.pedido.total+($scope.data[index].modelos[k].cantidad*$scope.data[index].precio);
+			   		$scope.pedido.totalFinal = $scope.pedido.total - ($scope.pedido.total * $scope.pedido.clientesPM_bonif / 100);
+			   		$scope.data[index].modelos[k].cantidad = 0;
 		    	}					
-			}	    				  	
+			}
+			AlertService.add('success', 'Se agregó al pedido '+$scope.data[index].nombre, 2000);	
+	    				  	
 		}	 
 
 	    /************************************************************************
@@ -104,8 +110,10 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
 									$scope.data = [];
 								},
 								//Error al eliminar
-								function(error){ AlertService.add('danger', error.data.MSG);
-	    $scope.data = '';}
+								function(error){ 
+									AlertService.add('danger', error.data.MSG);
+	    							$scope.data = '';
+	    						}
 							)
 						}
 					);
