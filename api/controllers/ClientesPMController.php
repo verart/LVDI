@@ -244,7 +244,7 @@ class ClientesPMController extends AppController {
 			}
 	
 			$cliente = $this->ClientesPM->getClientePorId($infoToken['token']['clientes_id']);
-			$cli = array('nombre'=> $cliente[0]['nombre'], 'id'=>$cliente[0]['id']);
+			$cli = array('nombre'=> $cliente[0]['nombre'], 'id'=>$cliente[0]['id'], 'bonificacion'=>$cliente[0]['bonificacion']);
 			
 			echo $this->json('clientePM', $cli);
 

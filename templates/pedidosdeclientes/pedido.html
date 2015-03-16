@@ -57,11 +57,25 @@
 					</div> <!-- tableContainer -->
 				
 					<br/>
-			
 					<div class="row"> 
 						<div class="resumen form-horizontal pull-right" role="form">
-							<label> Total a pagar:  {{ pedido.total | currency }} </label>
-						</div> 
+													
+							<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
+							
+							<div class="form-group">
+							    <label class="col-sm-11 small">
+							    	Bonificación:  {{pedido.clientesPM_bonif}} %
+							    </label>
+							</div>
+	
+							<hr/>
+							
+							<label style="margin-right:15px;"> 
+								Total a pagar:  {{ pedido.totalFinal | currency }} </label>
+							
+							<br>
+							
+						</div> <!--ng-if  user role -->
 					</div>
 			</div>
 
