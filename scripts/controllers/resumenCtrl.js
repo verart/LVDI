@@ -35,7 +35,8 @@ app.controller('resumenCtrl', ['$scope','$modal',  'resumenService', 'AlertServi
 				                                          
 				     $scope.resumenPorMayor = {
 				     	tarjeta:parseFloat(promise.data.DATA.resumenPorMayor['Tarjeta'],10), 
-				     	transferencia:parseFloat(promise.data.DATA.resumenPorMayor['Transferencia'],10), 
+				     	transfVictor:parseFloat(promise.data.DATA.resumenPorMayor['Transf. Victor'],10),
+				     	transfFede:parseFloat(promise.data.DATA.resumenPorMayor['Transf. Fede'],10), 
 				     	cheque:parseFloat(promise.data.DATA.resumenPorMayor['Cheque'],10), 
 				     	efectivo:parseFloat(promise.data.DATA.resumenPorMayor['Efectivo'],10)}; 
 				     	

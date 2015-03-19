@@ -310,7 +310,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 		  	{'label':'Efectivo','value':'Efectivo'}, 
 		  	{'label':'Tarjeta','value':'Tarjeta'},
 		  	{'label':'Cheque','value':'Cheque'}, 
-		  	{'label':'Transferencia','value':'Transferencia'}];
+		  	{'label':'Transf. Victor','value':'Transf. Victor'},
+		  	{'label':'Transf. Fede','value':'Transf. Fede'}];
 		  		 
 		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	 
 		  
