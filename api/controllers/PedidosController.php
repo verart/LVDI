@@ -175,6 +175,7 @@ class PedidosController extends AppController {
 				'clientesPM_id'=>$params['clientesPM_id'],
 				'estado'=>'Pendiente',
 				'fecha'=>$params['fecha'],
+				'bonificacion'=>$params['bonificacion'],
 				'total'=>$params['total']
 			);
 			

@@ -64,7 +64,7 @@
 							
 							<div class="form-group">
 							    <label class="col-sm-11 small">
-							    	Bonificación:  {{pedido.clientesPM_bonif}} %
+							    	Bonificación:  {{pedido.bonificacion}} %
 							    </label>
 							</div>
 	
@@ -84,8 +84,7 @@
 						
 						            
         <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary" ng-click="print()">Confirmar e imprimir</button>
-            <button type="submit" class="btn btn-primary" ng-click="confirmarPedido()">Confirmar</button>
+            <button type="submit" class="btn btn-primary">Confirmar</button>
             <button type="button" class="btn btn-warning" ng-click="cancel()">Cerrar</button>
         </div>
         
