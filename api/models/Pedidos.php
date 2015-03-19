@@ -33,7 +33,7 @@ class Pedidos extends AppModel {
 					GROUP BY PM.pedidos_id	
 				) as modelosPedidos ON modelosPedidos.pedidos_id = P.id  
 				$conditions
-				ORDER BY P.id   
+				ORDER BY P.id DESC    
 				$set_limit "; 
 				
 		

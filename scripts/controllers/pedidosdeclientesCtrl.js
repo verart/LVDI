@@ -21,7 +21,7 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
 			function(promise){ 
 				$scope.pedido.cliente_name = promise.data.DATA.nombre;
 				$scope.pedido.clientesPM_id = promise.data.DATA.id;
-				$scope.pedido.clientesPM_bonif = promise.data.DATA.bonificacion;
+				$scope.pedido.bonificacion = promise.data.DATA.bonificacion;
 				$scope.pedido.fecha = (formatLocalDate());
 				$scope.pedido.total = 0;
 				$scope.pedido.totalFinal = 0;
@@ -65,7 +65,7 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
 		    				estado: 'Pendiente'
 		    			});
 			   		$scope.pedido.total= $scope.pedido.total+($scope.data[index].modelos[k].cantidad*$scope.data[index].precio);
-			   		$scope.pedido.totalFinal = $scope.pedido.total - ($scope.pedido.total * $scope.pedido.clientesPM_bonif / 100);
+			   		$scope.pedido.totalFinal = parseFloat($scope.pedido.total) - ($scope.pedido.total * $scope.pedido.bonificacion / 100);
 			   		$scope.data[index].modelos[k].cantidad = 0;
 		    	}					
 			}
@@ -129,7 +129,7 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
  ModalPedidodeclientesCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalPedidodeclientesCtrl = function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info,$location) {
+var ModalPedidodeclientesCtrl = function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info, $location) {
 		  
 	$scope.pedido = info;
 
@@ -144,7 +144,7 @@ var ModalPedidodeclientesCtrl = function ($scope, $modalInstance, productosServi
 
 	// REMOVE modelo *** Quita un modelo del pedido. Actualiza los totales 	  
 	$scope.remove= function(index) {		  	
-		$scope.pedido.total =  parseInt($scope.pedido.total,10) - (parseInt($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
+		$scope.pedido.total =  parseFloat($scope.pedido.total,10) - (parseFloat($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
 		$scope.pedido.modelos.splice(index,1);	  	
 	}	 
 		 
@@ -156,11 +156,11 @@ var ModalPedidodeclientesCtrl = function ($scope, $modalInstance, productosServi
 
 	//REFRESH modelo  ***  Quita un modelo del pedido. Actualiza los totales   
 	$scope.refreshTotal= function() {	
-		$total = 0;
+		total = 0;
 		$scope.pedido.modelos.forEach(function(m){
-	    	$total =  $total + (m.precio * parseInt(m.cantidad));
+	    	total =  total + (m.precio * parseInt(m.cantidad));
 	    }) 	
-		$scope.pedido.total = $total;
+		$scope.pedido.total = total;
 	}
 }
 
