@@ -1,10 +1,8 @@
-
-
 app.config(function($locationProvider, $routeProvider, USER_ROLES){
 
-    $locationProvider.hashPrefix('!');
+    //$locationProvider.hashPrefix('!');
     $routeProvider
-    .when("/index", {
+    .when("/login", {
         controller : "loginCtrl",
         templateUrl : dir_root + "/templates/login.html",
         auth: {
@@ -129,9 +127,9 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
             needAuth: true,
             authorizedRoles:  [USER_ROLES.admin]
         }
-    })
+    })  
     .otherwise({
-       redirectTo: '/index'
+       redirectTo: '/login'
     });
 })
 

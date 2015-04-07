@@ -37,7 +37,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				function(error){ 
 	    			$scope.pending = false;	    			
 	    			AlertService.add('danger', error.data.MSG);
-					$location.path('/index');
+					$location.path('/login');
 
 				}
 			);
@@ -111,14 +111,14 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 			    				newName = 	(promise.data.DATA.nombre).toUpperCase();
 			    				if(lastName > newName)
 				    				$scope.data.push(promise.data.DATA);
-				    			AlertService.add('success', promise.data.MSG, 5000);	
+				    			AlertService.add('success', promise.data.MSG, 2000);	
 
 			    				orderBy($scope.data, '-nombre', false);
 			    			},
 			    			//Error al guardar
 			    			function(error){
 				    			var res_msg = error.data.MSG;
-				    			AlertService.add('danger', res_msg, 5000);
+				    			AlertService.add('danger', res_msg, 3000);
 			    			}
 			    		);
 			    		
@@ -131,11 +131,9 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				    	******************************************/
 			    		clientesService.editCliente(res).then(
 			    			//SUCCESS
-			    			function(promise){ },
-			    			//Error al actualizar
-			    			function(error){
-				    			AlertService.add('danger', error.data.MSG);
-			    			}
+			    			function(promise){  AlertService.add('success', 'Se actualizó la información del cliente.', 1000); },
+			    			//ERROR al actualizar
+			    			function(error){ AlertService.add('danger', error.data.MSG); }
 			    		);
 			    	}
 			    		
@@ -204,18 +202,17 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 		  	
 		  	mails = [];
 		  	clientesService.getMails().then(
-			    			//SUCCESS
-			    			function(promise){ 
-			    				var printDoc = $modal.open({
-							    templateUrl: dir_root+'/templates/printDoc.html',
-							    windowClass: 'wndPdf',
-							    controller: modalPdfClientesMailsCtrl,
-							    resolve: { clientes: function(){return promise.data.DATA} }
-							    });
-							    
-			    			},
-			    			//Error al actualizar
-			    			function(error){ AlertService.add('danger', error.data.MSG);}
+			    	//SUCCESS
+			    	function(promise){ 
+			   			var printDoc = $modal.open({
+					    	templateUrl: dir_root+'/templates/printDoc.html',
+					    	windowClass: 'wndPdf',
+					    	controller: modalPdfClientesMailsCtrl,
+					    	resolve: { clientes: function(){return promise.data.DATA} }
+						});
+					},
+			    	//Error al actualizar
+			    	function(error){ AlertService.add('danger', error.data.MSG);}
 			);
 		  	
 

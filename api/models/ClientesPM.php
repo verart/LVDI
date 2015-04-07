@@ -20,6 +20,7 @@ class ClientesPM extends AppModel {
 			$results[$i]['local'] = utf8_encode($results[$i]['local']);
 			$results[$i]['direccion'] = utf8_encode($results[$i]['direccion']);
 			$results[$i]['localidad'] = utf8_encode($results[$i]['localidad']);
+			$results[$i]['cuit'] = utf8_encode($results[$i]['cuit']);
 	
 		}
 		return $results;
@@ -65,6 +66,7 @@ class ClientesPM extends AppModel {
 			$results[$i]['local'] = utf8_encode($results[$i]['local']);
 			$results[$i]['direccion'] = utf8_encode($results[$i]['direccion']);
 			$results[$i]['localidad'] = utf8_encode($results[$i]['localidad']);
+			$results[$i]['cuit'] = utf8_encode($results[$i]['cuit']);
 			
 		}
 		
@@ -87,6 +89,7 @@ class ClientesPM extends AppModel {
 			if(isset($cliente['local']))  $cliente['local'] = utf8_decode($cliente['local']);
 			if(isset($cliente['direccion'])) $cliente['direccion'] = utf8_decode($cliente['direccion']);
 			if(isset($cliente['localidad'])) $cliente['localidad'] = utf8_decode($cliente['localidad']);
+			if(isset($cliente['cuit'])) $cliente['cuit'] = utf8_encode($cliente['cuit']);
 		
 		
 			if(!isset($cliente['id'])){ 

@@ -49,7 +49,7 @@ app.controller('pedidosespecialesCtrl', ['$scope','$modal', 'pedidosespecialesSe
 				function(error){
 	    			$scope.pending = false;
 	    			AlertService.add('danger', error.data.MSG);
-	    			$location.path('/index');
+	    			$location.path('/login');
 	    		}
 			); 
 		}	
@@ -159,7 +159,7 @@ app.controller('pedidosespecialesCtrl', ['$scope','$modal', 'pedidosespecialesSe
 			    			function(promise){ 
 				    			var index = $filter('getIndexById')($scope.data, res.pedido.id); 
 					    		$scope.data[index] = promise.data.DATA;
-					    		AlertService.add('success', promise.data.MSG, 3000);
+					    		AlertService.add('success', 'Se actualizó la información del pedido especial.', 1000); 
 
 			    			},
 			    			//Error al actualizar

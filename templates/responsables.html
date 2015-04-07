@@ -42,11 +42,11 @@
 			  		<tbody>
 			  			<tr ng-repeat="res in filteredRes = (data | filter:query | orderBy:order:true)" 
 			  						class="resList link" ng-click="openRes(res.id)">
-			  				<td> {{res.nombre}}</td>
-			  				<td> {{res.marca || 'Sin datos' }}</td>
+			  				<td> {{(res.nombre || 'Sin datos') | truncate:25 }}</td>
+			  				<td> {{(res.marca || 'Sin datos')  | truncate:20 }}</td>
 			  				<td> {{res.tel || 'Sin datos'}}</td>
 		 					<td> {{res.tel2 || 'Sin datos'}}</td>						
-		 					<td> {{res.email || 'Sin datos'}}</td>
+		 					<td> {{(res.email || 'Sin datos') | truncate:40 }}</td>
 		  				</tr>
 		  				<tr ng-show="(filteredRes.length < 1)" class="aviso"> <td colspan="5"> No hay responsables de producciones</td></tr>
 		   			</tbody>

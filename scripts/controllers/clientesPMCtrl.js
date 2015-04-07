@@ -1,6 +1,6 @@
-app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','clientesPMService', '$timeout', 
+app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertService','clientesPMService', '$timeout', '$location', 
 
-	function ($scope, $modal, $filter,$log, AlertService, clientesPMService, $timeout) {
+	function ($scope, $modal, $filter,$log, AlertService, clientesPMService, $timeout,$location) {
        
         
 		$scope.order = '-nombre';
@@ -34,8 +34,8 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 				//Error al actualizar
 				function(error){ 
 	    			$scope.pending = false;
+					$scope.parar = true;
 	    			AlertService.add('danger', error.data.MSG);
-					$location.path('/index');
 	    		}
 			);
         };
@@ -94,6 +94,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    			//Success
 			    			function(promise){ console.log(promise.data.DATA);
 			    				$scope.data.push(promise.data.DATA);
+			    				AlertService.add('success', 'Se agregó un nuevo cliente por mayor.', 1000); 
 			    			},
 			    			//Error al guardar
 			    			function(error){
@@ -110,7 +111,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    		clientesPMService.editCliente(res).then(
 			    		
 			    			//SUCCESS
-			    			function(promise){},
+			    			function(promise){AlertService.add('success', 'Se actualizó la información del cliente por mayor.', 1000); },
 			    			//Error al actualizar
 			    			function(error){
 				    			AlertService.add('danger', error.data.MSG);

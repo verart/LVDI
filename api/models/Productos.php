@@ -347,37 +347,38 @@ class Productos extends AppModel {
 				
 				$idProducto = $producto['id'];
 				$producto['nombre'] = utf8_decode($producto['nombre']);
-				
+				$productoAnterior = $this->getProductoPorId($producto['id']);
+
 				if($this->update($producto, array('id'=>$producto['id']))){
 				
 					foreach($modelos as $field => $value)	{
-					
-						$value['nombre'] = utf8_decode($value['nombre']);
+	
+						$value['nombre'] = isset($value['nombre'])?utf8_decode($value['nombre']):'';
 
-						if(!isset($value['id'])){
-						
+						if(!isset($value['id'])){						
 							// Modelo nuevo para el producto
-						
 							$value['productos_id'] = $idProducto;
 							$value['stock'] = (isset($value['stock']))?$value['stock']:0;
 							$value['created'] = date('Y/m/d', time());
 							unset($value['fechaVenta']); unset($value['fechaRep']);unset($value['$$hashKey']);
 								
 							if(!$this->Modelos->create($value))
-								throw new BadRequestException('Hubo un error al crear el modelo.');	
-									
+								throw new BadRequestException('Hubo un error al crear el modelo.');										
 						}else{ 
 						
 							// OJO! Aquí SOLO se modifica el nombre del modelo. 
 							// Si se incrementó la cantidad de stock NO se guarda acá la modificación.
 							/*  La modificación en el stock de un modelo del producto se realiza con la function reponer(). 
 								La invoca el controller de producto por cada reposición hecha. */
-								
 							if(!$this->Modelos->update(array('nombre'=>$value['nombre']), array('id'=>$value['id'])))
 								throw new BadRequestException('Hubo un error al modificar el modelo.');
+
 						}
-						
 					}
+
+					if(($productoAnterior['precio'] != $producto['precio']))
+						$this->imprimirEtiquetasProducto($producto['id'], $_SESSION['usuario']['id']);
+				
 				}else
 					throw new BadRequestException('Hubo un error al actualizar el producto.');				
 			}
@@ -395,7 +396,18 @@ class Productos extends AppModel {
 	}
 
 
-
+	/**
+	* IMPRIMIRETIQUETASPRODUCTOS
+	* Actualiza el modelo e imprimes la etiqueta
+	*/
+	function imprimirEtiquetasProducto($idProducto, $userId){
+		$modelos = $this->Modelos->getModelos($idProducto);
+		for($i=0; $i<count($modelos); $i++){
+			for($j=0; $j<$modelos[$i]['stock'];$j++){
+				$res = $this->ColaImpresion->set($modelos[$i]['id'], null, null,$userId); 
+			}
+		}
+	}
 
 
 	/**
@@ -458,6 +470,7 @@ class Productos extends AppModel {
 	}
 	
 	
+
 	/**
 	* BAJA
 	* Decrementa en 1 el stock del modelo

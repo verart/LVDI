@@ -57,9 +57,10 @@
 							<p> Efectivo: {{resumenPorMayor.efectivo | currency}}</p>
 							<p> Tarjeta: {{resumenPorMayor.tarjeta | currency }}</p>
 							<p> Cheque: {{resumenPorMayor.cheque | currency }}</p>
-							<p> Transf.: {{resumenPorMayor.transferencia | currency }}</p>
+							<p> Transf. V: {{resumenPorMayor.transfVictor | currency }}</p>
+							<p> Transf. F: {{resumenPorMayor.transfFede | currency }}</p>
 							<div class="linea"></div>
-							<p> Total: {{(resumenPorMayor.tarjeta + resumenPorMayor.efectivo + resumenPorMayor.cheque + resumenPorMayor.transferencia) | currency}}</p>
+							<p> Total: {{(resumenPorMayor.tarjeta + resumenPorMayor.efectivo + resumenPorMayor.cheque + resumenPorMayor.transfVictor + resumenPorMayor.transfFede) | currency}}</p>
 						</div>
 						
 					</div>

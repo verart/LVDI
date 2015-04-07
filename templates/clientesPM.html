@@ -15,9 +15,6 @@
 					<input 	type="text" class="form-control small filterInput" 
 							ng-model="query" id='inputSearch' 
 							placeholder="Filtro de clientes"  ng-enter="filtrarClientes()" >
-					
-									
-					
 					<hr/>
 					
 					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nuevo cliente por mayor </button>
@@ -40,7 +37,7 @@
 			  				<th>Tel</th>
 			  				<th>Localidad</th>
 			  				<th>email</th>
-			  				<th></th>
+			  				<th ng-if="(usuario.getUserRole()=='admin')"></th>
 			  			</tr>
 			  		</thead>	
 			  		<tbody>
@@ -51,7 +48,7 @@
 			  				<td ng-click="openCliente(cl.id)"> {{cl.tel || 'Sin datos'}}</td>
 		 					<td ng-click="openCliente(cl.id)"> {{cl.localidad || 'Sin datos'}}</td>
 		 					<td ng-click="openCliente(cl.id)"> {{cl.email || 'Sin datos'}}</td>
-		 					<td ng-click="enviarmail(cl.id)">
+		 					<td ng-if="(usuario.getUserRole()=='admin')&&(cl.email != '')" ng-click="enviarmail(cl.id)">
 		 						<span class="glyphicon glyphicon-envelope" title="Enviar mail para pedido"></span> 
 		 					</td>
 		  				</tr>

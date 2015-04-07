@@ -43,7 +43,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 				function(error){
 	    			$scope.pending = false;	
 					AlertService.add('danger', error.data.MSG);
-					$location.path('/index');
+					$location.path('/login');
 	    		}
 			); 
 		}	
@@ -154,6 +154,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    			//Success
 			    			function(promise){ 
 			    				$scope.data.splice(0,0,promise.data.DATA);
+			    				AlertService.add('success', 'Se creó un nuevo pedido.', 1000); 
 			    			},
 			    			//Error al guardar
 			    			function(error){
@@ -171,6 +172,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 			    			function(promise){
 				    			var index = $filter('getIndexById')($scope.data, res.pedido.id);
 					    		$scope.data[index] = promise.data.DATA;
+					    		AlertService.add('success', 'Se actualizó la información del pedido.', 1000); 
 			    			},
 			    			//Error al actualizar
 			    			function(error){
@@ -308,7 +310,8 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 		  	{'label':'Efectivo','value':'Efectivo'}, 
 		  	{'label':'Tarjeta','value':'Tarjeta'},
 		  	{'label':'Cheque','value':'Cheque'}, 
-		  	{'label':'Transferencia','value':'Transferencia'}];
+		  	{'label':'Transf. Victor','value':'Transf. Victor'},
+		  	{'label':'Transf. Fede','value':'Transf. Fede'}];
 		  		 
 		  $scope.estadosProductos = ['Pendiente', 'Terminado'];	 
 		  

@@ -57,11 +57,25 @@
 					</div> <!-- tableContainer -->
 				
 					<br/>
-			
 					<div class="row"> 
 						<div class="resumen form-horizontal pull-right" role="form">
-							<label> Total a pagar:  {{ pedido.total | currency }} </label>
-						</div> 
+													
+							<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
+							
+							<div class="form-group">
+							    <label class="col-sm-11 small">
+							    	Bonificación:  {{pedido.bonificacion}} %
+							    </label>
+							</div>
+	
+							<hr/>
+							
+							<label style="margin-right:15px;"> 
+								Total a pagar:  {{ pedido.totalFinal | currency }} </label>
+							
+							<br>
+							
+						</div> <!--ng-if  user role -->
 					</div>
 			</div>
 
@@ -70,8 +84,7 @@
 						
 						            
         <div class="modal-footer">
-	        <button type="submit" class="btn btn-primary" ng-click="print()">Confirmar e imprimir</button>
-            <button type="submit" class="btn btn-primary" ng-click="confirmarPedido()">Confirmar</button>
+            <button type="submit" class="btn btn-primary">Confirmar</button>
             <button type="button" class="btn btn-warning" ng-click="cancel()">Cerrar</button>
         </div>
         

@@ -19,13 +19,11 @@ class ColaImpresion extends AppModel {
 		PRODUCTOS DE REPOSICIONES HECHAS EN TALLER
 		************************************************/
 		
-		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo, CL.nombre as clientePM
+		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo 
 		 		FROM colaimpresion CI
 				INNER JOIN modelos M ON CI.modelos_id = M.id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
-				LEFT JOIN pedidos Ped ON Ped.id = CI.pedidos_id
-				LEFT JOIN clientespm CL ON CL.id = Ped.clientesPM_id 
-				WHERE (CI.pedidos_id IS NULL) & (CI.belongsTo IS NULL)
+				WHERE (CI.pedidos_id IS NULL) & (CI.belongsTo IS NULL) & (CI.ventas_id IS NULL)& (CI.producciones_id IS NULL)
 				ORDER BY Pr.nombre"; 
 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -49,12 +47,10 @@ class ColaImpresion extends AppModel {
 		PRODUCTOS SUELTOS QUE EL USUARIO DESEA IMPRIMIR
 		************************************************/ 
 					
-		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo, CL.nombre as clientePM
+		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo 
 		 		FROM colaimpresion CI
 				INNER JOIN modelos M ON CI.modelos_id = M.id
 				INNER JOIN productos Pr ON Pr.id = M.productos_id 
-				LEFT JOIN pedidos Ped ON Ped.id = CI.pedidos_id
-				LEFT JOIN clientespm CL ON CL.id = Ped.clientesPM_id 
 				WHERE CI.belongsTo = $userId
 				ORDER BY Pr.nombre"; 
 				
@@ -150,6 +146,31 @@ class ColaImpresion extends AppModel {
 			$iF++;
 		}
 		
+		/************************************************
+		PRODUCTOS DE DEVOLUCIONES DE VENTAS
+		************************************************/
+		
+		$sql = "SELECT CI.*, Pr.nombre as producto, Pr.precio, M.nombre as modelo  
+				FROM colaimpresion CI
+				INNER JOIN modelos M ON CI.modelos_id = M.id
+				INNER JOIN productos Pr ON Pr.id = M.productos_id 
+				WHERE not(CI.ventas_id IS NULL)
+				ORDER BY CI.ventas_id";
+				
+		$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
+	   	$query = $query->execute();	
+	   	
+		$results = $query->fetchAll();
+		$i = 0;
+		$resultsFormat['ventas']['modelos'] = array();
+		$m = 0;
+		while(($i < count($results))&&($results[$i]['pedidos_id'] == null)){
+			$resultsFormat['ventas']['modelos'][$m]['modelos_id'] = $results[$i]['modelos_id'];
+			$resultsFormat['ventas']['modelos'][$m]['id'] = $results[$i]['id'];
+			$resultsFormat['ventas']['modelos'][$m]['nombre'] = utf8_encode($results[$i]['producto']).'-'.utf8_encode($results[$i]['modelo']);
+			$resultsFormat['ventas']['modelos'][$m++]['precio'] = $results[$i++]['precio'];						
+		}
+
 		return $resultsFormat;
 	}
 	
@@ -163,12 +184,13 @@ class ColaImpresion extends AppModel {
 	* SET
 	* $productoAImprimir = array( $idModelo, $idPedido, $idProduccion, $belongsTo )
 	*/
-	function set($idModelo, $idPedido=NULL, $idProduccion=NULL, $belongsTo=NULL){
+	function set($idModelo, $idPedido=NULL, $idProduccion=NULL, $belongsTo=NULL, $idVenta=NULL){
 		
 		try{
 			$prod = array('modelos_id'=>$idModelo);
 			if($idPedido != NULL)$prod['pedidos_id']= $idPedido;
 			if($idProduccion != NULL)$prod['producciones_id']= $idProduccion;
+			if($idVenta != NULL)$prod['ventas_id']= $idVenta;
 			if($belongsTo != NULL)$prod['belongsTo']= $belongsTo;
 			
 			if(!$this->create($prod))
