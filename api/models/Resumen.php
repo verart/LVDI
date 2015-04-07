@@ -81,7 +81,7 @@ class Resumen extends AppModel {
 	   	$query = $query->execute();		   	
 		$results = $query->fetchAll();
 		
-		$finalResults['resumenPorMayor'] = array('Efectivo'=>0,'Tarjeta'=>0,'Transferencia'=>0,'Cheque'=>0, 'Transf. Victor'=>0,'Transf. Fede'=>0,);
+		$finalResults['resumenPorMayor'] = array('Efectivo'=>0,'Tarjeta'=>0,'Transferencia'=>0,'Cheque'=>0, 'Transf. Victor'=>0,'Transf. Fede'=>0);
 		$i=0;
 		while($i < count($results))
 			$finalResults['resumenPorMayor'][utf8_encode($results[$i]['FP'])]=$results[$i++]['resumenPorMayor'];	
