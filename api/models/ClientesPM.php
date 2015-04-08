@@ -42,7 +42,47 @@ class ClientesPM extends AppModel {
 	}
 	
 	
+	/**
+	 * Retorna el cliente que coincide con $nombre
+	 * @param $nombre
+	 */
+	function getClientePorNombre($nombre) {
+
+		$nombre = strtolower ($nombre);
+		$nombre = str_replace("%20", " ", $nombre);
+		$text = '%'.$nombre.'%';
+
+		$sql = "SELECT *   
+				FROM clientespm c
+				WHERE (c.nombre like '".$text."')or(c.localidad like '".$text."')
+				ORDER BY c.nombre  
+				LIMIT 0,10" ; 
 	
+		try{
+				
+	    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+			$query = $query->execute(); 
+			
+			//Se formatea el resultado para que queden los datos del producto con su arreglo de modelos.
+			$results = $query->fetchAll();
+			$resultsFormat = array(); 
+
+			if(!empty($results)){ 
+				for ($i=0 ; $i<count($results) ; $i++) {
+					$resultsFormat[$i]['nombre'] = utf8_encode($results[$i]['nombre']);
+					$resultsFormat[$i]['localidad'] = utf8_encode($results[$i]['localidad']);
+					$resultsFormat[$i]['id'] =  $results[$i]['id'];
+					$resultsFormat[$i]['bonificacion'] =  $results[$i]['bonificacion'];
+				} 
+				return array('success'=>true, 'clientesPM'=>$resultsFormat); 
+			}else
+				throw new BadRequestException('No existe cliente que coincida con '.$nombre.'.');
+
+		}catch(Exception $e){
+			return array('success'=>false,'msg'=>$e->getMsg());
+		}	
+		
+	}	
 	
 	
 	/**
@@ -52,7 +92,6 @@ class ClientesPM extends AppModel {
 	 */
 	function getClientePorId($idCliente) {
 		
-				
 		$sql = "SELECT *
 				FROM clientespm C	
 				WHERE C.id = ?";
