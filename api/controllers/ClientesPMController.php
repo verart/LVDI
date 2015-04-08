@@ -74,7 +74,24 @@ class ClientesPMController extends AppController {
 	}
 	
 	
-	
+	/*******************************************************************************************
+	CLIENTEBYNAME
+	Muestra el/los cliente/s con nombre que coincida con nombre
+	*******************************************************************************************/
+	function clienteByName($nombre) {
+		try {
+			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'clientesName'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+
+			$res = $this->ClientesPM->getClientePorNombre($nombre); 
+			if($res['success']) 
+				echo $this->json('', $res['clientesPM']);
+			else 
+				throw new BadRequestException($res['msg']); 
+		} catch (Exception $e) {	
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}	
 	
 	
 	function create() {

@@ -78,40 +78,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 		}, true);
 
 
-
-	    
-	    /*****************************************************************************************************
-	     PRODUCTOS / CLIENTES PARA PEDIDOS 
-	     Información facilitada para crear/mdificar un pedido --> listado de productos, listado de clientes	    
-	    *****************************************************************************************************/
 	    $scope.infoModal = {}
-	    $scope.infoModal.p = {mod_options:[], cl_options:[]};
-	    
-	    
-	    //PRODUCTOS - Recupera todos los modelos de cada producto. Retorna como nombre NomProd-NomMod
-	    productosService.nombresProductos(1).then(
-			//success
-			function(promise){
-			     promise.data.DATA.forEach(function (prod) {
-		             $scope.infoModal.p.mod_options.push({'nombre':prod.nombre, 'id':prod.id, 'precio':prod.precio});  });                   
-			},
-			//Error al actualizar
-			function(error){ AlertService.add('danger', error.data.MSG, 3000);}
-		);		
-		
-		//CLIENTES
-		clientesPMService.nombresClientes().then(
-			//success
-			function(promise){
-			    promise.data.DATA.forEach(function (cl){
-		             $scope.infoModal.p.cl_options.push({'nombre':cl.nombre, 'id':cl.id, 'bonificacion':cl.bonificacion});    });                   
-			},
-			//Error al actualizar
-			function(error){ AlertService.add('danger', error.data.MSG,3000);}
-		);
-		
-		
-		
 	    	    	    
 	    /************************************************************************
 	    OPENPEDIDO
@@ -296,7 +263,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
  ModalPedidoInstanceCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidosService, info) {
+var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidosService, productosService, clientesPMService, info) {
 		  
 		  
 		/**********************************************************************
@@ -304,9 +271,18 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 	    Mensajes a mostrar
 	    **********************************************************************/
 	    $scope.alerts = [ ];
-		  
+		
+		$scope.userRole = info.userRole;
+		$scope.form = {};
+		$scope.p = {mod_options:[], cl_options:[]};
+		$scope.form.idModelo = '';
+		$scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
+		$scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10)};
+
+		$scope.actionBeforeSave='';
+ 
 		  		  
-		  $scope.fps = [
+		$scope.fps = [
 		  	{'label':'Efectivo','value':'Efectivo'}, 
 		  	{'label':'Tarjeta','value':'Tarjeta'},
 		  	{'label':'Cheque','value':'Cheque'}, 
@@ -324,8 +300,87 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 			        this.responseText = $scope.estadosProductos;
 			     }        
 		   });
-		  		 
+
+	    /** Manejo de modelos ****************************************************/		  	  
 		  
+		// SEARCH producto *** Busca un producto 
+		$scope.search = function() {		  
+			if($scope.form.idModelo != ''){
+			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
+			  	productosService.getProductoModelo($scope.form.idModelo).then(
+					//success
+					function(promise){
+						$scope.form.modelo = promise.data.DATA; 
+					},
+					//No existe
+					function(error){ 
+						if((error.status == 403) || (error.status == 401)){
+						    $modalInstance.dismiss({action:'cancel'});
+							$location.path('/index');
+						}
+						$scope.form.modelo.nombre ='';}
+				);		
+			}		  
+		}	
+	    // SEARCHBYNAME producto *** Busca un producto
+		$scope.searchByName= function() {		  
+			if($scope.form.modelo.nombre != ''){
+			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
+			  	productosService.getProductoModeloByName($scope.form.modelo.nombre).then(
+					//success
+					function(promise){
+						$scope.p.mod_options = promise.data.DATA;
+					},					
+					//no existe
+					function(error){
+						if((error.status == 403) || (error.status == 401)){
+						    $modalInstance.dismiss({action:'cancel'});
+							$location.path('/index');
+						}
+						$scope.p.mod_options = [];
+					}
+				);		
+			}		  
+		}
+
+		// SETMODEL  *** guarda en form.modelo el modelo seleccionado
+		$scope.setModel= function(item) {		  
+			$scope.form.modelo = item;	
+			$scope.form.idModelo = item.id;
+		}
+	    
+
+	    /** Manejo de cliente ****************************************************/		  	  
+
+
+		// SEARCHCLIENTEBYNAME  *** Busca un cliente
+		$scope.searchClienteByName= function() {		  
+			if($scope.form.cliente.nombre != ''){
+			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
+			  	clientesPMService.getClienteByName($scope.form.cliente.nombre).then(
+					//success
+					function(promise){
+						$scope.p.cl_options = promise.data.DATA;
+					},					
+					//no existe
+					function(error){
+						if((error.status == 403) || (error.status == 401)){
+						    $modalInstance.dismiss({action:'cancel'});
+							$location.path('/index');
+						}
+						$scope.p.cl_options = [];
+					}
+				);		
+			}		  
+		}
+
+		// SETCliente  *** guarda en form.cliente el cliente seleccionado
+		$scope.setCliente= function(item) {		  
+			$scope.form.cliente = item;	
+			$scope.form.idCliente = item.id;
+			$scope.pedido.bonificacion = $scope.form.cliente.bonificacion;
+		}
+
 		  
 		  /***************************************************
 		   SUMARPAGOS
@@ -342,16 +397,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 		  }	 
 		  
 		  
-		  $scope.userRole = info.userRole;
-		  $scope.form = {};
-		  $scope.p = {};
-		  $scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
-		  $scope.form.pago = {monto:'', FP:'Efectivo', created:(new Date()).toISOString().slice(0, 10)};
-		  $scope.p.mod_options = info.p.mod_options;		  
-		  $scope.p.cl_options = info.p.cl_options;
-
-		  $scope.actionBeforeSave='';
-
 		  /*** Pedido para editar ***/
 		  if(info.pedido != ''){
 		  
@@ -538,6 +583,7 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 			  	$scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
 			  	angular.element("#newModId").focus();
 			  	angular.element("#newMod").val('');
+			  	angular.element("#newModId").val('');
 			  }
 		  }	 
 		  
@@ -650,34 +696,6 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 			    }	
 		  }, true);
 
-	  
-		  		  
-		  /***************************************************
-		   SEARCH
-		   Busca el id ingresado en el listado de productos. Si existe lo muestra en el input de nombres
-		  ****************************************************/	 
-		  $scope.search = function(){
-		  
-		  	if($scope.form.modelo.id == '') angular.element("#newMod").val('');
-		  	else{
-		  		$scope.form.modelo.id = parseInt($scope.form.modelo.id);
-
-			  	$mod = $scope.p.mod_options.filter( function( value ){ return value.id == $scope.form.modelo.id })[0]; 
-			  	
-			  	if($mod != undefined){		  	
-			  		$scope.form.modelo.nombre = $mod.nombre;
-			  		$scope.form.modelo.precio = $mod.precio;
-			  		angular.element("#newMod").val($mod.nombre);
-				}else{
-					$scope.form.modelo.nombre = '';
-			  		$scope.form.modelo.precio = '';
-			  		angular.element("#newMod").val('');
-				}
-			}
-		  }  
-		   
-		   
-		   
 		   
 		   
 		  /******************************************************************************************************/
