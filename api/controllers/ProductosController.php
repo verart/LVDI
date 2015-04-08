@@ -427,8 +427,8 @@ class ProductosController extends AppController {
 	
 		if (file_exists(COMPLETE_ROOT_DIR."img/tmp/".$fileName)){
 		
-			copy(COMPLETE_ROOT_DIR."img/tmp/".$fileName, COMPLETE_ROOT_DIR."img/productos/".$id.'.jpg');
-			unlink(COMPLETE_ROOT_DIR."img/tmp/".$fileName);
+			copy(COMPLETE_ROOT_DIR."img/tmp/".urlencode($fileName), COMPLETE_ROOT_DIR."img/productos/".$id.'.jpg');
+			unlink(COMPLETE_ROOT_DIR."img/tmp/".urlencode($fileName));
 			
 			return ROOT_URL."img/productos/".$id.'.jpg';
 		}else

@@ -562,6 +562,7 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  	$scope.form.modelo = {nombre:'', id:'', precio:'', cantidad:''};
 			  	angular.element("#newModId").focus();
 				angular.element("#newMod").val('');
+			  	angular.element("#newModId").val('');
 			  }
 		  }	 
 		  
@@ -699,6 +700,8 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 			  	$scope.form.modeloDev = {nombre:'', id:'', precio:''};
 			  	angular.element("#newDevId").focus();
 				angular.element("#newDev").val('');
+				angular.element("#newDevId").val('');
+
 			  }
 		}	 
 		  

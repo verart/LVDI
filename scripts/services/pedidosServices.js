@@ -86,7 +86,17 @@ app.service('clientesPMService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
             },
-            
+            /******************************
+            GETCLIENTEBYNAME
+            ******************************/
+            getClienteByName:function(clName) {
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/clientesPM/'+clName+'/clienteByName',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
+        
         }
 }])
 
