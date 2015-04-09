@@ -65,7 +65,45 @@ class Responsables extends AppModel {
 		return $results;		
 	}
 	
-	
+	/**
+	 * Retorna el responsable que coincide con $nombre
+	 * @param $nombre
+	 */
+	function getResponsablePorNombre($nombre) {
+
+		$nombre = strtolower ($nombre);
+		$nombre = str_replace("%20", " ", $nombre);
+		$text = '%'.$nombre.'%';
+
+		$sql = "SELECT *   
+				FROM responsables r
+				WHERE (r.nombre like '".$text."')
+				ORDER BY r.nombre  
+				LIMIT 0,10" ; 
+
+		try{				
+	    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+			$query = $query->execute(); 
+			
+			//Se formatea el resultado para que queden los datos del producto con su arreglo de modelos.
+			$results = $query->fetchAll();
+			$resultsFormat = array(); 
+
+			if(!empty($results)){ 
+				for ($i=0 ; $i<count($results) ; $i++) {
+					$resultsFormat[$i]['nombre'] = utf8_encode($results[$i]['nombre']);
+					$resultsFormat[$i]['nota'] = utf8_encode($results[$i]['nota']);
+					$resultsFormat[$i]['id'] =  $results[$i]['id'];
+				} 
+				return array('success'=>true, 'responsables'=>$resultsFormat); 
+			}else
+				throw new BadRequestException('No existe responsable de producción que coincida con '.$nombre.'.');
+
+		}catch(Exception $e){
+			return array('success'=>false,'msg'=>$e->getMsg());
+		}	
+		
+	}	
 	
 	
 	/**

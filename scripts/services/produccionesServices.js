@@ -66,6 +66,16 @@ app.service('responsablesService', ['$http', function ($http) {
 	            	url: dir_api + '/responsables/listAll',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
+            },
+            /******************************
+            GETCLIENTEBYNAME
+            ******************************/
+            getResponsableByName:function(respName) {
+	            return $http({
+	            	method: 'GET',
+	            	url: dir_api + '/responsables/'+respName+'/responsableByName',
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
             }
             
         }
