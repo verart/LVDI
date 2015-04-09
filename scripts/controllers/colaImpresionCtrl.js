@@ -88,7 +88,7 @@ app.controller('colaImpresionCtrl',
 						    $modalInstance.dismiss({action:'cancel'});
 							$location.path('/index');
 						}
-						$scope.p.mod_options = [];
+						$scope.mod_options = [];
 					}
 				);		
 			}		  
@@ -109,7 +109,7 @@ app.controller('colaImpresionCtrl',
 		  		colaImpresionService.addModeloImpresion({modelos_id:$scope.modelo.id, belongsTo:Session.getUserId()}).then(
 						//Success
 						function(promise){
-							$scope.data.sueltos.modelos.push({'nombre':$scope.modelo.nombre, 'modelos_id':$scope.modelo.id, 'precio':$scope.modelo.precio});	
+							$scope.data.sueltos.modelos.push({'nombre':$scope.modelo.nombre, 'modelos_id':$scope.modelo.id, 'precio':$scope.modelo.precio, 'id':promise.data.DATA.id});	
 							angular.element("#newMod").val('');
 							angular.element("#newMod").focus();
 						},
