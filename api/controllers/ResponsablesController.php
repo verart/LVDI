@@ -110,7 +110,27 @@ class ResponsablesController extends AppController {
 		}	
 	}
 	
+		
+	/*******************************************************************************************
+	RESPONSABLEBYNAME
+	Muestra el/los responsable/s con nombre que coincida con nombre
+	*******************************************************************************************/
+	function responsableByName($nombre) {
+		try {
+			if (!$this->PermisosComponent->puedeAcceder('responsables', 'clientesName'))
+				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
+
+			$res = $this->Responsables->getResponsablePorNombre($nombre); 
+			if($res['success']) 
+				echo $this->json('', $res['responsables']);
+			else 
+				throw new BadRequestException($res['msg']); 
+		} catch (Exception $e) {	
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}	
+	}	
 	
+
 	
 	function delete($idResponsable) {
 		
