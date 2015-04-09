@@ -22,16 +22,15 @@ app.controller('colaImpresionCtrl',
 	    /************************************************************************
 	    PRODUCTOS - Recupera todos los modelos de cada producto. Retorna como nombre NomProd-NomMod
 	    *************************************************************************/	
-	    productosService.nombresProductos(1).then(
-			//success
-			function(promise){
-			     promise.data.DATA.forEach(function (prod) {
-		             $scope.mod_options.push({'nombre':prod.nombre, 'id':prod.id, 'precio':prod.precio});  });                   
-			},
-			//Error al actualizar
-			function(error){ AlertService.add('danger', error.data.MSG);}
-		);	
-
+	 //    productosService.nombresProductos(1).then(
+		// 	//success
+		// 	function(promise){
+		// 	     promise.data.DATA.forEach(function (prod) {
+		//              $scope.mod_options.push({'nombre':prod.nombre, 'id':prod.id, 'precio':prod.precio});  });                   
+		// 	},
+		// 	//Error al actualizar
+		// 	function(error){ AlertService.add('danger', error.data.MSG);}
+		// );	
 
 	    
 	   /************************************************************************
@@ -74,9 +73,32 @@ app.controller('colaImpresionCtrl',
 		};
 		
 		
+		// SEARCHBYNAME producto *** Busca un producto
+		$scope.searchByName= function() {		  
+			if($scope.form.modelo.nombre != ''){
+			  	// Recupera el producto. Retorna como nombre NomProd-NomMod
+			  	productosService.getProductoModeloByName($scope.form.modelo.nombre).then(
+					//success
+					function(promise){
+						$scope.mod_options = promise.data.DATA;
+					},					
+					//no existe
+					function(error){
+						if((error.status == 403) || (error.status == 401)){
+						    $modalInstance.dismiss({action:'cancel'});
+							$location.path('/index');
+						}
+						$scope.p.mod_options = [];
+					}
+				);		
+			}		  
+		}
 		
-		
-		
+		// SETMODEL  *** guarda en form.modelo el modelo seleccionado
+		$scope.setModel= function(item) {		  
+			$scope.modelo = item;	
+		}
+
 		/***************************************************
 		 ADD producto
 		 Agrega un modelo a la cola. 
