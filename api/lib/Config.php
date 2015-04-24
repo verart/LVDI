@@ -10,7 +10,7 @@ class Config {
 	function &getInstance($boot = true) {
 		static $instance = array();
 		if (!$instance) {
-			$instance[0] =& new Config();
+			$instance[0] = new Config();
 			//$instance->__loadBootstrap($boot);
 		}
 		return $instance[0];

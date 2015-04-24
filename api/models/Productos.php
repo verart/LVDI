@@ -514,5 +514,30 @@ class Productos extends AppModel {
 		}	
 	}
 
+
+	function getMovimientos($id, $desde, $hasta,$requested_page=1) {
+
+	 	$set_limit = " LIMIT ".(($requested_page - 1) * 15) . ",15"; 
+
+		$where = "and (1 = 1) ".(!empty($desde))?"and (created >= '".$desde."') ":'';
+		$where .=(!empty($hasta))?"and (created <= '".$hasta."') ":'';
+		
+		$sql = "SELECT * 
+				FROM movimientos_stock M
+				WHERE (modelos_id = $id) $where
+				ORDER BY M.id DESC  
+				$set_limit" ; 
+		try{			
+	    	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
+			$query = $query->execute(); 
+			
+			$res = $query->fetchAll();
+			return array('success'=>true, 'movimientos'=>$res); 
+
+		}catch(Exception $e){ 
+			return array('success'=>false,'msg'=>$e->getMsg());
+		}	
+		
+	}
 }
 ?>

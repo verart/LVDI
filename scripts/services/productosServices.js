@@ -148,7 +148,18 @@ app.service('productosService', ['$http', function ($http) {
 	            	data: $.param({idMod:idM, habilitar:h}),
 	            	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });       
-            }     
+            },    
+            /******************************
+            PRODUCTOS EN PRODUCCION
+            ******************************/  
+            movimientos:function(mod,d,h,p) {
+	            return $http({
+	            	method: 'POST',
+	            	url: dir_api + '/productos/seguimiento',	            	
+	            	data: $.param({id:mod, desde:d, hasta:h, page:p}),
+	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	            })
+            },
         }
 }]);
 

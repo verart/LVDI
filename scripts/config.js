@@ -113,6 +113,14 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
 	        authorizedRoles:  [USER_ROLES.cuentas]
         }
     }) 
+    .when("/seguimiento", {
+        controller : "seguimientoCtrl",
+        templateUrl :  dir_root + "/templates/seguimiento.html",
+        auth: {
+            needAuth: true,
+            authorizedRoles:  [USER_ROLES.cuentas]
+        }
+    }) 
     .when("/pedidosdeclientes/:token", {
         controller : "pedidosdeclientesCtrl",
         templateUrl :  dir_root + "/templates/pedidosdeclientes.html",

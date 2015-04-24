@@ -138,6 +138,9 @@ $route->add('/gastos/index','POST','Gastos','index');
 $route->add('/gastos/delete','DELETE','Gastos','delete');
 $route->add('/gastos/create','POST','Gastos','create');
 
+$route->add('/productos/seguimiento','POST','Productos','seguimiento');
+
+
 $route->add('/pedidosdeclientes/productos','GET','Productos','pedidosdeclientes');
 
 

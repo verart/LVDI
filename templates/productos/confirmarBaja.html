@@ -1,0 +1,13 @@
+<form ng-submit="ok()">
+	<div class="modal-body">
+		
+		<p>Está por modificar el stock de este producto. Para continuar debe ingresar un motivo</p>
+		
+		<textarea class="form-control" ng-model="nota.texto"  placeholder="Motivo" required/>
+			
+        <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Continuar</button>
+            <button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+        </div>    
+	</div>
+</form>
