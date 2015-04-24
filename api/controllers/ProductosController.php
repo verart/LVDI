@@ -154,7 +154,8 @@ class ProductosController extends AppController {
 			// BAJA de modelos
 			if(!empty($params['mod2baja']))
 				foreach($params['mod2baja'] as $field => $value){
-					$result = $this->Modelos->baja($value['id'],$value['cantBaja']);
+					$nota = isset($value['nota'])?$value['nota']:'';
+					$result = $this->Modelos->baja($value['id'],$value['cantBaja'],$nota);
 					
 					if(!$result['success'])
 						throw new BadRequestException($result['msg']);									
@@ -445,5 +446,32 @@ class ProductosController extends AppController {
 			unlink(COMPLETE_ROOT_DIR."img/productos/".$id.'.jpg');
 
 	}
+
+
+	function seguimiento(){
+
+		try{
+			if (!$this->PermisosComponent->puedeAcceder('productos', 'seguimiento'))
+				throw new ForbiddenException('No tiene permiso para visualizar los movimientos de productos'); 
+
+			if(isset($_POST['id'])){
+				$desde = isset($_POST['desde'])?$_POST['desde']:null;
+				$hasta = isset($_POST['hasta'])?$_POST['hasta']:null;
+
+				$movimientos = $this->Productos->getMovimientos($_POST['id'], $desde, $hasta, $_POST['page']); 
+				
+				if(!$movimientos['success'])
+					throw new BadRequestException($movimientos['msg']); 
+
+				echo $this->json('Movimientos', $movimientos);
+			}	
+		}catch (Exception $e) {	
+
+			if ($e instanceof RequestException) 
+				echo $this->json( $e->getMsg(), $e->getData(), $e->getSatusCode() );
+		}
+
+	}
+
 }
 ?>

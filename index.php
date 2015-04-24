@@ -72,7 +72,7 @@
 	<script type="text/javascript" src="scripts/controllers/usuariosCtrl.js"></script>	
 	<script type="text/javascript" src="scripts/controllers/resumenCtrl.js"></script>	
 	<script type="text/javascript" src="scripts/controllers/gastosCtrl.js"></script>	
-
+	<script type="text/javascript" src="scripts/controllers/seguimientoCtrl.js"></script>
 
 	
 	<!-- Incluimos estilos -->	
