@@ -65,6 +65,9 @@
 	        <li id="gastos"ng-if="(usuario.getUserRole()=='cuentas')"
 	        	ng-class="{true:'active'}[(activeTab == 'gastos')]">
 	        	<a href="#/gastos" ng-click="refreshActiveTab('gastos')">Gastos</a></li> 
+	        <li id="seguimiento"ng-if="(usuario.getUserRole()=='cuentas')"
+	        	ng-class="{true:'active'}[(activeTab == 'seguimiento')]">
+	        	<a href="#/seguimiento" ng-click="refreshActiveTab('seguimiento')">Seguimiento de productos</a></li> 	
 	      </ul>
 	      <ul class="nav navbar-nav navbar-right">        
 	        <li class="dropdown">
