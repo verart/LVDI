@@ -40,16 +40,16 @@ app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthSe
       
 	    var authorizedRoles = nextRoute.auth.authorizedRoles;
 
-	    if (!AuthService.isAuthorized(authorizedRoles)) {
-	      if (!AuthService.isAuthenticated()) { 
-	        // user is not allowed
-	        $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-	      }else { 
-	        // user is not logged in
+      if (!AuthService.isAuthorized(authorizedRoles)) {
+        if (!AuthService.isAuthenticated()) { 
+          // user is not allowed
+          $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+        }else { 
+          // user is not logged in
           $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
-	        event.preventDefault();
-	      }
-	    }
+          event.preventDefault();
+        }
+      }
     }
   });
 });
