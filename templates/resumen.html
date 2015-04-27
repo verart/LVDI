@@ -5,7 +5,7 @@
 		<div class="h2 titleh2"> Resumen </div>
 
 		<!-- SIDEBAR-->			
-		<div class=" col-xs-12 col-md-3 sidebar">
+		<div class=" col-xs-12 col-md-2 sidebar">
 			<form class="navbar-form navbar-left" role="search">
 				<div class="form-group">
 					<div class="formElement">
@@ -33,13 +33,13 @@
 
 
 		<!-- BODY-->
-		<div class="col-xs-12 col-md-9 ">
+		<div class="col-xs-12 col-md-10 ">
 			<div class="tableContainer" style="display:flex" >
 				<div class="col-xs-12 col-md-7 colDetalle">
 					<p class="h3"> Ingresos</p>
 
-					<div class="resumenVentas">
-						<div class="title2Resumen">
+					<div>
+						<div class="title2Resumen title2ResumenIngresos">
 							<div class="col-md-7">Ventas</div>
 							<div class="col-md-5 totales">Total: {{resumenVentas.tarjeta + resumenVentas.efectivo + resumenVentas.cheque +resumenVentas.debito  | currency}}</div>
 						</div>	
@@ -60,9 +60,9 @@
 							<div class="col-md-4 totales">{{resumenVentas.debito | currency }}</div>
 						</div>
 					</div>
-					<div class="resumenVentas">&nbsp;</div>
+					&nbsp;
 					<div>
-						<div class="title2Resumen">
+						<div class="title2Resumen title2ResumenIngresos">
 							<div class="col-md-7"> Por Mayor </div>
 							<div class="col-md-5 totales">Total: {{(resumenPorMayor.tarjeta.total + resumenPorMayor.efectivo.total + resumenPorMayor.cheque.total + resumenPorMayor.transfVictor.total + resumenPorMayor.transfFede.total) | currency}}</div>
 						</div>
@@ -80,25 +80,41 @@
 						</div>
 
 				 	</div>
+					&nbsp;
+
 				</div>
 
-				<div class="col-xs-12 col-md-5">
+				<div class="col-xs-12 col-md-5 colGastos">
 					<p class="h3"> Gastos </p>
-	
-						<div>
-							<p> Efectivo: {{resumenGastos.efectivo | currency }}</p>
-							<p> Tarjeta: {{resumenGastos.tarjeta  | currency}}</p>
-							<p> Cheque: {{resumenGastos.cheque  | currency}}</p>
-							<p> Débito: {{resumenGastos.debito  | currency }}</p>			
-							<p> Transf.: {{resumenGastos.transferencia  | currency }}</p>
-							<div class="linea"></div>
-							<p> Total: {{(resumenGastos.cheque + resumenGastos.tarjeta + resumenGastos.efectivo + resumenGastos.debito + resumenGastos.transferencia) | currency }}</p>
-						</div>
+					<div class="title2Resumen title2ResumenGastos">
+						<div class="col-md-6"> Todas las categorías </div>
+						<div class="col-md-6 totales">Total: {{(resumenGastos.cheque + resumenGastos.tarjeta + resumenGastos.efectivo + resumenGastos.debito + resumenGastos.transferencia) | currency}}</div>
+					</div>
+					<div class="detalleResumen detalleSimple">
+						<div class="col-md-8">Efectivo</div>
+						<div class="col-md-4 totales">{{resumenGastos.efectivo | currency }}</div>
+					</div>
+					<div class="detalleResumen detalleSimple">
+						<div class="col-md-8">Tarjeta</div>
+						<div class="col-md-4 totales">{{resumenGastos.tarjeta | currency }}</div>
+					</div>	
+					<div class="detalleResumen detalleSimple">
+						<div class="col-md-8">Cheque</div>
+						<div class="col-md-4 totales">{{resumenGastos.cheque | currency }}</div>						
+					</div>
+					<div class="detalleResumen detalleSimple">
+						<div class="col-md-8">Débito</div>
+						<div class="col-md-4 totales">{{resumenGastos.debito | currency }}</div>
+					</div>
+					<div class="detalleResumen detalleSimple">
+						<div class="col-md-8">Transferencia</div>
+						<div class="col-md-4 totales">{{resumenGastos.transferencia | currency }}</div>
+					</div>
 				</div>
 
-			<div class="loading-spiner-holder" data-loading >
-				<div class="loading-spiner"><img src="img/loading.gif" /></div>
-			</div>
+				<div class="loading-spiner-holder" data-loading >
+					<div class="loading-spiner"><img src="img/loading.gif" /></div>
+				</div>
 
 
 		</div>

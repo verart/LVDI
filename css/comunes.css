@@ -165,9 +165,16 @@
 .title2Resumen{
 	font-size: 15px;
 	font-weight: 500;
+	margin-left: -25px;
 }
-.title2Resumen>div{
+.title2ResumenIngresos>div{
 	background-color: rgba(134, 216, 185, 0.21);
+}
+.title2ResumenGastos>div{
+	background-color: rgba(216, 134, 150, 0.21)
+}
+.detalleCabecera{
+	padding: 0px;
 }
 .detalleResumen{
 	font-size: 15px;
@@ -179,12 +186,9 @@
 .detalleDesplegable>div>a{
 	color: black;
 }
-.detalleSimple{
-	margin-left: 18px;
-}
 .detalleSimple>div{
-	margin-bottom: -4px;
-	margin-top: -4px;
+	margin-bottom: -3px;
+	margin-top: -3px;
 }
 .panel-heading .accordion-toggle:after {
     /* symbol for "opening" panels */
@@ -201,13 +205,9 @@
 	text-align: right;
 	padding-right: 20px;
 }
-.detalleDesplegable .totales{
-	padding-right: 5px;
-}
 .colDetalle{
 	border-right: 1px solid gray;
 }
-
 .linea{
 	border-bottom: 1px solid rgb(119, 115, 115);
 	width: 130px;
