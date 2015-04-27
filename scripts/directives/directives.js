@@ -247,3 +247,24 @@ app.directive('ngProdped', function()
         templateUrl: 'templates/productos/prodped.html',
     }
 });
+
+/*******************************************************************************************************
+NG-RESUMENFP (Element)
+En el resumen se muestra el detalle de una FP con una tabla desplegable
+*******************************************************************************************************/
+app.directive('ngResumenfp', function()
+{
+    return{
+        restrict: 'E',
+        templateUrl: 'templates/resumen/resumenfp.html',
+        scope: {
+            seccion: "@seccion",
+            total: "@total",
+            pagos:"=pagos",
+            content: "@content"
+        },
+        link: function(scope) {
+            scope.content = "/#"+ scope.content ;
+        }
+    }
+});

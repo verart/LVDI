@@ -133,6 +133,7 @@ $route->add('/usuarios/create','POST','Usuarios','create');
 
 
 $route->add('/resumen/index','POST','Resumen','index');
+$route->add('/resumen/detalle','POST','Resumen','detalle');
 
 $route->add('/gastos/index','POST','Gastos','index');
 $route->add('/gastos/delete','DELETE','Gastos','delete');

@@ -1,7 +1,7 @@
-app.controller('resumenCtrl', ['$scope','$modal',  'resumenService', 'AlertService', '$filter', 
+app.controller('resumenCtrl', ['$scope','$modal', 'resumenService', 'AlertService', '$filter', 'AuthService', 
 
 
-	function ($scope, $modal, resumenService, AlertService, $filter) {
+	function ($scope, $modal, resumenService, AlertService, $filter, AuthService) {
        
        
        	/**********************************************************************
@@ -34,11 +34,21 @@ app.controller('resumenCtrl', ['$scope','$modal',  'resumenService', 'AlertServi
 				     	efectivo:parseFloat(promise.data.DATA.resumenVentas['Efectivo'],10)}; 
 				                                          
 				     $scope.resumenPorMayor = {
-				     	tarjeta:parseFloat(promise.data.DATA.resumenPorMayor['Tarjeta'],10), 
-				     	transfVictor:parseFloat(promise.data.DATA.resumenPorMayor['Transf. Victor'],10),
-				     	transfFede:parseFloat(promise.data.DATA.resumenPorMayor['Transf. Fede'],10), 
-				     	cheque:parseFloat(promise.data.DATA.resumenPorMayor['Cheque'],10), 
-				     	efectivo:parseFloat(promise.data.DATA.resumenPorMayor['Efectivo'],10)}; 
+				     	tarjeta:{
+				     		'total': parseFloat(promise.data.DATA.resumenPorMayor['Tarjeta'].total,10),
+				     		'pagos': promise.data.DATA.resumenPorMayor['Tarjeta'].pagos},   
+				     	transfVictor:{
+				     		'total': parseFloat(promise.data.DATA.resumenPorMayor['Transf. Victor'].total,10),
+				     		'pagos': promise.data.DATA.resumenPorMayor['Transf. Victor'].pagos},   
+				     	transfFede:{
+				     		'total': parseFloat(promise.data.DATA.resumenPorMayor['Transf. Fede'].total,10), 
+				     		'pagos': promise.data.DATA.resumenPorMayor['Transf. Fede'].pagos},   
+				     	cheque:{
+				     		'total': parseFloat(promise.data.DATA.resumenPorMayor['Cheque'].total,10), 
+				     		'pagos': promise.data.DATA.resumenPorMayor['Cheque'].pagos},   
+				     	efectivo:{
+				     		'total': parseFloat(promise.data.DATA.resumenPorMayor['Efectivo'].total,10),
+				     		'pagos': promise.data.DATA.resumenPorMayor['Efectivo'].pagos}}; 
 				     	
 				     $scope.resumenGastos = {
 				     	tarjeta:parseFloat(promise.data.DATA.resumenGastos['Tarjeta'],10), 
@@ -49,16 +59,46 @@ app.controller('resumenCtrl', ['$scope','$modal',  'resumenService', 'AlertServi
 	               
 				},
 				//Error al actualizar
-				function(error){ AlertService.add('danger', error.data.MSG);}
+				function(error){ AuthService.logout();}
 			);
-		}	
+		};	
 
+		/*****************************************************************************************************
+	     DETALLE     
+	    *****************************************************************************************************/
+	    $scope.loadDetalle = function (fp) {
+	    	
+			resumenService.detalle($scope.desde, $scope.hasta, fp).then(		    	
+				//Success
+				function(promise){
+					switch(fp) {
+					    case 'Efectivo':
+					        $scope.resumenPorMayor['efectivo']['pagos'] = promise.data.DATA;
+					        break;
+					    case 'Tarjeta':
+					        $scope.resumenPorMayor['tarjeta']['pagos'] = promise.data.DATA;
+					        break;
+						case 'Cheque':
+					        $scope.resumenPorMayor['cheque']['pagos'] = promise.data.DATA;
+					        break;
+					    case 'Tranf. Victor':
+					        $scope.resumenPorMayor['transfVictor']['pagos'] = promise.data.DATA;
+					        break;
+						case 'Tranf. Fede':
+					        $scope.resumenPorMayor['transfFede']['pagos'] = promise.data.DATA;
+					        break;
+					}
+				},
+				//Error al actualizar
+				function(error){}
+			); 
+		};
 
 
 	    $scope.cargar();
+
+	
         
-        
-        	
 }]);
 
 
