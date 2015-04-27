@@ -4,8 +4,6 @@
 	
 		<div class="h2 titleh2"> Resumen </div>
 
-
-
 		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-3 sidebar">
 			<form class="navbar-form navbar-left" role="search">
@@ -37,35 +35,54 @@
 		<!-- BODY-->
 		<div class="col-xs-12 col-md-9 ">
 			<div class="tableContainer" style="display:flex" >
-				<div class="col-xs-12 col-md-8 colDetalle">
+				<div class="col-xs-12 col-md-7 colDetalle">
 					<p class="h3"> Ingresos</p>
-					<div class="col-xs-12 col-md-6">
-						<p class="title2Resumen"> Ventas </p>
-						<div>
-							<p> Efectivo: {{resumenVentas.efectivo  | currency}}</p>
-							<p> Tarjeta: {{resumenVentas.tarjeta  | currency}}</p>
-							<p> Cheque: {{resumenVentas.cheque  | currency}}</p>
-							<p> Débito: {{resumenVentas.debito  | currency}}</p>
-							<div class="linea"></div>
-							<p> Total: {{resumenVentas.tarjeta + resumenVentas.efectivo + resumenVentas.cheque + resumenVentas.debito  | currency}}</p>
+
+					<div class="resumenVentas">
+						<div class="title2Resumen">
+							<div class="col-md-7">Ventas</div>
+							<div class="col-md-5 totales">Total: {{resumenVentas.tarjeta + resumenVentas.efectivo + resumenVentas.cheque +resumenVentas.debito  | currency}}</div>
+						</div>	
+						<div class="detalleResumen detalleSimple">
+							<div class="col-md-8">Efectivo</div>
+							<div class="col-md-4 totales">{{resumenVentas.efectivo | currency }}</div>
 						</div>
-						
-					</div>
-					<div class="col-xs-12 col-md-6">
-						<p class="title2Resumen"> Por Mayor </p>
-						<div>
-							<p> Efectivo: {{resumenPorMayor.efectivo | currency}}</p>
-							<p> Tarjeta: {{resumenPorMayor.tarjeta | currency }}</p>
-							<p> Cheque: {{resumenPorMayor.cheque | currency }}</p>
-							<p> Transf. V: {{resumenPorMayor.transfVictor | currency }}</p>
-							<p> Transf. F: {{resumenPorMayor.transfFede | currency }}</p>
-							<div class="linea"></div>
-							<p> Total: {{(resumenPorMayor.tarjeta + resumenPorMayor.efectivo + resumenPorMayor.cheque + resumenPorMayor.transfVictor + resumenPorMayor.transfFede) | currency}}</p>
+						<div class="detalleResumen detalleSimple">
+							<div class="col-md-8">Tarjeta</div>
+							<div class="col-md-4 totales">{{resumenVentas.tarjeta | currency }}</div>
+						</div>	
+						<div class="detalleResumen detalleSimple">
+							<div class="col-md-8">Cheque</div>
+							<div class="col-md-4 totales">{{resumenVentas.cheque | currency }}</div>
 						</div>
-						
+						<div class="detalleResumen detalleSimple">
+							<div class="col-md-8">Débito</div>
+							<div class="col-md-4 totales">{{resumenVentas.debito | currency }}</div>
+						</div>
 					</div>
+					<div class="resumenVentas">&nbsp;</div>
+					<div>
+						<div class="title2Resumen">
+							<div class="col-md-7"> Por Mayor </div>
+							<div class="col-md-5 totales">Total: {{(resumenPorMayor.tarjeta.total + resumenPorMayor.efectivo.total + resumenPorMayor.cheque.total + resumenPorMayor.transfVictor.total + resumenPorMayor.transfFede.total) | currency}}</div>
+						</div>
+
+				 		<div  class="panel-default">
+					 		<ng-resumenfp content="collapseEfectivo" seccion="Efectivo" total={{resumenPorMayor.efectivo.total}} pagos="resumenPorMayor.efectivo.pagos"></ng-resumenfp>
+					 		
+					 		<ng-resumenfp content="collapseTarjeta" seccion="Tarjeta" total={{resumenPorMayor.tarjeta.total}} pagos="resumenPorMayor.tarjeta.pagos"></ng-resumenfp>
+					 		
+					 		<ng-resumenfp content="collapseCheque" seccion="Cheque" total={{resumenPorMayor.cheque.total}} pagos="resumenPorMayor.cheque.pagos"></ng-resumenfp>
+					 		
+					 		<ng-resumenfp content="collapsetransfVictor" seccion="Transf. V" total={{resumenPorMayor.transfVictor.total}} pagos="resumenPorMayor.transfVictor.pagos"></ng-resumenfp>
+							
+							<ng-resumenfp content="collapsetransfFede" seccion="Transf. F" total={{resumenPorMayor.transfFede.total}} pagos="resumenPorMayor.transfFede.pagos"></ng-resumenfp>
+						</div>
+
+				 	</div>
 				</div>
-				<div class="col-xs-12 col-md-4">
+
+				<div class="col-xs-12 col-md-5">
 					<p class="h3"> Gastos </p>
 	
 						<div>
@@ -78,18 +95,13 @@
 							<p> Total: {{(resumenGastos.cheque + resumenGastos.tarjeta + resumenGastos.efectivo + resumenGastos.debito + resumenGastos.transferencia) | currency }}</p>
 						</div>
 				</div>
-				
-				
 
-
-			<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
+			<div class="loading-spiner-holder" data-loading >
+				<div class="loading-spiner"><img src="img/loading.gif" /></div>
+			</div>
 
 
 		</div>
-		
-		<!-- SIDEBAR-->			
 
-       
-       			
 	</div>
 </div>

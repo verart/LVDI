@@ -1,0 +1,38 @@
+    <div class="panel-heading" role="tab" id={{seccion}} >
+     	<div class="panel-title detalleResumen detalleDesplegable">
+			<div class="col-md-8"><a class="collapsed accordion-toggle" data-toggle="collapse" data-parent="#accordion" href=/#{{content}} aria-expanded="false" aria-controls="collapse" >{{seccion}} </a></div>
+			<div class="col-md-4 totales">{{total | currency }}</div>
+		</div>
+	</div>
+	<div id={{content}} class="panel-collapse collapse" role="tabpanel" aria-labelledby={{seccion}}  >
+		<div class="panel-body">
+			<div class="tableContainer">
+				<table class="table table-condensed table-hover small">
+					<thead>
+						<tr>
+							<th class="col-md-6">Fecha</th>
+							<th class="col-md-6">Localidad</th>
+							<th>Monto</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="p in pagos">
+							<td> {{p.created}}</td>
+							<td class="col-md-5">{{p.localidad}}</td>
+							<td class="col-md-1 totales">{{p.monto | currency }}</td>
+						</tr>
+							<tr><td class="avisoSmall" colspan="6" style="text-align=center" ng-if="pagos.length == 0">
+								No hay pagos 
+							</td>
+						</tr>
+						</tr>
+							<tr><td class="avisoSmall" colspan="6" style="text-align=center" ng-if="pagos.length == 40">
+								Se visualizan los últimos 40 registros de pagos 
+							</td>
+						</tr>
+					</tbody>
+				</table>										
+			</div>	
+		</div>
+	</div>
+
