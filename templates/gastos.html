@@ -81,8 +81,6 @@
 							<textarea id= "descripcion" class="form-control" rows="4" placeholder="Descripción" 
 							ng-model="gasto.descripcion" ng-enter="addGasto()"></textarea>
 						</div>
-
-						
 										
 						<div class="row" style="margin-top:5px;">				
 							<div class="colForm col-xs-6 col-md-6">
@@ -107,19 +105,21 @@
 					<table class="table table-condensed table-hover">
 						<thead>
 							<tr>
-								<th class="col-md-2">Fecha</th>
-							  	<th class="col-md-5">Descripción</th>
+								<th class="col-md-1">Fecha</th>
+							  	<th class="col-md-2">Categoría</th>
+							  	<th class="col-md-3">Descripción</th>
 							  	<th class="col-md-2">Monto</th>
-							  	<th class="col-md-3">F.Pago</th>
+							  	<th class="col-md-2">F.Pago</th>
 							  	<th class="col-md-1 text-center"> </th>
 							  </tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="g in gastos">
 								<td class="col-md-2">{{g.created}}</span></td>
-								<td class="col-md-6"> {{g.descripcion}}  </td>
+								<td class="col-md-2"> {{g.categoria || "Sin categoría"}}  </td>
+								<td class="col-md-3"> {{g.descripcion}}  </td>
 								<td class="col-md-2"> {{g.monto | currency}}  </td>
-								<td class="col-md-3"> {{g.FP}}  </td>
+								<td class="col-md-2"> {{g.FP}}  </td>
 								<td class="col-md-1 text-center">				
 										
 									<span 	class="glyphicon glyphicon-remove accionesLst link"  
