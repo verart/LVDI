@@ -265,11 +265,7 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
 **************************************************************************************************************************/
 var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidosService, productosService, clientesPMService, info) {
 		  
-		  
-		/**********************************************************************
-	    ALERTS
-	    Mensajes a mostrar
-	    **********************************************************************/
+		//ALERTS - Mensajes a mostrar
 	    $scope.alerts = [ ];
 		
 		$scope.userRole = info.userRole;

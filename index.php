@@ -73,7 +73,7 @@
 	<script type="text/javascript" src="scripts/controllers/resumenCtrl.js"></script>	
 	<script type="text/javascript" src="scripts/controllers/gastosCtrl.js"></script>	
 	<script type="text/javascript" src="scripts/controllers/seguimientoCtrl.js"></script>
-
+	<script type="text/javascript" src="scripts/controllers/categoriasCtrl.js"></script>
 	
 	<!-- Incluimos estilos -->	
 	<link rel="stylesheet" href='bootstrap/dist/css/bootstrap.min.css' type="text/css" />

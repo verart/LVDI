@@ -1,0 +1,51 @@
+<div class="container-fluid">
+	<div class="row-fluid">	
+		<div class="h4 seccionTitle"> Categorías </div>
+
+		<!-- SIDEBAR-->			
+		<div class=" col-xs-12 col-md-3 sidebar">
+			<form class="navbar-form navbar-left filterInput" role="search">
+				<div class="form-group filterInput">
+					<input 	type="text" class="form-control small filterInput" 
+							ng-model="query" id='inputSearch' 
+							placeholder="Filtro de categorías" ng-enter="filtrarCategorias()">					
+					<hr/>	
+					<button type="button" class="btn btn-primary" ng-click="nuevo()"> Nueva categoría </button>
+				
+				</div>
+			</form>
+		</div>
+
+	
+		<!-- BODY-->
+		<div class="col-xs-12 col-md-9 ">
+			<div class="tableContainer" >
+			
+				<table class="table table-hover table-condense"  id="infinite-scrolling">
+			  		<thead>
+			  			<tr>
+			  				<th>Categorías</th>
+			  				<th> </th>
+			  			</tr>
+			  		</thead>	
+			  		<tbody>
+			  			<tr ng-repeat="c in filteredCategorias = (data | orderBy:order:true |filter:query )" 
+			  				class="link">
+			  				<td ng-click="openCategoria(c.id)" > {{c.nombre | truncate:40}}</td>
+			  				<td class="col-md-2 text-center">				
+								<span class="glyphicon glyphicon-remove accionesLst link"  
+									title="Eliminar categoría"
+									ng-click="eliminarCategoria(c.id)">
+								</span>
+							</td>
+		  				</tr>
+		  				<tr ng-show="(filteredCategorias.length < 1)" class="aviso"> <td colspan="5"> No hay categorías</td></tr>
+		   			</tbody>
+		  		</table>
+	
+			</div>
+			
+		</div>
+       			
+	</div>
+</div>

@@ -158,15 +158,14 @@ class Responsables extends AppModel {
 		
 		// Chequeo que alguno de los modelos no este en algun pedido
 		$sql = "SELECT *
-				FROM responsables R
-				INNER JOIN producciones P ON P.responsables_id = R.id
-				WHERE R.id = ?";
+				FROM producciones P 
+				WHERE P.responsables_id = ?";
 							
     	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
 		$query = $query->execute(array($idResponsable));
-		$respnsablesProducciones = $query->fetchAll();	
+		$responsablesProducciones = $query->fetchAll();	
 	
-		return (empty($respnsablesProducciones));
+		return (empty($responsablesProducciones));
 			
 	}
 

@@ -139,6 +139,11 @@ $route->add('/gastos/index','POST','Gastos','index');
 $route->add('/gastos/delete','DELETE','Gastos','delete');
 $route->add('/gastos/create','POST','Gastos','create');
 
+$route->add('/categorias/index','GET','Categorias','index');
+$route->add('/categorias/delete','DELETE','Categorias','delete');
+$route->add('/categorias/create','POST','Categorias','create');
+$route->add('/categorias/categoriasByName','GET','Categorias','categoriasByName');
+
 $route->add('/productos/seguimiento','POST','Productos','seguimiento');
 
 
