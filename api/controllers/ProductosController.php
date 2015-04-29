@@ -455,8 +455,8 @@ class ProductosController extends AppController {
 				throw new ForbiddenException('No tiene permiso para visualizar los movimientos de productos'); 
 
 			if(isset($_POST['id'])){
-				$desde = isset($_POST['desde'])?$_POST['desde']:null;
-				$hasta = isset($_POST['hasta'])?$_POST['hasta']:null;
+				$desde = isset($_POST['desde'])?$_POST['desde']:date("Y/m/d");
+				$hasta = isset($_POST['hasta'])?$_POST['hasta']:date("Y/m/d");
 
 				$movimientos = $this->Productos->getMovimientos($_POST['id'], $desde, $hasta, $_POST['page']); 
 				
