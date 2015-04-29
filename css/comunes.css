@@ -3,7 +3,9 @@
 	width: 100%;
 	margin-left:20px;
 }
-
+.form-group {
+  margin-bottom: 9px;
+}
 .form-control{
 	padding: 6px 8px;	
 	font-size: 13px;
@@ -274,4 +276,10 @@
 	margin-right: 15px;
 	margin-top: 5px;
 	cursor: pointer;
+}
+.catDropdown .dropdown-menu{
+	width: 88%;
+}
+.filterGastos .row{
+	margin-left: 13px;
 }

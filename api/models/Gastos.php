@@ -14,11 +14,11 @@ class Gastos extends AppModel {
 	
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 		
-		
-		$sql = "SELECT G.* 
+		$sql = "SELECT G.*, C.nombre as categoria  
 				FROM gastos G 
-				 $conditions
-				 ORDER BY G.created DESC, G.id DESC"; 
+				INNER JOIN categorias C ON G.categorias_id = C.id  
+				$conditions
+				ORDER BY G.created DESC, G.id DESC"; 
 				 				
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
 	   	$query = $query->execute();	
@@ -47,9 +47,7 @@ class Gastos extends AppModel {
 				if(!$this->create($gasto))				
 					throw new BadRequestException('Hubo un error al crear el gasto.');
 					
-				$gasto['id'] = $this->getLastId();
-
-							
+				$gasto['id'] = $this->getLastId();			
 			}else{
 			
 				if(!$this->update($gasto, array('id'=>$gasto['id'])))
