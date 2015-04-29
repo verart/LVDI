@@ -14,16 +14,12 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 
 		$rootScope.$on(AUTH_EVENTS.notAuthorized, function() {
 			console.log('No autorizado');	
-	    	$scope.stop = undefined;
-			//$scope.logout();
-			//return $location.path('/login');
+	    	$scope.logout();
 		});
  		   
 		$rootScope.$on(AUTH_EVENTS.notAuthenticated, function() {
 			console.log('No autenticado');
 			$scope.logout();
-			return $location.path('/login');	
-	    	$scope.stop = undefined;
 		});
 		
 		if($scope.usuario == undefined){

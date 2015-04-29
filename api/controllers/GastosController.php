@@ -11,19 +11,15 @@ class GastosController extends AppController {
 			
 			if (!$this->PermisosComponent->puedeAcceder('gastos', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
-				
-			if(isset($_POST['desde']) && ($_POST['desde'] != '')){
-				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
-					$opciones = array('conditions'=>array('created >'=> $_POST['desde'], 'created<'=>$_POST['hasta']));
-				else{
-					$opciones = array('conditions'=>array('created >'=> $_POST['desde']));
-				}
-			}else
-				if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
-					$opciones = array('conditions'=>array('created<'=>$_POST['hasta']));
-				else
-					$opciones = array(); 
 
+			$opciones = array('conditions'=>array()); 
+				
+			if(isset($_POST['desde']) && ($_POST['desde'] != ''))
+				$opciones['conditions']['created >']= $_POST['desde'];
+			if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
+				$opciones['conditions']['created <']= $_POST['hasta'];
+			if(isset($_POST['categorias_id']) && ($_POST['categorias_id']!= ''))
+				$opciones['conditions']['categorias_id']= $_POST['categorias_id'];
 	
 			$gastos = $this->Gastos->getGastos($opciones); 
 			
@@ -57,7 +53,7 @@ class GastosController extends AppController {
 			$params = (isset($_POST))? $_POST : array();
 	
 			// Campos obligatorios
-			if (!$this->parametrosRequeridosEn(array('created', 'descripcion', 'monto', 'FP'), $params))
+			if (!$this->parametrosRequeridosEn(array('created', 'categoria','monto', 'FP'), $params))
 				throw new BadRequestException('Los datos del gasto están incompletos'); 
 				
 					
@@ -65,6 +61,7 @@ class GastosController extends AppController {
 				'created'=>$params['created'],
 				'descripcion'=>$params['descripcion'],
 				'FP'=>$params['FP'],
+				'categorias_id'=>$params['categoria']['id'],
 				'monto'=>$params['monto']);
 			
 			
@@ -76,6 +73,7 @@ class GastosController extends AppController {
 			
 			// Retorna la info de la venta creada
 			$gasto['id'] = $res['gasto']['id'];
+			$gasto['categoria'] = $params['categoria']['nombre'];
 			echo $this->json('Gasto', $gasto);
 			
 

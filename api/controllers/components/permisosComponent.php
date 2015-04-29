@@ -56,6 +56,7 @@ class PermisosComponent extends AppComponent{
 			    	$this->acceso['ventas']=array('index','show');	
 					$this->acceso['notas']= array('index','create','delete');
 					$this->acceso['gastos']= array('index','create','delete');
+					$this->acceso['categorias']= array('index','create','delete');					
 					$this->acceso['productos']= array('index','seguimiento','productoModelo');
 					$this->edicion['gastos']= array('index','create','delete');
 					$this->edicion['notas']= array('index','create','delete');
