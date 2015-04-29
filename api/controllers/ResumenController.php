@@ -12,20 +12,10 @@ class ResumenController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('resumen', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 				
-			if(isset($_POST['desde']) && ($_POST['desde'] != '')){
-				if(isset($_POST['hasta']) && ($_POST['hasta']!= '')){
-					$opciones = array('conditions'=>array('created >'=> $_POST['desde'], 'created<'=>$_POST['hasta']));
-
-				}else{
-					$opciones = array('conditions'=>array('created >'=> $_POST['desde']));
-				}
-			}else
-				if(isset($_POST['hasta']) && ($_POST['hasta']!= '')){
-					$opciones = array('conditions'=>array('created <'=> $_POST['hasta']));
-				}else
-					$opciones = array(); 
-
-	
+			$opciones = array('conditions'=>array()); 	
+			$opciones['conditions']['created >']= (isset($_POST['desde']) && ($_POST['desde'] != ''))? $_POST['desde']:date("Y/m/d");  
+			$opciones['conditions']['created <']= (isset($_POST['hasta']) && ($_POST['hasta'] != ''))? $_POST['hasta']:date("Y/m/d");  
+			
 			$resumen = $this->Resumen->getResumen($opciones); 
 			echo $this->json('Resumen', $resumen);
 

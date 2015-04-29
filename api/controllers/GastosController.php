@@ -12,12 +12,9 @@ class GastosController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('gastos', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
-			$opciones = array('conditions'=>array()); 
-				
-			if(isset($_POST['desde']) && ($_POST['desde'] != ''))
-				$opciones['conditions']['created >']= $_POST['desde'];
-			if(isset($_POST['hasta']) && ($_POST['hasta']!= ''))
-				$opciones['conditions']['created <']= $_POST['hasta'];
+			$opciones = array('conditions'=>array()); 	
+			$opciones['conditions']['created >']= (isset($_POST['desde']) && ($_POST['desde'] != ''))? $_POST['desde']:date("Y/m/d");  
+			$opciones['conditions']['created <']= (isset($_POST['hasta']) && ($_POST['hasta'] != ''))? $_POST['hasta']:date("Y/m/d");  
 			if(isset($_POST['categorias_id']) && ($_POST['categorias_id']!= ''))
 				$opciones['conditions']['categorias_id']= $_POST['categorias_id'];
 	
