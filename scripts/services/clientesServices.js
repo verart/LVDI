@@ -1,24 +1,15 @@
 
-app.service('clientesService', ['$http','$q','pendingRequests', function ($http,$q,pendingRequests) {
+app.service('clientesService', ['$http', function ($http) {
         return {
         	//CLIENTES ************************************************
             clientes:function(p,f) {
-	            var canceller = $q.defer();
-				pendingRequests.add({
-					url: dir_api + '/clientes/index',
-					canceller: canceller
-				});
-				var promise = $http({
+	            return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/clientes/index',
 	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            promise.finally(function() {
-      				pendingRequests.remove(url);
-    			});
-				return promise; 
-            },
+	        },
             //CLIENTE ****************************************************
             cliente:function(idCl) {
 	            return $http({

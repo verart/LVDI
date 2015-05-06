@@ -1,25 +1,14 @@
-app.service('gastosService', ['$http','$q','pendingRequests', function ($http,$q,pendingRequests) {
+app.service('gastosService', ['$http', function ($http) {
         return {
             gastos:function(d, h, idC) {
-	           var canceller = $q.defer();
-				pendingRequests.add({
-					url: dir_api + '/gastos/index',
-					canceller: canceller
-				});
-				var promise = $http({
+	            return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/gastos/index',
 	            	data: $.param({desde:d,hasta:h, categorias_id:idC}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            promise.finally(function() {
-      				pendingRequests.remove(url);
-    			});
-				return promise;
-            },
-            /******************************
-            ADDGASTO
-            ******************************/
+	        },
+            //ADDGASTO
             addGasto:function (gasto) {
 	            return $http({
 	            	method: 'POST',
@@ -28,9 +17,7 @@ app.service('gastosService', ['$http','$q','pendingRequests', function ($http,$q
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },        
-            /******************************
-            DELETEGASTO
-            ******************************/
+            //DELETEGASTO
             deleteGasto:function (id) {         
 	            return $http({
 	            	method: 'DELETE',
@@ -45,9 +32,7 @@ app.service('gastosService', ['$http','$q','pendingRequests', function ($http,$q
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },      
-            /******************************
-            ADDCATEGORIA
-            ******************************/
+            //ADDCATEGORIA
             addCategoria:function (cat) { 
 	            return $http({
 	            	method: 'POST',
@@ -56,9 +41,7 @@ app.service('gastosService', ['$http','$q','pendingRequests', function ($http,$q
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
             },        
-            /******************************
-            DELETECATEGORIA
-            ******************************/
+            //DELETECATEGORIA
             deleteCategoria:function (id) { 
 	            return $http({
 	            	method: 'DELETE',
@@ -66,9 +49,7 @@ app.service('gastosService', ['$http','$q','pendingRequests', function ($http,$q
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
             },
-            /******************************
-            GETCATEGORIASBYNAME
-            ******************************/
+            //GETCATEGORIASBYNAME
             getCategoriasByName:function(cName) {
 	            return $http({
 	            	method: 'GET',

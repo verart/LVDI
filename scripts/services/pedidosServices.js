@@ -1,30 +1,15 @@
-
-app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($http, $q,pendingRequests) {
-        
+app.service('clientesPMService', ['$http',function ($http) {
         return {
-        	/******************************
-            CLIENTES POR MAYOR
-            ******************************/        
+        	//CLIENTES POR MAYOR **************************************************
             clientes:function(p,f) {
-	            var canceller = $q.defer();
-				pendingRequests.add({
-					url: dir_api + '/clientesPM/index',
-					canceller: canceller
-				});
-				var promise = $http({
+	            return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/clientesPM/index',
 	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            promise.finally(function() {
-      				pendingRequests.remove(url);
-    			});
-				return promise; 
-            },
-            /******************************
-            NOMBRES DE CLIENTES POR MAYOR
-            ******************************/        
+			},
+			//NOMBRES DE CLIENTES POR MAYOR **************************************************
             nombresClientes:function() {
 	            return $http({
 	            	method: 'GET',
@@ -32,9 +17,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            CLIENTE
-            ******************************/        
+            //CLIENTE **************************************************
             cliente:function(idCl) {
 	            return $http({
 	            	method: 'GET',
@@ -42,9 +25,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            ADDCLIENTE
-            ******************************/
+            //ADDCLIENTE **************************************************
             addCliente:function (cliente) {
 	            return $http({
 	            	method: 'POST',
@@ -53,9 +34,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            EDITCLIENTE
-            ******************************/
+            //EDITCLIENTE **************************************************
             editCliente: function(cliente){ 
 	            return $http({
 	            	method: 'PUT',
@@ -64,9 +43,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
             },
-            /******************************
-            DELETECLIENTE
-            ******************************/
+            //DELETECLIENTE **************************************************
             deleteCliente:function (id) { 
 	            return $http({
 	            	method: 'DELETE',
@@ -74,9 +51,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	        },
-            /******************************
-            tienePermiso
-            ******************************/        
+            //tienePermiso **************************************************
             tienePermiso:function(token) {
 	            return $http({
 	            	method: 'GET',
@@ -84,10 +59,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            /******************************
-            ENVIARMAIL
-            ******************************/
+            //ENVIARMAIL **************************************************
             enviarMail: function(mail){ 
 	            return $http({
 	            	method: 'PUT',
@@ -96,9 +68,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
             },
-            /******************************
-            GETCLIENTEBYNAME
-            ******************************/
+            //GETCLIENTEBYNAME **************************************************
             getClienteByName:function(clName) {
 	            return $http({
 	            	method: 'GET',
@@ -106,34 +76,21 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-        
         }
 }])
 
 
-
-
-.service('pedidosService', ['$http','$q','pendingRequests', function ($http,$q,pendingRequests) {
+.service('pedidosService', ['$http', function ($http) {
         return {
             pedidos:function(e,p,f) {
-				pendingRequests.add({
-					url: dir_api + '/pedidos/index',
-					canceller: $q.defer()
-				});
-				var promise = $http({
+				return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/pedidos/index',
 	            	data:  $.param({estado:e,pag:p,filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-				promise.finally(function() {
-      				pendingRequests.remove(url);
-    			});
-				return promise; 
-            },
-            /******************************
-            ADDPEDIDO
-            ******************************/
+			},
+            //ADDPEDIDO **************************************************
             addPedido:function (pedido) {
 	            return $http({
 	            	method: 'POST',
@@ -142,9 +99,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            EDITPEDIDO
-            ******************************/
+            //EDITPEDIDO **************************************************
             editPedido: function(pedido){ 
 	            return $http({
 	            	method: 'PUT',
@@ -153,9 +108,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
             },
-            /******************************
-            DELETEPEDIDO
-            ******************************/
+            //DELETEPEDIDO **************************************************
             deletePedido:function (id) {      
 	            return $http({
 	            	method: 'DELETE',
@@ -163,9 +116,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });    
             }, 
-            /******************************
-            MODELOS DEL PEDIDO
-            ******************************/
+            //MODELOS DEL PEDIDO **************************************************
             modelosPedido:function (id) {        
 	            return $http({
 	            	method: 'GET',
@@ -173,9 +124,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });    
             },
-            /******************************
-            PAGOS DEL PEDIDO
-            ******************************/
+            //PAGOS DEL PEDIDO **************************************************
             pagosPedido:function (id) { 
 	            return $http({
 	            	method: 'GET',
@@ -183,9 +132,7 @@ app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($htt
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });  
             },             
-            /******************************
-            CONFIRMPEDIDO
-            ******************************/
+            //CONFIRMPEDIDO **************************************************
             confirmarPedido:function (p, t) {
 	            return $http({
 	            	method: 'POST',

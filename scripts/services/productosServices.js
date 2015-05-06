@@ -1,23 +1,14 @@
 
-app.service('productosService', ['$http','$q', 'pendingRequests', function ($http, $q,pendingRequests) {
+app.service('productosService', ['$http', function ($http) {
         return {    
             //PRODUCTOS **********************************************************
             productos:function() {
-            	var canceller = $q.defer();
-				pendingRequests.add({
-					url: dir_api + '/productos/index',
-					canceller: canceller
-				});				
-				var promise =  $http({
+            	return  $http({
 	            	method: 'GET',
 	            	url: dir_api + '/productos/index',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-				promise.finally(function() {
-      				pendingRequests.remove(url);
-    			});
-				return promise; 
-            },
+			},
             //ADDPRODUCTO **********************************************************
             addProducto:function (producto) {
 	            return $http({
@@ -132,23 +123,12 @@ app.service('productosService', ['$http','$q', 'pendingRequests', function ($htt
             },    
             //PRODUCTOS EN PRODUCCION **********************************************************
             movimientos:function(mod,d,h,p) {
-	            var canceller = $q.defer();
-				pendingRequests.add({
-					url: dir_api + '/productos/index',
-					canceller: canceller
-				});				
-				var promise = $http({
+	        	return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/productos/seguimiento',	            	
 	            	data: $.param({id:mod, desde:d, hasta:h, page:p}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-				promise.finally(function() {
-      				pendingRequests.remove(url);
-    			});
-				return promise;
             },
         }
 }]);
-
-

@@ -15,7 +15,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 	    $scope.alerts = [ ];
 
 	    
-	    	    
+	   	$(window).unbind('scroll');
 	    /**********************************************************************
 	     Recupera en data los productos
 	    **********************************************************************/
