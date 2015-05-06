@@ -1,16 +1,26 @@
 
-app.service('clientesPMService', ['$http', function ($http) {
+app.service('clientesPMService', ['$http','$q', 'pendingRequests',function ($http, $q,pendingRequests) {
+        
         return {
         	/******************************
             CLIENTES POR MAYOR
             ******************************/        
             clientes:function(p,f) {
-	            return $http({
+	            var canceller = $q.defer();
+				pendingRequests.add({
+					url: dir_api + '/clientesPM/index',
+					canceller: canceller
+				});
+				var promise = $http({
 	            	method: 'POST',
 	            	url: dir_api + '/clientesPM/index',
 	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
+	            });
+	            promise.finally(function() {
+      				pendingRequests.remove(url);
+    			});
+				return promise; 
             },
             /******************************
             NOMBRES DE CLIENTES POR MAYOR
@@ -103,15 +113,25 @@ app.service('clientesPMService', ['$http', function ($http) {
 
 
 
-.service('pedidosService', ['$http', function ($http) {
+.service('pedidosService', ['$http','$q','pendingRequests', function ($http,$q,pendingRequests) {
         return {
             pedidos:function(e,p,f) {
-	            return $http({
+
+				var canceller = $q.defer();
+				pendingRequests.add({
+					url: dir_api + '/pedidos/index',
+					canceller: canceller
+				});
+				var promise = $http({
 	            	method: 'POST',
 	            	url: dir_api + '/pedidos/index',
 	            	data:  $.param({estado:e,pag:p,filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
+	            });
+				promise.finally(function() {
+      				pendingRequests.remove(url);
+    			});
+				return promise; 
             },
             /******************************
             ADDPEDIDO

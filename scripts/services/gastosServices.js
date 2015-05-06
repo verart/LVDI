@@ -1,12 +1,21 @@
-app.service('gastosService', ['$http', function ($http) {
+app.service('gastosService', ['$http','$q','pendingRequests', function ($http,$q,pendingRequests) {
         return {
             gastos:function(d, h, idC) {
-	           return $http({
+	           var canceller = $q.defer();
+				pendingRequests.add({
+					url: dir_api + '/gastos/index',
+					canceller: canceller
+				});
+				var promise = $http({
 	            	method: 'POST',
 	            	url: dir_api + '/gastos/index',
 	            	data: $.param({desde:d,hasta:h, categorias_id:idC}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
+	            });
+	            promise.finally(function() {
+      				pendingRequests.remove(url);
+    			});
+				return promise;
             },
             /******************************
             ADDGASTO

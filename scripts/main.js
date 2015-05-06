@@ -10,7 +10,6 @@ app.constant('AUTH_EVENTS', {
   notAuthorized: 'auth-not-authorized'
 });
 
-
 app.constant('USER_ROLES', {
   all: '*',
   admin: 'admin',
@@ -19,15 +18,9 @@ app.constant('USER_ROLES', {
   cuentas: 'cuentas'
 });
 
-
-
 app.run(function(editableOptions) {
   editableOptions.theme = 'bs3';
 });
-
-
-
-
 
 app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthService) {
 
@@ -71,20 +64,13 @@ app.run(function(){
     });
 });
 
-
-
-
 function formatLocalDate() {
-
-			    var now = new Date(),
-			        tzo = -now.getTimezoneOffset(),
-			        dif = tzo >= 0 ? '+' : '-',
-			        pad = function(num) {
-			            norm = Math.abs(Math.floor(num));
-			            return (norm < 10 ? '0' : '') + norm;
-			        };
-			        
-			    return now.getFullYear() 
-			        + '-' + pad(now.getMonth()+1)
-			        + '-' + pad(now.getDate());
+  var now = new Date(),
+	tzo = -now.getTimezoneOffset(),
+	dif = tzo >= 0 ? '+' : '-',
+	pad = function(num) {
+    norm = Math.abs(Math.floor(num));
+    return (norm < 10 ? '0' : '') + norm;
+  };
+	return now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
 };
