@@ -1,9 +1,6 @@
 <div class="container-fluid">
-
 	<div class="row-fluid">
-	
 		<div class="h2 titleh2"> Resumen </div>
-
 		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-2 sidebar">
 			<form class="navbar-form navbar-left" role="search">
@@ -31,13 +28,11 @@
 		</div>
 
 
-
 		<!-- BODY-->
 		<div class="col-xs-12 col-md-10 ">
 			<div class="tableContainer" style="display:flex" >
 				<div class="col-xs-12 col-md-7 colDetalle">
 					<p class="h3"> Ingresos</p>
-
 					<div>
 						<div class="title2Resumen title2ResumenIngresos">
 							<div class="col-md-7">Ventas</div>
@@ -78,10 +73,8 @@
 							
 							<ng-resumenfp content="collapsetransfFede" seccion="Transf. F" total={{resumenPorMayor.transfFede.total}} pagos="resumenPorMayor.transfFede.pagos"></ng-resumenfp>
 						</div>
-
 				 	</div>
 					&nbsp;
-
 				</div>
 
 				<div class="col-xs-12 col-md-5 colGastos">
@@ -111,13 +104,11 @@
 						<div class="col-md-4 totales">{{resumenGastos.transferencia | currency }}</div>
 					</div>
 				</div>
+			</div>
 
-				<div class="loading-spiner-holder" data-loading >
-					<div class="loading-spiner"><img src="img/loading.gif" /></div>
-				</div>
-
-
+			<div class="loading-spiner-holder" data-loading >
+				<div class="loading-spiner"><img src="img/loading.gif" /></div>
+			</div>
 		</div>
-
 	</div>
 </div>
