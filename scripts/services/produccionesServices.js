@@ -1,23 +1,16 @@
 
 app.service('responsablesService', ['$http', function ($http) {
         return {
-        
-        	/******************************
-			RESPONSABLES
-			******************************/        
-            responsables:function(p,f){
-	            return $http({
+        	//RESPONSABLES
+			responsables:function(p,f){
+            	return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/responsables/index',
 	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-            },
-
-            
-            /******************************
-            ADDRES
-            ******************************/
+	            });
+			},
+			//ADDRES
             addRes:function (res) {
 	            return $http({
 	            	method: 'POST',
@@ -26,40 +19,24 @@ app.service('responsablesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
-            /******************************
-            EDITRES
-            ******************************/
+            //EDITRES
             editRes: function(res){ 
-	            
 	            return $http({
 	            	method: 'PUT',
 	            	url: dir_api + '/responsables/update',
 	            	data: $.param(res),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
-            },
-             
-             
-                   
-            /******************************
-            DELETERES
-            ******************************/
+	        },      
+            //DELETERES
             deleteRes:function (id) { 
-	                    
 	            return $http({
 	            	method: 'DELETE',
 	            	url: dir_api + '/responsables/'+id+'/delete',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
-            },
-            
-            /******************************
-            NOMBRES DE RESPONSABLES
-            ******************************/        
+	        },
+            //NOMBRES DE RESPONSABLES
             nombresResponsables:function() {
 	            return $http({
 	            	method: 'GET',
@@ -67,9 +44,7 @@ app.service('responsablesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            GETCLIENTEBYNAME
-            ******************************/
+            //GETCLIENTEBYNAME
             getResponsableByName:function(respName) {
 	            return $http({
 	            	method: 'GET',
@@ -77,30 +52,20 @@ app.service('responsablesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             }
-            
         }
 }])
-
-
-
-
-
 
 .service('produccionesService', ['$http', function ($http) {
         return {
             producciones:function(e,p,f) {
-	           return $http({
+            	return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/producciones/index',
 	            	data: $.param({estado:e, pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-            },
-            
-            
-            /******************************
-            ADDPRODUCCION
-            ******************************/
+			},
+            //ADDPRODUCCION
             addProduccion:function (prod) {
 	            return $http({
 	            	method: 'POST',
@@ -109,50 +74,30 @@ app.service('responsablesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-             
-            /******************************
-            EDITPRODUCCION
-            ******************************/
+            //EDITPRODUCCION
             editProduccion: function(prod){ 
-	            
 	            return $http({
 	            	method: 'PUT',
 	            	url: dir_api + '/producciones/update',
 	            	data: $.param(prod),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
-            },
-            
-            
-                        
-            /******************************
-            DELETEPRODUCCION
-            ******************************/
+	        },
+            //DELETEPRODUCCION
             deleteProduccion:function (id) { 
-	                    
 	            return $http({
 	            	method: 'DELETE',
 	            	url: dir_api + '/producciones/'+id+'/delete',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
-            },
-            
-            /******************************
-            MODELOS DEL PRODUCCION
-            ******************************/
+	        },
+            //MODELOS DEL PRODUCCION
             modelosProduccion:function (id) { 
-	                    
 	            return $http({
 	            	method: 'GET',
 	            	url: dir_api + '/producciones/'+id+'/modelos',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
-            }
-            
-            
+	        }
         }
 }])

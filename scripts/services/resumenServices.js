@@ -6,9 +6,8 @@ app.service('resumenService', ['$http', function ($http) {
 	            url: dir_api + '/resumen/index',
 	            data: $.param({desde:d,hasta:h}),
 	            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-			})
-        },
-
+			});
+	    },
 		detalle:function(d, h, fp) {
 			return $http({
 				method: 'POST',

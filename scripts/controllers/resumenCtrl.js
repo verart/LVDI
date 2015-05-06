@@ -18,7 +18,7 @@ app.controller('resumenCtrl', ['$scope','$modal', 'resumenService', 'AlertServic
 	    $scope.desde = fechaHoy;
 	    $scope.hasta = fechaHoy;
 	    
-	    
+	    $(window).unbind('scroll');
 	    /*****************************************************************************************************
 	    CARGAR     
 	    *****************************************************************************************************/    	    

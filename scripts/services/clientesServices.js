@@ -1,10 +1,7 @@
 
 app.service('clientesService', ['$http', function ($http) {
         return {
-        
-        	/******************************
-            CLIENTES
-            ******************************/        
+        	//CLIENTES ************************************************
             clientes:function(p,f) {
 	            return $http({
 	            	method: 'POST',
@@ -12,12 +9,8 @@ app.service('clientesService', ['$http', function ($http) {
 	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-            },
-            
-            
-            /******************************
-            CLIENTE
-            ******************************/        
+	        },
+            //CLIENTE ****************************************************
             cliente:function(idCl) {
 	            return $http({
 	            	method: 'GET',
@@ -25,11 +18,7 @@ app.service('clientesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
-            /******************************
-            ADDCLIENTE
-            ******************************/
+            //ADDCLIENTE ****************************************************
             addCliente:function (cliente) {
 	            return $http({
 	            	method: 'POST',
@@ -38,28 +27,17 @@ app.service('clientesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
-            /******************************
-            EDITCLIENTE
-            ******************************/
+            //EDITCLIENTE ****************************************************
             editCliente: function(cliente){ 
-	            
 	            return $http({
 	            	method: 'PUT',
 	            	url: dir_api + '/clientes/update',
 	            	data: $.param(cliente),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
             },
-            
-            
-            /******************************
-            DELETECLIENTE
-            ******************************/
+            //DELETECLIENTE ****************************************************
             deleteCliente:function (id) { 
-	                    
 	            return $http({
 	            	method: 'DELETE',
 	            	url: dir_api + '/clientes/'+id+'/delete',
@@ -67,11 +45,7 @@ app.service('clientesService', ['$http', function ($http) {
 	            });
 	            
             },
-            
-            
-            /******************************
-            GETMAILS
-            ******************************/        
+            //GETMAILS ****************************************************
             getMails:function() {
 	            return $http({
 	            	method: 'GET',
@@ -79,11 +53,7 @@ app.service('clientesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-            
-            /******************************
-            LIST
-            ******************************/        
+            //LIST ****************************************************
             list: function(term) {
 	        var request  = dir_api + '/clientes/'+term+'/list';;
 	        return $http.get(request).then(function(response) {
@@ -94,6 +64,5 @@ app.service('clientesService', ['$http', function ($http) {
 	            return _list;
 	          });
 	      	}
-            
         }
 }]);

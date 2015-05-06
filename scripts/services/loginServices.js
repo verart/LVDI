@@ -1,10 +1,8 @@
 
-app.factory('AuthService', function ($http, Session,AlertService) {
+app.factory('AuthService', function ($http, Session, AlertService) {
   return {
-    
     login: function (credentials) {
-      
-      return $http({
+	  	return $http({
 	                method: 'POST', 
 	                url: dir_api + '/sesion',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
@@ -41,7 +39,6 @@ app.factory('AuthService', function ($http, Session,AlertService) {
     	var isAutho =  (authorizedRoles.indexOf(Session.getUserRole())!= -1);
     	return isAuthe && isAutho;
     }
-
   };
 })
 
@@ -49,7 +46,6 @@ app.factory('AuthService', function ($http, Session,AlertService) {
 
 
 .service('Session', function (AlertService, $rootScope) {
-	
 	this.create = function (userId, userName, userRole) {
 		if(typeof(Storage)!=="undefined"){
 		  	localStorage.userId = userId;
@@ -58,35 +54,28 @@ app.factory('AuthService', function ($http, Session,AlertService) {
 		}else
 		  	AlertService.add('danger', "El navegador no soporta sessionStorage", 5000);	  
 	};
-	  
-	  this.destroy = function () {
+	this.destroy = function () {
 		  localStorage.userId = null;
 		  localStorage.userName = null;
 		  localStorage.userRole = null;
-		  
-	  };
-	  
-	   
-	  this.getUserName= function(){
+	};
+	this.getUserName= function(){
 	  	var name = (localStorage.userName != 'null')?localStorage.userName:''; 
 		  return name;
-	  };
-	  
-	  this.getUserId= function(){
+	};
+	this.getUserId= function(){
 		  return localStorage.userId;
-	  };
-	  this.getUserRole= function(){
+	};
+	this.getUserRole= function(){
 		  return localStorage.userRole;
-	  };
-	  
-	  return this;
+	};
+	return this;
 	 
 })
 
 
 
 .factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
-
   return {
   	responseError: function (response) {
       if (response.status === 401) {
@@ -101,15 +90,4 @@ app.factory('AuthService', function ($http, Session,AlertService) {
       return $q.reject(response);
     }
   };
-})
-
-
-
-
-
-
-
-
-
-
-
+});

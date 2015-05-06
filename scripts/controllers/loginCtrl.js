@@ -3,7 +3,7 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 	function ($scope, $rootScope, USER_ROLES,AUTH_EVENTS,AuthService,Session,$location,$interval) {
 
 		$scope.usuario = Session;
-		
+
 		$scope.stop = $interval(function() {
             var myelement = document.getElementById('logo'); 
             myelement.src = 'img/LVDI_s.png?rand=' + Math.random();
@@ -29,35 +29,26 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 	
 		$scope.logout = function() {
 			Session.destroy();
-			AuthService.logout();
-	    	$location.path('/login');	
+			AuthService.logout();	
 	    	$scope.stop = undefined;
+	    	$location.path('/login');
 		}
 		
 		$scope.refreshActiveTab = function(id){
 			$rootScope.activeTab = id;
 		};
-	
 }])
-
-
 
 
 app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS', 'AuthService','Session', 
 
 	function ($scope, $rootScope, $location, AUTH_EVENTS, AuthService, Session) {
-  
-		  
 		  $scope.credentials = {
 		    usuario: '',
 		    clave: '',
 		    aviso: ''
 		  };
-  
-  
-  
 		  $scope.login = function (credentials) {
-	    
 		    AuthService.login(credentials).then(
 		    //success
 		    	function() {
@@ -69,15 +60,12 @@ app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS',
 			    		$location.path('/productos');
 			    		$rootScope.activeTab ='productos';
 			    	}
-			    	
 			    }, 
 			    
 			    function (error) {
 				    $rootScope.$broadcast(AUTH_EVENTS.loginFailed);
 				    $scope.aviso = error.data.MSG;
 				    $location.path('/login')
-				});
-		    
+				});		    
 		  };
-	  
 }]);

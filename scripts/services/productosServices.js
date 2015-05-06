@@ -1,20 +1,15 @@
 
 app.service('productosService', ['$http', function ($http) {
-        return {
-            
-            /******************************
-            PRODUCTOS
-            ******************************/
+        return {    
+            //PRODUCTOS **********************************************************
             productos:function() {
-	            return $http({
+            	return  $http({
 	            	method: 'GET',
 	            	url: dir_api + '/productos/index',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-            },
-            /******************************
-            ADDPRODUCTO
-            ******************************/
+	            });
+			},
+            //ADDPRODUCTO **********************************************************
             addProducto:function (producto) {
 	            return $http({
 	            	method: 'POST',
@@ -23,9 +18,7 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },            
-            /******************************
-            GETPRODUCTO
-            ******************************/
+            //GETPRODUCTO **********************************************************
             getProducto:function(idProd) {
 	            return $http({
 	            	method: 'GET',
@@ -33,9 +26,7 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            GETPRODUCTOMODELO
-            ******************************/
+            //GETPRODUCTOMODELO **********************************************************
             getProductoModelo:function(idMod) {
 	            return $http({
 	            	method: 'GET',
@@ -43,9 +34,7 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            GETPRODUCTOMODELOBYNAME
-            ******************************/
+            //GETPRODUCTOMODELOBYNAME **********************************************************
             getProductoModeloByName:function(modName) {
 	            return $http({
 	            	method: 'GET',
@@ -53,9 +42,7 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            EDITPRODUCTO
-            ******************************/
+            //EDITPRODUCTO **********************************************************
             editProducto: function(producto){ 
 	            return $http({
 	            	method: 'PUT',
@@ -63,11 +50,8 @@ app.service('productosService', ['$http', function ($http) {
 	            	data: $.param(producto),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
-            },
-            /******************************
-            DELETEPRODUCTO
-            ******************************/
+	        },
+            //DELETEPRODUCTO **********************************************************
             deleteProducto:function (id) {        
 	            return $http({
 	            	method: 'DELETE',
@@ -75,9 +59,7 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });    
             },
-            /******************************
-            REPONERPRODUCTO
-            ******************************/
+            //REPONERPRODUCTO **********************************************************
             reponerProducto: function(idMod){ 
 	            $http({
 	            	method: 'POST',
@@ -88,9 +70,7 @@ app.service('productosService', ['$http', function ($http) {
 	            .success(function(data) {return true;} )
 	            .error(function(data, status) {return false;} )        
             }, 
-            /******************************
-            PRODUCTOS EN PRODUCCION
-            ******************************/  
+            //PRODUCTOS EN PRODUCCION **********************************************************
             nombresProductos:function(enProd) {
 	            return $http({
 	            	method: 'GET',
@@ -99,9 +79,7 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            PRODUCTOS EN PRODUCCION CON STOCK > 0
-            ******************************/
+            //PRODUCTOS EN PRODUCCION CON STOCK > 0 **********************************************************
             nombresProductosDisponibles:function() {
 	            return $http({
 	            	method: 'GET',
@@ -109,9 +87,7 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            PRODUCTOSPEDIDOS
-            ******************************/
+            //PRODUCTOSPEDIDOS **********************************************************
             prodsPedido:function(token) {
 	            return $http({
 	            	method: 'GET',
@@ -127,9 +103,7 @@ app.service('productosService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            HABILITARPRODUCTO
-            ******************************/
+            //HABILITARPRODUCTO **********************************************************
             habilitarProducto: function(idP, h){ 
 	            return $http({
 	            	method: 'POST',
@@ -138,9 +112,7 @@ app.service('productosService', ['$http', function ($http) {
 	            	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            }); 
             }, 
-            /******************************
-            HABILITARMODELO
-            ******************************/
+            //HABILITARMODELO **********************************************************
             habilitarModelo: function(idM, h){ 
 	            return $http({
 	            	method: 'POST',
@@ -149,17 +121,15 @@ app.service('productosService', ['$http', function ($http) {
 	            	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });       
             },    
-            /******************************
-            PRODUCTOS EN PRODUCCION
-            ******************************/  
+            //PRODUCTOS EN PRODUCCION **********************************************************
             movimientos:function(mod,d,h,p) {
-	            return $http({
+	        	return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/productos/seguimiento',	            	
 	            	data: $.param({id:mod, desde:d, hasta:h, page:p}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-            },
+	            });
+			},
         }
 }]);
 

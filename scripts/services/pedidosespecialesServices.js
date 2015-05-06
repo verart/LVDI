@@ -6,9 +6,8 @@ app.service('pedidosespecialesService', ['$http', function ($http) {
 	            	url: dir_api + '/pedidosespeciales/index',
 	            	data:  $.param({estado:e,pag:p,filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-            },
-            
+	            });
+			},
             /******************************
             ADDPEDIDO
             ******************************/
@@ -20,8 +19,6 @@ app.service('pedidosespecialesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            
-             
             /******************************
             EDITPEDIDO
             ******************************/
@@ -35,40 +32,26 @@ app.service('pedidosespecialesService', ['$http', function ($http) {
 	            });
 	            
             },
-            
-            
-                        
             /******************************
             DELETEPEDIDO
             ******************************/
             deletePedido:function (id) { 
-	                    
 	            return $http({
 	            	method: 'DELETE',
 	            	url: dir_api + '/pedidosespeciales/'+id+'/delete',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
             }, 
-            
-
-            
-            
             /******************************
             PAGOS DEL PEDIDO
             ******************************/
             pagosPedido:function (id) { 
-	                    
 	            return $http({
 	            	method: 'GET',
 	            	url: dir_api + '/pedidosespeciales/'+id+'/pagos',
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
             }
-            
-            
-           
         }
 }]);
 

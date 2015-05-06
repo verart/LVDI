@@ -6,8 +6,8 @@ app.service('gastosService', ['$http', function ($http) {
 	            	url: dir_api + '/gastos/index',
 	            	data: $.param({desde:d,hasta:h, categorias_id:idC}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	            })
-            },
+	            });
+	        },
             /******************************
             ADDGASTO
             ******************************/
