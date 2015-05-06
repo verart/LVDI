@@ -1,9 +1,9 @@
-app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUTH_EVENTS','AuthService','Session','$location','$interval',
+app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUTH_EVENTS','AuthService','Session','$location','$interval','pendingRequests',
 	
-	function ($scope, $rootScope, USER_ROLES,AUTH_EVENTS,AuthService,Session,$location,$interval) {
+	function ($scope, $rootScope, USER_ROLES,AUTH_EVENTS,AuthService,Session,$location,$interval,pendingRequests) {
 
 		$scope.usuario = Session;
-		
+
 		$scope.stop = $interval(function() {
             var myelement = document.getElementById('logo'); 
             myelement.src = 'img/LVDI_s.png?rand=' + Math.random();
@@ -28,6 +28,7 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 		}
 	
 		$scope.logout = function() {
+			pendingRequests.cancelAll();
 			Session.destroy();
 			AuthService.logout();
 	    	$location.path('/login');	
@@ -37,10 +38,16 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 		$scope.refreshActiveTab = function(id){
 			$rootScope.activeTab = id;
 		};
+
+
+		$scope.requests = [];
+		$scope.$watch(function() {
+			return pendingRequests.get();
+		}, function(pending) {
+			$scope.requests = pending;
+		})
 	
 }])
-
-
 
 
 app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS', 'AuthService','Session', 
