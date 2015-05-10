@@ -1,6 +1,4 @@
-
 app.service('clientesPMService', ['$http',function ($http) {
-        
         return {
         	//CLIENTES POR MAYOR **************************************************
             clientes:function(p,f) {
@@ -10,8 +8,8 @@ app.service('clientesPMService', ['$http',function ($http) {
 	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	        },
-            //NOMBRES DE CLIENTES POR MAYOR **************************************************
+			},
+			//NOMBRES DE CLIENTES POR MAYOR **************************************************
             nombresClientes:function() {
 	            return $http({
 	            	method: 'GET',

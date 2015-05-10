@@ -129,8 +129,6 @@ app.service('productosService', ['$http', function ($http) {
 	            	data: $.param({id:mod, desde:d, hasta:h, page:p}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-			},
+            },
         }
 }]);
-
-

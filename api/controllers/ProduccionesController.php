@@ -16,7 +16,7 @@ class ProduccionesController extends AppController {
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
 			
-			$opciones = array('page'=>$_POST['pag'],'pageSize'=>15);
+			$opciones = array('page'=>$_POST['pag'],'pageSize'=>20);
 			
 			if(isset($_POST['filter']) && ($_POST['filter']!= ''))
 				$opciones['conditions'] = array('LIKE' => array('nombre'=>$_POST['filter']));

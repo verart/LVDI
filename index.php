@@ -9,8 +9,6 @@
 
 
 	<div ng-include ng-if="(activeTab != 'login')" src="'templates/navbar.html'"></div>
-	      
-	<div ng-view > </div>
 	
 	 <!-- Agregamos primero jQuery antes que angular es una buena practica -->
 	<script type="text/javascript" src="lib/javascript/jquery.js"></script>
@@ -87,6 +85,9 @@
     <link rel="stylesheet" href='css/ventas.css' type="text/css" />
     <link rel="stylesheet" href='css/impresion.css' type="text/css" />
 
-	
+		      
+	<div ng-view > </div>
+
+
 </body>
 </html>

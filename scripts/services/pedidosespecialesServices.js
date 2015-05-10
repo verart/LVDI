@@ -8,9 +8,7 @@ app.service('pedidosespecialesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 			},
-            /******************************
-            ADDPEDIDO
-            ******************************/
+            //ADDPEDIDO
             addPedido:function (pedido) {
 	            return $http({
 	            	method: 'POST',
@@ -19,22 +17,16 @@ app.service('pedidosespecialesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            EDITPEDIDO
-            ******************************/
-            editPedido: function(pedido){ 
-	            
+            //EDITPEDIDO
+            editPedido: function(pedido){         
 	            return $http({
 	            	method: 'PUT',
 	            	url: dir_api + '/pedidosespeciales/update',
 	            	data: $.param(pedido),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-	            
-            },
-            /******************************
-            DELETEPEDIDO
-            ******************************/
+	        },
+            //DELETEPEDIDO
             deletePedido:function (id) { 
 	            return $http({
 	            	method: 'DELETE',
@@ -42,9 +34,7 @@ app.service('pedidosespecialesService', ['$http', function ($http) {
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
             }, 
-            /******************************
-            PAGOS DEL PEDIDO
-            ******************************/
+            //PAGOS DEL PEDIDO
             pagosPedido:function (id) { 
 	            return $http({
 	            	method: 'GET',

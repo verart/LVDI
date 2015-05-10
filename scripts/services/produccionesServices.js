@@ -9,7 +9,7 @@ app.service('responsablesService', ['$http', function ($http) {
 	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-			},
+            },
 			//ADDRES
             addRes:function (res) {
 	            return $http({
@@ -64,7 +64,7 @@ app.service('responsablesService', ['$http', function ($http) {
 	            	data: $.param({estado:e, pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-			},
+            },
             //ADDPRODUCCION
             addProduccion:function (prod) {
 	            return $http({

@@ -3,15 +3,15 @@ app.factory('AuthService', function ($http, Session, AlertService) {
   return {
     login: function (credentials) {
 	  	return $http({
-	                method: 'POST', 
-	                url: dir_api + '/sesion',
-	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-	                data: $.param(credentials),
-	          }).then(
-		          function (res) { 
-		          	Session.create(res.data.DATA.id, res.data.DATA.nombre, res.data.DATA.perfil); 
-		          }
-		      );
+				method: 'POST', 
+	        	url: dir_api + '/sesion',
+	        	headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+	        	data: $.param(credentials),
+	    	}).then(
+		        function (res) { 
+		        	Session.create(res.data.DATA.id, res.data.DATA.nombre, res.data.DATA.perfil); 
+		        }
+		    );
     },
 
     logout: function () {   
