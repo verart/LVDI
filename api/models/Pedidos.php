@@ -17,7 +17,7 @@ class Pedidos extends AppModel {
 	function getPedidos($opciones = array(), $requested_page = 1) {
 	
 		
-	 	$set_limit = " LIMIT ".(($requested_page - 1) * 15) . ",15"; 
+	 	$set_limit = " LIMIT ".(($requested_page - 1) * 20) . ",20"; 
 
 		$conditions = (isset($opciones['conditions']))? $this->_buildConditions($opciones['conditions']): "";	
 				
