@@ -58,7 +58,6 @@ app.controller('produccionesCtrl',
 					function(error){ 
 	    				$scope.pending = false;
 						AlertService.add('danger', error.data.MSG);
-						$location.path('/login');
 					}
 				);
 			}	
@@ -272,21 +271,14 @@ app.controller('produccionesCtrl',
 	    /*****************************************************************************************************
 	     INFINITE SCROLL	    
 	    *****************************************************************************************************/
-	    if ($('#infinite-scrolling').size() > 0) {
-	    
+	    if ($('#infinite-scrolling').size() > 0) {	    
 			$(window).on('scroll', function() {
-
 				if (($(window).scrollTop() > $(document).height() - $(window).height() - 60) & !$scope.parar & !$scope.pending ) {		     	
 			  		$scope.cargarProducciones();
 		    	}
 		  	});
 		  	return;
 		};
-	    
-	    	    
-		
-		
-    
 }]);
 
 

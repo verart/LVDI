@@ -1,29 +1,16 @@
 
-app.service('responsablesService', ['$http','$q','pendingRequests', function ($http,$q,pendingRequests) {
+app.service('responsablesService', ['$http', function ($http) {
         return {
-        	/******************************
-			RESPONSABLES
-			******************************/        
-            responsables:function(p,f){
-            	var canceller = $q.defer();
-				pendingRequests.add({
-					url: dir_api + '/responsables/index',
-					canceller: canceller
-				});
-	            var promise = $http({
+        	//RESPONSABLES
+			responsables:function(p,f){
+            	return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/responsables/index',
 	            	data: $.param({pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
-				promise.finally(function() {
-      				pendingRequests.remove(url);
-    			});
-	            return promise;
             },
-			/******************************
-            ADDRES
-            ******************************/
+			//ADDRES
             addRes:function (res) {
 	            return $http({
 	            	method: 'POST',
@@ -32,9 +19,7 @@ app.service('responsablesService', ['$http','$q','pendingRequests', function ($h
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            EDITRES
-            ******************************/
+            //EDITRES
             editRes: function(res){ 
 	            return $http({
 	            	method: 'PUT',
@@ -43,9 +28,7 @@ app.service('responsablesService', ['$http','$q','pendingRequests', function ($h
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	        },      
-            /******************************
-            DELETERES
-            ******************************/
+            //DELETERES
             deleteRes:function (id) { 
 	            return $http({
 	            	method: 'DELETE',
@@ -53,9 +36,7 @@ app.service('responsablesService', ['$http','$q','pendingRequests', function ($h
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	        },
-            /******************************
-            NOMBRES DE RESPONSABLES
-            ******************************/        
+            //NOMBRES DE RESPONSABLES
             nombresResponsables:function() {
 	            return $http({
 	            	method: 'GET',
@@ -63,9 +44,7 @@ app.service('responsablesService', ['$http','$q','pendingRequests', function ($h
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            GETCLIENTEBYNAME
-            ******************************/
+            //GETCLIENTEBYNAME
             getResponsableByName:function(respName) {
 	            return $http({
 	            	method: 'GET',
@@ -76,28 +55,17 @@ app.service('responsablesService', ['$http','$q','pendingRequests', function ($h
         }
 }])
 
-.service('produccionesService', ['$http','$q','pendingRequests', function ($http,$q,pendingRequests) {
+.service('produccionesService', ['$http', function ($http) {
         return {
             producciones:function(e,p,f) {
-            	var canceller = $q.defer();
-				pendingRequests.add({
-					url:  dir_api + '/producciones/index',
-					canceller: canceller
-				});				
-	            var promise = $http({
+            	return $http({
 	            	method: 'POST',
 	            	url: dir_api + '/producciones/index',
 	            	data: $.param({estado:e, pag:p, filter:f}),
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
-				promise.finally(function() {
-      				pendingRequests.remove(url);
-    			});
-    			return promise;
             },
-            /******************************
-            ADDPRODUCCION
-            ******************************/
+            //ADDPRODUCCION
             addProduccion:function (prod) {
 	            return $http({
 	            	method: 'POST',
@@ -106,9 +74,7 @@ app.service('responsablesService', ['$http','$q','pendingRequests', function ($h
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            })
             },
-            /******************************
-            EDITPRODUCCION
-            ******************************/
+            //EDITPRODUCCION
             editProduccion: function(prod){ 
 	            return $http({
 	            	method: 'PUT',
@@ -117,9 +83,7 @@ app.service('responsablesService', ['$http','$q','pendingRequests', function ($h
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	        },
-            /******************************
-            DELETEPRODUCCION
-            ******************************/
+            //DELETEPRODUCCION
             deleteProduccion:function (id) { 
 	            return $http({
 	            	method: 'DELETE',
@@ -127,9 +91,7 @@ app.service('responsablesService', ['$http','$q','pendingRequests', function ($h
 	                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
 	            });
 	        },
-            /******************************
-            MODELOS DEL PRODUCCION
-            ******************************/
+            //MODELOS DEL PRODUCCION
             modelosProduccion:function (id) { 
 	            return $http({
 	            	method: 'GET',
