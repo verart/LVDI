@@ -40,6 +40,7 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 }])
 
 
+
 app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS', 'AuthService','Session', 
 
 	function ($scope, $rootScope, $location, AUTH_EVENTS, AuthService, Session) {

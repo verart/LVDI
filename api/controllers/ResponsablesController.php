@@ -12,7 +12,7 @@ class ResponsablesController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('responsables', 'index'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 			
-			$opciones = array('order'=>'nombre ASC','page'=>$_POST['pag'],'pageSize'=>10);
+			$opciones = array('order'=>'nombre ASC','page'=>$_POST['pag'],'pageSize'=>20);
 			$responsables = $this->Responsables->getResponsables($opciones);
 			echo $this->json('Responsables', $responsables);
 

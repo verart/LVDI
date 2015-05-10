@@ -25,9 +25,7 @@ app.controller('produccionesCtrl',
 	    $scope.query = '';
 	    $scope.filterSubmitted = '';
 
-	    /*****************************************************************************************************
-	     PRODUCCIONES     
-	    *****************************************************************************************************/
+	    //PRODUCCIONES     
 	    $scope.page = 0;            
 	    $scope.data = [];
 	    $scope.parar = false;
