@@ -10,8 +10,8 @@ include_once('lib/Common.php');
 
 if (ENTORNO == 'DESARROLLO'){	
 	ini_set('display_errors', 'On');
-	error_reporting(E_ERROR | E_WARNING | E_PARSE);
-	error_reporting(E_ALL);
+	//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+	error_reporting(E_ALL ^ E_STRICT );
 }else
 	error_reporting('E_NONE');
 

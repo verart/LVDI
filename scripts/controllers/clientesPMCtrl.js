@@ -303,7 +303,7 @@ app.controller('ModalClientesPMInstanceCtrl', [ '$scope', '$modalInstance',  '$f
  ModalMailCtrl
  Controller del modal para enviar mail
 **************************************************************************************************************************/
-app.controller('ModalMailCtrl'['$scope', '$modalInstance', 'AlertService', 'clientePM',
+app.controller('ModalMailCtrl', ['$scope', '$modalInstance', 'AlertService', 'clientePM',
 
 	function ($scope, $modalInstance, AlertService, clientePM) {
 			  
