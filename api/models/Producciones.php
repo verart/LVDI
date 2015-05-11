@@ -34,7 +34,7 @@ class Producciones extends AppModel {
 		//Proceso los pedidos 
 		while($iF < count($results)){ 
 			$results[$iF]['responsable'] = utf8_encode($results[$iF]['responsable']);
-			
+			$results[$iF]['motivo'] = utf8_encode($results[$iF]['motivo']);
 			$iF++;
 		}	
 		
