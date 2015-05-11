@@ -1,91 +1,65 @@
 <div class="container-fluid" >
-
 	<div class="h4 seccionTitle noTab"> Producciones </div>	
-	
-	
 	<!-- PRODUCCIONES	 -->
 	<div ng-init="filtrarProducciones()" class="row-fluid">
-			
-				<!-- SIDEBAR-->			
-				<div class=" col-xs-12 col-md-3 sidebar">
-					<form class="navbar-form navbar-left" role="search">
-						<div class="form-group">
-							
-							
-							<input type="text" class="form-control small filterInput" 
+		<!-- SIDEBAR-->			
+		<div class=" col-xs-12 col-md-3 sidebar">
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input type="text" class="form-control small filterInput" 
 							ng-model="query" id='inputSearch' 
 							placeholder="Filtro de producciones" ng-enter="filtrarProducciones()">
-							
-							<div class="formElement">
-							
-								<label class="control-label">Mostrar</label>
-								
-								<div class="controls opciones">
-									<label class="radio small">
-										<input type="radio" value="Retirado" ng-model="filterProds.estado"
+					
+					<div class="formElement">
+						<label class="control-label">Mostrar</label>
+						<div class="controls opciones">
+							<label class="radio small">
+								<input type="radio" value="Retirado" ng-model="filterProds.estado"
 										name="producciones[estado]"> 
 										Sólo los Retirados
-									</label>
-									<label class="radio small">
-										<input type="radio" value="Devuelto"  ng-model="filterProds.estado"
+							</label>
+							<label class="radio small">
+								<input type="radio" value="Devuelto"  ng-model="filterProds.estado"
 										name="producciones[estado]"> 
 										Sólo los Devueltos
-									</label>						
-									<label class="radio small">
-										<input type="radio" value=""  ng-model="filterProds.estado" 
+							</label>						
+							<label class="radio small">
+								<input type="radio" value=""  ng-model="filterProds.estado" 
 										name="producciones[estado]"> 
 										Todos
-									</label>
-									
-								</div>	
-							</div>
-							
-							<hr/>
-							
-							<button type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nueva producción </button>
-							
-							      
-						</div>
-					</form>
-				</div>
-		
-		
-		
-				<!-- BODY-->
-				<div class="col-xs-12 col-md-9 ">
-					<div class="tableContainer" >
-					
-						<table class="table table-hover table-condense"  id="infinite-scrolling">
-					  	<thead>
-					  		<tr>
-					  			<th>Responsable</th>
-					  			<th>Fecha</th>
-					  			<th>Fecha Devolución</th>
-					  			<th>Estado</th>
-					  		</tr>
-						</thead>
-						<tbody>	
-							<tr ng-repeat="prod in filteredProds = (data | orderBy:order:false | filter:query | filter:filterProds)" 
-					  						class="prodsList link"  ng-click="openProduccion(prod.id)">
-					  						
-								<td> {{prod.responsable}} </td>
-								<td> {{prod.fecha | date:'dd/MM/yyyy' }} </td>
-								<td> {{prod.fecha_devolucion | date:'dd/MM/yyyy'}} </td>				
-								<td> {{prod.estado}} </td>
-								
-							</tr>
-							
-				  			<tr ng-show="(filteredProds.length < 1)" class="aviso"> <td colspan="4"> No hay producciones</td></tr>
-						</tbody>
-						</table>
-		
-						<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
-					
+							</label>
+						</div>	
 					</div>
-				
-					<div class="finProducciones"></div>
-				</div>	<!-- body -->			
+					<hr/>
+					<button type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nueva producción </button>
+				</div>
+			</form>
+		</div>
+		<!-- BODY-->
+		<div class="col-xs-12 col-md-9 ">
+			<div class="tableContainer" >
+				<table class="table table-hover table-condense"  id="infinite-scrolling">
+					<thead>
+						<tr>
+					  		<th>Responsable</th>
+					  		<th>Fecha</th>
+					  		<th>Fecha Devolución</th>
+					  		<th>Estado</th>
+						</tr>
+					</thead>
+					<tbody>	
+						<tr ng-repeat="prod in filteredProds = (data | orderBy:order:false | filter:query | filter:filterProds)" class="prodsList link"  ng-click="openProduccion(prod.id)">
+					  		<td> {{prod.responsable}} </td>
+							<td> {{prod.fecha | date:'dd/MM/yyyy' }} </td>
+							<td> {{prod.fecha_devolucion | date:'dd/MM/yyyy'}} </td>				
+							<td> {{prod.estado}} </td>
+						</tr>
+						<tr ng-show="(filteredProds.length < 1)" class="aviso"> <td colspan="4"> No hay producciones</td></tr>
+					</tbody>
+				</table>
+				<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
 			</div>
-
-		
+			<div class="finProducciones"></div>
+		</div>	<!-- body -->			
+	</div>
 </div>

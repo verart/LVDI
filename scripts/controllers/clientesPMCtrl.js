@@ -236,7 +236,9 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
  ModalClientesPMInstanceCtrl
  Controller del modal para agregar/editar clientes  
 **************************************************************************************************************************/
-var ModalClientesPMInstanceCtrl = function ($scope, $modalInstance, $filter, clientePM) {
+app.controller('ModalClientesPMInstanceCtrl', [ '$scope', '$modalInstance',  '$filter', 'clientePM' , 
+
+	function ($scope, $modalInstance, $filter, clientePM) {
 		  		  		  
 		  
 		  if(clientePM != ''){
@@ -294,25 +296,27 @@ var ModalClientesPMInstanceCtrl = function ($scope, $modalInstance, $filter, cli
 			  $scope.clientePM.nota = original.nota
 		  };	
 		  	  		  		  
-}
+}]);
 
 
 /*************************************************************************************************************************
  ModalMailCtrl
  Controller del modal para enviar mail
 **************************************************************************************************************************/
-var ModalMailCtrl = function ($scope, $modalInstance, AlertService, clientePM, $location) {
-		  
-	$scope.mail= {cliente: clientePM};
-	$scope.mail.saludo = 'Hola '+ $scope.mail.cliente.nombre+ ",";
-	$scope.mail.cuerpo = "Desde Los Vados del Isen te enviamos este link para que puedas realizar tu pedido.\n\nTené en cuenta que solo funcionará durante los próximos 7 días.";
-	$scope.mail.despedida = "Esperamos tu pedido. \n \n Los Vados del Isen";
-	// CANCEL *** Se cierra el modal y retornan los datos de la venta original, sin cambios
-	$scope.cancel = function () {
-		$modalInstance.dismiss();
-	};
+app.controller('ModalMailCtrl'['$scope', '$modalInstance', 'AlertService', 'clientePM',
 
-	$scope.ok = function () {
-		$modalInstance.close({idCliente:$scope.mail.cliente.id, 'saludo':$scope.mail.saludo,'texto':$scope.mail.cuerpo,'despedida':$scope.mail.despedida});
-	};
-}
+	function ($scope, $modalInstance, AlertService, clientePM) {
+			  
+		$scope.mail= {cliente: clientePM};
+		$scope.mail.saludo = 'Hola '+ $scope.mail.cliente.nombre+ ",";
+		$scope.mail.cuerpo = "Desde Los Vados del Isen te enviamos este link para que puedas realizar tu pedido.\n\nTené en cuenta que solo funcionará durante los próximos 7 días.";
+		$scope.mail.despedida = "Esperamos tu pedido. \n \n Los Vados del Isen";
+		
+		// CANCEL *** Se cierra el modal y retornan los datos de la venta original, sin cambios
+		$scope.cancel = function () { $modalInstance.dismiss(); };
+
+		$scope.ok = function () {
+			$modalInstance.close({idCliente:$scope.mail.cliente.id, 'saludo':$scope.mail.saludo,'texto':$scope.mail.cuerpo,'despedida':$scope.mail.despedida});
+		};
+	}
+]);

@@ -25,7 +25,6 @@ app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 	    *************************************************************************/	
 		$scope.openUsuario = function(idUs) {
 	 	
-	 	
 	 		if(idUs != ''){
 	 			$scope.selectedUsuario = $filter('getById')($scope.data, idUs);
 	 		}else{
@@ -155,7 +154,9 @@ app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
  ModalClientesInstanceCtrl
  Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalUsuariosInstanceCtrl = function ($scope, $modalInstance, $filter, usuarios) {
+app.controller('ModalUsuariosInstanceCtrl',['$scope', '$modalInstance', '$filter', 'usuarios',
+
+	function ($scope, $modalInstance, $filter, usuarios) {
 		  		  		  
 		  
 		  if(usuarios != ''){
@@ -204,7 +205,6 @@ var ModalUsuariosInstanceCtrl = function ($scope, $modalInstance, $filter, usuar
 			  $scope.usuarios.nombre = original.nombre;
 			  $scope.usuarios.clave = original.clave;			  
 			  $scope.usuarios.perfiles_id = original.perfiles_id;	
-		  };	
-		  	  
-		  	  
-}
+		  };			  	  
+	}
+]);

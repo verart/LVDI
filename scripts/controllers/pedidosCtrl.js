@@ -1,5 +1,4 @@
-app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosService', 'clientesPMService', 'AlertService', '$filter', 
-
+app.controller('pedidosCtrl', ['$scope','$modal', 'pedidosService', 'productosService', 'clientesPMService', 'AlertService', '$filter',
 
 	function ($scope, $modal, pedidosService, productosService, clientesPMService, AlertService, $filter) {
        
@@ -262,7 +261,9 @@ app.controller('pedidosCtrl', ['$scope','$modal',  'pedidosService', 'productosS
  ModalPedidoInstanceCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidosService, productosService, clientesPMService, info) {
+app.controller('ModalPedidoInstanceCtrl', ['$scope', '$modalInstance', '$filter', 'pedidosService', 'productosService', 'clientesPMService', 'info',
+
+	function ($scope, $modalInstance, $filter, pedidosService, productosService, clientesPMService, info) {
 		  
 		//ALERTS - Mensajes a mostrar
 	    $scope.alerts = [ ];
@@ -737,11 +738,9 @@ var ModalPedidoInstanceCtrl = function ($scope, $modalInstance, $filter, pedidos
 			  	
 			  	$scope.pedido.pagos.splice(index,1);
 			  	
-		  	}	 
-
-		   
-		   
-}
+		  	}		   
+	}
+]);
 
 
 

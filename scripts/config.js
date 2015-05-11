@@ -1,4 +1,6 @@
-app.config(function($locationProvider, $routeProvider, USER_ROLES){
+app.config(['$locationProvider','$routeProvider', 'USER_ROLES', 
+
+    function($locationProvider, $routeProvider, USER_ROLES){
 
     //$locationProvider.hashPrefix('!');
     $routeProvider
@@ -147,14 +149,15 @@ app.config(function($locationProvider, $routeProvider, USER_ROLES){
     .otherwise({
        redirectTo: '/login'
     });
-})
+}]);
 
 
-.config(function ($httpProvider) {  
-	$httpProvider.interceptors.push([    
-		'$injector',    
-		function ($injector) {      
-			return $injector.get('AuthInterceptor');
-	}]);
-	
-});
+app.config(['$httpProvider',
+    function ($httpProvider) {  
+    	$httpProvider.interceptors.push([    
+    		'$injector',    
+    		function ($injector) {      
+    			return $injector.get('AuthInterceptor');
+    	}]);	
+    }
+]);

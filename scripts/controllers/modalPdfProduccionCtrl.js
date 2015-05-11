@@ -1,6 +1,6 @@
-var modalPdfProduccionCtrl = function ($scope, $modalInstance, $sce, produccion) {		  
-	
+app.controller('modalPdfProduccionCtrl',['$scope', '$modalInstance', '$sce', 'produccion',
 
+	function ($scope, $modalInstance, $sce, produccion) {		  
 
 			var doc = new jsPDF("Portrait", "mm", "a4");
 			doc.setFont("helvetica");
@@ -92,5 +92,5 @@ var modalPdfProduccionCtrl = function ($scope, $modalInstance, $sce, produccion)
 		  $scope.ok = function () {
 		  	$modalInstance.close();
 		  };
-		  
-};
+	}
+]);

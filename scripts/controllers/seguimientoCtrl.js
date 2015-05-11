@@ -69,7 +69,8 @@ app.controller('seguimientoCtrl', ['$scope','$modal',  'productosService', 'Aler
 		  	 $scope.parar = false;
 		  	 $scope.movimientos = [];
 		  	 $scope.page = 0;
-		  	 $scope.cargar();
+		  	 if($scope.form.idModelo != '')
+		  	 	$scope.cargar();
 		  	 
 		};
 

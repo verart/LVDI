@@ -219,7 +219,9 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
  ModalClientesPMInstanceCtrl
  Controller del modal para agregar/editar clientes  
 **************************************************************************************************************************/
-var ModalResponsablesInstanceCtrl = function ($scope, $modalInstance, $filter, responsable) {
+app.controller('ModalResponsablesInstanceCtrl', ['$scope', '$modalInstance', '$filter', 'responsable',
+
+	function ($scope, $modalInstance, $filter, responsable) {
 		  		  		  
 		  
 		  if(responsable != ''){
@@ -274,8 +276,8 @@ var ModalResponsablesInstanceCtrl = function ($scope, $modalInstance, $filter, r
 			  $scope.responsable.localidad = original.localidad
 			  $scope.responsable.email = original.email
 			  $scope.responsable.nota = original.nota
-		  };	
-		  	  		  		  
-}
+		  };		  	  		  		  
+	}
+]);
 
 

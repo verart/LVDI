@@ -207,7 +207,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 			   			var printDoc = $modal.open({
 					    	templateUrl: dir_root+'/templates/printDoc.html',
 					    	windowClass: 'wndPdf',
-					    	controller: modalPdfClientesMailsCtrl,
+					    	controller: 'modalPdfClientesMailsCtrl',
 					    	resolve: { clientes: function(){return promise.data.DATA} }
 						});
 					},
@@ -247,9 +247,10 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
  ModalClientesInstanceCtrl
  Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, clientes) {
-		  		  		  
-		  
+app.controller('ModalClientesInstanceCtrl', ['$scope','$modalInstance','$filter','clientes', 
+
+	function ($scope, $modalInstance, $filter, clientes) {
+		  		  		  	  
 		  if(clientes != ''){
 		  	var original = angular.copy(clientes);
 		  	$scope.clientes = clientes;
@@ -257,8 +258,7 @@ var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, clien
 		  	$scope.clientes	 = {nombre:'',email:'', nota:''};
 		  	var original = $scope.clientes;
 		  }
-		  
-		  
+			  
 		  /***************************************************
 		   OK
 		   Se cierra el modal y retornan los datos del producto
@@ -266,8 +266,7 @@ var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, clien
 		  $scope.ok = function () {
 		  	$modalInstance.close({clientes: $scope.clientes});
 		  };
-		  
-		  
+		    
 		  /***************************************************
 		   CANCEL
 		   Se cierra el modal y retornan los datos del producto original, sin cambios
@@ -288,14 +287,10 @@ var ModalClientesInstanceCtrl = function ($scope, $modalInstance, $filter, clien
 			  $modalInstance.dismiss(res);
 		  };
 		  
-
-		  // back2original
-		  // Copia en producto los campos originales que se enviaron.  
+		  // back2original - Copia en producto los campos originales que se enviaron.  
 		  $scope.back2original = function(){
 			  $scope.clientes.nombre = original.nombre;
 			  $scope.clientes.email = original.email;			  
 			  $scope.clientes.nota = original.nota;	
-		  };	
-		  	  
-		  	  
-}
+		  };		  	  
+}]);

@@ -1,16 +1,9 @@
 <form id="form" ng-submit="ok()" editable-form >
-
         <div id= "wndOpenProduccion" class="modal-body">
-		
-		
 			<div class="modal-header"  style="margin-bottom: 18px;">
 			   		<h3>Datos del cliente </h3>
 			</div>
-			       
-		
-		
 			<div class="modal-body form-group">
-						
 					<div class="form-group">
 						<input type="text" class="form-control small" placeholder="Apellido y Nombre" 
 							ng-model="clientes.nombre" id="nombre" focus-me="{{true}}" required/>
@@ -24,19 +17,12 @@
 						<textarea class="form-control" rows="2" placeholder="Nota"  ng-model="clientes.nota"></textarea>
 					</div>				
 			</div>
-        
-	
 		</div> <!-- / modal-body -->
-						
-						            
         <div class="modal-footer">
-        	
 	        <button ng-if="clientes.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteCliente()">
 	        	Eliminar cliente
 	        </button>
-
 	        <button type="submit" class="btn btn-primary" >Guardar</button>
             <button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
-            
         </div>
 </form>

@@ -1,5 +1,7 @@
 
-var modalConfirmCtrl = function ($scope, $modalInstance, txt) {		  
+app.controller('modalConfirmCtrl', ['$scope', '$modalInstance', 'txt',
+
+	function ($scope, $modalInstance, txt) {		  
 	
 		  $scope.msj = txt.msj;
 		  $scope.accept_txt = txt.accept;
@@ -11,8 +13,7 @@ var modalConfirmCtrl = function ($scope, $modalInstance, txt) {
 		  ****************************************************/ 
 		  $scope.ok = function () {
 		  	$modalInstance.close();
-		  };
-		  
+		  };	  
 		  
 		  /***************************************************
 		   CANCEL
@@ -21,4 +22,5 @@ var modalConfirmCtrl = function ($scope, $modalInstance, txt) {
 		  $scope.cancel = function () {
 		    $modalInstance.dismiss();
 		  };
-};
+	}
+]);

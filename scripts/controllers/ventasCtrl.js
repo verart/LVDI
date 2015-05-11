@@ -356,7 +356,9 @@ app.controller('ventasCtrl', ['$scope','$modal',  'ventasService', 'productosSer
  ModalVentaInstanceCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info,$location) {
+app.controller('ModalVentaInstanceCtrl', ['$scope', '$modalInstance', 'productosService', 'AlertService', 'ventasService', '$filter', 'info','$location',
+
+	function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info,$location) {
 		  
 		  $scope.fps = [
 		  	{'label':'Efectivo','value':'Efectivo'}, 
@@ -861,18 +863,10 @@ var ModalVentaInstanceCtrl = function ($scope, $modalInstance, productosService,
 					//Error al actualizar
 					function(error){ AlertService.add('danger', error.data.MSG);}
 				);
-			}		
-			  	
-		  }
-
-
-
-}
-
-
-
-
-
+			}		  	
+		}
+	}
+]);
 
 
 
@@ -967,12 +961,8 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 				}, 
 				// Si el modal cierra por CANCELAR
 				function (res){}
-			);	
-		  	
+			);			  	
 	}		 
-		 
-
-	
 	
 	/***************************************************
 	SALIR
@@ -981,8 +971,6 @@ app.controller('ModalNotaInstanceCtrl', ['$scope','$modal','$modalInstance', 'no
 	$scope.salir = function () {
 		$modalInstance.close();
 	};
-		 
-
 }]);	
 
 

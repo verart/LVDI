@@ -127,7 +127,9 @@ app.controller('categoriasCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
  ModalClientesInstanceCtrl
  Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalCategoriasInstanceCtrl = function ($scope, $modalInstance, categoria) {
+app.controller('ModalCategoriasInstanceCtrl',['$scope', '$modalInstance','categoria',
+
+	function ($scope, $modalInstance, categoria) {
 		  		  		
 		  if(categoria != ''){
 		  	var original = angular.copy(categoria);
@@ -161,4 +163,4 @@ var ModalCategoriasInstanceCtrl = function ($scope, $modalInstance, categoria) {
 			  $scope.categoria.nombre = original.nombre;
 		  };	
 		  	  		  	  
-}
+}]);
