@@ -1,4 +1,6 @@
-var modalPdfPedidoNotAdminCtrl = function ($scope, $modalInstance, $sce, $filter, pedido) {		  
+app.controller('modalPdfPedidoNotAdminCtrl', [ '$scope', '$modalInstance', '$sce', '$filter', 'pedido',
+
+	function ($scope, $modalInstance, $sce, $filter, pedido) {		  
 	
 
 
@@ -97,4 +99,5 @@ var modalPdfPedidoNotAdminCtrl = function ($scope, $modalInstance, $sce, $filter
 		  	$modalInstance.close();
 		  };
 		  
-};
+	}
+]);

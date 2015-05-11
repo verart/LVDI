@@ -38,7 +38,7 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 			$rootScope.activeTab = id;
 		};
 
-}])
+}]);
 
 
 app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS', 'AuthService','Session', 
@@ -69,4 +69,5 @@ app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS',
 				    $location.path('/login')
 				});		    
 		  };
-}]);
+	}
+]);

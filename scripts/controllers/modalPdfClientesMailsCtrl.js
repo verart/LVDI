@@ -1,7 +1,7 @@
-var modalPdfClientesMailsCtrl = function ($scope, $modalInstance, $sce, $filter, clientes) {		  
+app.controller('modalPdfClientesMailsCtrl', ['$scope', '$modalInstance', '$sce', '$filter', 'clientes', 
+
+	function ($scope, $modalInstance, $sce, $filter, clientes) {		  
 	
-
-
 			var doc = new jsPDF("portrait", "mm", "a4");
 			doc.setFont("helvetica");
 			
@@ -49,5 +49,5 @@ var modalPdfClientesMailsCtrl = function ($scope, $modalInstance, $sce, $filter,
 		  $scope.ok = function () {
 		  	$modalInstance.close();
 		  };
-		  
-};
+	}
+]);

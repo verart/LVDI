@@ -1,33 +1,20 @@
 <form id="form" ng-submit="ok()" editable-form >
-
         <div id= "wndOpenProduccion" class="modal-body">
-		
-		
 			<div class="modal-header"  style="margin-bottom: 18px;">
 			   		<h3>Datos del cliente </h3>
 			</div>
-			       
-		
-		
 			<div class="modal-body form-group">
-						
 					<div class="row">
-					
 						<div class="form-group colForm col-sm-6">
 								<input type="text" class="form-control small" placeholder="Apellido y Nombre"
 									ng-model="clientePM.nombre" id="nombre" focus-me="{{true}}" required/>
 						</div>
-						
 						<div class="form-group colForm col-sm-6">
 								<input type="text" class="form-control small" placeholder="Local"
 									ng-model="clientePM.local"/>
 						</div>
-						
 					</div>	
-						
-					
 					<div class="row">	
-					
 						<div class="form-group colForm col-sm-6">
 								<input type="text" class="form-control small" placeholder="Teléfono 1"
 									ng-model="clientePM.tel"/>
@@ -37,27 +24,18 @@
 								<input type="text" class="form-control small" placeholder="Teléfono 2"
 									ng-model="clientePM.tel2"/>
 						</div>
-						
 					</div>
-					
-					
 					<div class="row">	
-					
 						<div class="form-group colForm col-sm-6">
 								<input type="text" class="form-control small" placeholder="Dirección"
 									ng-model="clientePM.direccion"/>
 						</div>
-						
 						<div class="form-group colForm col-sm-6">
 								<input type="text" class="form-control small" placeholder="Localidad"
 									ng-model="clientePM.localidad" required/>
 						</div>
-						
 					</div>
-				
-				
 					<div class="row">	
-					
 						<div class="form-group colForm col-sm-6">
 							<input type="text" class="form-control small" placeholder="Email"
 									ng-model="clientePM.email"/>
@@ -67,9 +45,7 @@
 									ng-model="clientePM.cuit"/>
 						</div>
 					</div>
-					
 					<div class="row">
-						
 						<div class="form-group colForm col-sm-2">
 								<input type="text" class="form-control small" placeholder="Bonif"
 									ng-model="clientePM.bonificacion"/>
@@ -77,33 +53,18 @@
 						<div class="form-group colForm col-sm-1 textForInput">
 								%
 						</div>
-						
 					</div>
-					
 					<div class="row">	
-						
 						<div class="colForm col-sm-6">	
 							<textarea class="form-control" rows="2" placeholder="Nota" 
 									ng-model="clientePM.nota"></textarea>
 						</div>
-						
 					</div>
-					
-					
-		
-						
-		</div>
-        
-	
+			</div>
 		</div> <!-- / modal-body -->
-						
-						            
         <div class="modal-footer">
-        	
 	        <button ng-if="clientePM.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteCliente()">Eliminar cliente</button>
-
 	        <button type="submit" class="btn btn-primary">Guardar</button>
-            <button class="btn btn-warning" ng-click="cancel()">Cancelar</button>
-            
+            <button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
         </div>
-   
+</form>

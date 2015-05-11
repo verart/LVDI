@@ -18,34 +18,36 @@ app.constant('USER_ROLES', {
   cuentas: 'cuentas'
 });
 
-app.run(function(editableOptions) {
+app.run(['editableOptions',function(editableOptions) {
   editableOptions.theme = 'bs3';
-});
+}]);
 
-app.run(function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthService) {
+app.run(['$rootScope', '$route', '$location', 'AUTH_EVENTS', 'USER_ROLES', 'AuthService', 
 
-  $rootScope.$on('$locationChangeStart', function (event, next) {
-  
-    var nextPath = $location.path(); 
-    var nextRoute = $route.routes[nextPath]; 
+  function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthService) {
+
+    $rootScope.$on('$locationChangeStart', function (event, next) {
     
-    if((typeof(nextRoute) !== "undefined")&&(nextRoute.auth.needAuth)){
+      var nextPath = $location.path(); 
+      var nextRoute = $route.routes[nextPath]; 
       
-	    var authorizedRoles = nextRoute.auth.authorizedRoles;
+      if((typeof(nextRoute) !== "undefined")&&(nextRoute.auth.needAuth)){
+        
+  	    var authorizedRoles = nextRoute.auth.authorizedRoles;
 
-      if (!AuthService.isAuthorized(authorizedRoles)) {
-        if (!AuthService.isAuthenticated()) { 
-          // user is not allowed
-          $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
-        }else { 
-          // user is not logged in
-          $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
-          event.preventDefault();
+        if (!AuthService.isAuthorized(authorizedRoles)) {
+          if (!AuthService.isAuthenticated()) { 
+            // user is not allowed
+            $rootScope.$broadcast(AUTH_EVENTS.notAuthenticated);
+          }else { 
+            // user is not logged in
+            $rootScope.$broadcast(AUTH_EVENTS.notAuthorized);
+            event.preventDefault();
+          }
         }
       }
-    }
-  });
-});
+    });
+}]);
 
 
 app.run(function(){

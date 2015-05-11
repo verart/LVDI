@@ -27,7 +27,7 @@ app.directive('uploader', [function() {
 
 	return {
 		restrict: 'E',
-		controller: function($scope, $element, $attrs){ 
+		controller:['$scope', '$element', '$attrs', function($scope, $element, $attrs){ 
 
 			$scope.progress = 0;
 			$scope.action = "api/uploader.php";
@@ -81,7 +81,7 @@ app.directive('uploader', [function() {
 				});
 		
 			}
-		},
+		}],
 		link: function(scope, elem, attrs, ctrl) {
 			
 			elem.find('.fake-uploader').click(function() {
@@ -127,7 +127,7 @@ app.directive('ngEnter', function () {
 FOCUS-ME (boolean)
 Coloca el focus en el element donde se encuentra el atributo
 *******************************************************************************************************/
-app.directive('focusMe', function($timeout) {
+app.directive('focusMe',['$timeout', function($timeout) {
     return function(scope, element, attrs) {
         attrs.$observe('focusMe', function(value) {
             if ( value==="true" ) {
@@ -137,7 +137,7 @@ app.directive('focusMe', function($timeout) {
             }
         });
     }
-});
+}]);
 
 
 
@@ -146,7 +146,7 @@ FORMAUTOFILLFIL
 Cuando en un input tiene un valor cargado por defecto (caso de los inputs del login), el controller no detecta 
 que el dato esta cargado y el scope queda sin actualizar y cuando el usuario hace submit no lo loguea.
 *******************************************************************************************************/
-app.directive('formAutofillFix', function ($timeout) {
+app.directive('formAutofillFix', ['$timeout', function($timeout) {
 
   return function (scope, element, attrs) {
     element.prop('method', 'post');
@@ -166,8 +166,7 @@ app.directive('formAutofillFix', function ($timeout) {
       });
     }
   };
-
-});
+}]);
 
 
 
@@ -204,7 +203,7 @@ app.directive('loading',   ['$http' ,function ($http)
 /*******************************************************************************************************
 XEDITABLE
 *******************************************************************************************************/    
-app.directive('xeditable', function($timeout) {
+app.directive('xeditable',['$timeout', function($timeout) {
     return {
         restrict: 'A',
         require: "ngModel",
@@ -222,7 +221,7 @@ app.directive('xeditable', function($timeout) {
             }, 10);
         }
     };
-}); 
+}]); 
 
 /*******************************************************************************************************
 NG-CARRITO(Element)

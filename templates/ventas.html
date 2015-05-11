@@ -1,18 +1,10 @@
 <div class="container-fluid" data-ng-init="cargarVentas()">
-
 	<div class="row-fluid">
-	
 		<div class="h4 seccionTitle"> Ventas </div>
- 
-
-		<!-- SIDEBAR-->			
 		<div class=" col-xs-12 col-md-3 sidebar">
 			<form class="navbar-form navbar-left" role="search">
-
 				<div class="form-group filterInput">
-					
 						<label class="control-label">Mostrar</label>
-						
 						<div class="controls opciones">
 							<label class="radio small">
 								<input type="radio" value="hoy" ng-model="filterVentas.filter"
@@ -32,28 +24,17 @@
 								ng-change="filtrarVentas(value)"> 
 								Con deuda
 							</label>
-							
 					</div>
-					
 					<hr/>
-					
 					<button type="button" class="btn btn-primary" ng-click="nuevo(usuario.getUserRole())"> Nueva Venta </button>
-					
 					<br/>
 					<br/>
-
 					<button type="button" class="btn btn-primary" ng-click="openNotas()"> Notas </button>
-
-					      
 				</div>
 			</form>
 		</div>
-
-
-		<!-- BODY-->
 		<div class="col-xs-12 col-md-9 ">
 			<div class="tableContainer" >
-				
 				<table class="table table-hover table-condense" id="infinite-scrolling">
 			  		<thead>
 			  			<tr>
@@ -86,17 +67,9 @@
 		  				<tr ng-show="(filteredVentas.length < 1)" class="aviso"> <td colspan="4"> No hay ventas</td></tr>
 		   			</tbody>
 		  		</table>
-		  		
-		  		<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>
-
-
-	
+		  		<div class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="img/loading.gif" /></div></div>	
 			</div>
-			
 			<div class="finVentas"></div>
-			
 		</div>
-		
-       			
 	</div>
 </div>

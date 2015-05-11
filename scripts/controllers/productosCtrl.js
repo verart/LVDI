@@ -221,7 +221,9 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
  ModalInstanceCtrl
  Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info, $modal) {
+app.controller('ModalInstanceCtrl', [ '$scope', '$modalInstance', '$filter', 'info', '$modal',
+
+	function ($scope, $modalInstance, $filter, info, $modal) {
 		  		  		  
 		  
 		  if(info.producto != ''){
@@ -412,24 +414,28 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info, $modal)
 					$scope.producto.mod2alta.push({id: idMod, cantAlta: 1});
 		  	  }  		
 		  };		  		  
-}
+	}
+]);
 
 
 
 /*************************************************************************************************************************
  ModalBajaCtrl
 **************************************************************************************************************************/
-var ModalBajaCtrl = function ($scope, $modalInstance) {		  
-	
-	$scope.nota = {texto:""};
+app.controller('ModalBajaCtrl', ['$scope', '$modalInstance',
 
-	// OK - Se cierra el modal y retornan los datos del producto  
-	$scope.ok = function () {
-		$modalInstance.close($scope.nota.texto);
-	};
-		  
-	//CANCEL - Se cierra el modal y retornan los datos del producto original, sin cambios
-	$scope.cancel = function () {
-		$modalInstance.dismiss();
-	};
-};
+	function ($scope, $modalInstance) {		  
+	
+		$scope.nota = {texto:""};
+
+		// OK - Se cierra el modal y retornan los datos del producto  
+		$scope.ok = function () {
+			$modalInstance.close($scope.nota.texto);
+		};
+			  
+		//CANCEL - Se cierra el modal y retornan los datos del producto original, sin cambios
+		$scope.cancel = function () {
+			$modalInstance.dismiss();
+		};
+	}
+]);
