@@ -2,16 +2,11 @@
 
 	<div id="wndOpenProduccion" class="modal-body">
 		
-
-		
 			<div class="modal-header"  style="margin-bottom: 18px;">
 			   		<h3>Datos de la producción</h3>
 			</div>
-			       
-		
 		
 			<div class="modal-body form-group">
-						
 					<div class="row">
 					
 						<div class="colForm col-xs-6 col-sm-3">
@@ -43,7 +38,7 @@
 						<div class="colForm col-xs-6 col-sm-4">
 							<input type="text" id="newR" autocomplete="off" ng-model="form.responsable.nombre" 
 							class="form-control small" placeholder="Nombre del responsable" typeahead="resp_option as resp_option.nombre for resp_option in p.resp_options"
-							typeahead-on-select="setResponsable($item)" typeahead-wait-ms="300" ng-keyup="searchResponsableByName()" />
+							typeahead-on-select="setResponsable($item)" typeahead-wait-ms="300" ng-keyup="searchResponsableByName()" required/>
 
 						</div>
 						
@@ -154,7 +149,7 @@
 						            
         <div class="modal-footer">
         	
-	        <!--<button ng-if="produccion.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteProduccion()">Eliminar producción</button>--> 
+	        <!--<button type="button" ng-if="produccion.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deleteProduccion()">Eliminar producción</button>--> 
 
 	        <button type="submit" class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
             <button type="submit" class="btn btn-primary" ng-click="save()">Guardar</button>

@@ -63,7 +63,7 @@ class Producciones extends AppModel {
 				INNER JOIN productos Pr ON Pr.id = M.productos_id	
 				WHERE P.id = ?
 				ORDER BY Pr.nombre, M.nombre";
-				
+
     	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
 		$query = $query->execute(array($idProduccion));
 		$results = $query->fetchAll();
@@ -78,8 +78,8 @@ class Producciones extends AppModel {
 			$resultsFormat['responsables_id'] = $results[$i]['responsables_id']; 
 			$resultsFormat['responsable'] = utf8_encode($results[$i]['responsable']);
 			$resultsFormat['estado'] = $results[$i]['estado']; 
-			$resultsFormat['nota'] = $results[$i]['nota']; 
-			$resultsFormat['motivo'] = $results[$i]['motivo'];
+			$resultsFormat['nota'] = utf8_encode($results[$i]['nota']); 
+			$resultsFormat['motivo'] = utf8_encode($results[$i]['motivo']);
 			
 			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
 			$resultsFormat['modelos'] = array();
