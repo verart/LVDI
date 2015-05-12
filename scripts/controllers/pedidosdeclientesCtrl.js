@@ -99,7 +99,7 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
 					var confirm = $modal.open({
 						templateUrl: dir_root+'/templates/confirm.html',
 						windowClass: 'wndConfirm',
-						controller: modalConfirmCtrl,
+						controller: 'modalConfirmCtrl',
 						resolve: { txt: function(){ return txt_confirm } }
 					});
 					confirm.result.then( 
@@ -131,7 +131,7 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
  ModalPedidodeclientesCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-app.controller('ModalPedidodeclientesCtrl'[ '$scope', '$modalInstance', 'productosService', 'AlertService', 'ventasService', '$filter', 'info', '$location', 
+app.controller('ModalPedidodeclientesCtrl', [ '$scope', '$modalInstance', 'productosService', 'AlertService', 'ventasService', '$filter', 'info', '$location', 
 
 	function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info, $location) {
 		  

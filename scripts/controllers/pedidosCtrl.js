@@ -168,7 +168,7 @@ app.controller('pedidosCtrl', ['$scope','$modal', 'pedidosService', 'productosSe
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
+					    	controller: 'modalConfirmCtrl',
 					    	resolve: { txt: function(){ return txt_confirm } }
 					     });
 
