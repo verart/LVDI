@@ -108,7 +108,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 			    	if($scope.selectedRes == '') {
 			    		responsablesService.addRes(res).then(
 			    			//Success
-			    			function(promise){ console.log(promise.data.DATA);
+			    			function(promise){ 
 			    				lastName = ($scope.data[$scope.data.length-1].nombre).toUpperCase();
 			    				newName = 	(promise.data.DATA.nombre).toUpperCase();
 			    				if(lastName > newName)
@@ -159,7 +159,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
+					    	controller: 'modalConfirmCtrl',
 					    	resolve: { txt: function(){ return txt_confirm } }
 					     });
 
@@ -257,7 +257,7 @@ app.controller('ModalResponsablesInstanceCtrl', ['$scope', '$modalInstance', '$f
 		   DELETE
 		   Se cierra el modal y retornan un indicador de que hay que eliminar el cliente
 		  ****************************************************/
-		  $scope.deleteRes = function () { console.log($scope.responsable);
+		  $scope.deleteRes = function () { 
 			  $scope.back2original();	
 			  var res = {action:'delete', idR:$scope.responsable.id};	  		
 			  $modalInstance.dismiss(res);
