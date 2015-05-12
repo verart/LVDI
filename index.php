@@ -29,48 +29,12 @@
 	
 	
 	<!-- Propios -->
-	<script type="text/javascript" src="scripts/constants.js"></script>
  	<script type="text/javascript" src="scripts/main.min.js"></script>
- 	<script type="text/javascript" src="scripts/services/services.min.js"></script>
 	<script type="text/javascript" src="scripts/config.min.js"></script>
 	<script type="text/javascript" src="scripts/filters/filters.min.js"></script>
 	<script type="text/javascript" src="scripts/directives/directives.min.js"></script>
-
-	<script type="text/javascript" src="scripts/services/clientesServices.min.js"></script>
-	<script type="text/javascript" src="scripts/services/colaImpresionServices.min.js"></script>
-	<script type="text/javascript" src="scripts/services/commonServices.min.js"></script>	
-	<script type="text/javascript" src="scripts/services/gastosServices.min.js"></script>
-	<script type="text/javascript" src="scripts/services/loginServices.min.js"></script>	
-	<script type="text/javascript" src="scripts/services/pedidosespecialesServices.min.js"></script>
-	<script type="text/javascript" src="scripts/services/pedidosServices.min.js"></script>
-	<script type="text/javascript" src="scripts/services/produccionesServices.min.js"></script>
-	<script type="text/javascript" src="scripts/services/productosServices.min.js"></script>
-	<script type="text/javascript" src="scripts/services/resumenServices.min.js"></script>
-	<script type="text/javascript" src="scripts/services/usuariosServices.min.js"></script>	
-	<script type="text/javascript" src="scripts/services/ventasServices.min.js"></script>	
-	
-	<script type="text/javascript" src="scripts/controllers/categoriasCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/clientesCtrl.min.js"></script>	
-	<script type="text/javascript" src="scripts/controllers/clientesPMCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/colaImpresionCtrl.min.js"></script>	
-	<script type="text/javascript" src="scripts/controllers/gastosCtrl.min.js"></script>	
-	<script type="text/javascript" src="scripts/controllers/loginCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/modalConfirmCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/modalPdfClientesMailsCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/modalPdfPedidoCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/modalPdfPedidoNotAdminCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/modalPdfProduccionCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/pedidosCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/pedidosdeclientesCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/pedidosespecialesCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/produccionesCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/productosCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/productosparapedidosCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/responsablesCtrl.min.js"></script>
-	<script type="text/javascript" src="scripts/controllers/resumenCtrl.min.js"></script>	
-	<script type="text/javascript" src="scripts/controllers/seguimientoCtrl.js"></script>
-	<script type="text/javascript" src="scripts/controllers/usuariosCtrl.min.js"></script>	
-	<script type="text/javascript" src="scripts/controllers/ventasCtrl.min.js"></script>
+	<script type="text/javascript" src="scripts/services/servicesall.min.js"></script>
+	<script type="text/javascript" src="scripts/controllers/controllers.min.js"></script>
 
 	<!-- Incluimos estilos -->	
 	<link rel="stylesheet" href='bootstrap/dist/css/bootstrap.min.css' type="text/css" />

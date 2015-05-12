@@ -22,6 +22,10 @@ app.run(['editableOptions',function(editableOptions) {
   editableOptions.theme = 'bs3';
 }]);
 
+
+var dir_root = '/LVDI';
+var dir_api = '/LVDI/api';
+
 app.run(['$rootScope', '$route', '$location', 'AUTH_EVENTS', 'USER_ROLES', 'AuthService', 
 
   function ($rootScope, $route, $location, AUTH_EVENTS, USER_ROLES, AuthService) {
@@ -76,3 +80,4 @@ function formatLocalDate() {
   };
 	return now.getFullYear() + '-' + pad(now.getMonth()+1) + '-' + pad(now.getDate());
 };
+
