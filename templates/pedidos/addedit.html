@@ -182,7 +182,7 @@
 		</div> <!-- row -->	
 	</div> <!-- / modal-body -->
 	<div class="modal-footer">
-    	<button ng-if="pedido.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deletePedido()">Eliminar pedido</button>
+    	<button type="button" ng-if="pedido.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deletePedido()">Eliminar pedido</button>
 		<button type="submit" class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
 		<button type="submit" class="btn btn-primary" ng-click="save()">Guardar</button>
 		<button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
