@@ -436,7 +436,7 @@ class Ventas extends AppModel {
 			$idModelo = $result[0]['modelos_id'];
 			
 			//Repone stock	
-			$res = $this->Modelos->reponer($idModelo,1,'');
+			$res = $this->Modelos->reponer($idModelo,1,'Devolucion','Quitado de una venta.');
 		    if(!$res['success'])
 				throw new BadRequestException($res['msg']);	
 		

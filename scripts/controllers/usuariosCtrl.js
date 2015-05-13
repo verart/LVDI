@@ -83,7 +83,7 @@ app.controller('usuariosCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 			    			function(promise){ AlertService.add('success', 'El usuario fue actualizado', 1000);},
 			    			//Error al actualizar
 			    			function(error){
-				    			AlertService.add('danger', error.data.MSG);
+				    			AlertService.add('danger', error.data.MSG,3000);
 			    			}
 			    		);
 			    	}

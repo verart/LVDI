@@ -347,42 +347,33 @@ app.controller('ModalInstanceCtrl', [ '$scope', '$modalInstance', '$filter', 'in
 		    
 			var idMod = $scope.producto.modelos[indexMod].id;
 				    
-			//Busco el id de modelo en el array de elementos dado de baja
-			var index2baja = $filter('getIndexById')($scope.producto.mod2baja, idMod); 
-				    
-			//Actualizo mod2baja
-			if(index2baja != null){
-				$scope.producto.mod2baja[index2baja].cantBaja = $scope.producto.mod2baja[index2baja].cantBaja + 1;
-				$scope.producto.modelos[indexMod].stock --;
-			}else{ 
-				//Busco el id de modelo en el array de elementos dado de alta
-				 var index2alta = $filter('getIndexById')($scope.producto.mod2alta, idMod);
+			//Busco el id de modelo en el array de elementos dado de alta
+			var index2alta = $filter('getIndexById')($scope.producto.mod2alta, idMod);
 					  	
-				//Actualizo mod2alta
-				if(index2alta != null){
-					$scope.producto.mod2alta[index2alta].cantAlta = $scope.producto.mod2alta[index2alta].cantAlta - 1;
-					$scope.producto.modelos[indexMod].stock --;
-					if($scope.producto.mod2alta[index2alta].cantAlta == 0) 
-					  	$scope.producto.mod2alta.splice(index2alta,1);
-				}else{	  	  	
-					var modalInstanceBaja = $modal.open({
-						templateUrl: dir_root+'/templates/productos/confirmarBaja.html',
-						windowClass: 'wndBajaProducto',
-						controller: ModalBajaCtrl,
-						backdrop: 'static',
-						keyboard: true
-					});
-					modalInstanceBaja.result
-					.then( 
-						//CONTINUAR
-						function (r){
-							$scope.producto.modelos[indexMod].stock --;
-							$scope.producto.mod2baja.push({id: idMod, cantBaja: 1, nota: r});
-						},
-						//CANCELAR
-					  	function (res){ }
-					);	
-				}		
+			//Actualizo mod2alta
+			if(index2alta != null){
+				$scope.producto.mod2alta[index2alta].cantAlta = $scope.producto.mod2alta[index2alta].cantAlta - 1;
+				$scope.producto.modelos[indexMod].stock --;
+				if($scope.producto.mod2alta[index2alta].cantAlta == 0) 
+				  	$scope.producto.mod2alta.splice(index2alta,1);
+			}else{	  	  	
+				var modalInstanceBaja = $modal.open({
+					templateUrl: dir_root+'/templates/productos/confirmarBaja.html',
+					windowClass: 'wndBajaProducto',
+					controller: 'ModalBajaCtrl',
+					backdrop: 'static',
+					keyboard: true
+				});
+				modalInstanceBaja.result
+				.then( 
+					//CONTINUAR
+					function (r){
+						$scope.producto.modelos[indexMod].stock --;
+						$scope.producto.mod2baja.push({id: idMod, cantBaja: 1, nota: r});
+					},
+					//CANCELAR
+					function (res){ }
+				);		
 			}
 		  };
 

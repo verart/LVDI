@@ -38,7 +38,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 				//Error al actualizar
 				function(error){ 
 	    			$scope.pending = false;
-	    			AlertService.add('danger', error.data.MSG);
+	    			AlertService.add('danger', error.data.MSG, 3000);
 	    			$location.path('/login');
 	    		}
 			);
@@ -135,7 +135,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 			    			function(promise){AlertService.add('success', 'Se actualizó la información del responsable de producción.', 1500); },
 			    			//Error al actualizar
 			    			function(error){
-				    			AlertService.add('danger', error.data.MSG);
+				    			AlertService.add('danger', error.data.MSG, 3000);
 			    			}
 			    		);
 			    	}
@@ -176,7 +176,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 					    			},
 					    			//Error al eliminar
 					    			function(promise){
-						    			AlertService.add('danger', promise.data.MSG);
+						    			AlertService.add('danger', promise.data.MSG, 3000);
 					    			}
 					    		);
 						    }, 

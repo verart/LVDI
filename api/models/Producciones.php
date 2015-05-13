@@ -5,7 +5,7 @@ class Producciones extends AppModel {
 	public $primaryKey = 'id';	
 	
 	
-	public $hasMany = array('Modelos', 'MovimientosStock','ColaImpresion'); 
+	public $hasMany = array('Modelos','ColaImpresion'); 
 	
 	
 	/**
@@ -81,7 +81,6 @@ class Producciones extends AppModel {
 			$resultsFormat['nota'] = utf8_encode($results[$i]['nota']); 
 			$resultsFormat['motivo'] = utf8_encode($results[$i]['motivo']);
 			
-			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
 			$resultsFormat['modelos'] = array();
 			while($i < count($results)){
 				$resultsFormat['modelos'][$i]['id'] = $results[$i]['modelos_id'];
@@ -199,6 +198,7 @@ class Producciones extends AppModel {
 						$idModelo = $value['id'];
 						
 						//Decremento el stock del modelo agregado a la produccion
+
 						$res = $this->Modelos->baja($idModelo, 1,'','BajaProduccion');
 						if(!$res['success'])
 							throw new BadRequestException($res['msg']);

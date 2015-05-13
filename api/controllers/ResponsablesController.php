@@ -117,7 +117,7 @@ class ResponsablesController extends AppController {
 	*******************************************************************************************/
 	function responsableByName($nombre) {
 		try {
-			if (!$this->PermisosComponent->puedeAcceder('responsables', 'clientesName'))
+			if (!$this->PermisosComponent->puedeAcceder('responsables', 'show'))
 				throw new ForbiddenException('No tiene permiso para acceder a esta página'); 
 
 			$res = $this->Responsables->getResponsablePorNombre($nombre); 

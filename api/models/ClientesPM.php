@@ -197,7 +197,7 @@ class ClientesPM extends AppModel {
 					throw new BadRequestException('Existen pedidos de este cliente. No se puede eliminar. ');		
 					
 		}catch (Exception $e) {
-			echo $e->getMsg();
+			return array('success'=>false, 'msg'=>$e->getMsg());
 
 		}
 			

@@ -92,7 +92,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    	if($scope.selectedCliente == '') {
 			    		clientesPMService.addCliente(res).then(
 			    			//Success
-			    			function(promise){ console.log(promise.data.DATA);
+			    			function(promise){ 
 			    				$scope.data.push(promise.data.DATA);
 			    				AlertService.add('success', 'Se agregó un nuevo cliente por mayor.', 1000); 
 			    			},
@@ -114,7 +114,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    			function(promise){AlertService.add('success', 'Se actualizó la información del cliente por mayor.', 1000); },
 			    			//Error al actualizar
 			    			function(error){
-				    			AlertService.add('danger', error.data.MSG);
+				    			AlertService.add('danger', error.data.MSG,3000);
 			    			}
 			    		);
 			    	}
@@ -155,7 +155,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 					    			},
 					    			//Error al eliminar
 					    			function(promise){
-						    			AlertService.add('danger', promise.data.MSG);
+						    			AlertService.add('danger', promise.data.MSG, 3000);
 					    			}
 					    		);
 						    }, 
@@ -274,7 +274,7 @@ app.controller('ModalClientesPMInstanceCtrl', [ '$scope', '$modalInstance',  '$f
 		   DELETE
 		   Se cierra el modal y retornan un indicador de que hay que eliminar el cliente
 		  ****************************************************/
-		  $scope.deleteCliente = function () { console.log($scope.clientePM);
+		  $scope.deleteCliente = function () { 
 			  $scope.back2original();	
 			  var res = {action:'delete', idCliente:$scope.clientePM.id};	  		
 			  $modalInstance.dismiss(res);

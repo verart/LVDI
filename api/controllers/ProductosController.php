@@ -164,7 +164,7 @@ class ProductosController extends AppController {
 			// ALTA de modelos
 			if(!empty($params['mod2alta']))
 				foreach($params['mod2alta'] as $field => $value){
-					$result = $this->Productos->reponer($value['id'],$value['cantAlta']);
+					$result = $this->Productos->reponer($value['id'],$value['cantAlta'],'Alta de stock - Edición de producto');
 					
 					if(!$result['success'])
 						throw new BadRequestException($result['msg']);									
