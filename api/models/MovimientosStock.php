@@ -41,7 +41,7 @@ class MovimientosStock extends AppModel {
 			$this->beginTransaction();
 			
 			$movimiento['created'] = date('Y/m/d', time());
-			
+			$movimiento['nota'] = 'us:'.$_SESSION['usuario']['nombre'].' - '.$movimiento['nota'];
 			if(!$this->create($movimiento))				
 				throw new BadRequestException('Hubo un error al crear el movimiento.');
 							

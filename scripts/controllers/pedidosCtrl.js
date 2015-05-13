@@ -211,9 +211,9 @@ app.controller('pedidosCtrl', ['$scope','$modal', 'pedidosService', 'productosSe
 		$scope.print = function (pedido) {
 		  	
 		  	if(($scope.userRole == '') || ($scope.userRole == 'admin'))
-		  		controllerPrint = modalPdfPedidoCtrl;
+		  		controllerPrint = 'modalPdfPedidoCtrl';
 		  	else
-		  		controllerPrint = modalPdfPedidoNotAdminCtrl;
+		  		controllerPrint = 'modalPdfPedidoNotAdminCtrl';
 		  	
 		  	//Datos completos del cliente del pedido
 			clientesPMService.cliente(pedido.clientesPM_id).then(

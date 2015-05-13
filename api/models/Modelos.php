@@ -107,7 +107,7 @@ class Modelos extends AppModel {
 	* REPONER
 	* Incrementa en 1 el stock del modelo y registra el movimiento con el tipo: 
 	*/
-	function reponer($idModelo, $cantidad =1, $tipo="Reposicion"){
+	function reponer($idModelo, $cantidad =1, $tipo="Reposicion", $nota=null){
 		
 		try{
 			
@@ -119,7 +119,7 @@ class Modelos extends AppModel {
 				throw new BadRequestException('Hubo un error al reponer el modelo '.$idModelo);
 				
 			$movimiento = array(
-				'modelos_id'=> $idModelo, 'created'=> date('Y/m/d h:i:s', time()), 'tipo'=> $tipo, 'cantidad'=> $cantidad);	
+				'modelos_id'=> $idModelo, 'created'=> date('Y/m/d h:i:s', time()), 'tipo'=> $tipo, 'cantidad'=> $cantidad, 'nota'=>$nota);	
 			if(!$this->MovimientosStock->setMovimiento($movimiento))
 				throw new BadRequestException('Hubo un error al crear el movimiento para el modelo '.$idModelo);
 							

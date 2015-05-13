@@ -36,7 +36,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 				//Error al actualizar
 				function(error){ 
 	    			$scope.pending = false;	    			
-	    			AlertService.add('danger', error.data.MSG);
+	    			AlertService.add('danger', error.data.MSG,3000);
 					$location.path('/login');
 
 				}
@@ -133,7 +133,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 			    			//SUCCESS
 			    			function(promise){  AlertService.add('success', 'Se actualizó la información del cliente.', 1000); },
 			    			//ERROR al actualizar
-			    			function(error){ AlertService.add('danger', error.data.MSG); }
+			    			function(error){ AlertService.add('danger', error.data.MSG,3000); }
 			    		);
 			    	}
 			    		
@@ -173,7 +173,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 					    			},
 					    			//Error al eliminar
 					    			function(promise){
-						    			AlertService.add('danger', promise.data.MSG);
+						    			AlertService.add('danger', promise.data.MSG,3000);
 					    			}
 					    		);
 						    }, 
@@ -212,7 +212,7 @@ app.controller('clientesCtrl', ['$scope', '$modal', '$filter','$log', 'AlertServ
 						});
 					},
 			    	//Error al actualizar
-			    	function(error){ AlertService.add('danger', error.data.MSG);}
+			    	function(error){ AlertService.add('danger', error.data.MSG,3000);}
 			);
 		  	
 

@@ -256,7 +256,7 @@ app.controller('produccionesCtrl',
 		  	var printDoc = $modal.open({
 					    	templateUrl: dir_root+'/templates/printDoc.html',
 					    	windowClass: 'wndPdf',
-					    	controller: modalPdfProduccionCtrl,
+					    	controller: 'modalPdfProduccionCtrl',
 					    	resolve: { produccion: function(){return prod;} }
 			});
 		
