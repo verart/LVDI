@@ -195,7 +195,9 @@ class ClientesPM extends AppModel {
 					throw new BadRequestException('Hubo un error al eliminar el cliente.');
 			}else
 					throw new BadRequestException('Existen pedidos de este cliente. No se puede eliminar. ');		
-					
+			
+			return array('success'=>true, 'msg'=>'Se ha eliminado el cliente.');
+
 		}catch (Exception $e) {
 			return array('success'=>false, 'msg'=>$e->getMsg());
 
