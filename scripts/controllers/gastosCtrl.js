@@ -28,11 +28,13 @@ app.controller('gastosCtrl', ['$scope','$modal',  'gastosService', 'AlertService
 		$scope.catFilter_options = [];
 		$scope.categoria = {id:'', nombre:''};
 		$scope.categoriaFilter_id = '';
+		$scope.categoriaFilter = {nombre: '', id:''} ;
 		
 		/*****************************************************************************************************
 	    CARGAR     
 	    *****************************************************************************************************/    	    
 	    $scope.cargar = function(){
+	    	if($scope.categoriaFilter.nombre == '') $scope.categoriaFilter_id = '';
 			gastosService.gastos($scope.desde, $scope.hasta, $scope.categoriaFilter_id).then(
 				//success
 				function(promise){ $scope.gastos = promise.data.DATA;},
@@ -89,7 +91,7 @@ app.controller('gastosCtrl', ['$scope','$modal',  'gastosService', 'AlertService
 						$scope.cat_options = [];
 					}
 				);		
-			}		  
+			}	  
 		}
 
 		// SETCategoria  *** guarda en gasto la categoria seleccionado
