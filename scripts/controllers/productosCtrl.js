@@ -159,7 +159,7 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
+					    	controller: 'modalConfirmCtrl',
 					    	resolve: { txt: function(){ return txt_confirm } }
 					     });
 
@@ -221,7 +221,9 @@ app.controller('productosCtrl', ['$scope', '$modal', '$filter','productosService
  ModalInstanceCtrl
  Controller del modal para agregar/editar productos  
 **************************************************************************************************************************/
-var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info, $modal) {
+app.controller('ModalInstanceCtrl', [ '$scope', '$modalInstance', '$filter', 'info', '$modal',
+
+	function ($scope, $modalInstance, $filter, info, $modal) {
 		  		  		  
 		  
 		  if(info.producto != ''){
@@ -300,7 +302,7 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info, $modal)
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
+					    	controller: 'modalConfirmCtrl',
 					    	resolve: { txt: function(){ return txt_confirm } }
 					     });
 
@@ -345,42 +347,33 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info, $modal)
 		    
 			var idMod = $scope.producto.modelos[indexMod].id;
 				    
-			//Busco el id de modelo en el array de elementos dado de baja
-			var index2baja = $filter('getIndexById')($scope.producto.mod2baja, idMod); 
-				    
-			//Actualizo mod2baja
-			if(index2baja != null){
-				$scope.producto.mod2baja[index2baja].cantBaja = $scope.producto.mod2baja[index2baja].cantBaja + 1;
-				$scope.producto.modelos[indexMod].stock --;
-			}else{ 
-				//Busco el id de modelo en el array de elementos dado de alta
-				 var index2alta = $filter('getIndexById')($scope.producto.mod2alta, idMod);
+			//Busco el id de modelo en el array de elementos dado de alta
+			var index2alta = $filter('getIndexById')($scope.producto.mod2alta, idMod);
 					  	
-				//Actualizo mod2alta
-				if(index2alta != null){
-					$scope.producto.mod2alta[index2alta].cantAlta = $scope.producto.mod2alta[index2alta].cantAlta - 1;
-					$scope.producto.modelos[indexMod].stock --;
-					if($scope.producto.mod2alta[index2alta].cantAlta == 0) 
-					  	$scope.producto.mod2alta.splice(index2alta,1);
-				}else{	  	  	
-					var modalInstanceBaja = $modal.open({
-						templateUrl: dir_root+'/templates/productos/confirmarBaja.html',
-						windowClass: 'wndBajaProducto',
-						controller: ModalBajaCtrl,
-						backdrop: 'static',
-						keyboard: true
-					});
-					modalInstanceBaja.result
-					.then( 
-						//CONTINUAR
-						function (r){
-							$scope.producto.modelos[indexMod].stock --;
-							$scope.producto.mod2baja.push({id: idMod, cantBaja: 1, nota: r});
-						},
-						//CANCELAR
-					  	function (res){ }
-					);	
-				}		
+			//Actualizo mod2alta
+			if(index2alta != null){
+				$scope.producto.mod2alta[index2alta].cantAlta = $scope.producto.mod2alta[index2alta].cantAlta - 1;
+				$scope.producto.modelos[indexMod].stock --;
+				if($scope.producto.mod2alta[index2alta].cantAlta == 0) 
+				  	$scope.producto.mod2alta.splice(index2alta,1);
+			}else{	  	  	
+				var modalInstanceBaja = $modal.open({
+					templateUrl: dir_root+'/templates/productos/confirmarBaja.html',
+					windowClass: 'wndBajaProducto',
+					controller: 'ModalBajaCtrl',
+					backdrop: 'static',
+					keyboard: true
+				});
+				modalInstanceBaja.result
+				.then( 
+					//CONTINUAR
+					function (r){
+						$scope.producto.modelos[indexMod].stock --;
+						$scope.producto.mod2baja.push({id: idMod, cantBaja: 1, nota: r});
+					},
+					//CANCELAR
+					function (res){ }
+				);		
 			}
 		  };
 
@@ -412,24 +405,28 @@ var ModalInstanceCtrl = function ($scope, $modalInstance, $filter, info, $modal)
 					$scope.producto.mod2alta.push({id: idMod, cantAlta: 1});
 		  	  }  		
 		  };		  		  
-}
+	}
+]);
 
 
 
 /*************************************************************************************************************************
  ModalBajaCtrl
 **************************************************************************************************************************/
-var ModalBajaCtrl = function ($scope, $modalInstance) {		  
-	
-	$scope.nota = {texto:""};
+app.controller('ModalBajaCtrl', ['$scope', '$modalInstance',
 
-	// OK - Se cierra el modal y retornan los datos del producto  
-	$scope.ok = function () {
-		$modalInstance.close($scope.nota.texto);
-	};
-		  
-	//CANCEL - Se cierra el modal y retornan los datos del producto original, sin cambios
-	$scope.cancel = function () {
-		$modalInstance.dismiss();
-	};
-};
+	function ($scope, $modalInstance) {		  
+	
+		$scope.nota = {texto:""};
+
+		// OK - Se cierra el modal y retornan los datos del producto  
+		$scope.ok = function () {
+			$modalInstance.close($scope.nota.texto);
+		};
+			  
+		//CANCEL - Se cierra el modal y retornan los datos del producto original, sin cambios
+		$scope.cancel = function () {
+			$modalInstance.dismiss();
+		};
+	}
+]);

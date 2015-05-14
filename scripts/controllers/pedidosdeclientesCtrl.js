@@ -1,9 +1,11 @@
 app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'productosService','clientesPMService','AlertService','$filter','$routeParams','$location', '$rootScope', 
 
-
 	function ($scope,$modal,pedidosService,productosService,clientesPMService,AlertService,$filter,$routeParams,$location, $rootScope) {
       
+	   	$(window).unbind('scroll');
+
       	$rootScope.activeTab = 'pedidosdeclientes';
+
 
 	    $scope.order = ['-nombre'];
 	    $scope.query = '';
@@ -97,7 +99,7 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
 					var confirm = $modal.open({
 						templateUrl: dir_root+'/templates/confirm.html',
 						windowClass: 'wndConfirm',
-						controller: modalConfirmCtrl,
+						controller: 'modalConfirmCtrl',
 						resolve: { txt: function(){ return txt_confirm } }
 					});
 					confirm.result.then( 
@@ -129,40 +131,43 @@ app.controller('pedidosdeclientesCtrl', ['$scope','$modal', 'pedidosService', 'p
  ModalPedidodeclientesCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalPedidodeclientesCtrl = function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info, $location) {
+app.controller('ModalPedidodeclientesCtrl', [ '$scope', '$modalInstance', 'productosService', 'AlertService', 'ventasService', '$filter', 'info', '$location', 
+
+	function ($scope, $modalInstance, productosService, AlertService, ventasService, $filter, info, $location) {
 		  
-	$scope.pedido = info;
+		$scope.pedido = info;
 
-	// CANCEL *** Se cierra el modal y retornan los datos de la venta original, sin cambios
-	$scope.cancel = function () {
-		$modalInstance.dismiss();
-	};
+		// CANCEL *** Se cierra el modal y retornan los datos de la venta original, sin cambios
+		$scope.cancel = function () {
+			$modalInstance.dismiss();
+		};
 
-	$scope.ok = function () {
-		$modalInstance.close();
-	};
+		$scope.ok = function () {
+			$modalInstance.close();
+		};
 
-	// REMOVE modelo *** Quita un modelo del pedido. Actualiza los totales 	  
-	$scope.remove= function(index) {		  	
-		$scope.pedido.total =  parseFloat($scope.pedido.total,10) - (parseFloat($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
-		$scope.pedido.modelos.splice(index,1);	  	
-	}	 
-		 
+		// REMOVE modelo *** Quita un modelo del pedido. Actualiza los totales 	  
+		$scope.remove= function(index) {		  	
+			$scope.pedido.total =  parseFloat($scope.pedido.total,10) - (parseFloat($scope.pedido.modelos[index].precio,10) *  parseInt($scope.pedido.modelos[index].cantidad,10));
+			$scope.pedido.modelos.splice(index,1);	  	
+		}	 
+			 
 
-	// WATCH pedido.modelos *** Actualiza  total
-	$scope.$watch('pedido.modelos', function(newValue, oldValue) {
-		$scope.refreshTotal();
-	}, true);
+		// WATCH pedido.modelos *** Actualiza  total
+		$scope.$watch('pedido.modelos', function(newValue, oldValue) {
+			$scope.refreshTotal();
+		}, true);
 
-	//REFRESH modelo  ***  Quita un modelo del pedido. Actualiza los totales   
-	$scope.refreshTotal= function() {	
-		total = 0;
-		$scope.pedido.modelos.forEach(function(m){
-	    	total =  total + (m.precio * parseInt(m.cantidad));
-	    }) 	
-		$scope.pedido.total = total;
+		//REFRESH modelo  ***  Quita un modelo del pedido. Actualiza los totales   
+		$scope.refreshTotal= function() {	
+			total = 0;
+			$scope.pedido.modelos.forEach(function(m){
+		    	total =  total + (m.precio * parseInt(m.cantidad));
+		    }) 	
+			$scope.pedido.total = total;
+		}
 	}
-}
+]);
 
 
 

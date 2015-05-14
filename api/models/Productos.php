@@ -28,7 +28,7 @@ class Productos extends AppModel {
 					FROM movimientos_stock MovS
 					WHERE tipo= 'venta'
 					GROUP BY modelos_id) Venta ON Venta.modelos_id = M.id	
-				$conditions & (M.baja = 0)
+				$conditions and (M.baja = 0)
 				ORDER BY P.nombre, M.nombre";
 
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -118,7 +118,7 @@ class Productos extends AppModel {
 		$sql = "SELECT P.nombre nombre_prod, P.precio, M.id as id, M.nombre as nombre_mod
 				FROM productos P
 				INNER JOIN modelos M ON (M.productos_id = P.id) 
-				$conditions & (M.baja = 0) 
+				$conditions and (M.baja = 0) 
 				ORDER BY nombre_prod, nombre_mod ASC";
 
 	   	$query = $this->con->prepare($sql, array(), MDB2_PREPARE_RESULT);    	
@@ -209,7 +209,7 @@ class Productos extends AppModel {
 		$sql = "SELECT  M.id, P.nombre as nomProducto, M.nombre as nomModelo, P.precio  
 				FROM productos P
 				INNER JOIN modelos M on P.id = M.productos_id
-				WHERE concat(P.nombre,'-',M.nombre) like '".$text."'
+				WHERE (M.baja = 0) and concat(P.nombre,'-',M.nombre) like '".$text."'
 				ORDER BY P.nombre,M.nombre 
 				LIMIT 0,10" ; 
 	
@@ -296,7 +296,7 @@ class Productos extends AppModel {
 	* 
 	* 
 	* Este módulo no carga stock. Si se crea un modelo de producto se crea con stock en 0, por lo tanto no se manda a imprimir.
-	* Nota: Stock solo se actualiza desde reponer/vender/baja. (Se debe registrar el movimiento por cada reposición.)
+	* Nota: Stock solo se actualiza desde reponer/baja/ventas/devolucion/retirar(producciones)/devolver(producciones). (Se debe registrar el movimiento por cada reposición.)
 	*/
 	function setProducto($producto, $modelos){
 		
@@ -443,13 +443,13 @@ class Productos extends AppModel {
 	* REPONER
 	* Incrementa en 1 el stock del modelo
 	*/
-	function reponer($idMod){
+	function reponer($idMod, $cant=1, $nota=null){
 		
 		try{
 		
 			$this->beginTransaction();
 			
-			$res = $this->Modelos->reponer($idMod); // Incrementa el stcok del modelo y marca el movimiento de stock
+			$res = $this->Modelos->reponer($idMod,$cant,"Reposicion",$nota); // Incrementa el stcok del modelo y marca el movimiento de stock
 			if($res['success'])
 				$res = $this->ColaImpresion->set($idMod); 
 			else

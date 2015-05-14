@@ -38,7 +38,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 				//Error al actualizar
 				function(error){ 
 	    			$scope.pending = false;
-	    			AlertService.add('danger', error.data.MSG);
+	    			AlertService.add('danger', error.data.MSG, 3000);
 	    			$location.path('/login');
 	    		}
 			);
@@ -108,7 +108,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 			    	if($scope.selectedRes == '') {
 			    		responsablesService.addRes(res).then(
 			    			//Success
-			    			function(promise){ console.log(promise.data.DATA);
+			    			function(promise){ 
 			    				lastName = ($scope.data[$scope.data.length-1].nombre).toUpperCase();
 			    				newName = 	(promise.data.DATA.nombre).toUpperCase();
 			    				if(lastName > newName)
@@ -135,7 +135,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 			    			function(promise){AlertService.add('success', 'Se actualizó la información del responsable de producción.', 1500); },
 			    			//Error al actualizar
 			    			function(error){
-				    			AlertService.add('danger', error.data.MSG);
+				    			AlertService.add('danger', error.data.MSG, 3000);
 			    			}
 			    		);
 			    	}
@@ -159,7 +159,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
+					    	controller: 'modalConfirmCtrl',
 					    	resolve: { txt: function(){ return txt_confirm } }
 					     });
 
@@ -176,7 +176,7 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
 					    			},
 					    			//Error al eliminar
 					    			function(promise){
-						    			AlertService.add('danger', promise.data.MSG);
+						    			AlertService.add('danger', promise.data.MSG, 3000);
 					    			}
 					    		);
 						    }, 
@@ -219,7 +219,9 @@ app.controller('responsablesCtrl', ['$scope', '$modal', '$filter','$log', 'Alert
  ModalClientesPMInstanceCtrl
  Controller del modal para agregar/editar clientes  
 **************************************************************************************************************************/
-var ModalResponsablesInstanceCtrl = function ($scope, $modalInstance, $filter, responsable) {
+app.controller('ModalResponsablesInstanceCtrl', ['$scope', '$modalInstance', '$filter', 'responsable',
+
+	function ($scope, $modalInstance, $filter, responsable) {
 		  		  		  
 		  
 		  if(responsable != ''){
@@ -255,7 +257,7 @@ var ModalResponsablesInstanceCtrl = function ($scope, $modalInstance, $filter, r
 		   DELETE
 		   Se cierra el modal y retornan un indicador de que hay que eliminar el cliente
 		  ****************************************************/
-		  $scope.deleteRes = function () { console.log($scope.responsable);
+		  $scope.deleteRes = function () { 
 			  $scope.back2original();	
 			  var res = {action:'delete', idR:$scope.responsable.id};	  		
 			  $modalInstance.dismiss(res);
@@ -274,8 +276,8 @@ var ModalResponsablesInstanceCtrl = function ($scope, $modalInstance, $filter, r
 			  $scope.responsable.localidad = original.localidad
 			  $scope.responsable.email = original.email
 			  $scope.responsable.nota = original.nota
-		  };	
-		  	  		  		  
-}
+		  };		  	  		  		  
+	}
+]);
 
 

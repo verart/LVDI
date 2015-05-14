@@ -193,7 +193,7 @@ app.controller('pedidosespecialesCtrl', ['$scope','$modal', 'pedidosespecialesSe
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
+					    	controller: 'modalConfirmCtrl',
 					    	resolve: { txt: function(){ return txt_confirm } }
 					     });
 
@@ -259,7 +259,9 @@ app.controller('pedidosespecialesCtrl', ['$scope','$modal', 'pedidosespecialesSe
  ModalPedidoespecialInstanceCtrl
  Controller del modal para administrar un pedido 
 **************************************************************************************************************************/
-var ModalPedidoespecialInstanceCtrl = function ($scope, $modalInstance, $filter, pedidosespecialesService, clientesService, info) {
+app.controller('ModalPedidoespecialInstanceCtrl', ['$scope', '$modalInstance', '$filter', 'pedidosespecialesService', 'clientesService', 'info',
+
+	function ($scope, $modalInstance, $filter, pedidosespecialesService, clientesService, info) {
 		  
 		  
 		/**********************************************************************
@@ -488,11 +490,9 @@ var ModalPedidoespecialInstanceCtrl = function ($scope, $modalInstance, $filter,
 			  	
 			  	$scope.pedido.pagos.splice(index,1);
 			  	
-		  	}	 
-
-		   
-		   
-}
+		  	}	   
+	}
+]);
 
 
 

@@ -42,13 +42,16 @@
 							<tr>
 								<th class="col-md-2">Fecha</th>
 							  	<th class="col-md-2">Tipo</th>
+							  	<th class="col-md-2">Cant</th>
 							  	<th class="col-md-6">Nota</th>
 							  </tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="m in movimientos">
-								<td class="col-md-2">{{m.created}}</span></td>
-								<td class="col-md-2"> {{m.tipo}}  </td>
+								<td class="col-md-2"> {{m.created}} </td>
+								<td ng-class="{'rojo': (m.tipo == 'Venta')||(m.tipo == 'Baja')||(m.tipo == 'BajaProduccion')}"
+								class="col-md-2"> {{m.tipo}}  </td>
+								<td class="col-md-2"> {{m.cantidad}}  </td>
 								<td class="col-md-6"> {{m.nota}}  </td>
 							</tr>
 							<tr><td class="aviso" colspan="6" style="text-align=center" ng-if="movimientos.length == 0">

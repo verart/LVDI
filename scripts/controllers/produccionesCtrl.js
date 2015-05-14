@@ -207,7 +207,7 @@ app.controller('produccionesCtrl',
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
+					    	controller: 'modalConfirmCtrl',
 					    	resolve: { txt: function(){ return txt_confirm } }
 					     });
 
@@ -256,7 +256,7 @@ app.controller('produccionesCtrl',
 		  	var printDoc = $modal.open({
 					    	templateUrl: dir_root+'/templates/printDoc.html',
 					    	windowClass: 'wndPdf',
-					    	controller: modalPdfProduccionCtrl,
+					    	controller: 'modalPdfProduccionCtrl',
 					    	resolve: { produccion: function(){return prod;} }
 			});
 		
@@ -288,8 +288,9 @@ app.controller('produccionesCtrl',
  ModalProduccionInstanceCtrl
  Controller del modal para agregar/editar modelos  
 **************************************************************************************************************************/
-var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, produccionesService,productosService,responsablesService,info) {
-		  
+app.controller('ModalProduccionInstanceCtrl', ['$scope', '$modalInstance', '$filter', 'produccionesService', 'productosService', 'responsablesService', 'info',
+
+	function ($scope, $modalInstance, $filter, produccionesService,productosService,responsablesService,info) {		  
 		  
 		  $scope.estados = ['Retirado','Devuelto'];
 			    
@@ -553,10 +554,7 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, pro
 			  }
 		  }	 
 		  
-		 
-		 
-		 
-		 
+			 
 		 /***************************************************
 		   REMOVE producto
 		   Quita un modelo de la producción.
@@ -579,9 +577,9 @@ var ModalProduccionInstanceCtrl = function ($scope, $modalInstance, $filter, pro
 		  	
 		  	$scope.produccion.modelos.forEach(function (m) { m.estado = 'Devuelto'; });                   
 			
-		  }	
-  		  
-}
+		  }			  
+	}
+]);
 
 
 

@@ -1,5 +1,5 @@
 
-app.factory('AuthService', function ($http, Session, AlertService) {
+app.factory('AuthService',['$http', 'Session', 'AlertService', function ($http, Session, AlertService) {
   return {
     login: function (credentials) {
 	  	return $http({
@@ -40,12 +40,12 @@ app.factory('AuthService', function ($http, Session, AlertService) {
     	return isAuthe && isAutho;
     }
   };
-})
+}]);
 
 
 
 
-.service('Session', function (AlertService, $rootScope) {
+app.service('Session', ['AlertService','$rootScope', function (AlertService, $rootScope) {
 	this.create = function (userId, userName, userRole) {
 		if(typeof(Storage)!=="undefined"){
 		  	localStorage.userId = userId;
@@ -71,11 +71,11 @@ app.factory('AuthService', function ($http, Session, AlertService) {
 	};
 	return this;
 	 
-})
+}]);
 
 
 
-.factory('AuthInterceptor', function ($rootScope, $q, AUTH_EVENTS) {
+app.factory('AuthInterceptor', ['$rootScope', '$q', 'AUTH_EVENTS', function ($rootScope, $q, AUTH_EVENTS) {
   return {
   	responseError: function (response) {
       if (response.status === 401) {
@@ -90,4 +90,4 @@ app.factory('AuthService', function ($http, Session, AlertService) {
       return $q.reject(response);
     }
   };
-});
+}]);

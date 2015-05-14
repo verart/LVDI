@@ -5,7 +5,7 @@ class Producciones extends AppModel {
 	public $primaryKey = 'id';	
 	
 	
-	public $hasMany = array('Modelos', 'MovimientosStock','ColaImpresion'); 
+	public $hasMany = array('Modelos','ColaImpresion'); 
 	
 	
 	/**
@@ -34,7 +34,7 @@ class Producciones extends AppModel {
 		//Proceso los pedidos 
 		while($iF < count($results)){ 
 			$results[$iF]['responsable'] = utf8_encode($results[$iF]['responsable']);
-			
+			$results[$iF]['motivo'] = utf8_encode($results[$iF]['motivo']);
 			$iF++;
 		}	
 		
@@ -63,7 +63,7 @@ class Producciones extends AppModel {
 				INNER JOIN productos Pr ON Pr.id = M.productos_id	
 				WHERE P.id = ?
 				ORDER BY Pr.nombre, M.nombre";
-				
+
     	$query = $this->con->prepare($sql, array('integer'), MDB2_PREPARE_RESULT);	
 		$query = $query->execute(array($idProduccion));
 		$results = $query->fetchAll();
@@ -78,10 +78,9 @@ class Producciones extends AppModel {
 			$resultsFormat['responsables_id'] = $results[$i]['responsables_id']; 
 			$resultsFormat['responsable'] = utf8_encode($results[$i]['responsable']);
 			$resultsFormat['estado'] = $results[$i]['estado']; 
-			$resultsFormat['nota'] = $results[$i]['nota']; 
-			$resultsFormat['motivo'] = $results[$i]['motivo'];
+			$resultsFormat['nota'] = utf8_encode($results[$i]['nota']); 
+			$resultsFormat['motivo'] = utf8_encode($results[$i]['motivo']);
 			
-			//Si mientras se recorren los modelos alguno no tiene stock se cambia reponer a 1.
 			$resultsFormat['modelos'] = array();
 			while($i < count($results)){
 				$resultsFormat['modelos'][$i]['id'] = $results[$i]['modelos_id'];
@@ -199,6 +198,7 @@ class Producciones extends AppModel {
 						$idModelo = $value['id'];
 						
 						//Decremento el stock del modelo agregado a la produccion
+
 						$res = $this->Modelos->baja($idModelo, 1,'','BajaProduccion');
 						if(!$res['success'])
 							throw new BadRequestException($res['msg']);

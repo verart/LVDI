@@ -1,115 +1,79 @@
 <form id="form" ng-submit="ok()" editable-form >
-
- <div id= "wndOpenPedido" class="modal-body">
-		
-     		
-			<div class="modal-header"  style="margin-bottom: 18px;">
-			   		<h3>Datos del pedido</h3>
+	<div id= "wndOpenPedido" class="modal-body">
+		<div class="modal-header"  style="margin-bottom: 18px;">
+		   		<h3>Datos del pedido</h3>
+		</div>
+		<div class="form-group row">
+			<div class="colForm col-xs-6 col-sm-3">
+				<label>Fecha</label>
+				<input type="date" class="form-control small" 
+						placeholder="Fecha" id="fechaPedido" focus-me="{{true}}" 
+						ng-model="pedido.fecha" style="padding-right:0px;" required/>
 			</div>
-			       
-		
-		
-			<div class="form-group row">
-						
-						<div class="colForm col-xs-6 col-sm-3">
-							<label>Fecha</label>
-							<input type="date" class="form-control small" 
-									placeholder="Fecha" id="fechaPedido" focus-me="{{true}}" 
-									ng-model="pedido.fecha" style="padding-right:0px;" required/>
-						</div>
-						<div class="colForm col-xs-6 col-sm-3">
-							<label>Fecha de entrega</label>
-							<input type="date" class="form-control small" 
-									placeholder="Fecha de entrega" id="fechaEntregaPedido"
-									ng-model="pedido.fecha_entrega" style="padding-right:0px;" required/>
-						</div>	
-						<div class="colForm col-xs-6 col-sm-4">
-							<label>Cliente</label>						
-							<input type="text" id="newCl" autocomplete="off" ng-model="form.cliente.nombre" 
-							class="form-control small" placeholder="Nombre de cliente" typeahead="cl_option as cl_option.nombre for cl_option in p.cl_options"
-							typeahead-on-select="setCliente($item)" typeahead-wait-ms="300" ng-keyup="searchClienteByName()" />
-							
-						</div>
-							
-						<div class="colForm col-xs-6 col-sm-2">	
-							<label>Estado</label>										
-							<select class="form-control small filterInput selectpicker" ng-model="pedido.estado" 
-								ng-options="estado for estado in estados">
-							</select> 
-						</div>
-
+			<div class="colForm col-xs-6 col-sm-3">
+				<label>Fecha de entrega</label>
+				<input type="date" class="form-control small" 
+						placeholder="Fecha de entrega" id="fechaEntregaPedido"
+						ng-model="pedido.fecha_entrega" style="padding-right:0px;" required/>
+			</div>	
+			<div class="colForm col-xs-6 col-sm-4">
+				<label>Cliente</label>						
+				<input type="text" id="newCl" autocomplete="off" ng-model="form.cliente.nombre" 
+						class="form-control small" placeholder="Nombre de cliente" typeahead="cl_option as cl_option.nombre for cl_option in p.cl_options"
+						typeahead-on-select="setCliente($item)" typeahead-wait-ms="300" ng-keyup="searchClienteByName()" />
 			</div>
-        
-			
-			<br/>
-        
-			
-			
-			<div  class="row">
-			
-				<div class="col-xs-12 col-sm-4">
-				
-					<div ng-if="EditEnabled" class="boxPeak">
-						
-						<div class="pull-right arrow-right"></div>
-										
-						<h5>Agregar producto</h5>
-						
-						<input type="text" id="newModId" class="form-control small filterInput" focus-me="{{true}}"
+			<div class="colForm col-xs-6 col-sm-2">	
+				<label>Estado</label>										
+				<select class="form-control small filterInput selectpicker" ng-model="pedido.estado" 
+						ng-options="estado for estado in estados">
+				</select> 
+			</div>
+		</div>
+        <br/>
+        <div  class="row">
+			<div class="col-xs-12 col-sm-4">
+				<div ng-if="EditEnabled" class="boxPeak">
+					<div class="pull-right arrow-right"></div>
+					<h5>Agregar producto</h5>
+					<input type="text" id="newModId" class="form-control small filterInput" focus-me="{{true}}"
 						ng-model="form.idModelo" placeholder="Id de producto" ng-change="search()" ng-enter="add()"/>
-					
-						<hr/> 
-						
-						<input type="text" id="newMod" autocomplete="off" ng-model="form.modelo.nombre" 
+					<hr/> 
+					<input type="text" id="newMod" autocomplete="off" ng-model="form.modelo.nombre" 
 							class="form-control small" placeholder="Nombre de producto" ng-enter="add()" typeahead="mod_option as mod_option.nombre for mod_option in p.mod_options"
 							typeahead-on-select="setModel($item)" typeahead-wait-ms="300" ng-keyup="searchByName()" />
-
-				
-						<div class="row" style="margin-top:5px;">
-							<div class="colForm col-xs-6 col-sm-5">
-								<input type="number" class="form-control small" 
-										ng-model="form.modelo.cantidad" placeholder="Cantidad" style="padding-right:0px;" ng-enter="add()"/>
-							</div>
-										
-							<div class="colForm col-xs-6 col-md-6">
-								<button type="button" class="btn btn-default" ng-click="add()" > Agregar </button>
-							</div>
-							
+					<div class="row" style="margin-top:5px;">
+						<div class="colForm col-xs-6 col-sm-5">
+							<input type="number" class="form-control small" 
+									ng-model="form.modelo.cantidad" placeholder="Cantidad" style="padding-right:0px;" ng-enter="add()"/>
+						</div>
+						<div class="colForm col-xs-6 col-md-6">
+							<button type="button" class="btn btn-default" ng-click="add()" > Agregar </button>
 						</div>
 					</div>
-					
-					<br/>
-					
-					<textarea class="form-control" rows="3" placeholder="Nota sobre el pedido" ng-model="pedido.nota"></textarea>
-					
 				</div>
-				
-				
-				
-				<!-- DETALLE  -->
-				<div class=" col-xs-12 col-sm-8">
-				
-					<div class="tableContainer">
+				<br/>
+				<textarea class="form-control" rows="3" placeholder="Nota sobre el pedido" ng-model="pedido.nota"></textarea>
+			</div>
+			<!-- DETALLE  -->
+			<div class=" col-xs-12 col-sm-8">
+				<div class="tableContainer">
 					<table class="table table-condensed table-hover small">
 						<thead>
 							<tr>
 								<th class="col-md-5">Productos</th>
-							  	<th class="col-md-2 text-center">Cant</th>
+								<th class="col-md-2 text-center">Cant</th>
 							  	<th ng-if="(userRole == 'admin')" class="col-md-2 text-center">P.U.</th>
-							  	<th ng-if="(userRole == 'admin')" class="col-md-1 text-center">P.Tot</th>
-							  	<th class="col-md-1 text-center">Estado</th>
-							  	<th class="col-md-2 text-center"> </th>
-							  </tr>
+								<th ng-if="(userRole == 'admin')" class="col-md-1 text-center">P.Tot</th>
+								<th class="col-md-1 text-center">Estado</th>
+								<th class="col-md-2 text-center"> </th>
+							</tr>
 						</thead>
 						<tbody>
 							<tr ng-repeat="mod in pedido.modelos">
 								<td class="col-md-5">{{mod.nombre}}</span></td>
-								<td class="col-md-2 text-center editableCell">
-									
-									<a ng-if="EditEnabled" xeditable href="#" data-type="number" data-value="{{mod.cantidad}}" 
-									ng-model="mod.cantidad"
+								<td class="col-md-2 text-center editableCell">		
+									<a ng-if="EditEnabled" xeditable href="#" data-type="number" data-value="{{mod.cantidad}}" ng-model="mod.cantidad"
 									class="editable editable-click editable-open">{{ mod.cantidad || 1 }}</a>
-									
 									<p ng-if="!EditEnabled">
 										{{mod.cantidad || 1}}
 									</p>
@@ -118,26 +82,18 @@
 									{{mod.precio | currency}} </td>
 								<td ng-if="(userRole == 'admin')" class="col-md-1 text-center"> 
 									{{(mod.precio * mod.cantidad) | currency}}  </td>
-									
 								<td class="col-md-1 text-center editableCell" > 
-									
 									<a ng-if="EditEnabled" xeditable href="#" data-type="select" data-value="{{mod.estado}}" 
 									ng-model="mod.estado" data-source="/estadosProductos" 
 									class="editable editable-click editable-open">{{ mod.estado }}</a>
-									
-									<p ng-if="!EditEnabled">
-										{{ mod.estado }}
-									</p>
-									
+									<p ng-if="!EditEnabled"> {{ mod.estado }} </p> </td>
 								<td class="col-md-2 text-center">				
-										
 									<!-- ELIMINAR  - Si es el unico modelo del producto no se permite eliminarlo -->
 									<span 	ng-class="{true: 'disabled'}[!EditEnabled]"
 											class="glyphicon glyphicon-remove accionesLst link"  
 											title="Quitar producto del pedido"
 											ng-click="(!EditEnabled) || remove($index)">
 									</span>
-				 
 								</td>
 							</tr>
 							<tr><td class="avisoSmall" colspan="6" style="text-align=center" ng-if="pedido.modelos.length == 0">
@@ -145,124 +101,90 @@
 							</tr>
 						</tbody>
 					</table>										
-					</div> <!-- tableContainer -->
-				
-					<br/>
-			
-					<div class="row"> 
-						<div ng-if="userRole == 'admin'" class="resumen form-horizontal pull-right" role="form">
-													
-							<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
-							
-							<div class="form-group">
-							    <label for="bonif" class="col-sm-8 control-label small">Bonificación:</label>
-							    
-							    <div class="col-sm-2"  style="padding:0px">
-							    	<input class="form-control" id="bonif" ng-model="pedido.bonificacion">
-							    </div>
-							    
-							    <label for="bonif" class="col-sm-2 control-label small" style="text-align:left;padding-left:6px;">%</label>
-					
+				</div> <!-- tableContainer -->
+				<br/>
+				<div class="row"> 
+					<div ng-if="userRole == 'admin'" class="resumen form-horizontal pull-right" role="form">
+						<label style="margin-right:15px;"> Subtotal:  {{pedido.total | currency}} </label>
+						<div class="form-group">
+						    <label for="bonif" class="col-sm-8 control-label small">Bonificación:</label>
+							<div class="col-sm-2"  style="padding:0px">
+								<input class="form-control" id="bonif" ng-model="pedido.bonificacion">
 							</div>
-	
-							<hr/>
-							
-							<label style="margin-right:15px;"> Total a pagar:  {{ pedido.totalFinal | currency }} </label>
-							
-							<br>
-							
-						</div> <!--ng-if  user role -->
+							<label for="bonif" class="col-sm-2 control-label small" style="text-align:left;padding-left:6px;">%</label>
+						</div>
+						<hr/>
+						<label style="margin-right:15px;"> Total a pagar:  {{ pedido.totalFinal | currency }} </label>
+						<br>
+					</div> <!--ng-if  user role -->
+				</div>
+				<!-- PAGOS  -->
+				<br/>
+				<hr/>
+				<div ng-if="userRole == 'admin'" class="pagos"> <!-- El usuario taller no ve esta informacion -->
+					<h4>Pagos</h4>
+					<div class="tableContainer" ng-if="pedido.pagos.length > 0" >
+						<table class="table table-condensed table-hover small">
+							<thead>
+								<tr>
+									<th class="col-md-2">Fecha</th>
+									<th class="col-md-2">Monto</th>
+									<th class="col-md-1">FP</th>
+									<th class="col-md-2"> </th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="p in pedido.pagos">
+									<td class="col-md-5"> {{p.created}} </span></td>
+									<td class="col-md-2"> {{p.monto |currency}}</td>
+									<td class="col-md-2"> {{p.FP}}</td>					
+									<td class="col-md-2">														
+										<!-- ELIMINAR PAGO -->
+									 	<span 	class="glyphicon glyphicon-remove accionesLst link"  
+												title="Eliminar pago"
+												ng-click="removePago($index)">
+										</span>
+									</td>
+								</tr>
+							</tbody>
+						</table>					
 					</div>
-						
-					<!-- PAGOS  -->
-					<br/>
-					<hr/>
-
-					<div ng-if="userRole == 'admin'" class="pagos"> <!-- El usuario taller no ve esta informacion -->
-					
-							<h4>Pagos</h4>
-	
-							<div class="tableContainer" ng-if="pedido.pagos.length > 0" >
-								<table class="table table-condensed table-hover small">
-								  	<thead>
-								  		<tr>
-								  			<th class="col-md-2">Fecha</th>
-								  			<th class="col-md-2">Monto</th>
-								  			<th class="col-md-1">FP</th>
-								  			<th class="col-md-2"> </th>
-								  		</tr>
-									</thead>
-									<tbody>
-										<tr ng-repeat="p in pedido.pagos">
-											<td class="col-md-5"> {{p.created}} </span></td>
-											<td class="col-md-2"> {{p.monto |currency}}</td>
-											<td class="col-md-2"> {{p.FP}}</td>					
-											<td class="col-md-2">														
-												<!-- ELIMINAR PAGO -->
-											 	<span 	class="glyphicon glyphicon-remove accionesLst link"  
-											 			title="Eliminar pago"
-											 			ng-click="removePago($index)">
-												 </span>
-												 
-											</td>
-										</tr>
-									</tbody>
-								</table>					
-							</div>
-							
-							<div class="tableContainer" ng-if="pedido.pagos.length == 0" >
-									<p class="avisoSmall" >No se han realizado pagos.</p>
-							</div>
-								
-					</div> <!-- Pagos -->
-		
-					<br/>
-							
-					<div class="littleForm row">
-								<div class="col-xs-12 col-sm-4">
-									<input type="date" class="form-control small" 
-											placeholder="Fecha" id="fechaPago" focus-me="{{true}}" 
-											ng-model="form.pago.created" style="margin-left:11px;padding-right:0px;" required/>
-								</div>
-								<div class="col-xs-12 col-md-2">
-									<input type="number" step="any" id="montoPago" class="form-control small inputForm" 
-											ng-model="form.pago.monto" placeholder="Monto" ng-enter="add(nuevoMonto)">
-								</div>
-		 						<div class="colForm col-xs-12 col-md-3">					
-									<select class="form-control small filterInput selectpicker" id="fpPago"
-										ng-model="form.pago.FP" 
-										ng-options="fp.value as fp.label for (k,fp) in fps"
-										ng-init="Efectivo">
-									</select> 
-								</div>
-								<div class="colForm col-xs-6 col-md-3">
-									<button type="button" class="btn btn-default" ng-click="addPago()">Agregar pago</button>
-								</div>
-					</div> <!--littleForm -->
-							
-							
-					<label class="pull-right" style="margin-right:15px; margin-top:25px;"> Resta pagar:  {{ pedido.totalFinal -  pedido.totalPagos| currency }} </label>
-	
-						
-					
-	 			</div> <!-- col- -->	
-				
-			</div> <!-- row -->	
-			
-
-
-
-		</div> <!-- / modal-body -->
-						
-						            
-        <div class="modal-footer">
-        	
-	        <button ng-if="pedido.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deletePedido()">Eliminar pedido</button>
-
-	        <button type="submit" class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
-            <button type="submit" class="btn btn-primary" ng-click="save()">Guardar</button>
-            <button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
-            
-        </div>
-        
-   </form>
+					<div class="tableContainer" ng-if="pedido.pagos.length == 0" >
+						<p class="avisoSmall" >No se han realizado pagos.</p>
+					</div>
+				</div> <!-- Pagos -->
+				<br/>
+				<div class="littleForm row">
+					<div class="col-xs-12 col-sm-4">
+						<input type="date" class="form-control small" 
+								placeholder="Fecha" id="fechaPago" focus-me="{{true}}" 
+								ng-model="form.pago.created" style="margin-left:11px;padding-right:0px;" required/>
+					</div>
+					<div class="col-xs-12 col-md-2">
+						<input type="number" step="any" id="montoPago" class="form-control small inputForm" 
+								ng-model="form.pago.monto" placeholder="Monto" ng-enter="add(nuevoMonto)">
+					</div>
+				 	<div class="colForm col-xs-12 col-md-3">					
+						<select class="form-control small filterInput selectpicker" id="fpPago"
+								ng-model="form.pago.FP" 
+								ng-options="fp.value as fp.label for (k,fp) in fps"
+								ng-init="Efectivo">
+						</select> 
+					</div>
+					<div class="colForm col-xs-6 col-md-3">
+						<button type="button" class="btn btn-default" ng-click="addPago()">Agregar pago</button>
+					</div>
+				</div> <!--littleForm -->
+				<label class="pull-right" style="margin-right:15px; margin-top:25px;"> 
+					Resta pagar:  {{ pedido.totalFinal -  pedido.totalPagos| currency }} 
+				</label>
+			</div> <!-- col- -->	
+		</div> <!-- row -->	
+	</div> <!-- / modal-body -->
+	<div class="modal-footer">
+    	<button type="button" ng-if="pedido.id != null" class="btn btn-danger btn-sm pull-left" ng-click="deletePedido()">Eliminar pedido</button>
+		<button type="submit" class="btn btn-primary" ng-click="print()">Guardar e imprimir</button>
+		<button type="submit" class="btn btn-primary" ng-click="save()">Guardar</button>
+		<button type="button" class="btn btn-warning" ng-click="cancel()">Cancelar</button>
+	</div>
+</form>

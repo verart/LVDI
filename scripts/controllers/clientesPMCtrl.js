@@ -92,7 +92,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    	if($scope.selectedCliente == '') {
 			    		clientesPMService.addCliente(res).then(
 			    			//Success
-			    			function(promise){ console.log(promise.data.DATA);
+			    			function(promise){ 
 			    				$scope.data.push(promise.data.DATA);
 			    				AlertService.add('success', 'Se agregó un nuevo cliente por mayor.', 1000); 
 			    			},
@@ -114,7 +114,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 			    			function(promise){AlertService.add('success', 'Se actualizó la información del cliente por mayor.', 1000); },
 			    			//Error al actualizar
 			    			function(error){
-				    			AlertService.add('danger', error.data.MSG);
+				    			AlertService.add('danger', error.data.MSG,3000);
 			    			}
 			    		);
 			    	}
@@ -138,7 +138,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 				    	var confirm = $modal.open({
 					    	templateUrl: dir_root+'/templates/confirm.html',
 					    	windowClass: 'wndConfirm',
-					    	controller: modalConfirmCtrl,
+					    	controller: 'modalConfirmCtrl',
 					    	resolve: { txt: function(){ return txt_confirm } }
 					     });
 
@@ -155,7 +155,7 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
 					    			},
 					    			//Error al eliminar
 					    			function(promise){
-						    			AlertService.add('danger', promise.data.MSG);
+						    			AlertService.add('danger', promise.data.MSG, 3000);
 					    			}
 					    		);
 						    }, 
@@ -236,7 +236,9 @@ app.controller('clientesPMCtrl', ['$scope', '$modal', '$filter','$log', 'AlertSe
  ModalClientesPMInstanceCtrl
  Controller del modal para agregar/editar clientes  
 **************************************************************************************************************************/
-var ModalClientesPMInstanceCtrl = function ($scope, $modalInstance, $filter, clientePM) {
+app.controller('ModalClientesPMInstanceCtrl', [ '$scope', '$modalInstance',  '$filter', 'clientePM' , 
+
+	function ($scope, $modalInstance, $filter, clientePM) {
 		  		  		  
 		  
 		  if(clientePM != ''){
@@ -272,7 +274,7 @@ var ModalClientesPMInstanceCtrl = function ($scope, $modalInstance, $filter, cli
 		   DELETE
 		   Se cierra el modal y retornan un indicador de que hay que eliminar el cliente
 		  ****************************************************/
-		  $scope.deleteCliente = function () { console.log($scope.clientePM);
+		  $scope.deleteCliente = function () { 
 			  $scope.back2original();	
 			  var res = {action:'delete', idCliente:$scope.clientePM.id};	  		
 			  $modalInstance.dismiss(res);
@@ -294,25 +296,27 @@ var ModalClientesPMInstanceCtrl = function ($scope, $modalInstance, $filter, cli
 			  $scope.clientePM.nota = original.nota
 		  };	
 		  	  		  		  
-}
+}]);
 
 
 /*************************************************************************************************************************
  ModalMailCtrl
  Controller del modal para enviar mail
 **************************************************************************************************************************/
-var ModalMailCtrl = function ($scope, $modalInstance, AlertService, clientePM, $location) {
-		  
-	$scope.mail= {cliente: clientePM};
-	$scope.mail.saludo = 'Hola '+ $scope.mail.cliente.nombre+ ",";
-	$scope.mail.cuerpo = "Desde Los Vados del Isen te enviamos este link para que puedas realizar tu pedido.\n\nTené en cuenta que solo funcionará durante los próximos 7 días.";
-	$scope.mail.despedida = "Esperamos tu pedido. \n \n Los Vados del Isen";
-	// CANCEL *** Se cierra el modal y retornan los datos de la venta original, sin cambios
-	$scope.cancel = function () {
-		$modalInstance.dismiss();
-	};
+app.controller('ModalMailCtrl', ['$scope', '$modalInstance', 'AlertService', 'clientePM',
 
-	$scope.ok = function () {
-		$modalInstance.close({idCliente:$scope.mail.cliente.id, 'saludo':$scope.mail.saludo,'texto':$scope.mail.cuerpo,'despedida':$scope.mail.despedida});
-	};
-}
+	function ($scope, $modalInstance, AlertService, clientePM) {
+			  
+		$scope.mail= {cliente: clientePM};
+		$scope.mail.saludo = 'Hola '+ $scope.mail.cliente.nombre+ ",";
+		$scope.mail.cuerpo = "Desde Los Vados del Isen te enviamos este link para que puedas realizar tu pedido.\n\nTené en cuenta que solo funcionará durante los próximos 7 días.";
+		$scope.mail.despedida = "Esperamos tu pedido. \n \n Los Vados del Isen";
+		
+		// CANCEL *** Se cierra el modal y retornan los datos de la venta original, sin cambios
+		$scope.cancel = function () { $modalInstance.dismiss(); };
+
+		$scope.ok = function () {
+			$modalInstance.close({idCliente:$scope.mail.cliente.id, 'saludo':$scope.mail.saludo,'texto':$scope.mail.cuerpo,'despedida':$scope.mail.despedida});
+		};
+	}
+]);

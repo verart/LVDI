@@ -74,7 +74,7 @@ class ProduccionesController extends AppController {
 			if(!($res['success'])){
 				throw new BadRequestException($res['msg']);
 			}
-			
+
 			// Retorna la info del pedido actualizado	
 			echo $this->json('Producción', $this->Producciones->getProduccionPorId($res['producciones_id']));
 

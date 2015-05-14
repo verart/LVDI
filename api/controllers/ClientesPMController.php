@@ -163,8 +163,11 @@ class ClientesPMController extends AppController {
 			if (!$this->PermisosComponent->puedeAcceder('clientesPM', 'delete'))
 				throw new BadRequestException('No tiene permiso para acceder a esta página'); 
 			
-			$msg = $this->ClientesPM->delCliente($idCliente);
-			echo $this->json('clientesPM', $msg);
+			$res = $this->ClientesPM->delCliente($idCliente);
+			if(!$res['success'])	
+				throw new BadRequestException($res['msg']);
+
+			echo $this->json('clientesPM', 'Se eliminó el cliente.');
 
 		} catch (Exception $e) {	
 			if ($e instanceof RequestException) 

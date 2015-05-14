@@ -1,7 +1,7 @@
-var modalPdfPedidoCtrl = function ($scope, $modalInstance, $sce, $filter, pedido) {		  
+app.controller('modalPdfPedidoCtrl',['$scope', '$modalInstance', '$sce', '$filter', 'pedido', 
+
+	function ($scope, $modalInstance, $sce, $filter, pedido) {		  
 	
-
-
 			var doc = new jsPDF("portrait", "mm", "a4");
 			doc.setFont("helvetica");
 			
@@ -124,4 +124,5 @@ var modalPdfPedidoCtrl = function ($scope, $modalInstance, $sce, $filter, pedido
 		  	$modalInstance.close();
 		  };
 		  
-};
+	}
+]);

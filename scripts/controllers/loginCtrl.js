@@ -37,7 +37,7 @@ app.controller('ApplicationController', ['$scope','$rootScope','USER_ROLES','AUT
 		$scope.refreshActiveTab = function(id){
 			$rootScope.activeTab = id;
 		};
-}])
+}]);
 
 
 
@@ -69,4 +69,5 @@ app.controller('loginCtrl', ['$scope', '$rootScope', '$location', 'AUTH_EVENTS',
 				    $location.path('/login')
 				});		    
 		  };
-}]);
+	}
+]);

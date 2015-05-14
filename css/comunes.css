@@ -18,7 +18,12 @@
 .alertsList{
 	width:90%;
 }
-
+.rojo{
+	color: rgb(213, 73, 73);
+}
+.verde{
+	color: rgb(40, 105, 40);
+}
 .aviso{
 	text-align: center;
 	font-size: 27px;
