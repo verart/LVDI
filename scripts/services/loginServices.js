@@ -91,3 +91,4 @@ app.factory('AuthInterceptor', ['$rootScope', '$q', 'AUTH_EVENTS', function ($ro
     }
   };
 }]);
+
